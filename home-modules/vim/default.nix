@@ -1,7 +1,6 @@
-{ pkgs ? (import <nixpkgs> { }), ... }:
+args@{ pkgs ? (import <nixpkgs> { }), ... }:
 let
-
-  unstable = (import <unstable> { });
+  unstable = args.unstable or (import <unstable> { });
   np = pkgs.vimPlugins;
   unp = unstable.vimPlugins;
 
@@ -9,12 +8,12 @@ in {
   imports = [ ./vim-init.nix ];
 
   home.packages = [
-            pkgs.nixfmt
-            unstable.haskellPackages.cabal-fmt
-            pkgs.shfmt
-            pkgs.uncrustify
-            pkgs.clang-tools
-          ];
+    pkgs.nixfmt
+    unstable.haskellPackages.cabal-fmt
+    pkgs.shfmt
+    pkgs.uncrustify
+    pkgs.clang-tools
+  ];
 
   programs.neovim = {
     enable = true;
