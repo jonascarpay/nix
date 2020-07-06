@@ -3,6 +3,7 @@
     ./agda.nix
     ./albert
     ./emacs.nix
+    ./firefox.nix
     ./fish.nix
     ./polybar.nix
     ./ranger

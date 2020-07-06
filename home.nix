@@ -4,7 +4,8 @@ let
   channels = import ~/dotfiles/channels.nix;
   unstable = import <unstable> { };
 in rec {
-  imports = [ ./caches.nix ./home-modules ./xcjp-cache.nix ];
+  imports =
+    [ ./caches.nix ./home-modules ./home-modules/caches.nix ./xcjp-cache.nix ];
 
   caches.cachix = [{
     name = "iohk";
@@ -130,7 +131,6 @@ in rec {
   qt = { enable = manageX; };
 
   programs = {
-    firefox.enable = true;
     fzf.enable = true;
     broot.enable = true;
 

@@ -78,11 +78,9 @@ in {
         Example value:
 
         [
-          "jupyterWith"
-          {
-            name = "iohk";
-            sha256 = "0ds8j8g3rp9jam7kb0040smrjhnrrcgc0xjpnhmy6iq9fkm6zja4";
-          }
+          "someCachix"
+          "someOtherCachix"
+          { name = "someCachixWithSha"; sha256 = "..."; }
         ]
       '';
       default = [ ];

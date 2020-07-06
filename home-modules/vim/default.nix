@@ -8,6 +8,10 @@ in {
   imports = [ ./vim-init.nix ];
 
   home.packages = [
+    # for coc
+    pkgs.nodejs
+
+    # formatters
     pkgs.nixfmt
     unstable.haskellPackages.cabal-fmt
     pkgs.shfmt

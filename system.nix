@@ -1,7 +1,12 @@
-{ pkgs, config, ... }: {
-  imports = [ ./secrets.nix ];
+{ pkgs, config, ... }:
+
+let unstable = import <unstable> { };
+in {
+  imports = [ ./cachix.nix ./secrets.nix ];
 
   system.copySystemConfiguration = true;
+
+  cachix = [ "all-hies" ];
 
   i18n = {
     # defaultLocale = "ja_JP.UTF-8";
@@ -19,7 +24,6 @@
       keep-outputs = true
       keep-derivations = true
     '';
-    binaryCaches = [ "https://cache.nixos.org" ];
     requireSignedBinaryCaches = false;
   };
 
@@ -101,6 +105,8 @@
         15515 # default
         139
         138 # samba
+        500 # xc vpn
+        4500 # xc vpn
         27031
         27036 # steam
       ];
@@ -112,8 +118,7 @@
   services = {
     openssh.enable = true;
     printing.enable = true;
-    printing.drivers =
-      [ pkgs.brlaser ]; # [ pkgs.gutenprint pkgs.gutenprintBin ];
+    printing.drivers = [ pkgs.brlaser pkgs.gutenprint pkgs.gutenprintBin ];
     fstrim.enable = true;
     strongswan = {
       enable = true;
@@ -121,18 +126,12 @@
     };
     logind.extraConfig = "RuntimeDirectorySize=2G";
     ntp.enable = true;
-    dbus.packages = with pkgs;
-      [
-        gnome3.dconf # Nodig voor ???
-        # gnome2.GConf # Nodig voor hamster
-        # hamster-time-tracker
-      ];
     mopidy = {
       enable = true;
       extensionPackages = [
         pkgs.mopidy-spotify
         pkgs.mopidy-iris
-        # pkgs.mopidy-soundcloud # broken :(
+        unstable.mopidy-soundcloud # broken :(
       ];
       configuration = ''
         [spotify]
