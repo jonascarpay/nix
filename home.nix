@@ -4,8 +4,7 @@ let
   channels = import ~/dotfiles/channels.nix;
   unstable = import <unstable> { };
 in rec {
-  imports =
-    [ ./caches.nix ./home-modules ./home-modules/caches.nix ./xcjp-cache.nix ];
+  imports = [ ./home-modules ./home-modules/caches.nix ./xcjp-cache.nix ];
 
   caches.cachix = [{
     name = "iohk";
@@ -16,7 +15,7 @@ in rec {
     packages = with pkgs; [
       anki
       ag
-      blender
+      entr
       gnome3.nautilus
       killall
       kakoune-unwrapped
@@ -67,30 +66,6 @@ in rec {
           :def remain \_args -> pure $ unlines [":reload", ":main"]
         '';
       };
-      fancy-uninstall = {
-        executable = true;
-        target = "fancy-uninstall.sh";
-        text = ''
-          #!usr/bin/env bash
-          nix-env -q | fzf | xargs -I{} nix-env -e {}
-        '';
-      };
-      script = {
-        executable = true;
-        target = "hello.sh";
-        text = ''
-          #!usr/bin/env bash
-          echo "hello"
-        '';
-      };
-      stack-clean-all = {
-        executable = true;
-        target = "stack-clean-all.sh";
-        text = ''
-          #!usr/bin/env bash
-          find -type f -name ".stack-work" -exec rm -rf {} \;
-        '';
-      };
       ".tmux.conf".text = with pkgs.tmuxPlugins; ''
         # run-shell ${sensible}/share/tmux-plugins/sensible/sensible.tmux
         run-shell ${pain-control}/share/tmux-plugins/pain-control/pain_control.tmux
@@ -136,7 +111,7 @@ in rec {
 
     termite = {
       enable = true;
-      backgroundColor = "rgba(0,0,0,0.90)";
+      backgroundColor = "rgba(0,0,0,0.95)";
       # cursorBlink = "on";
       # cursorShape = "ibeam";
     };
@@ -167,7 +142,7 @@ in rec {
       enable = true;
       userName = "Jonas Carpay";
       userEmail = "jonascarpay@gmail.com";
-      ignores = [ "*~" "*.swp" "*.swo" "tags" "TAGS" ];
+      ignores = [ "*~" "*.swp" "*.swo" "tags" "TAGS" "result/" ];
       extraConfig.commit.verbose = true;
     };
   };
@@ -184,7 +159,15 @@ in rec {
 
     picom = {
       enable = manageX;
-      package = pkgs.callPackage ~/Dev/picom { };
+      package = pkgs.picom.overrideAttrs (_: {
+        src = pkgs.fetchFromGitHub {
+          owner = "tryone144";
+          repo = "picom";
+          rev = "9b4a6f062758f1f9a66d4e77d16c86c9aa259b42";
+          sha256 = "0jf1lih85d07q1kw1v3sa4azjyf33b61kkxjakb2l6zi8fcxf4s9";
+        };
+      });
+      # package = pkgs.callPackage ~/Dev/picom { };
       shadow = true;
       experimentalBackends = true;
       fade = true;

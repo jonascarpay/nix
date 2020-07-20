@@ -89,7 +89,7 @@ applicationKeys =
     -- , ((modm, xK_Return), spawn termEmu)
     ((modm, xK_Return), mkTerm),
     ((modm, xK_o), spawn "rofi -show run"),
-    ((modm, xK_b), wal "wal" True False),
+    ((modm, xK_b), wal "haishoku" True False),
     ((modm .|. shiftMask, xK_b), wal "wal" True True),
     ((modm .|. ctrlMask, xK_1), wal "wal" False False),
     ((modm .|. ctrlMask, xK_2), wal "colorz" False False),

@@ -27,85 +27,85 @@ in {
   programs.fish = {
     enable = true;
     shellInit = ''
-        function fish_user_key_bindings
-          ${if config.programs.fzf.enable then "fzf_key_bindings" else ""}
-        end
+      function fish_user_key_bindings
+        ${if config.programs.fzf.enable then "fzf_key_bindings" else ""}
+      end
 
-        set fish_greeting
+      set fish_greeting
 
-        function gi
-          curl -sL https://www.gitignore.io/api/$argv
-        end
+      function gi
+        curl -sL https://www.gitignore.io/api/$argv
+      end
 
-        ${powerline-fish}
+      ${powerline-fish}
 
-        source ~/.cache/wal/colors.fish
-        set -g theme_color_scheme terminal
+      source ~/.cache/wal/colors.fish
+      set -g theme_color_scheme terminal
 
-        cat ~/.cache/wal/sequences &
+      cat ~/.cache/wal/sequences &
     '';
     shellAbbrs = {
-      c   = "cd";
-      dc  = "cd ~/Documents/";
-      dn  = "cd ~/Downloads/";
-      dv  = "cd ~/Dev/";
-      ft  = "rm tags; and fast-tags -Rv .";
-      g   = "git";
-      ga  = "git add";
+      c = "cd";
+      dc = "cd ~/Documents/";
+      dn = "cd ~/Downloads/";
+      dv = "cd ~/Dev/";
+      ft = "rm tags; and fast-tags -Rv .";
+      g = "git";
+      ga = "git add";
       gaa = "git add --all";
       gap = "git add --patch";
-      gb  = "git branch";
+      gb = "git branch";
       gbd = "git branch -d";
-      gc  = "git commit";
+      gc = "git commit";
       gca = "git commit --amend";
       gcm = "git checkout master";
       gco = "git checkout";
-      gd  = "git diff";
-      gl  = "git pull";
-      gp  = "git push";
-      gr  = "git remote";
+      gd = "git diff";
+      gl = "git pull";
+      gp = "git push";
+      gr = "git remote";
       gra = "git rebase --abort";
       grc = "git rebase --continue";
       grh = "git reset HEAD --hard";
       gri = "git rebase -i";
-      gs  = "git status";
-      hm  = "home-manager";
+      gs = "git status";
+      hm = "home-manager";
       hms = "home-manager switch";
-      l   = "ls";
-      ll  = "ls -lah";
-      n   = "nvim";
-      nb  = "nix build";
+      l = "ls";
+      ll = "ls -lah";
+      n = "vim";
+      nb = "nix build";
       nbl = "nix build -L";
-      nbo = "nix build -L --option substituters \"\"";
-      nc  = "nix-channel";
+      nbo = ''nix build -L --option substituters ""'';
+      nc = "nix-channel";
       ncl = "nix-channel --list";
       ncu = "nix-channel --update";
-      ne  = "nix-env";
-      ng  = "nix-collect-garbage";
-      ns  = "nix-shell";
-      nsf = "nix-shell --run fish";
+      ne = "nix-env";
+      ng = "nix-collect-garbage";
+      ns = "cached-nix-shell";
+      nsf = "cached-nix-shell --run fish";
       nsp = "nix-shell -p";
-      nsr = "nix-shell --run";
-      nsv = "nix-shell --run nvim";
-      rf  = "rm -rf";
-      rn  = "ranger";
-      s   = "sudo";
-      sb  = "stack build";
+      nsr = "cached-nix-shell --run";
+      nsv = "cached-nix-shell --run vim";
+      rf = "rm -rf";
+      rn = "ranger";
+      s = "sudo";
+      sb = "stack build";
       snc = "sudo nix-channel";
       sno = "sudo nixos-rebuild";
-      sh  = "stack haddock; and stack hoogle --no-nix-pure --server";
+      sh = "stack haddock; and stack hoogle --no-nix-pure --server";
       sha = "stack haddock --open --no-nix-pure";
-      sr  = "stack repl";
-      st  = "stack";
-      sv  = "sudo nvim";
-      t   = "tmux";
-      v   = "nvim";
-      vc  = "nvim ~/.config/nixpkgs/config.nix";
-      vh  = "nvim ~/.config/nixpkgs/home.nix";
-      vs  = "nvim ~/system.nix";
+      sr = "stack repl";
+      st = "stack";
+      sv = "sudo vim";
+      t = "tmux";
+      v = "vim";
+      vd = "vimdir";
+      vn = "vimdir ~/nix";
     };
   };
-  home.file.".tmux.conf".text = "set-option -g default-command /home/jmc/.nix-profile/bin/fish";
+  home.file.".tmux.conf".text =
+    "set-option -g default-command /home/jmc/.nix-profile/bin/fish";
 
   home.file.".config/wal/templates/colors.fish".text = ''
     # set fish_color_normal normal

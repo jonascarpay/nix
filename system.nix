@@ -1,8 +1,8 @@
 { pkgs, config, ... }:
 
-let unstable = import <unstable> { };
+let unstable = import <unstable> { inherit (config.nixpkgs) config; };
 in {
-  imports = [ ./cachix.nix ./secrets.nix ];
+  imports = [ ./system-modules ./cachix.nix ./secrets.nix ];
 
   system.copySystemConfiguration = true;
 
@@ -16,7 +16,10 @@ in {
     };
   };
 
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+    cudaSupport = true;
+  };
 
   nix = {
     trustedUsers = [ "root" "jmc" ];
@@ -77,6 +80,7 @@ in {
       tree
     ];
 
+    homeBinInPath = true;
     variables = {
       EDITOR = "vim";
       PAGER = "less";
@@ -126,23 +130,6 @@ in {
     };
     logind.extraConfig = "RuntimeDirectorySize=2G";
     ntp.enable = true;
-    mopidy = {
-      enable = true;
-      extensionPackages = [
-        pkgs.mopidy-spotify
-        pkgs.mopidy-iris
-        unstable.mopidy-soundcloud # broken :(
-      ];
-      configuration = ''
-        [spotify]
-        enabled = true
-        username = ${config.secrets.spotify.username}
-        password = ${config.secrets.spotify.password}
-        client_id = ${config.secrets.spotify.client_id}
-        client_secret = ${config.secrets.spotify.client_secret}
-        bitrate = 320
-      '';
-    };
     xserver = {
       enable = true;
       displayManager.lightdm.autoLogin = {
@@ -155,7 +142,10 @@ in {
   };
 
   programs.bash.enableCompletion = true; # enable tab-completion for nix-* tools
+  programs.fish.vendor.completions.enable =
+    true; # not sure if this does anything for user fish but I'm willing to try
 
+  programs.dconf.enable = true;
   users = {
     mutableUsers = false;
     users.jmc = {

@@ -141,6 +141,7 @@ in {
             })
           ];
           config = ''
+            let myclangfmt = { 'exe': 'clang-format', 'args': ['--style=Chromium'], 'stdin': 1 }
             let g:neoformat_basic_format_trim = 1
             augroup fmt
             autocmd!
@@ -152,6 +153,10 @@ in {
             else
               let g:neoformat_enabled_haskell = ['ormolu']
             endif
+            let g:neoformat_c_chromify = myclangfmt
+            let g:neoformat_cpp_chromify = myclangfmt
+            let g:neoformat_enabled_c = ['myclangfmt']
+            let g:neoformat_enabled_cpp = ['myclangfmt']
             nn <leader>fm :Neoformat<CR>
             nn <leader>fo :Neoformat ormolu<CR>
             nn <leader>fs :Neoformat stylishhaskell<CR>

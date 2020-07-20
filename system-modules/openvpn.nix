@@ -1,15 +1,16 @@
-{ pkgs, config, ... } :
+{ pkgs, config, ... }:
 
 let
 
   serverdb = pkgs.fetchzip {
     url = "https://downloads.nordcdn.com/configs/archives/servers/ovpn.zip";
-    sha256 = "1jlcdqx1z9pl7lz7vdar3552pg60l7n3lzc7s8xvjyzp0cjwbi4q";
-    stripRoot=false;
+    sha256 = "03ypwwc7qmr42f06z64agyzjqd2591bkwm3562qpr38f79acyldd";
+    stripRoot = false;
   };
 
   mkServ = serv: auto: {
-    config = builtins.readFile "${serverdb}/ovpn_tcp/${serv}.nordvpn.com.tcp.ovpn";
+    config =
+      builtins.readFile "${serverdb}/ovpn_tcp/${serv}.nordvpn.com.tcp.ovpn";
     autoStart = auto;
     updateResolvConf = true;
     authUserPass = config.secrets.openvpn;
