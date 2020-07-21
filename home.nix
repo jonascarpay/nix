@@ -22,6 +22,7 @@ in rec {
       mpv
       neofetch
       okular
+      unstable.lutris
       unstable.cached-nix-shell
       haskellPackages.cabal-bounds
       pandoc
