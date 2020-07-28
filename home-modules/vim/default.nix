@@ -106,6 +106,8 @@ in {
             nn <leader>ga :GitGutterStageHunk<CR>
             nn <leader>gp :GitGutterPreviewHunk<CR>
             nn <leader>gu :GitGutterUndoHunk<CR>
+            nn <leader>gn :GitGutterNextHunk<CR>
+            nn <leader>gp :GitGutterPrevHunk<CR>
             set diffopt+=vertical
           '';
         };

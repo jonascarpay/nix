@@ -9,7 +9,7 @@ in {
   cachix = [ "all-hies" ];
 
   i18n = {
-    # defaultLocale = "ja_JP.UTF-8";
+    defaultLocale = "ja_JP.UTF-8";
     inputMethod = {
       enabled = "fcitx";
       fcitx.engines = with pkgs.fcitx-engines; [ mozc table-other ];
@@ -18,7 +18,7 @@ in {
 
   nixpkgs.config = {
     allowUnfree = true;
-    cudaSupport = true;
+    # cudaSupport = true;
   };
 
   nix = {
