@@ -4,7 +4,7 @@ let
 
   serverdb = pkgs.fetchzip {
     url = "https://downloads.nordcdn.com/configs/archives/servers/ovpn.zip";
-    sha256 = "03ypwwc7qmr42f06z64agyzjqd2591bkwm3562qpr38f79acyldd";
+    sha256 = "0k1ym0z89j78pq70qq09vaw35izqxnmwnnfyac364ws2bj2yiqzn";
     stripRoot = false;
   };
 
@@ -19,8 +19,7 @@ let
 in {
 
   services.openvpn.servers = {
-    nord-hk = mkServ "hk137" false;
-    # nord-jp = mkServ "jp247" false; # No longer exists
+    nord-hk = mkServ "hk143" false;
     nord-nl = mkServ "nl707" false;
     nord-us = mkServ "us4629" false;
     nord-ca = mkServ "ca977" false;
