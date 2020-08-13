@@ -23,7 +23,15 @@ in with lib; {
       enable = mkEnableOption "neovim-init";
       preConfig = mkOption { };
       plugins = mkOption { };
-      modules = mkOption { };
+      modules = mkOption {
+        description = "Function to attr set of plugin/config pairs";
+        type = mkOptionType {
+          name = "Function to attr set of plugin/config pairs";
+          merge = loc: ls: gh: foldr (a: b: (a.value gh // b)) { } ls;
+          emptyValue = _: { };
+          check = x: isFunction x;
+        };
+      };
     };
   };
   config = mkIf cfg.enable {
