@@ -4,7 +4,12 @@ let
   unstable = import <unstable> { inherit (config.nixpkgs) config; };
 in
 {
-  imports = [ ./system-modules ./cachix.nix ./secrets.nix ];
+  imports = [
+    ./system-modules/openvpn.nix
+    ./system-modules/mopidy.nix
+    ./cachix.nix
+    ./secrets.nix
+  ];
 
   system.copySystemConfiguration = true;
 
