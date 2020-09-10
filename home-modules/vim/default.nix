@@ -12,7 +12,8 @@ in {
     pkgs.nodejs
 
     # formatters
-    pkgs.nixfmt
+    pkgs.nixpkgs-fmt
+    # pkgs.nixfmt
     unstable.haskellPackages.cabal-fmt
     pkgs.shfmt
     pkgs.uncrustify
@@ -69,7 +70,6 @@ in {
         np.vim-repeat
         np.vim-unimpaired
         np.vim-eunuch
-        np.vim-easy-align
         np.vim-easymotion
       ];
       modules = gh: {
@@ -82,6 +82,12 @@ in {
           '';
         };
 
+        easy-align = {
+          plugins = [ np.vim-easy-align ];
+          config = ''
+            xmap <Enter> <Plug>(LiveEasyAlign)
+          '';
+        };
         sharedClipboard = {
           config = ''
             vmap <leader>y :w! /tmp/vitmp<CR>
@@ -138,8 +144,8 @@ in {
         neoformat = {
           # plugins = [ np.neoformat ];
           plugins = [
-            (gh "sbdchd/neoformat" {
-              rev = "96c3cbdee4d0ddbe385388319d7e976e4009e943";
+            (gh "jonascarpay/neoformat" {
+              rev = "cb5b0ecb3eda0eff2ed7e51b7ebd3eecfd9ae251";
             })
           ];
           config = ''
@@ -198,8 +204,11 @@ in {
           '';
         };
 
+        # note; uses the ~/.config/nvim/coc-settings.json file.
+        # ideally we'd have that declaratively, or just not use such a crappy system.
+        # or emacs
         coc = {
-          plugins = [ unp.coc-nvim ];
+          plugins = [ unp.coc-nvim unp.coc-python ];
           config = ''
             set hidden
             set nobackup

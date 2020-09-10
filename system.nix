@@ -1,12 +1,29 @@
 { pkgs, config, ... }:
 
-let unstable = import <unstable> { inherit (config.nixpkgs) config; };
-in {
+let
+  unstable = import <unstable> { inherit (config.nixpkgs) config; };
+in
+{
   imports = [ ./system-modules ./cachix.nix ./secrets.nix ];
 
   system.copySystemConfiguration = true;
 
   cachix = [ "all-hies" ];
+
+  boot.kernelParams = [
+    "noibrs"
+    "noibpb"
+    "nopti"
+    "nospectre_v2"
+    "nospectre_v1"
+    "l1tf=off"
+    "nospec_store_bypass_disable"
+    "no_stf_barrier"
+    "mds=off"
+    "tsx=on"
+    "tsx_async_abort=off"
+    "mitigations=off"
+  ];
 
   i18n = {
     defaultLocale = "ja_JP.UTF-8";

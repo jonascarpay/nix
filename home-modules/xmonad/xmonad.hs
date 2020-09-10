@@ -1,5 +1,3 @@
--- peek
-
 import qualified Codec.Binary.UTF8.String as UTF8
 import Control.Monad
 import qualified DBus as D
@@ -86,10 +84,12 @@ keyBindings conf =
 
 applicationKeys =
   [ ((modm, xK_f), spawn "firefox"),
+    ((modm, xK_z), spawn "firefox localhost:9999"),
     -- , ((modm, xK_Return), spawn termEmu)
     ((modm, xK_Return), mkTerm),
     ((modm, xK_o), spawn "rofi -show run"),
     ((modm, xK_b), wal "haishoku" True False),
+    ((modm, xK_c), spawn "emacsclient --create-frame --no-wait"),
     ((modm .|. shiftMask, xK_b), wal "wal" True True),
     ((modm .|. ctrlMask, xK_1), wal "wal" False False),
     ((modm .|. ctrlMask, xK_2), wal "colorz" False False),
@@ -134,7 +134,7 @@ wal backend newpape light = do
       then return $ "/home/jmc/Wallpapers/papes/"
       else wrap "\"" "\"" <$> liftIO (readFile "/home/jmc/.cache/wal/wal")
   let cmd = unwords $ ["wal", "--backend", backend, "-i", pape] ++ (if light then ["-l"] else [])
-  liftIO $ writeFile "/home/jmc/tmp" cmd
+  -- liftIO $ writeFile "/home/jmc/tmp" cmd
   spawn cmd
 
 myBSP =

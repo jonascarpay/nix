@@ -2,43 +2,75 @@
 let
   manageX = true;
   channels = import ~/dotfiles/channels.nix;
-  unstable = import <unstable> { };
-in rec {
-  imports = [ ./home-modules ./home-modules/caches.nix ./xcjp-cache.nix ];
+  unstable = import <unstable> {};
+in
+{
+  imports = [
+    ./home-modules/agda.nix
+    ./home-modules/albert
+    ./home-modules/blender.nix
+    ./home-modules/caches.nix
+    ./home-modules/emacs
+    ./home-modules/firefox.nix
+    ./home-modules/fish.nix
+    ./home-modules/polybar.nix
+    ./home-modules/ranger
+    ./home-modules/rofi.nix
+    ./home-modules/scripts
+    ./home-modules/slipbox.nix
+    ./home-modules/spotify.nix
+    ./home-modules/vim
+    ./home-modules/wal.nix
+    ./home-modules/xmonad
+    ./xcjp-cache.nix
+    ./secrets.nix
+  ];
 
-  caches.cachix = [{
-    name = "iohk";
-    sha256 = "0ds8j8g3rp9jam7kb0040smrjhnrrcgc0xjpnhmy6iq9fkm6zja4";
-  }];
+  caches.cachix = [
+    {
+      name = "iohk";
+      sha256 = "0ds8j8g3rp9jam7kb0040smrjhnrrcgc0xjpnhmy6iq9fkm6zja4";
+    }
+  ];
+
+  manual = {
+    manpages.enable = true;
+    html.enable = true;
+    json.enable = true;
+  };
+
+  fonts.fontconfig.enable = true;
 
   home = {
     packages = with pkgs; [
-      anki
       ag
+      anki
       entr
       gnome3.nautilus
-      killall
+      haskellPackages.cabal-bounds
       kakoune-unwrapped
+      killall
       mpv
       neofetch
       okular
-      unstable.lutris
-      unstable.cached-nix-shell
-      haskellPackages.cabal-bounds
       pandoc
       pavucontrol
       python37Packages.ueberzug # for image previews
-      slack
       s-tui
+      slack
       spotify
       steam
       sxiv
+      signal-desktop
       tealdeer
-      transmission-gtk
       tmux
+      transmission-gtk
+      unstable.cached-nix-shell
+      unstable.lutris
       unzip
       weechat
       xclip
+      youtube-dl
     ];
 
     sessionVariables = {
@@ -160,14 +192,14 @@ in rec {
 
     picom = {
       enable = manageX;
-      package = pkgs.picom.overrideAttrs (_: {
-        src = pkgs.fetchFromGitHub {
-          owner = "tryone144";
-          repo = "picom";
-          rev = "9b4a6f062758f1f9a66d4e77d16c86c9aa259b42";
-          sha256 = "0jf1lih85d07q1kw1v3sa4azjyf33b61kkxjakb2l6zi8fcxf4s9";
-        };
-      });
+      package = pkgs.picom.overrideAttrs (
+        _: {
+          src = builtins.fetchGit {
+            url = "https://github.com/yshui/picom.git";
+            rev = "c9ca9de55e59a4334007ed91704f35342c7ab447";
+          };
+        }
+      );
       # package = pkgs.callPackage ~/Dev/picom { };
       shadow = true;
       experimentalBackends = true;
@@ -198,11 +230,12 @@ in rec {
         latitude = "35.6762";
         longitude = "139.6503";
       };
-    in {
-      enable = true;
-      tray = true;
-      inherit (tokyo) latitude longitude;
-    };
+    in
+      {
+        enable = true;
+        tray = true;
+        inherit (tokyo) latitude longitude;
+      };
 
   };
 
@@ -216,9 +249,7 @@ in rec {
 
   xsession = {
     enable = manageX;
-    initExtra = ''
-      ${pkgs.albert}/bin/albert &
-    '';
+    initExtra = "${pkgs.albert}/bin/albert &";
   };
 }
 

@@ -10,6 +10,14 @@ let
       FILE=$(fzf --preview='cat {+}')
       vim "$FILE"
     '';
+    vimgrep = ''
+      #!/usr/bin/env bash
+      set -e
+
+      [[ -n "$1" ]] && cd "$1"
+      FILE=$(fzf --preview='cat {+}')
+      vim "$FILE"
+    '';
     nix-fancy-uninstall = ''
       #!/usr/bin/env bash
       nix-env -q | fzf | xargs -I{} nix-env -e {}

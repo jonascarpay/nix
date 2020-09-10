@@ -19,7 +19,7 @@ lib.mkIf (config.xsession.enable) {
     config = {
       "bar/common" = {
         width = "100%";
-        locale = "ja_JP.UTF-8";
+        # locale = "ja_JP.UTF-8";
         font-0 = "SauceCodePro Nerd Font:size=8;2";
         font-1 = "SauceCodePro Nerd Font:size=8:weight=bold;2";
         # tray-position = "right";

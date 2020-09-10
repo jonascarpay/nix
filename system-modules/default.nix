@@ -1,1 +1,1 @@
-{ imports = [ ./openvpn.nix ./mopidy.nix ]; }
+{ imports = [ ./openvpn.nix ./mopidy.nix ./mlfa.nix ]; }
