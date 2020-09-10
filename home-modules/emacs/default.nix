@@ -85,6 +85,27 @@ in
           '';
         };
 
+        polymode = {
+          enable = true;
+          after = [ "nix" ];
+          config = /* elisp */ ''
+            (add-to-list 'auto-mode-alist '("\\.nix$" . poly-nix-mode))
+            
+            (define-hostmode poly-nix-hostmode :mode 'nix-mode)
+            
+            (define-innermode poly-elisp-expr-nix-innermode
+              :mode 'emacs-lisp-mode
+              :head-matcher "/\\* elisp \\*/ '''\n"
+              :tail-matcher " *''';\n"
+              :head-mode 'host
+              :tail-mode 'host)
+            
+            (define-polymode poly-nix-mode
+              :hostmode 'poly-nix-hostmode
+              :innermodes '(poly-elisp-expr-nix-innermode))
+          '';
+        };
+
         projectile = {
           enable = true;
           config = ''

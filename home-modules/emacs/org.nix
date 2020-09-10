@@ -9,7 +9,7 @@ in
   ];
   fonts.fontconfig.enable = true;
   programs.emacs.init = {
-    postlude = ''
+    postlude = /* elisp */ ''
       (setq org-hide-emphasis-markers t)
       (setq org-startup-indented t)
       (push "~/Org/" org-agenda-files)
