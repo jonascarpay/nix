@@ -1,3 +1,6 @@
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+
 import qualified Codec.Binary.UTF8.String as UTF8
 import Control.Monad
 import qualified DBus as D
@@ -17,9 +20,6 @@ import XMonad.Core
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
-import XMonad.Layout.BinarySpacePartition
-import XMonad.Layout.BorderResize
-import qualified XMonad.Layout.Hidden as LH
 import qualified XMonad.Layout.IndependentScreens as IS
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spacing
@@ -40,6 +40,18 @@ termEmu = "termite -e /home/jmc/.nix-profile/bin/fish"
 
 -- termEmu = "urxvt -e /home/jmc/.nix-profile/bin/fish"
 
+newtype MyLayout a = MyLayout Rational
+  deriving (Eq, Read, Show)
+
+instance LayoutClass MyLayout a where
+  description _ = "MyLayout"
+  pureLayout (MyLayout w) scr (W.Stack m ls rs) = stack ls pl ++ [(m, pm)] ++ stack rs pr
+	where
+	  wl = if null ls then 0 else w
+	  wr = if null rs then 1 else (1-2*w)/(1-w)
+	  (pl,(pm,pr)) = splitHorizontallyBy wr <$> splitHorizontallyBy wl scr
+	  stack as = zip as . splitVertically (length as)
+
 main = do
   dbus <- D.connectSession
   D.requestName
@@ -49,14 +61,14 @@ main = do
   forM [".xmonad-worspace-log", ".xmonad-title-log"] $ \file ->
     safeSpawn "mkfifo" ["/tmp/" ++ file]
   xmonad $ ewmh
-    $ navigation2D
-      navcfg
-      (xK_k, xK_h, xK_j, xK_l)
-      [ (modm, windowGo),
-        (modm .|. shiftMask, windowSwap)
-      ]
-      True
-    $ flip additionalKeys (applicationKeys ++ navigationKeys)
+    -- $ navigation2D
+    --   navcfg
+    --   (xK_k, xK_h, xK_j, xK_l)
+    --   [ (modm, windowGo),
+    --     (modm .|. shiftMask, windowSwap)
+    --   ]
+    --   True
+    $ flip additionalKeys applicationKeys
     $ dcfg dbus
 
 dcfg dbus =
@@ -67,7 +79,7 @@ dcfg dbus =
       focusFollowsMouse = False,
       logHook = myLogHook dbus,
       keys = keyBindings,
-      layoutHook = LH.hiddenWindows . noBorders $ myBSP ||| simpleTabbed,
+      layoutHook = noBorders $ myTall ||| simpleTabbed,
       startupHook = startupHook desktopConfig,
       workspaces = IS.withScreens 2 [show n | n <- [1 .. 5]],
       handleEventHook = handleEventHook def <+> fullscreenEventHook
@@ -99,34 +111,34 @@ applicationKeys =
     ((modm .|. ctrlMask, xK_e), wal "haishoku" False True)
   ]
 
-navigationKeys =
-  [ ((modm, xK_r), sendMessage Rotate),
-    ((modm, xK_s), sendMessage Swap),
-    ((modm .|. altMask, xK_l), sendMessage $ ExpandTowards R),
-    ((modm .|. altMask, xK_h), sendMessage $ ExpandTowards L),
-    ((modm .|. altMask, xK_j), sendMessage $ ExpandTowards D),
-    ((modm .|. altMask, xK_k), sendMessage $ ExpandTowards U),
-    ((modm .|. altMask .|. ctrlMask, xK_l), sendMessage $ ShrinkFrom R),
-    ((modm .|. altMask .|. ctrlMask, xK_h), sendMessage $ ShrinkFrom L),
-    ((modm .|. altMask .|. ctrlMask, xK_j), sendMessage $ ShrinkFrom D),
-    ((modm .|. altMask .|. ctrlMask, xK_k), sendMessage $ ShrinkFrom U),
-    ((modm, xK_r), sendMessage Rotate),
-    ((modm, xK_s), sendMessage Swap),
-    ((modm, xK_n), sendMessage FocusParent),
-    ((modm .|. ctrlMask, xK_n), sendMessage SelectNode),
-    ((modm .|. shiftMask, xK_n), sendMessage MoveNode),
-    ((modm, xK_a), sendMessage Equalize),
-    ((modm .|. shiftMask, xK_a), sendMessage Balance),
-    ((modm, xK_m), withFocused LH.hideWindow),
-    ((modm .|. shiftMask, xK_m), LH.popNewestHiddenWindow)
-    -- , ((modm .|. shiftMask, xK_t), toggleWindowSpacingEnabled >> toggleSmartSpacing >> toggleScreenSpacingEnabled)
-  ]
+-- navigationKeys =
+--   [ ((modm, xK_r), sendMessage Rotate),
+--     ((modm, xK_s), sendMessage Swap),
+--     ((modm .|. altMask, xK_l), sendMessage $ ExpandTowards R),
+--     ((modm .|. altMask, xK_h), sendMessage $ ExpandTowards L),
+--     ((modm .|. altMask, xK_j), sendMessage $ ExpandTowards D),
+--     ((modm .|. altMask, xK_k), sendMessage $ ExpandTowards U),
+--     ((modm .|. altMask .|. ctrlMask, xK_l), sendMessage $ ShrinkFrom R),
+--     ((modm .|. altMask .|. ctrlMask, xK_h), sendMessage $ ShrinkFrom L),
+--     ((modm .|. altMask .|. ctrlMask, xK_j), sendMessage $ ShrinkFrom D),
+--     ((modm .|. altMask .|. ctrlMask, xK_k), sendMessage $ ShrinkFrom U),
+--     ((modm, xK_r), sendMessage Rotate),
+--     ((modm, xK_s), sendMessage Swap),
+--     ((modm, xK_n), sendMessage FocusParent),
+--     ((modm .|. ctrlMask, xK_n), sendMessage SelectNode),
+--     ((modm .|. shiftMask, xK_n), sendMessage MoveNode),
+--     ((modm, xK_a), sendMessage Equalize),
+--     ((modm .|. shiftMask, xK_a), sendMessage Balance),
+--     ((modm, xK_m), withFocused LH.hideWindow),
+--     ((modm .|. shiftMask, xK_m), LH.popNewestHiddenWindow)
+--     -- , ((modm .|. shiftMask, xK_t), toggleWindowSpacingEnabled >> toggleSmartSpacing >> toggleScreenSpacingEnabled)
+--   ]
 
-navcfg =
-  def
-    { defaultTiledNavigation = centerNavigation,
-      unmappedWindowRect = [("Full", singleWindowRect)] -- Needed for full-screen hjkl-navigation
-    }
+-- navcfg =
+--   def
+--     { defaultTiledNavigation = centerNavigation,
+--       unmappedWindowRect = [("Full", singleWindowRect)] -- Needed for full-screen hjkl-navigation
+--     }
 
 wal backend newpape light = do
   pape <-
@@ -137,12 +149,18 @@ wal backend newpape light = do
   -- liftIO $ writeFile "/home/jmc/tmp" cmd
   spawn cmd
 
-myBSP =
-  avoidStruts
-    $ borderResize
+-- myBSP =
+--   avoidStruts
+--     $ spacingWithEdge 10
+--     $ desktopLayoutModifiers
+--     $ emptyBSP
+
+myTall =
+    avoidStruts
     $ spacingWithEdge 10
     $ desktopLayoutModifiers
-    $ emptyBSP
+    -- $ Tall 1 (3/100) (3/5)
+    $ MyLayout (1/4)
 
 mkTerm = withWindowSet launchTerminal
   where
