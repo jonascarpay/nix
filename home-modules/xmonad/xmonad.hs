@@ -5,32 +5,26 @@ import qualified Codec.Binary.UTF8.String as UTF8
 import Control.Monad
 import qualified DBus as D
 import qualified DBus.Client as D
-import Data.Function (on)
 import Data.List (isPrefixOf, sortBy)
-import Data.Map (fromList)
+import qualified Data.Map as M
 import Data.Monoid ((<>))
+import Data.Bool (bool)
 import Numeric
 import System.IO
-import System.IO.Error (catchIOError)
-import System.Process (readProcess)
 import XMonad
-import XMonad.Actions.Navigation2D
 import XMonad.Config.Desktop as DC
 import XMonad.Core
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
-import qualified XMonad.Layout.IndependentScreens as IS
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spacing
-import XMonad.Layout.Tabbed
 import qualified XMonad.StackSet as W
+import qualified XMonad.Util.WorkspaceCompare as WC
+import qualified XMonad.Actions.CycleWS as CW
 import XMonad.Util.EZConfig (additionalKeys)
 import XMonad.Util.NamedWindows (getName)
 import XMonad.Util.Run
-import qualified XMonad.Util.WorkspaceCompare as WC
-
-modm = mod4Mask
 
 altMask = mod1Mask
 
@@ -45,12 +39,23 @@ newtype MyLayout a = MyLayout Rational
 
 instance LayoutClass MyLayout a where
   description _ = "MyLayout"
-  pureLayout (MyLayout w) scr (W.Stack m ls rs) = stack ls pl ++ [(m, pm)] ++ stack rs pr
-	where
-	  wl = if null ls then 0 else w
-	  wr = if null rs then 1 else (1-2*w)/(1-w)
-	  (pl,(pm,pr)) = splitHorizontallyBy wr <$> splitHorizontallyBy wl scr
-	  stack as = zip as . splitVertically (length as)
+
+  pureMessage (MyLayout w) m = fmap resize (fromMessage m)
+    where resize Shrink = MyLayout (max 0 $ w-delta)
+          resize Expand = MyLayout (min 1 $ w+delta)
+          delta = 3 / 100
+
+  pureLayout (MyLayout w) scr (W.Stack m [] []) = [(m, scr)]
+  pureLayout (MyLayout w) scr (W.Stack m us ds) = 
+    let (pm,pr) = splitHorizontallyBy w scr
+        st = reverse us ++ ds
+     in (m, pm) : zip st (splitVerticallyDiv (length st) (length us) 50 pr)
+
+splitVerticallyDiv :: Int -> Int -> Int -> Rectangle -> [Rectangle]
+splitVerticallyDiv n x r (Rectangle rx ry rw rh) = (\ry' -> Rectangle rx (fromIntegral ry') rw (fromIntegral rh')) <$> ys
+  where
+    rh' = div (fromIntegral rh - r) n
+    ys = [ i*fromIntegral rh' + fromIntegral ry + bool 0 r (i >= x) | i <- take n [0..]]
 
 main = do
   dbus <- D.connectSession
@@ -60,85 +65,52 @@ main = do
     [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
   forM [".xmonad-worspace-log", ".xmonad-title-log"] $ \file ->
     safeSpawn "mkfifo" ["/tmp/" ++ file]
-  xmonad $ ewmh
-    -- $ navigation2D
-    --   navcfg
-    --   (xK_k, xK_h, xK_j, xK_l)
-    --   [ (modm, windowGo),
-    --     (modm .|. shiftMask, windowSwap)
-    --   ]
-    --   True
-    $ flip additionalKeys applicationKeys
+  xmonad
+    $ ewmh
     $ dcfg dbus
 
 dcfg dbus =
   desktopConfig
     { terminal = termEmu,
-      modMask = modm,
+      modMask = mod4Mask,
       borderWidth = 0, -- Necessary to remove borders from floating windows
       focusFollowsMouse = False,
       logHook = myLogHook dbus,
-      keys = keyBindings,
-      layoutHook = noBorders $ myTall ||| simpleTabbed,
+      layoutHook = noBorders $ myLayout ||| Full,
       startupHook = startupHook desktopConfig,
-      workspaces = IS.withScreens 2 [show n | n <- [1 .. 5]],
+      keys = myKeys,
+      -- workspaces = show <$> [1..5],
+      workspaces = [ "一", "二", "三", "四", "五" ], -- TODO maybe do this in post
       handleEventHook = handleEventHook def <+> fullscreenEventHook
     }
 
-keyBindings conf =
-  let m = modMask conf
-   in fromList
-        [ ((m .|. e, k), windows (IS.onCurrentScreen f ws))
-          | (k, ws) <- zip [xK_1 .. xK_9] (IS.workspaces' conf),
-            (e, f) <- [(0, W.view), (shiftMask, W.shift)]
-        ]
-        <> keys desktopConfig conf
+myLayout = avoidStruts $ spacingWithEdge 10 $ MyLayout (5/8)
 
-applicationKeys =
-  [ ((modm, xK_f), spawn "firefox"),
-    ((modm, xK_z), spawn "firefox localhost:9999"),
-    -- , ((modm, xK_Return), spawn termEmu)
-    ((modm, xK_Return), mkTerm),
-    ((modm, xK_o), spawn "rofi -show run"),
-    ((modm, xK_b), wal "haishoku" True False),
-    ((modm, xK_c), spawn "emacsclient --create-frame --no-wait"),
-    ((modm .|. shiftMask, xK_b), wal "wal" True True),
-    ((modm .|. ctrlMask, xK_1), wal "wal" False False),
-    ((modm .|. ctrlMask, xK_2), wal "colorz" False False),
-    ((modm .|. ctrlMask, xK_3), wal "haishoku" False False),
-    ((modm .|. ctrlMask, xK_q), wal "wal" False True),
-    ((modm .|. ctrlMask, xK_w), wal "colorz" False True),
-    ((modm .|. ctrlMask, xK_e), wal "haishoku" False True)
-  ]
+myKeys conf = M.fromList
+  [ ((m, xK_f), spawn "firefox")
+  , ((m, xK_Return), mkTerm)
+  , ((m, xK_o), spawn "rofi -show run")
+  , ((m, xK_b), wal "haishoku" True False)
+  , ((m, xK_c), spawn "emacsclient --create-frame --no-wait")
+  , ((m .|. shiftMask, xK_b), wal "wal" True True)
+  , ((m .|. ctrlMask, xK_1), wal "wal" False False)
+  , ((m .|. ctrlMask, xK_2), wal "colorz" False False)
+  , ((m .|. ctrlMask, xK_3), wal "haishoku" False False)
+  , ((m .|. ctrlMask, xK_q), wal "wal" False True)
+  , ((m .|. ctrlMask, xK_w), wal "colorz" False True)
+  , ((m .|. ctrlMask, xK_e), wal "haishoku" False True)
 
--- navigationKeys =
---   [ ((modm, xK_r), sendMessage Rotate),
---     ((modm, xK_s), sendMessage Swap),
---     ((modm .|. altMask, xK_l), sendMessage $ ExpandTowards R),
---     ((modm .|. altMask, xK_h), sendMessage $ ExpandTowards L),
---     ((modm .|. altMask, xK_j), sendMessage $ ExpandTowards D),
---     ((modm .|. altMask, xK_k), sendMessage $ ExpandTowards U),
---     ((modm .|. altMask .|. ctrlMask, xK_l), sendMessage $ ShrinkFrom R),
---     ((modm .|. altMask .|. ctrlMask, xK_h), sendMessage $ ShrinkFrom L),
---     ((modm .|. altMask .|. ctrlMask, xK_j), sendMessage $ ShrinkFrom D),
---     ((modm .|. altMask .|. ctrlMask, xK_k), sendMessage $ ShrinkFrom U),
---     ((modm, xK_r), sendMessage Rotate),
---     ((modm, xK_s), sendMessage Swap),
---     ((modm, xK_n), sendMessage FocusParent),
---     ((modm .|. ctrlMask, xK_n), sendMessage SelectNode),
---     ((modm .|. shiftMask, xK_n), sendMessage MoveNode),
---     ((modm, xK_a), sendMessage Equalize),
---     ((modm .|. shiftMask, xK_a), sendMessage Balance),
---     ((modm, xK_m), withFocused LH.hideWindow),
---     ((modm .|. shiftMask, xK_m), LH.popNewestHiddenWindow)
---     -- , ((modm .|. shiftMask, xK_t), toggleWindowSpacingEnabled >> toggleSmartSpacing >> toggleScreenSpacingEnabled)
---   ]
-
--- navcfg =
---   def
---     { defaultTiledNavigation = centerNavigation,
---       unmappedWindowRect = [("Full", singleWindowRect)] -- Needed for full-screen hjkl-navigation
---     }
+  , ((m,               xK_n), CW.nextWS)
+  , ((m,               xK_p), CW.prevWS)
+  , ((m .|. shiftMask, xK_n), CW.shiftToNext >> CW.nextWS)
+  , ((m .|. shiftMask, xK_p), CW.shiftToPrev >> CW.prevWS)
+  , ((m, xK_grave), CW.moveTo CW.Next CW.NonEmptyWS)
+  -- , ((m,               xK_Right), CW.nextScreen)
+  -- , ((m,               xK_Left),  CW.prevScreen)
+  -- , ((m .|. shiftMask, xK_Right), CW.shiftNextScreen)
+  -- , ((m .|. shiftMask, xK_Left),  CW.shiftPrevScreen)
+  ] <> keys desktopConfig conf
+    where m = modMask conf
 
 wal backend newpape light = do
   pape <-
@@ -154,13 +126,6 @@ wal backend newpape light = do
 --     $ spacingWithEdge 10
 --     $ desktopLayoutModifiers
 --     $ emptyBSP
-
-myTall =
-    avoidStruts
-    $ spacingWithEdge 10
-    $ desktopLayoutModifiers
-    -- $ Tall 1 (3/100) (3/5)
-    $ MyLayout (1/4)
 
 mkTerm = withWindowSet launchTerminal
   where
@@ -179,32 +144,11 @@ myLogHook dbus = do
   -- hiddens <- AM.withMinimized (pure . length)
   dynamicLogWithPP eventLogHook
   where
-    eventLogHook =
-      def
-        { ppOutput = dbusOutput dbus,
-          ppCurrent =
-            wrap "%{R}%{T2} " " %{T-}%{R}"
-              -- . (if hiddens > 0 then (<> ('+' : show hiddens)) else id)
-              . parseWS,
-          ppVisible = wrap " " " " . parseWS,
-          ppUrgent = wrap " " " " . parseWS,
-          ppHidden = wrap " " " " . parseWS,
-          ppLayout = const "",
-          ppWsSep = "",
-          ppSort = WC.mkWsSort WC.getWsCompareByTag,
-          ppSep = "  ",
-          ppTitle = shorten 300
-        }
-    parseWS :: String -> String
-    parseWS (b : '_' : d) =
-      let d' = read (b : [])
-          b' = read d
-          i = 2 * (b' - 1) + d'
-          letter = if d' == 0 then 'L' else 'R'
-          -- wrap str = "%{A1:wmctrl -s " ++ show i ++ ":}" ++ str ++ "%{A}"
-          wrap = id
-       in wrap (letter : d)
-    parseWS str = str
+    eventLogHook = def
+      { ppOutput = dbusOutput dbus
+      , ppLayout = const ""
+      -- , ppSort = WC.getSortByXineramaRule
+      }
 
 dbusOutput :: D.Client -> String -> IO ()
 dbusOutput dbus str = do

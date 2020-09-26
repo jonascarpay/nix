@@ -3,10 +3,9 @@
 # https://github.com/hlissner/doom-emacs/blob/develop/docs/modules.org
 
 { pkgs, ... }:
-
 let
   nurNoPkgs = import <nur> { pkgs = null; };
-  upkgs = import <unstable> {};
+  upkgs = import <unstable> { };
 in
 {
   imports = [
@@ -41,7 +40,10 @@ in
     "/network-security.data"
   ];
 
-  services.emacs.enable = true;
+  services.emacs = {
+    enable = true;
+    # FIXME client.enable = true;
+  };
 
   programs.emacs = {
     enable = true;

@@ -7,6 +7,7 @@ in
   imports = [
     ./system-modules/openvpn.nix
     ./system-modules/mopidy.nix
+    # ./system-modules/gnome.nix
     ./cachix.nix
     ./secrets.nix
   ];
@@ -106,9 +107,9 @@ in
     variables = {
       EDITOR = "vim";
       PAGER = "less";
-      # HM_PATH       = "https://github.com/rycee/home-manager/archive/master.tar.gz";
-      HM_PATH =
-        "https://github.com/rycee/home-manager/archive/release-19.09.tar.gz";
+      # HM_PATH = "https://github.com/rycee/home-manager/archive/master.tar.gz";
+      HM_PATH = "https://github.com/rycee/home-manager/archive/release-20.03.tar.gz";
+      # HM_PATH = "https://github.com/rycee/home-manager/archive/release-20.09.tar.gz";
       XMODIFIER = "@im=fcitx"; # Probably don't need this
     };
   };
@@ -146,12 +147,6 @@ in
     printing.enable = true;
     printing.drivers = [ pkgs.brlaser pkgs.gutenprint pkgs.gutenprintBin ];
     fstrim.enable = true;
-    strongswan = {
-      enable = true;
-      secrets = [ "ipsec.d/ipsec.nm-l2tp.secrets" ];
-    };
-    logind.extraConfig = "RuntimeDirectorySize=2G";
-    ntp.enable = true;
     xserver = {
       enable = true;
       displayManager.lightdm.autoLogin = {
@@ -160,7 +155,14 @@ in
       };
       desktopManager.plasma5.enable = true;
     };
-    nixosManual.showManual = true;
+
+    strongswan = {
+      enable = true;
+      secrets = [ "ipsec.d/ipsec.nm-l2tp.secrets" ];
+    };
+    logind.extraConfig = "RuntimeDirectorySize=2G";
+    ntp.enable = true;
+    # nixosManual.showManual = true;
   };
 
   programs.bash.enableCompletion = true; # enable tab-completion for nix-* tools

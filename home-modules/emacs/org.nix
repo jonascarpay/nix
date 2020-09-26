@@ -13,7 +13,8 @@ in
       (setq org-hide-emphasis-markers t)
       (setq org-startup-indented t)
       (push "~/Org/" org-agenda-files)
-      (setq system-time-locale "en-US")
+      (push "~/Org/CrossCompass/" org-agenda-files)
+      ;; (setq system-time-locale "en-US")
       (global-prettify-symbols-mode t)
       (setq-default prettify-symbols-alist '(
         ("#+BEGIN_SRC" . "λ") ("#+begin_src" . "λ")
@@ -26,11 +27,10 @@ in
         (interactive)
         (read-file-name-default
           "Capture to: "
-          "~/Org"
+          "~/Org/"
           nil
           'confirm
-          "agenda.org"
-          (lambda (str) (string-equal (file-name-extension str) "org"))))
+          "agenda.org"))
       
       (defun jmc/org-capture ()
         "Read file name to capture to."

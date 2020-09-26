@@ -1,10 +1,11 @@
 { pkgs, config, ... }:
 let upkgs = import <unstable> { };
-in {
+in
+{
   programs.rofi = {
     enable = true;
     theme = "~/.cache/wal/colors-rofi-dark.rasi";
-    package = upkgs.rofi.override { plugins = [ upkgs.rofi-calc ]; };
+    # FIXME package = upkgs.rofi.override { plugins = [ upkgs.rofi-calc ]; };
     # fullscreen = true;
     # terminal = "";
     font = "SauceCodePro Nerd Font Mono 24";

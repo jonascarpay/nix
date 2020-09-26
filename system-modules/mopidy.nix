@@ -1,7 +1,9 @@
 { pkgs, config, ... }:
-let unstable = import <unstable> { inherit (config.nixpkgs) config; };
+let
+  unstable = import <unstable> { inherit (config.nixpkgs) config; };
 
-in {
+in
+{
   # nixpkgs.overlays = [ (_: _: { inherit (unstable) mopidy; }) ];
 
   services.mopidy = {

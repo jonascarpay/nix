@@ -19,9 +19,10 @@ lib.mkIf (config.xsession.enable) {
     config = {
       "bar/common" = {
         width = "100%";
-        # locale = "ja_JP.UTF-8";
-        font-0 = "SauceCodePro Nerd Font:size=8;2";
-        font-1 = "SauceCodePro Nerd Font:size=8:weight=bold;2";
+        locale = "ja_JP.UTF-8";
+        font-0 = "SauceCodePro Nerd Font:style=Regular:size=8;2";
+        font-1 = "SauceCodePro Nerd Font:style=Bold:size=8;2";
+        font-2 = "IPAPGothic:style=Bold:size=8;3";
         # tray-position = "right";
         background = "\${colors.background}";
         foreground = "\${colors.foreground}";
@@ -89,7 +90,7 @@ lib.mkIf (config.xsession.enable) {
 
       "module/date" = {
         type = "internal/date";
-        date = "%y/%m/%d";
+        date = "%y/%m/%d %a";
         time = "%H:%M";
         label = " %date%  %time% ";
         label-font = "2";

@@ -6,7 +6,7 @@ let
 in
 {
   imports = [
-    ./home-modules/agda.nix
+    # ./home-modules/agda.nix
     ./home-modules/albert
     ./home-modules/blender.nix
     ./home-modules/caches.nix
@@ -57,11 +57,12 @@ in
       pavucontrol
       python37Packages.ueberzug # for image previews
       s-tui
+      signal-desktop
+      skype
       slack
       spotify
       steam
       sxiv
-      signal-desktop
       tealdeer
       tmux
       transmission-gtk
@@ -151,7 +152,9 @@ in
 
     home-manager = {
       enable = true;
-      path = "https://github.com/rycee/home-manager/archive/master.tar.gz";
+      # setting path seems dangerous since it creates a circular dependency
+      # path = "https://github.com/rycee/home-manager/archive/master.tar.gz";
+      # path = https://github.com/rycee/home-manager/archive/release-20.09.tar.gz;
       # path = https://github.com/rycee/home-manager/archive/release-20.03.tar.gz;
     };
 
@@ -191,7 +194,7 @@ in
     # syncthing.tray = true;
 
     picom = {
-      enable = manageX;
+      # enable = manageX;
       package = pkgs.picom.overrideAttrs (
         _: {
           src = builtins.fetchGit {
@@ -221,21 +224,22 @@ in
       ];
     };
 
-    redshift = let
-      delft = {
-        latitude = "52.0115769";
-        longitude = "4.3570677";
-      };
-      tokyo = {
-        latitude = "35.6762";
-        longitude = "139.6503";
-      };
-    in
-      {
-        enable = true;
-        tray = true;
-        inherit (tokyo) latitude longitude;
-      };
+    redshift =
+      let
+        delft = {
+          latitude = "52.0115769";
+          longitude = "4.3570677";
+        };
+        tokyo = {
+          latitude = "35.6762";
+          longitude = "139.6503";
+        };
+      in
+        {
+          enable = true;
+          tray = true;
+          inherit (tokyo) latitude longitude;
+        };
 
   };
 
