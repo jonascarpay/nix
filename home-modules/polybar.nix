@@ -2,9 +2,9 @@
 { pkgs, config, lib, ... }:
 lib.mkIf (config.xsession.enable) {
 
-  programs.autorandr.hooks.postswitch = {
-    restart-polybar = "systemctl restart --user polybar.service";
-  };
+  programs.autorandr.hooks.postswitch.restart-polybar = ''
+    systemctl restart --user polybar.service
+  '';
   services.polybar = {
     enable = true;
     package = pkgs.polybar.override { alsaSupport = true; };
@@ -23,13 +23,12 @@ lib.mkIf (config.xsession.enable) {
         font-0 = "SauceCodePro Nerd Font:style=Regular:size=8;2";
         font-1 = "SauceCodePro Nerd Font:style=Bold:size=8;2";
         font-2 = "IPAPGothic:style=Bold:size=8;3";
-        # tray-position = "right";
+        tray-position = "right";
         background = "\${colors.background}";
         foreground = "\${colors.foreground}";
         module-margin = "1";
         modules-left = "xmonad";
-        modules-right =
-          "pulseaudio wireless wired fs memory cpu battery date-nl date";
+        modules-right = "wireless wired fs memory cpu battery date-nl date";
         line-color = "\${colors.foreground}";
         line-size = "3";
       };
@@ -162,11 +161,24 @@ lib.mkIf (config.xsession.enable) {
         ramp-coreload-7 = "█";
       };
 
-      "module/xmonad" = {
-        type = "custom/script";
-        exec = "${pkgs.xmonad-log}/bin/xmonad-log";
-        tail = "true";
-      };
+      "module/xmonad" =
+        let
+          dbuswatch = pkgs.writeTextFile
+            {
+              name = "xmonad-log.sh";
+              executable = true;
+              # godverdomme 3 kkuur bezig geweest met uitvinden dat je -u nodig hebt voor sed echt chille zaterdag
+              text = ''
+                ${pkgs.dbus}/bin/dbus-monitor "path=/org/xmonad/Log,interface=org.xmonad.Log,member=Update" | \
+                  ${pkgs.gnused}/bin/sed -nu 's/^   string "\([^:].*\)"$/\1/p'
+              '';
+            };
+        in
+        {
+          type = "custom/script";
+          exec = "${dbuswatch}";
+          tail = "true";
+        };
 
       "module/wired" = {
         type = "internal/network";

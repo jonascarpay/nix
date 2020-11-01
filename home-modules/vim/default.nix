@@ -4,7 +4,8 @@ let
   np = pkgs.vimPlugins;
   unp = unstable.vimPlugins;
 
-in {
+in
+{
   imports = [ ./vim-init.nix ];
 
   home.packages = [
@@ -145,7 +146,7 @@ in {
           # plugins = [ np.neoformat ];
           plugins = [
             (gh "jonascarpay/neoformat" {
-              rev = "cb5b0ecb3eda0eff2ed7e51b7ebd3eecfd9ae251";
+              rev = "ae202214ea73e58f93b4bfc83424c1e9c3d90976";
             })
           ];
           config = ''

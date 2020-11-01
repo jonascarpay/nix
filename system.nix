@@ -1,5 +1,4 @@
 { pkgs, config, ... }:
-
 let
   unstable = import <unstable> { inherit (config.nixpkgs) config; };
 in
@@ -51,6 +50,8 @@ in
       keep-derivations = true
     '';
     requireSignedBinaryCaches = false;
+    binaryCaches = [ "https://hydra.iohk.io" ];
+    binaryCachePublicKeys = [ "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=" ];
   };
 
   fonts = {
@@ -108,7 +109,7 @@ in
       EDITOR = "vim";
       PAGER = "less";
       # HM_PATH = "https://github.com/rycee/home-manager/archive/master.tar.gz";
-      HM_PATH = "https://github.com/rycee/home-manager/archive/release-20.03.tar.gz";
+      HM_PATH = "https://github.com/rycee/home-manager/archive/release-20.09.tar.gz";
       # HM_PATH = "https://github.com/rycee/home-manager/archive/release-20.09.tar.gz";
       XMODIFIER = "@im=fcitx"; # Probably don't need this
     };
@@ -116,6 +117,7 @@ in
 
   networking = {
     networkmanager.enable = true;
+    hosts."127.0.0.1" = [ "localhost" "youtube.com" ];
     firewall = {
       enable = true;
       allowedTCPPorts = [
@@ -126,6 +128,8 @@ in
         27036
         27037 # steam
         8080 # hoogle
+        8081 # hoogle
+        8096 # jellyfin
       ];
       allowedUDPPorts = [
         53
@@ -136,6 +140,8 @@ in
         4500 # xc vpn
         27031
         27036 # steam
+        8081 # steam
+        8096 # jellyfin
       ];
     };
   };

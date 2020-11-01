@@ -1,5 +1,6 @@
 { pkgs, config, ... }:
-let upkgs = import <unstable> { };
+let
+  upkgs = import <unstable> {};
 in
 {
   programs.rofi = {
@@ -11,7 +12,8 @@ in
     font = "SauceCodePro Nerd Font Mono 24";
     lines = 5;
     extraConfig = ''
-      rofi.modi: combi,calc
+      // rofi.modi: combi,calc
+      rofi.modi: combi
       rofi.combi-modi run,window
       rofi.matching: fuzzy
     '';

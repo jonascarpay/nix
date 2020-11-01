@@ -52,12 +52,13 @@ let
     propagatedBuildInputs = old.propagatedBuildInputs ++ [ colorz haishoku ];
     patches = old.patches ++ [ epatch ];
   });
-in {
+in
+{
   home.packages = [ mywal pywalfox ];
   xsession.initExtra = ''
     wal -i ~/Wallpapers/papes --backend haishoku
   '';
-  programs.autorandr.hooks.postswitch = {
-    restart-wal = ''wal -i "$(cat /home/jmc/.cache/wal/wal)" -R'';
-  };
+  programs.autorandr.hooks.postswitch.restart-wal = ''
+    wal -i "$(cat /home/jmc/.cache/wal/wal)" -R
+  '';
 }

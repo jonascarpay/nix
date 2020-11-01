@@ -2,17 +2,18 @@
 let
   manageX = true;
   channels = import ~/dotfiles/channels.nix;
-  unstable = import <unstable> {};
+  unstable = import <unstable> { };
 in
 {
   imports = [
-    # ./home-modules/agda.nix
+    ./home-modules/agda.nix
     ./home-modules/albert
     ./home-modules/blender.nix
     ./home-modules/caches.nix
     ./home-modules/emacs
     ./home-modules/firefox.nix
     ./home-modules/fish.nix
+    ./home-modules/picom.nix
     ./home-modules/polybar.nix
     ./home-modules/ranger
     ./home-modules/rofi.nix
@@ -26,12 +27,10 @@ in
     ./secrets.nix
   ];
 
-  caches.cachix = [
-    {
-      name = "iohk";
-      sha256 = "0ds8j8g3rp9jam7kb0040smrjhnrrcgc0xjpnhmy6iq9fkm6zja4";
-    }
-  ];
+  caches.cachix = [{
+    name = "iohk";
+    sha256 = "0ds8j8g3rp9jam7kb0040smrjhnrrcgc0xjpnhmy6iq9fkm6zja4";
+  }];
 
   manual = {
     manpages.enable = true;
@@ -47,14 +46,14 @@ in
       anki
       entr
       gnome3.nautilus
-      haskellPackages.cabal-bounds
-      kakoune-unwrapped
+      haskellPackages.cabal-bounds # TODO move to formatter
       killall
       mpv
       neofetch
       okular
       pandoc
       pavucontrol
+      pidgin
       python37Packages.ueberzug # for image previews
       s-tui
       signal-desktop
@@ -67,10 +66,10 @@ in
       tmux
       transmission-gtk
       unstable.cached-nix-shell
-      unstable.lutris
+      # unstable.lutris
       unzip
       weechat
-      xclip
+      xclip # Doesn't work?
       youtube-dl
     ];
 
@@ -145,7 +144,7 @@ in
 
     termite = {
       enable = true;
-      backgroundColor = "rgba(0,0,0,0.95)";
+      # backgroundColor = "rgba(0,0,0,0.95)";
       # cursorBlink = "on";
       # cursorShape = "ibeam";
     };
@@ -178,7 +177,7 @@ in
       enable = true;
       userName = "Jonas Carpay";
       userEmail = "jonascarpay@gmail.com";
-      ignores = [ "*~" "*.swp" "*.swo" "tags" "TAGS" "result/" ];
+      ignores = [ "*~" "*.swp" "*.swo" "tags" "TAGS" "result" "result-*" ];
       extraConfig.commit.verbose = true;
     };
   };
@@ -193,37 +192,6 @@ in
     # syncthing.enable = true;
     # syncthing.tray = true;
 
-    picom = {
-      # enable = manageX;
-      package = pkgs.picom.overrideAttrs (
-        _: {
-          src = builtins.fetchGit {
-            url = "https://github.com/yshui/picom.git";
-            rev = "c9ca9de55e59a4334007ed91704f35342c7ab447";
-          };
-        }
-      );
-      # package = pkgs.callPackage ~/Dev/picom { };
-      shadow = true;
-      experimentalBackends = true;
-      fade = true;
-      noDockShadow = false;
-      fadeDelta = 4;
-      extraOptions = ''
-        blur = true;
-        blur-method = "dual_kawase";
-        blur-background-fixed = true;
-        blur-strength = 12;
-      '';
-      opacityRule = [
-        "70:class_i = 'termite' && !focused"
-        "70:class_i = 'polybar'"
-        "100:class_i = 'Blender'"
-        "100:class_i = 'gl'"
-        "80:!focused"
-      ];
-    };
-
     redshift =
       let
         delft = {
@@ -235,11 +203,11 @@ in
           longitude = "139.6503";
         };
       in
-        {
-          enable = true;
-          tray = true;
-          inherit (tokyo) latitude longitude;
-        };
+      {
+        enable = true;
+        tray = true;
+        inherit (tokyo) latitude longitude;
+      };
 
   };
 
@@ -249,6 +217,12 @@ in
       After = [ "pulseaudio.service" "bluetooth.service" ];
     };
     Service.ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
+  };
+  systemd.user.services.jellyfin = {
+    Unit = {
+      Description = "Jellyfin media server";
+    };
+    Service.ExecStart = "${pkgs.jellyfin}/bin/jellyfin";
   };
 
   xsession = {
