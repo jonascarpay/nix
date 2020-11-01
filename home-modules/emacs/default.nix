@@ -5,7 +5,7 @@
 { pkgs, ... }:
 let
   nurNoPkgs = import <nur> { pkgs = null; };
-  upkgs = import <unstable> { };
+  upkgs = import <unstable> {};
 in
 {
   imports = [
@@ -56,8 +56,10 @@ in
           };
         }
       );
-      org-fragtog = upkgs.emacsPackages.org-fragtog;
-      ivy = upkgs.emacsPackages.ivy; # Doesn't display actions, fixed 2020-05-01
+      selectrum = upkgs.emacsPackages.selectrum;
+      prescient = upkgs.emacsPackages.prescient;
+      selectrum-prescient = upkgs.emacsPackages.selectrum-prescient;
+      # ivy = upkgs.emacsPackages.ivy; # Doesn't display actions, fixed 2020-05-01
     };
     package = upkgs.emacs;
 
@@ -88,7 +90,7 @@ in
         };
 
         polymode = {
-          enable = true;
+          enable = false;
           after = [ "nix" ];
           config = /* elisp */ ''
             (add-to-list 'auto-mode-alist '("\\.nix$" . poly-nix-mode))
@@ -118,6 +120,8 @@ in
           '';
         };
 
+        avy.enable = true;
+        
         nix-mode = {
           # Also check out
           # https://github.com/shlevy/nix-buffer
@@ -131,28 +135,42 @@ in
         };
 
         ivy = {
-          enable = true;
+          enable = false;
           config = "(ivy-mode 1)";
         };
 
         # Companion to ivy that at least fixes the M-x keys
         counsel = {
-          enable = true;
+          enable = false;
           config = "(counsel-mode)";
         };
 
-        counsel-projectile = {
+        selectrum = {
           enable = true;
+          config = "(selectrum-mode +1)";
+        };
+        prescient.enable = true;
+        selectrum-prescient = {
+          enable = true;
+          after = [ "selectrum" "prescient" ];
+          config = "(selectrum-prescient-mode)";
+        };
+
+        counsel-projectile = {
+          enable = false;
           config = ''
             (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
           '';
         };
 
+        multiple-cursors.enable = true;
+        magit.enable = true;
         key-chord = {
           enable = true;
           config = "(key-chord-mode t)";
         };
 
+        # switch for https://github.com/raxod502/apheleia
         reformatter.enable = true;
 
         hydra.enable = true;
@@ -173,12 +191,12 @@ in
         };
 
         evil = {
-          enable = true;
+          enable = false;
           init = "(setq evil-want-C-u-scroll t)";
           config = "(evil-mode 1)";
         };
         evil-escape = {
-          enable = true;
+          enable = false;
           config = ''
             (evil-escape-mode t)
             (setq-default evil-escape-key-sequence "hj")
@@ -186,7 +204,7 @@ in
         };
 
         popwin = {
-          enable = true;
+          enable = false;
           config = ''
             (popwin-mode 1)
           '';

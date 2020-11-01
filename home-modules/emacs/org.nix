@@ -1,6 +1,7 @@
 { pkgs, ... }:
 let
   tex = "${pkgs.texlive.combined.scheme-full}/bin/pdflatex";
+  upkgs = import <unstable> { };
 in
 {
   home.packages = [
@@ -8,6 +9,9 @@ in
     pkgs.texlive.combined.scheme-full
   ];
   fonts.fontconfig.enable = true;
+  programs.emacs.overrides = _: _: {
+    org-fragtog = upkgs.emacsPackages.org-fragtog;
+  };
   programs.emacs.init = {
     postlude = /* elisp */ ''
       (setq org-hide-emphasis-markers t)
@@ -50,6 +54,13 @@ in
 
       (setq org-todo-keywords
         '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+
+      (defun jmc/org-agenda ()
+        "Make org-agenda for just the main agenda files"
+        (interactive)
+        (let ((org-agenda-files '("~/Org/agenda.org" "~/Org/birthdays.org")))
+            (org-agenda nil "n"))
+      )
     '';
     # (org-indent-mode)
     usePackage = {
