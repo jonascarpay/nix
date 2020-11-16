@@ -27,10 +27,20 @@ in
     ./secrets.nix
   ];
 
-  caches.cachix = [{
-    name = "iohk";
-    sha256 = "0ds8j8g3rp9jam7kb0040smrjhnrrcgc0xjpnhmy6iq9fkm6zja4";
-  }];
+  caches = {
+    cachix = {
+      # cachix = [{
+      #   name = "iohk";
+      #   sha256 = "0ds8j8g3rp9jam7kb0040smrjhnrrcgc0xjpnhmy6iq9fkm6zja4";
+      # }];
+    };
+    extraCaches = {
+      iohk-hydra = {
+        url = "https://hydra.iohk.io";
+        key = "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=";
+      };
+    };
+  };
 
   manual = {
     manpages.enable = true;

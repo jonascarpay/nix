@@ -1,7 +1,6 @@
 { config, lib, ... }:
 with lib;
 let
-
   cfg = config.caches;
 
   nixosCache = {
@@ -9,25 +8,29 @@ let
     key = "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=";
   };
 
-  cachixCaches = let
+  cachixCaches =
+    let
+      getCacheDynamic = arg:
+        if isString arg then getCache { name = arg; } else getCache arg;
 
-    getCacheDynamic = arg:
-      if isString arg then getCache { name = arg; } else getCache arg;
+      getCache = args:
+        let
+          content = builtins.fetchurl ({
+            url = "https://cachix.org/api/v1/cache/${args.name}";
+          } // optionalAttrs (args ? sha256) { inherit (args) sha256; });
+          json = builtins.fromJSON (builtins.readFile content);
+          url = json.uri;
+          keys = json.publicSigningKeys;
+        in
+        { inherit url keys; };
 
-    getCache = args:
-      let
-        content = builtins.fetchurl ({
-          url = "https://cachix.org/api/v1/cache/${args.name}";
-        } // optionalAttrs (args ? sha256) { inherit (args) sha256; });
-        json = builtins.fromJSON (builtins.readFile content);
-        url = json.uri;
-        keys = json.publicSigningKeys;
-      in { inherit url keys; };
-
-  in listToAttrs (map (arg: {
-    name = arg.name or arg;
-    value = getCacheDynamic arg;
-  }) cfg.cachix);
+    in
+    listToAttrs (map
+      (arg: {
+        name = arg.name or arg;
+        value = getCacheDynamic arg;
+      })
+      cfg.cachix);
 
   substituters = concatStringsSep " " (map (v: v.url) (attrValues cfg.caches));
   publicKeys = concatStringsSep " "
@@ -37,12 +40,14 @@ let
     trusted-public-keys = ${publicKeys}
   '';
 
-in {
+in
+{
   options.caches = {
     caches = mkOption {
       description = ''
         Caches to write to .config/nix/nix.conf.
-        If this value is set, the values of caches.extraCaches and caches.cachix will be ignored.
+        It is recommended you use `caches.cachix` and `caches.extraCaches` instead of setting this directly.
+        If this value is set, the values of `caches.extraCaches` and `caches.cachix` will be ignored.
         The names are ignored.
 
         Example value:
@@ -62,8 +67,18 @@ in {
     extraCaches = mkOption {
       description = ''
         Caches to append to .config/nix/nix.conf.
+        The names are ignored.
         Same as caches.caches, but composes with caches.cachix and leaves the
         default nixos cache intact.
+
+        Example value:
+          
+          {
+            iohk-hydra = {
+              url = "https://hydra.iohk.io";
+              key = "hydra.iohk.io:********************************************";
+            };
+          }
       '';
       type = types.attrs;
       default = { };
