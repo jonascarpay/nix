@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TupleSections #-}
 
@@ -82,6 +83,7 @@ instance LayoutClass TallDock a where
 
   pureMessage (TallDock m rd rs z) msg
       =   fmap resize (fromMessage msg)
+      <|> fmap vresize (fromMessage msg)
       <|> fmap incDock (fromMessage msg)
       <|> fmap togglezoom (fromMessage msg)
 
@@ -89,6 +91,8 @@ instance LayoutClass TallDock a where
       delta = 3 / 100
       resize Shrink = TallDock m rd (max 0.1 $ rs-delta) False
       resize Expand = TallDock m rd (min 0.9 $ rs+delta) False
+      vresize VShrink = TallDock m (max 0.1 $ rd-delta) rs False
+      vresize VExpand = TallDock m (min 0.9 $ rd+delta) rs False
       incDock (IncMasterN d) = TallDock (max 0 (m+d)) rd rs False
       togglezoom ZoomToggle = TallDock m rd rs (not z)
       togglezoom ZoomUnzoom = TallDock m rd rs False
@@ -99,10 +103,11 @@ defaultTallDock = TallDock 1 (3/4) (1/2) False
 myLayout = avoidStruts $ spacingWithEdge 10 $ defaultTallDock
 -- myLayout = avoidStruts $ defaultTallDock
 
-data ZoomMsg = ZoomToggle | ZoomUnzoom
-  deriving (Eq, Show, Typeable)
+data VResizeMsg = VShrink | VExpand
+  deriving (Eq, Show, Typeable, Message)
 
-instance Message ZoomMsg
+data ZoomMsg = ZoomToggle | ZoomUnzoom
+  deriving (Eq, Show, Typeable, Message)
 
 splitVerticallyDiv :: Int -> Int -> Int -> Rectangle -> [Rectangle]
 splitVerticallyDiv n x r (Rectangle rx ry rw rh) = (\ry' -> Rectangle rx (fromIntegral ry') rw (fromIntegral rh')) <$> ys
@@ -156,6 +161,8 @@ myKeys conf = handlezoom $ M.fromList myKeyList <> keys desktopConfig conf
       , ((m .|. shiftMask .|. ctrlMask, xK_w), wal "colorz" False True)
       , ((m .|. shiftMask .|. ctrlMask, xK_e), wal "haishoku" False True)
     
+      , ((m .|. shiftMask, xK_h), sendMessage VShrink)
+      , ((m .|. shiftMask, xK_l), sendMessage VExpand)
       , ((m, xK_n), CW.moveTo CW.Next CW.HiddenWS)
       , ((m, xK_p), CW.moveTo CW.Prev CW.HiddenWS)
       , ((m .|. controlMask, xK_n), CW.shiftTo CW.Next CW.HiddenWS)
@@ -173,6 +180,7 @@ myKeys conf = handlezoom $ M.fromList myKeyList <> keys desktopConfig conf
       ] <>
       [((m .|. mask, key), screenWorkspace scr >>= flip whenJust (windows . f))
           | (key, scr) <- zip [xK_w, xK_e, xK_r] [0..]
+          -- | (key, scr) <- zip [xK_e, xK_w] [0..]
           , (mask, f) <- [ (0, W.view)
                          , (controlMask, \n -> W.shift n)
                          , (shiftMask, \n -> W.view n . W.shift n)
