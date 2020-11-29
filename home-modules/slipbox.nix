@@ -1,6 +1,5 @@
 { pkgs, lib, ... }:
 let
-
   boxdir = "/home/jmc/slipbox";
   port = "9999";
   rev = "8894f9449d04b05d58f41c9b71472333eaaa4471";
@@ -51,7 +50,8 @@ let
   #     '';
   #   };
 
-in {
+in
+{
 
   home.packages = [ pkgs.ripgrep neuron ];
 
