@@ -7,13 +7,13 @@ in
     ./system-modules/openvpn.nix
     ./system-modules/mopidy.nix
     # ./system-modules/gnome.nix
-    ./cachix.nix
+    # ./cachix.nix
     ./secrets.nix
   ];
 
   system.copySystemConfiguration = true;
 
-  cachix = [ "all-hies" ];
+  # cachix = [ "all-hies" ];
 
   boot.kernelParams = [
     "noibrs"
@@ -50,8 +50,8 @@ in
       keep-derivations = true
     '';
     requireSignedBinaryCaches = false;
-    binaryCaches = [ "https://hydra.iohk.io" ];
-    binaryCachePublicKeys = [ "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=" ];
+    # binaryCaches = [ "https://hydra.iohk.io" ];
+    # binaryCachePublicKeys = [ "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=" ];
   };
 
   fonts = {
