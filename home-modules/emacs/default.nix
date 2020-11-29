@@ -5,7 +5,7 @@
 { pkgs, ... }:
 let
   nurNoPkgs = import <nur> { pkgs = null; };
-  upkgs = import <unstable> {};
+  upkgs = import <unstable> { };
 in
 {
   imports = [
@@ -13,6 +13,12 @@ in
     ./haskell.nix
     ./org.nix
     ./ui.nix
+  ];
+
+  home.packages = with pkgs; [
+    shellcheck
+    ripgrep
+    fd
   ];
 
   programs.git.ignores = [
@@ -121,7 +127,7 @@ in
         };
 
         avy.enable = true;
-        
+
         nix-mode = {
           # Also check out
           # https://github.com/shlevy/nix-buffer
