@@ -161,6 +161,7 @@ in
             else
               let g:neoformat_enabled_haskell = ['ormolu']
             endif
+            let g:neoformat_enabled_javascript = []
             nn <leader>fm :Neoformat<CR>
             nn <leader>fo :Neoformat ormolu<CR>
             nn <leader>fs :Neoformat stylishhaskell<CR>
