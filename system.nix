@@ -117,7 +117,6 @@ in
 
   networking = {
     networkmanager.enable = true;
-    hosts."127.0.0.1" = [ "localhost" "youtube.com" ];
     firewall = {
       enable = true;
       allowedTCPPorts = [
@@ -130,6 +129,8 @@ in
         8080 # hoogle
         8081 # hoogle
         8096 # jellyfin
+        4040 # weird ssh
+        4041 # weird http
       ];
       allowedUDPPorts = [
         53
@@ -167,7 +168,7 @@ in
       secrets = [ "ipsec.d/ipsec.nm-l2tp.secrets" ];
     };
     logind.extraConfig = "RuntimeDirectorySize=2G";
-    ntp.enable = true;
+    # ntp.enable = true; # can take super long
     # nixosManual.showManual = true;
   };
 
