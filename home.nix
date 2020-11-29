@@ -227,10 +227,12 @@ in
     Service.ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
   };
   systemd.user.services.jellyfin = {
-    Unit = {
-      Description = "Jellyfin media server";
+    Unit.Description = "Jellyfin media server";
+    Service = {
+      ExecStart = "${pkgs.jellyfin}/bin/jellyfin";
+      Restart = "always";
+      RestartSec = 3;
     };
-    Service.ExecStart = "${pkgs.jellyfin}/bin/jellyfin";
   };
 
   xsession = {
