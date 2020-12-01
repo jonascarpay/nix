@@ -11,10 +11,6 @@ in
     ../secrets.nix
   ];
 
-  nixpkgs.localSystem = {
-    system = "aarch64-linux";
-  };
-
   networking = {
     enableIPv6 = false;
     hostName = "xc-jonas";
