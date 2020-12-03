@@ -174,8 +174,8 @@ myKeys conf = handlezoom $ M.fromList myKeyList <> keys desktopConfig conf
       [((m .|. mask, k), windows f)
             | (i, k) <- zip (XM.workspaces conf) [xK_1 .. xK_9]
             , (mask, f) <- [ (0, W.greedyView i)
-                           , (controlMask, W.shift i)
-                           , (shiftMask, W.greedyView i . W.shift i)
+                           , (shiftMask, W.shift i)
+                           , (controlMask, W.greedyView i . W.shift i)
                            ]
       ] <>
       [((m .|. mask, key), screenWorkspace scr >>= flip whenJust (windows . f))
