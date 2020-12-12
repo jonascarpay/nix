@@ -32,7 +32,6 @@ in
         27037 # steam
         8080 # hoogle
         8081 # hoogle
-        8096 # jellyfin
         4040 # weird ssh
         4041 # weird http
         22000 # syncthing
@@ -47,7 +46,6 @@ in
         27031
         27036 # steam
         8081 # steam
-        8096 # jellyfin
         21027 # syncthing
       ];
     };
