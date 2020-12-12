@@ -35,6 +35,7 @@ in
         8096 # jellyfin
         4040 # weird ssh
         4041 # weird http
+        22000 # syncthing
       ];
       allowedUDPPorts = [
         53
@@ -47,6 +48,7 @@ in
         27036 # steam
         8081 # steam
         8096 # jellyfin
+        21027 # syncthing
       ];
     };
   };

@@ -194,12 +194,13 @@ in
   services = {
     flameshot.enable = manageX;
     unclutter.enable = manageX;
+    syncthing = {
+      enable = true;
+      tray = true;
+    };
     dunst.enable = manageX;
     # network-manager-applet.enable = manageX;
     # xscreensaver.enable = true;
-
-    # syncthing.enable = true;
-    # syncthing.tray = true;
 
     redshift =
       let
