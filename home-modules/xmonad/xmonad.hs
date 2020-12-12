@@ -182,8 +182,8 @@ myKeys conf = handlezoom $ M.fromList myKeyList <> keys desktopConfig conf
           | (key, scr) <- zip [xK_w, xK_e, xK_r] [0..]
           -- | (key, scr) <- zip [xK_e, xK_w] [0..]
           , (mask, f) <- [ (0, W.view)
-                         , (controlMask, \n -> W.shift n)
-                         , (shiftMask, \n -> W.view n . W.shift n)
+                         , (shiftMask, \n -> W.shift n)
+                         , (controlMask, \n -> W.view n . W.shift n) -- TODO greedyview vs view?
                          ]
       ]
 
