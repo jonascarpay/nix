@@ -56,7 +56,7 @@ in
       gnome3.nautilus
       haskellPackages.cabal-bounds # TODO move to formatter
       killall
-      mpv
+      celluloid
       neofetch
       okular
       pandoc
