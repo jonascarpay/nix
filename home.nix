@@ -113,6 +113,7 @@ in
 
         set  -g base-index      0
         setw -g pane-base-index 0
+        setw -g window-size smallest
 
         set -g status-keys vi
         set -g mode-keys   vi
