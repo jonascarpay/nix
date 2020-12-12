@@ -66,8 +66,8 @@ in
     opengl.driSupport32Bit = true;
     opengl.extraPackages = [ pkgs.linuxPackages.nvidia_x11.out ];
     opengl.extraPackages32 = [ pkgs.linuxPackages.nvidia_x11.lib32 ];
-    nvidia.optimus_prime = {
-      enable = !integrated;
+    nvidia.prime = {
+      sync.enable = !integrated;
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:1:0:0";
     };
@@ -150,11 +150,11 @@ in
       videoDrivers = [
         (if integrated then "intel" else "nvidia")
       ];
-      displayManager.lightdm.autoLogin = {
+      displayManager.autoLogin = {
         enable = true;
         user = "jmc";
       };
-      desktopManager.plasma5.enable = true;
+      desktopManager.plasma5.enable = true; # TODO disable
     };
     logind.extraConfig = "RuntimeDirectorySize=2G";
   };
