@@ -20,7 +20,10 @@
   system.copySystemConfiguration = true;
   nixpkgs.config.allowUnfree = true;
   security.sudo.wheelNeedsPassword = false;
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    passwordAuthentication = false;
+  };
   programs.bash.enableCompletion = true; # enable tab-completion for nix-* tools
 
   users = {
