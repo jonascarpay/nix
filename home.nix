@@ -78,7 +78,7 @@ in
       unzip
       weechat
       xclip # Doesn't work?
-      youtube-dl
+      unstable.youtube-dl
     ];
 
     sessionVariables = {
