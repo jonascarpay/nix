@@ -198,6 +198,7 @@ in
       enable = true;
       tray = true;
     };
+    caffeine.enable = true;
     dunst.enable = manageX;
     # network-manager-applet.enable = manageX;
     # xscreensaver.enable = true;
