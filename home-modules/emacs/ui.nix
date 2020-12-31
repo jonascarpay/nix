@@ -9,17 +9,7 @@
     all-the-icons.config = ''
       (use-package all-the-icons)
     '';
-    page-break-lines.enable = false;
-    page-break-lines.config = ''
-      (use-package page-break-lines)
-    '';
 
-    # solaire-mode.config = ''
-    #   (use-package solaire-mode
-    #     :hook (after-init . solaire-global-mode))
-    # '';
-
-    solaire-mode.enable = true;
     solaire-mode.config = ''
       ;; A more complex, more lazy-loaded config
       (use-package solaire-mode
@@ -45,7 +35,6 @@
       )
     '';
 
-    # https://github.com/hlissner/emacs-doom-themes/tree/screenshots
     doom-themes.config = ''
       (use-package doom-themes)
     '';
@@ -67,10 +56,12 @@
         )
         :config
         (setq neo-theme 'icons)
+        (setq neo-window-fixed-size nil)
+        (setq neo-reset-size-on-open nil) ;; TODO this doesn't work?
+        ;; TODO don't move cursor
       )
     '';
 
-    # ;; (setq doom-modeline-height 25)
     dashboard.config = ''
       (use-package dashboard
         :after all-the-icons general
