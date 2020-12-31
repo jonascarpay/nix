@@ -224,7 +224,7 @@ in
   systemd.user.services.mpris = {
     Unit = {
       Description = "Bluetooth media controls";
-      After = [ "pulseaudio.service" "bluetooth.service" ];
+      After = [ "multi-user.target" "pulseaudio.service" "bluetooth.service" ];
     };
     Service.ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
   };
