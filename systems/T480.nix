@@ -125,6 +125,7 @@ in
   services = {
     printing = {
       enable = true;
+      browsing = true;
       drivers = [ pkgs.brlaser pkgs.gutenprint pkgs.gutenprintBin ];
     };
     tlp = {

@@ -61,7 +61,6 @@ in
       pandoc
       pavucontrol
       pidgin
-      python37Packages.ueberzug # for image previews
       s-tui
       signal-desktop
       skype
@@ -192,6 +191,7 @@ in
 
   services = {
     flameshot.enable = manageX;
+    dropbox.enable = true;
     unclutter.enable = manageX;
     syncthing = {
       enable = true;
