@@ -1,90 +1,92 @@
 { pkgs, ... }:
-let
-  tex = "${pkgs.texlive.combined.scheme-full}/bin/pdflatex";
-  upkgs = import <unstable> { };
-in
 {
-  home.packages = [
-    pkgs.etBook
-    pkgs.texlive.combined.scheme-full
+  # home.packages = [
+  #   pkgs.etBook
+  #   pkgs.texlive.combined.scheme-full
+  # ];
+  # fonts.fontconfig.enable = true;
+  # programs.emacs.overrides = _: _: {
+  #   org-fragtog = upkgs.emacsPackages.org-fragtog;
+  # };
+  home.packages = with pkgs; [
+    sqlite
+    ripgrep
+    graphviz
   ];
-  fonts.fontconfig.enable = true;
-  programs.emacs.overrides = _: _: {
-    org-fragtog = upkgs.emacsPackages.org-fragtog;
-  };
-  programs.emacs.init = {
-    postlude = /* elisp */ ''
-      (setq org-hide-emphasis-markers t)
-      (setq org-startup-indented t)
-      (push "~/Org/" org-agenda-files)
-      (push "~/Org/CrossCompass/" org-agenda-files)
-      ;; (setq system-time-locale "en-US")
-      (global-prettify-symbols-mode t)
-      (setq-default prettify-symbols-alist '(
-        ("#+BEGIN_SRC" . "λ") ("#+begin_src" . "λ")
-        ("#+END_SRC"   . "ƛ") ("#+end_src"   . "ƛ")
-        ;; ("[ ]" . "☐") ("[X]" . "☑") ("[-]" . "❍")
-      ))
+  programs.emacs.init.modules = {
+    org = {
+      packages = [ ];
+      precedence = -1;
+      config = ''
+        (setq org-hide-emphasis-markers t)
+        (setq org-startup-indented t)
+        (setq org-agenda-start-on-weekday nil)
 
-      (defvar jmc/org-capture-file "~/Org/agenda.org")
-      (defun jmc/get-agenda ()
-        (interactive)
-        (read-file-name-default
-          "Capture to: "
-          "~/Org/"
-          nil
-          'confirm
-          "agenda.org"))
-      
-      (defun jmc/org-capture ()
-        "Read file name to capture to."
-        (interactive)
-        (setq jmc/org-capture-file (jmc/get-agenda))
-        (org-capture nil "j")
-        (message "done"))
-        ;; (call-interactively #'org-capture))
+        (setq org-agenda-files '(
+          "~/Org/agenda.org"
+          "~/Org/contacts.org"))
 
-      (setq org-capture-templates `(
-        ("j" "Journal"      entry (file+datetree jmc/org-capture-file) "* %?")
-        ("J" "Journal+link" entry (file+datetree jmc/org-capture-file) "* %?\n  %i\n  %a")
-        ("d" "Diary"        entry (file+datetree "~/Org/diary.org") "* %(format-time-string \"%H:%M\")\n%?")
-      ))
+        (setq system-time-locale "en-US")
+        (global-prettify-symbols-mode t)
+        (setq-default prettify-symbols-alist '(
+          ("#+BEGIN_SRC" . "λ") ("#+begin_src" . "λ")
+          ("#+END_SRC"   . "ƛ") ("#+end_src"   . "ƛ")
+        ))
+        (lmap
+         "o c" 'org-capture
+         "o a" 'org-agenda)
 
-      (setq org-agenda-start-on-weekday nil)
+        (defvar jmc/org-capture-file "~/Org/agenda.org")
 
-      (setq org-todo-keywords
-        '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+        (setq org-capture-templates `(
+          ("a" "Agenda"       entry (file+datetree "~/Org/agenda.org") "* %?")
+          ("j" "Journal"      entry (file+datetree "~/Org/journal.org") "* %(format-time-string \"%H:%M\")\n%?")
+          ("d" "Diary"        entry (file+datetree "~/Org/diary.org") "* %(format-time-string \"%H:%M\")\n%?")
+          ;; ("j" "Journal"      entry (file+datetree jmc/org-capture-file) "* %?")
+          ;; ("J" "Journal+link" entry (file+datetree jmc/org-capture-file) "* %?\n  %i\n  %a")
+        ))
+        (setq org-startup-indented t)
 
-      (defun jmc/org-agenda ()
-        "Make org-agenda for just the main agenda files"
-        (interactive)
-        (let ((org-agenda-files '("~/Org/agenda.org" "~/Org/birthdays.org")))
-            (org-agenda nil "n"))
+        (add-hook 'org-mode-hook (lambda ()
+          (push '(?* . ("*" . "*")) evil-surround-pairs-alist)
+          (push '(?_ . ("_" . "_")) evil-surround-pairs-alist)
+          (push '(?/ . ("/" . "/")) evil-surround-pairs-alist)
+        ))
+      '';
+    };
+    # usePackage = {
+    #   org.enable = true;
+    #   org-bullets = {
+    #     enable = true;
+    #     after = [ "org" ];
+    #     config = "(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))";
+    #   };
+    # org-fragtog.config = ''
+    #   (use-package org-fragtog
+    #     :after org
+    #     :hook org-mode)
+    # '';
+
+    org-roam.config = ''
+      (use-package org-roam
+        :ensure t
+        :after general
+        :hook
+          (after-init . org-roam-mode)
+        :custom
+          (org-roam-directory "~/Org/Notes/")
+        :config
+          (lmap
+            "o r" 'org-roam
+            "o f" 'org-roam-find-file
+            "o g" 'org-roam-graph)
+          (general-define-key
+            :keymaps 'org-mode-map
+            :states 'insert
+            "C-l" 'org-roam-insert
+            "C-L" 'org-roam-insert-immediate)
       )
     '';
-    # (org-indent-mode)
-    usePackage = {
-      org.enable = true;
-      org-bullets = {
-        enable = true;
-        after = [ "org" ];
-        config = "(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))";
-      };
-      org-plus-contrib = {
-        enable = false;
-        after = [ "org" ];
-      };
-      org-contacts = {
-        enable = false;
-        after = [ "org-plus-contrib" ];
-        config = ''(setq org-contacts-files '("~/Org/contacts.org))'';
-      };
-      org-fragtog = {
-        enable = true;
-        after = [ "org" ];
-        config = "(add-hook 'org-mode-hook 'org-fragtog-mode)";
-      };
-    };
   };
 }
 

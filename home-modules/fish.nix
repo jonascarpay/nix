@@ -87,6 +87,7 @@ in {
       nsp = "nix-shell -p";
       nsr = "cached-nix-shell --run";
       nsv = "cached-nix-shell --run vim";
+      nse = "cached-nix-shell --run emacs";
       rf = "rm -rf";
       rn = "ranger";
       s = "sudo";

@@ -229,6 +229,25 @@ in
     };
     Service.ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
   };
+  systemd.user.services.orgsync = {
+    Unit.Description = "Org github sync";
+    Service = {
+      Type = "oneshot";
+      ExecStart =
+        let
+          script = pkgs.writeShellScript "org-sync" ''
+            cd ~/Org
+            ${pkgs.gitAndTools.git-sync}/bin/git-sync
+          '';
+        in
+        "${script}";
+    };
+  };
+  systemd.user.timers.orgsync = {
+    Unit.Description = "Org sync timer";
+    Timer.OnCalendar = "*:0/15";
+    Install.WantedBy = [ "timers.target" ];
+  };
 
   xsession = {
     enable = manageX;

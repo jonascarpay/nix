@@ -153,6 +153,7 @@ myKeys conf = handlezoom $ M.fromList myKeyList <> keys desktopConfig conf
       , ((m, xK_o), spawn "rofi -show run")
       , ((m, xK_b), wal "haishoku" True False)
       , ((m, xK_c), spawn "emacsclient --create-frame --no-wait")
+      -- , ((m, xK_c), spawn "emacs")
       , ((m .|. shiftMask, xK_b), wal "wal" True True)
       , ((m .|. shiftMask .|. ctrlMask, xK_1), wal "wal" False False)
       , ((m .|. shiftMask .|. ctrlMask, xK_2), wal "colorz" False False)
