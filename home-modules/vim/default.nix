@@ -14,7 +14,6 @@ in
 
     # formatters
     pkgs.nixpkgs-fmt
-    # pkgs.nixfmt
     unstable.haskellPackages.cabal-fmt
     pkgs.shfmt
     pkgs.uncrustify
@@ -144,23 +143,13 @@ in
 
         neoformat = {
           # plugins = [ np.neoformat ];
-          plugins = [
-            (gh "jonascarpay/neoformat" {
-              rev = "ae202214ea73e58f93b4bfc83424c1e9c3d90976";
-            })
-          ];
+          plugins = [ (gh "sbdchd/neoformat" { rev = "7e458dafae64b7f14f8c2eaecb886b7a85b8f66d"; }) ];
           config = ''
             let g:neoformat_basic_format_trim = 1
             augroup fmt
             autocmd!
             autocmd BufWritePre * silent Neoformat
             augroup END
-            let g:neoformat_haskell_ormolu = { 'exe': 'ormolu', 'args': [] } " see https://github.com/sbdchd/neoformat/issues/283
-            if !empty(findfile(".stylish-haskell.yaml", ".;"))
-              let g:neoformat_enabled_haskell = ['stylishhaskell']
-            else
-              let g:neoformat_enabled_haskell = ['ormolu']
-            endif
             let g:neoformat_enabled_javascript = []
             nn <leader>fm :Neoformat<CR>
             nn <leader>fo :Neoformat ormolu<CR>
@@ -217,22 +206,15 @@ in
             set nowritebackup
             set cmdheight=2
             set updatetime=300
-            nmap <leader>f <Plug>(coc-fix-current)
+            nmap <silent> ga :CocAction<cr>
+            nmap <silent> <leader>ga <Plug>(coc-fix-current)
             nmap <leader>lf :<C-u>CocList diagnostics<cr>
             nmap <silent> [g <Plug>(coc-diagnostic-prev)
             nmap <silent> ]g <Plug>(coc-diagnostic-next)
             nmap <silent> gd <Plug>(coc-definition)
             nmap <silent> gy <Plug>(coc-type-definition)
             nmap <silent> gi <Plug>(coc-implementation)
-            nmap <silent> gr <Plug>(coc-references)
-            nnoremap <silent> gh :call <SID>show_documentation()<CR>
-            function! s:show_documentation()
-              if (index(['vim','help'], &filetype) >= 0)
-                execute 'h '.expand('<cword>')
-              else
-                call CocAction('doHover')
-              endif
-            endfunction
+            nnoremap <silent> gh :call CocAction('doHover')<cr>
             " Highlight the symbol and its references when holding the cursor.
             autocmd CursorHold * silent call CocActionAsync('highlight')
           '';
