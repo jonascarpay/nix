@@ -221,13 +221,6 @@ in
 
   };
 
-  systemd.user.services.mpris = {
-    Unit = {
-      Description = "Bluetooth media controls";
-      After = [ "multi-user.target" "pulseaudio.service" "bluetooth.service" ];
-    };
-    Service.ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
-  };
   systemd.user.services.orgsync = {
     Unit.Description = "Org github sync";
     Service = {
