@@ -74,6 +74,7 @@
     };
 
     # https://github.com/abo-abo/avy
+    # TODO: line jump markers at first character
     avy.config = ''
       (use-package avy
         :after general
@@ -84,9 +85,9 @@
           "f" 'evil-avy-goto-char-timer
           "j" 'evil-avy-goto-line
           "k" 'evil-avy-goto-line
-          "w" 'evil-avy-goto-subword-0
+          "w" 'evil-avy-goto-word-0
           "W" 'evil-avy-goto-word-0
-          "b" 'evil-avy-goto-subword-0
+          "b" 'evil-avy-goto-word-0
           "B" 'evil-avy-goto-word-0
         )
       )
