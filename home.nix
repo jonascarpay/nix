@@ -27,10 +27,10 @@ in
   ];
 
   caches = {
-    # cachix = [{
-    #   name = "iohk";
-    #   sha256 = "0ds8j8g3rp9jam7kb0040smrjhnrrcgc0xjpnhmy6iq9fkm6zja4";
-    # }];
+    cachix = [{
+      name = "jmc";
+      sha256 = "1bk08lvxi41ppvry72y1b9fi7bb6qvsw6bn1ifzsn46s3j0idq0a";
+    }];
     extraCaches = {
       iohk-hydra = {
         url = "https://hydra.iohk.io";
