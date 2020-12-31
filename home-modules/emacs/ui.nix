@@ -58,6 +58,18 @@
         (setq doom-modeline-icon t) ; For some reason we need this for emacsclient, see manual
       )
     '';
+
+    neotree.config = ''
+      (use-package neotree
+        :general
+        (:states 'normal
+          "C-n" 'neotree-projectile-action
+        )
+        :config
+        (setq neo-theme 'icons)
+      )
+    '';
+
     # ;; (setq doom-modeline-height 25)
     dashboard.config = ''
       (use-package dashboard
