@@ -199,14 +199,20 @@ in
               (lambda (file) (string-prefix-p "/nix/store/" file)))
           )
         '';
-        helm-projectile.config = ''
-          (use-package helm-projectile
-            :after helm projectile general
-            :config
-            (lmap "f f" 'helm-projectile)
-            (lmap "f g" 'helm-projectile-grep)
-          )
-        '';
+        helm-projectile = {
+          packages = [ "helm-projectile" "helm-ag" ];
+          config = ''
+            (use-package helm-projectile
+              :after helm projectile general
+              :config
+              (lmap "f f" 'helm-projectile)
+              (lmap "f g" 'helm-projectile-ag)
+            )
+            (use-package helm-ag
+              :after helm-projectile
+            )
+          '';
+        };
       };
     };
   };
