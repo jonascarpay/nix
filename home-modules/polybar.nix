@@ -1,5 +1,11 @@
 # Click events are broken until 3.5.0
 { pkgs, config, lib, ... }:
+let
+  sensors = "${pkgs.lm_sensors}/bin/sensors";
+  grep = "${pkgs.gnugrep}/bin/grep";
+  awk = "${pkgs.gawk}/bin/awk";
+  sed = "${pkgs.gnused}/bin/sed";
+in
 lib.mkIf (config.xsession.enable) {
 
   programs.autorandr.hooks.postswitch.restart-polybar = ''
@@ -28,7 +34,7 @@ lib.mkIf (config.xsession.enable) {
         foreground = "\${colors.foreground}";
         module-margin = "1";
         modules-left = "xmonad";
-        modules-right = "wireless wired fs memory cpu battery date-nl date";
+        modules-right = "onigiri wireless wired fs memory temp fan cpu battery date-nl date";
         line-color = "\${colors.foreground}";
         line-size = "3";
       };
@@ -101,6 +107,39 @@ lib.mkIf (config.xsession.enable) {
         interval = "30";
       };
 
+      "module/fan" = {
+        type = "custom/script";
+        exec = "${sensors} | ${grep} fan1 | ${awk} '{print $2; exit}'";
+        label = " %output% RPM";
+        interval = "1";
+      };
+
+      "module/onigiri" =
+        let
+          singleping = pkgs.writeShellScript "singleping" ''
+            #!/usr/bin/env bash
+
+            # if output=$(ping -c 1 -W 1 192.168.1.6 | ${grep} -oP ".*time=\K\d+"); then
+            if output=$(ping -W 1 -q -c 5 192.168.1.6 | ${grep} -oP " = \K\d"); then
+                echo "歷  $output ms"
+            else
+                echo "轢 "
+            fi
+          '';
+        in
+        {
+          type = "custom/script";
+          exec = "${singleping}";
+          interval = "30";
+        };
+
+      "module/temp" = {
+        type = "custom/script";
+        exec = "${sensors} | ${grep} Package | ${awk} '{print $4; exit}' | ${sed} 's/^.\\([0-9]\\+\\)../\\1/' ";
+        label = " %output%";
+        interval = "1";
+      };
+
       "module/date-nl" = {
         type = "custom/script";
         exec = ''TZ=Europe/Amsterdam ${pkgs.coreutils}/bin/date +" %H:%M"'';
@@ -170,7 +209,7 @@ lib.mkIf (config.xsession.enable) {
               # godverdomme 3 kkuur bezig geweest met uitvinden dat je -u nodig hebt voor sed echt chille zaterdag
               text = ''
                 ${pkgs.dbus}/bin/dbus-monitor "path=/org/xmonad/Log,interface=org.xmonad.Log,member=Update" | \
-                  ${pkgs.gnused}/bin/sed -nu 's/^   string "\([^:].*\)"$/\1/p'
+                  ${sed} -nu 's/^   string "\([^:].*\)"$/\1/p'
               '';
             };
         in
