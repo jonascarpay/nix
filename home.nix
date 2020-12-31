@@ -19,7 +19,6 @@ in
     ./home-modules/rofi.nix
     ./home-modules/scripts
     # ./home-modules/slipbox.nix
-    ./home-modules/spotify.nix
     ./home-modules/vim
     ./home-modules/wal.nix
     ./home-modules/xmonad
