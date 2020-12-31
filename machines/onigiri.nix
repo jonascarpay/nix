@@ -1,8 +1,8 @@
 { pkgs, lib, ... }: {
 
   imports = [
-    ../system-modules/openvpn.nix
-    ../secrets.nix
+    ../system/openvpn.nix
+    ../secrets/accounts.nix
   ];
 
   boot = {
@@ -104,14 +104,14 @@
 
   fileSystems = {
     "/" = {
-        device = "/dev/disk/by-uuid/44444444-4444-4444-8888-888888888888";
-        fsType = "ext4";
-      };
+      device = "/dev/disk/by-uuid/44444444-4444-4444-8888-888888888888";
+      fsType = "ext4";
+    };
 
     "/boot" = {
-        device = "/dev/disk/by-uuid/2178-694E";
-        fsType = "vfat";
-      };
+      device = "/dev/disk/by-uuid/2178-694E";
+      fsType = "vfat";
+    };
 
     "/mnt/exthd" = {
       device = "/dev/disk/by-uuid/2A76DE2B76DDF811";
@@ -126,8 +126,8 @@
       script = ''
         ${pkgs.rclone}/bin/rclone serve webdav /mnt/exthd/ --addr :8090 --user dav --pass dav
       '';
-      wants= [ "network-online.target" ];
-      after= [ "network-online.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
     };
   };

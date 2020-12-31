@@ -3,12 +3,11 @@ let integrated = false;
 in
 {
   imports = [
-    ../system-modules/global.nix
-    ../system-modules/openvpn.nix
-    ../system-modules/mopidy.nix
-    ../system-modules/jp.nix
-    ../system-modules/fonts.nix
-    ../secrets.nix
+    ../system/global.nix
+    ../system/openvpn.nix
+    ../system/jp.nix
+    ../system/fonts.nix
+    ../secrets/accounts.nix
   ];
 
   networking = {
@@ -171,9 +170,7 @@ in
     requireSignedBinaryCaches = false;
   };
 
-  programs = {
-    dconf.enable = true; # TODO ?
-  };
+  programs.dconf.enable = true; # TODO ?
 }
 
 # vim: fdm=indent:foldlevel=1:foldcolumn=2

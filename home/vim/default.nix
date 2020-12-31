@@ -8,6 +8,8 @@ in
 {
   imports = [ ./vim-init.nix ];
 
+  programs.git.ignores = [ "*~" "*.swp" "*.swo" "tags" "TAGS" ];
+
   home.packages = [
     # for coc
     pkgs.nodejs

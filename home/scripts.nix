@@ -1,6 +1,6 @@
-{ lib, ... }:
+{ pkgs, lib, ... }:
+with lib;
 let
-
   scripts = {
     vimdir = ''
       #!/usr/bin/env bash
@@ -34,10 +34,10 @@ let
     '';
   };
 
-  mkScript = name: text: {
-    target = "bin/${name}";
-    inherit text;
-    executable = true;
-  };
-
-in { home = { file = lib.mapAttrs mkScript scripts; }; }
+in
+{
+  home.packages =
+    map
+      (name: pkgs.writeShellScriptBin name (getAttr name scripts))
+      (builtins.attrNames scripts);
+}

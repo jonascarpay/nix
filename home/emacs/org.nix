@@ -1,13 +1,5 @@
 { pkgs, ... }:
 {
-  # home.packages = [
-  #   pkgs.etBook
-  #   pkgs.texlive.combined.scheme-full
-  # ];
-  # fonts.fontconfig.enable = true;
-  # programs.emacs.overrides = _: _: {
-  #   org-fragtog = upkgs.emacsPackages.org-fragtog;
-  # };
   home.packages = with pkgs; [
     sqlite
     ripgrep
@@ -54,18 +46,6 @@
         ))
       '';
     };
-    # usePackage = {
-    #   org.enable = true;
-    #   org-bullets = {
-    #     enable = true;
-    #     after = [ "org" ];
-    #     config = "(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))";
-    #   };
-    # org-fragtog.config = ''
-    #   (use-package org-fragtog
-    #     :after org
-    #     :hook org-mode)
-    # '';
 
     org-roam.config = ''
       (use-package org-roam
@@ -88,7 +68,25 @@
       )
     '';
   };
+  systemd.user = {
+    services.orgsync = {
+      Unit.Description = "Org github sync";
+      Service = {
+        Type = "oneshot";
+        ExecStart =
+          let
+            script = pkgs.writeShellScript "org-sync" ''
+              cd ~/Org
+              ${pkgs.gitAndTools.git-sync}/bin/git-sync
+            '';
+          in
+          "${script}";
+      };
+    };
+    timers.orgsync = {
+      Unit.Description = "Org sync timer";
+      Timer.OnCalendar = "*:0/15";
+      Install.WantedBy = [ "timers.target" ];
+    };
+  };
 }
-
-# References:
-# [1] https://github.com/kaushalmodi/.emacs.d/blob/42831e8997f7a3c90bf4bd37ae9f03c48277781d/setup-files/setup-org.el#L413-L584
