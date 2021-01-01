@@ -52,7 +52,7 @@
     fish
     tmux
     ranger
-    raspberrypi-tools
+    libraspberrypi
     htop # TODO move to globals # TODO import globals?
   ];
 
@@ -64,6 +64,7 @@
     isNormalUser = true;
     createHome = true;
     extraGroups = [ "wheel" "networkmanager" ];
+    shell = pkgs.fish;
   };
 
   services = {
