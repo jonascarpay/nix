@@ -5,7 +5,6 @@ in
 {
   imports = [
     ./caches.nix
-    ./emacs
     ./fish.nix
     ./ranger.nix
     ./scripts.nix

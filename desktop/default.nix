@@ -2,6 +2,7 @@
 {
   imports = [
     ./blender.nix
+    ./emacs
     ./firefox.nix
     ./picom.nix
     ./polybar.nix
