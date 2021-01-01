@@ -150,7 +150,6 @@ myKeys conf = handlezoom $ M.fromList myKeyList <> keys desktopConfig conf
       , ((m, xK_Return), mkTerm)
       , ((m .|. shiftMask, xK_Return), windows W.swapMaster)
       , ((m, xK_s), windows W.swapDown >> windows W.focusUp)
-      , ((m, xK_o), spawn "rofi -show run")
       , ((m, xK_b), wal "haishoku" True False)
       , ((m, xK_c), spawn "emacsclient --create-frame --no-wait")
       -- , ((m, xK_c), spawn "emacs")
