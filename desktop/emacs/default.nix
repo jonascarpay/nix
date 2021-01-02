@@ -173,6 +173,8 @@ in
           )
         '';
 
+        # TODO yasnippet
+
         nix-mode.config = let doublesingle = "''"; in
           ''
             (use-package nix-mode

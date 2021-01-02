@@ -48,19 +48,33 @@
       )
     '';
 
-    # TODO treemacs seems better
-    neotree.config = ''
-      (use-package neotree
+    treemacs.config = ''
+      (use-package treemacs
+        :after treemacs-all-the-icons
         :general
         (:states 'normal
-          "C-n" 'neotree-projectile-action
+          "C-n" 'treemacs
         )
         :config
-        (setq neo-theme 'icons)
-        (setq neo-window-fixed-size nil)
-        (setq neo-reset-size-on-open nil) ;; TODO this doesn't work?
-        ;; TODO don't move cursor
+        (setq treemacs-python-executable "${pkgs.python3}/bin/python")
+        (treemacs-git-mode 'deferred)
+        (treemacs-load-theme "all-the-icons")
       )
+    '';
+    treemacs-projectile.config = ''
+      (use-package treemacs-projectile
+        :after treemacs projectile)
+    '';
+    treemacs-magit.config = ''
+      (use-package treemacs-magit
+        :after treemacs magit)
+    '';
+    treemacs-evil.config = ''
+      (use-package treemacs-evil
+        :after treemacs evil)
+    '';
+    treemacs-all-the-icons.config = ''
+      (use-package treemacs-all-the-icons)
     '';
 
     dashboard.config = ''
