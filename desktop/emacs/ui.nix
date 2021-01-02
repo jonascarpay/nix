@@ -50,14 +50,13 @@
 
     treemacs.config = ''
       (use-package treemacs
-        :after treemacs-all-the-icons
         :general
         (:states 'normal
-          "C-n" 'treemacs
-        )
+          "C-n" 'treemacs)
         :config
         (setq treemacs-python-executable "${pkgs.python3}/bin/python")
         (treemacs-git-mode 'deferred)
+        (require 'treemacs-all-the-icons)
         (treemacs-load-theme "all-the-icons")
       )
     '';
@@ -74,7 +73,8 @@
         :after treemacs evil)
     '';
     treemacs-all-the-icons.config = ''
-      (use-package treemacs-all-the-icons)
+      (use-package treemacs-all-the-icons
+        :defer t)
     '';
 
     dashboard.config = ''

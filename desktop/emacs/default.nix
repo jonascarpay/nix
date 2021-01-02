@@ -1,5 +1,3 @@
-# https://github.com/jwiegley/use-package
-# https://github.com/hlissner/doom-emacs/blob/develop/docs/modules.org
 { pkgs, ... }:
 let
   unstable = import <unstable> { };
@@ -156,7 +154,12 @@ in
             :hook (lsp-mode . lsp-enable-which-key-integration)
             :commands lsp)
         '';
-        lsp-ui.config = "(use-package lsp-ui)";
+        lsp-ui.config = ''
+          (use-package lsp-ui
+            :after lsp-mode
+          )
+        '';
+
         company.config = ''
           (use-package company
             :hook ('after-init . global-company-mode))
