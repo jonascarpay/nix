@@ -48,6 +48,7 @@
       )
     '';
 
+    # TODO treemacs seems better
     neotree.config = ''
       (use-package neotree
         :general

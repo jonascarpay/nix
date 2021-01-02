@@ -133,6 +133,10 @@ in
           '';
         };
 
+        beacon.config = ''
+          (use-package beacon
+            :hook (after-init . beacon-mode))
+        '';
         # https://github.com/emacs-helm/helm/wiki
         helm.config = ''
           (use-package helm
@@ -153,6 +157,7 @@ in
             :hook (nix-mode . nixpkgs-fmt-on-save-mode))
         '';
 
+        # TODO try lsp-mode
         eglot.config = ''
           (use-package eglot
             :defer t

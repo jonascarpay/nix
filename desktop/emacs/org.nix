@@ -43,6 +43,7 @@
           (push '(?* . ("*" . "*")) evil-surround-pairs-alist)
           (push '(?_ . ("_" . "_")) evil-surround-pairs-alist)
           (push '(?/ . ("/" . "/")) evil-surround-pairs-alist)
+          (visual-line-mode)
         ))
       '';
     };
