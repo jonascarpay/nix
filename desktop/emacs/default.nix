@@ -126,7 +126,8 @@ in
             (menu-bar-mode 0)
             (tool-bar-mode 0)
             (scroll-bar-mode 0)
-            (global-display-line-numbers-mode t)
+            (add-hook 'text-mode-hook 'display-line-numbers-mode)
+            (add-hook 'prog-mode-hook 'display-line-numbers-mode)
             (setq custom-file "~/custom.el")
             (load custom-file)
           '';
