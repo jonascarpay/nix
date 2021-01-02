@@ -141,13 +141,15 @@ dcfg dbus =
       handleEventHook = handleEventHook def <+> fullscreenEventHook
     }
 
-myKeys conf = handlezoom $ M.fromList myKeyList <> keys desktopConfig conf
+myKeys conf = M.fromList myKeyList <> addUnzoom (keys desktopConfig conf)
   where
-    handlezoom = M.insert (m, xK_z) (sendMessage ZoomToggle) -- . fmap (>> sendMessage ZoomUnzoom)
     m = modMask conf
+    addUnzoom km = foldr (\k m' -> M.adjust (sendMessage ZoomUnzoom >>) k m') km unzoomKeys
+      where unzoomKeys = [(k,v) | k <- [m,m .|. shiftMask], v <- [xK_j, xK_k]]
     myKeyList = 
       [ ((m, xK_f), spawn "firefox")
       , ((m, xK_Return), mkTerm)
+      , ((m, xK_z), sendMessage ZoomToggle)
       , ((m .|. shiftMask, xK_Return), windows W.swapMaster)
       , ((m, xK_s), windows W.swapDown >> windows W.focusUp)
       , ((m, xK_b), wal "haishoku" True False)
