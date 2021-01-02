@@ -1,6 +1,5 @@
 # https://github.com/jwiegley/use-package
 # https://github.com/hlissner/doom-emacs/blob/develop/docs/modules.org
-
 { pkgs, ... }:
 let
   unstable = import <unstable> { };
@@ -116,11 +115,6 @@ in
             (which-key-mode))
         '';
 
-        company.config = ''
-          (use-package company
-            :hook ('after-init . global-company-mode))
-        '';
-
         customInit = {
           packages = [ ];
           config = builtins.readFile ./init.el;
@@ -162,41 +156,41 @@ in
             :commands lsp)
         '';
         lsp-ui.config = "(use-package lsp-ui)";
+        company.config = ''
+          (use-package company
+            :hook ('after-init . global-company-mode))
+        '';
 
-        electric-pairs = {
-          packages = [ ];
-          config = ''
-            (electric-pair-mode t)
+        smartparens.config = ''
+          (use-package smartparens
+            :hook (after-init . smartparens-global-mode)
+            :config
+            (require 'smartparens-config)
             (general-define-key
               :states 'insert
-              "C-l" 'right-char) ;; for exiting a delimiter
-
-            ;; (defun org-add-electric-pairs ()
-            ;;   (setq-local electric-pair-pairs (append electric-pair-pairs org-electric-pairs))
-            ;;   (setq-local electric-pair-text-pairs electric-pair-pairs))
-
-            ;; (add-hook 'org-mode-hook 'org-add-electric-pairs)
-          '';
-        };
-
-        nix-mode.config = ''
-          (use-package nix-mode
-            :after reformatter
-            :init
-            (defun nix-add-electric-pairs ()
-              (setq-local electric-pair-pairs
-                (append electric-pair-pairs '((?= . ?\;) (?< . ?>)) )
-              )
-            )
-            :hook
-            (nix-mode . nixpkgs-fmt-on-save-mode)
-            (nix-mode . nix-add-electric-pairs)
+              "C-l" 'sp-forward-sexp)
           )
         '';
 
+        nix-mode.config = let doublesingle = "''"; in
+          ''
+            (use-package nix-mode
+              :after reformatter
+              :hook
+              (nix-mode . nixpkgs-fmt-on-save-mode)
+              :config
+              (sp-with-modes 'nix-mode
+                (sp-local-pair "=" ";")
+                (sp-local-pair "'" nil :actions nil)
+                (sp-local-pair "${doublesingle}" "${doublesingle}")
+                (sp-local-pair "let" "in")
+                (sp-local-pair "<" ">"))
+            )
+          '';
+
         markdown-mode.config = ''
           (use-package markdown-mode
-            :mode "\\.md\\'" ;; because of course this messes with the haskell loading
+            :mode "\\.md\\'"
           )
         '';
 
@@ -205,6 +199,15 @@ in
             :general
             (:states 'normal :prefix "SPC g"
               "s" 'magit-status)
+          )
+        '';
+        git-gutter.config = ''
+          (use-package git-gutter
+            :hook (after-init . global-git-gutter-mode)
+            :after general
+            :config
+            (lmap "g a" 'git-gutter:stage-hunk)
+            (lmap "g u" 'git-gutter:revert-hunk)
           )
         '';
 
@@ -230,20 +233,19 @@ in
               (lambda (file) (string-prefix-p "/nix/store/" file)))
           )
         '';
-        helm-projectile = {
-          packages = [ "helm-projectile" "helm-ag" ];
-          config = ''
-            (use-package helm-projectile
-              :after helm projectile general
-              :config
-              (lmap "f f" 'helm-projectile)
-              (lmap "f g" 'helm-projectile-ag)
-            )
-            (use-package helm-ag
-              :after helm-projectile
-            )
-          '';
-        };
+        helm-projectile.config = ''
+          (use-package helm-projectile
+            :after helm projectile general
+            :config
+            (lmap "f f" 'helm-projectile)
+            (lmap "f g" 'helm-projectile-ag)
+          )
+        '';
+        helm-ag.config = ''
+          (use-package helm-ag
+            :after helm-projectile
+          )
+        '';
       };
     };
   };
