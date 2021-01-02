@@ -116,6 +116,11 @@ in
             (which-key-mode))
         '';
 
+        company.config = ''
+          (use-package company
+            :hook ('after-init . global-company-mode))
+        '';
+
         customInit = {
           packages = [ ];
           config = builtins.readFile ./init.el;
@@ -153,10 +158,10 @@ in
 
         lsp-mode.config = ''
           (use-package lsp-mode
-            :hook ((haskell-mode . lsp)
-                  (lsp-mode . lsp-enable-which-key-integration))
+            :hook (lsp-mode . lsp-enable-which-key-integration)
             :commands lsp)
         '';
+        lsp-ui.config = "(use-package lsp-ui)";
 
         electric-pairs = {
           packages = [ ];
@@ -179,7 +184,9 @@ in
             :after reformatter
             :init
             (defun nix-add-electric-pairs ()
-              (setq-local electric-pair-pairs (append electric-pair-pairs '((?= . ?\;)) ))
+              (setq-local electric-pair-pairs
+                (append electric-pair-pairs '((?= . ?\;) (?< . ?>)) )
+              )
             )
             :hook
             (nix-mode . nixpkgs-fmt-on-save-mode)

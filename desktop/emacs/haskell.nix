@@ -1,3 +1,15 @@
+{ pkgs, ... }:
+let
+  my-lsp-haskell = pkgs.emacsPackages.lsp-haskell.overrideAttrs
+    (_: {
+      src = pkgs.fetchFromGitHub {
+        owner = "emacs-lsp";
+        repo = "lsp-haskell";
+        rev = "592e883026288677f4042333b51efc7a40b9a68a";
+        sha256 = "1dar5iapnx55z8875sr05p4b9nklmqdx6vfxhisy2hsgkp8iq8fc";
+      };
+    });
+in
 {
   programs.emacs.init.modules = {
     haskell-mode.config = ''
@@ -37,7 +49,13 @@
       )
     '';
 
+    lsp-haskell.packages = [ my-lsp-haskell ];
     lsp-haskell.config = ''
-'';
+      (use-package lsp-haskell
+        :custom (lsp-haskell-server-path "haskell-language-server")
+        :hook (haskell-mode . lsp)
+        :hook (haskell-literate-mode-hook . lsp)
+      )
+    '';
   };
 }
