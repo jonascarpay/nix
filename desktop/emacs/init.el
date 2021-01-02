@@ -21,10 +21,6 @@
               (kill-buffer)))
       (message "Not a file visiting buffer!"))))
 
-(electric-pair-mode t)
-(general-define-key
- :states 'insert
- "C-l" 'right-char) ;; for exiting a delimiter
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 

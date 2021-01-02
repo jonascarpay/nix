@@ -4,13 +4,10 @@
       (use-package haskell-mode
         :mode "\\.hs\\'"
         :config
-          (require 'eglot)
           (require 'reformatter)
           (reformatter-define ormolu
             :program "ormolu"
             :lighter " OHF")
-          (add-to-list 'eglot-server-programs '(haskell-mode . ("haskell-language-server" "--lsp")))
-          (add-hook 'haskell-mode-hook 'eglot-ensure)
           (add-hook 'haskell-mode-hook 'ormolu-on-save-mode)
 
           ;; workaround for indentation not working in 2020
@@ -39,5 +36,8 @@
           )
       )
     '';
+
+    lsp-haskell.config = ''
+'';
   };
 }

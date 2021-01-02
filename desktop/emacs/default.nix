@@ -151,20 +151,39 @@ in
         '';
         # TODO use use-package binds
 
+        lsp-mode.config = ''
+          (use-package lsp-mode
+            :hook ((haskell-mode . lsp)
+                  (lsp-mode . lsp-enable-which-key-integration))
+            :commands lsp)
+        '';
+
+        electric-pairs = {
+          packages = [ ];
+          config = ''
+            (electric-pair-mode t)
+            (general-define-key
+              :states 'insert
+              "C-l" 'right-char) ;; for exiting a delimiter
+
+            ;; (defun org-add-electric-pairs ()
+            ;;   (setq-local electric-pair-pairs (append electric-pair-pairs org-electric-pairs))
+            ;;   (setq-local electric-pair-text-pairs electric-pair-pairs))
+
+            ;; (add-hook 'org-mode-hook 'org-add-electric-pairs)
+          '';
+        };
+
         nix-mode.config = ''
           (use-package nix-mode
             :after reformatter
-            :hook (nix-mode . nixpkgs-fmt-on-save-mode))
-        '';
-
-        # TODO try lsp-mode
-        eglot.config = ''
-          (use-package eglot
-            :defer t
-            :config
-              (require 'markdown-mode)
-              (setq eldoc-echo-area-use-multiline-p 5)
-              (setq eldoc-prefer-doc-buffer t)
+            :init
+            (defun nix-add-electric-pairs ()
+              (setq-local electric-pair-pairs (append electric-pair-pairs '((?= . ?\;)) ))
+            )
+            :hook
+            (nix-mode . nixpkgs-fmt-on-save-mode)
+            (nix-mode . nix-add-electric-pairs)
           )
         '';
 
