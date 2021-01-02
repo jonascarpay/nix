@@ -3,7 +3,6 @@
   imports = [
     ./blender.nix
     ./emacs
-    ./firefox.nix
     ./picom.nix
     ./polybar.nix
     ./wal.nix
@@ -30,6 +29,7 @@
   home.sessionVariables.TERMCMD = "termite";
 
   programs.termite.enable = true;
+  programs.firefox.enable = true;
   home.keyboard.options = [ "ctrl:nocaps" ];
   qt.enable = true;
   fonts.fontconfig.enable = true;
