@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   programs.emacs.init.modules = {
 
@@ -41,6 +42,18 @@
     '';
 
     # https://github.com/Somelauw/evil-org-mode
+    evil-org.packages = [
+      (
+        pkgs.emacsPackages.evil-org.overrideAttrs
+          (old: {
+            src = pkgs.fetchFromGitHub {
+              owner = "Somelauw";
+              repo = "evil-org-mode";
+              rev = "80ef38fb378541937f6ddfe836809e76eda1e355";
+              sha256 = "19028laqnsl0h5nii7ykfh39srg94zhydhj1rcv52fs9nlg6c6dq";
+            };
+          }))
+    ];
     evil-org.config = ''
       (use-package evil-org
         :after org
