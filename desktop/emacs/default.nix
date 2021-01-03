@@ -107,6 +107,10 @@ in
           )
         '';
 
+        flycheck.config = ''
+          (use-package flycheck
+            :hook (after-init . global-flycheck-mode)
+          )'';
         which-key.config = ''
           (use-package which-key
             :config
