@@ -46,6 +46,7 @@
       (
         pkgs.emacsPackages.evil-org.overrideAttrs
           (old: {
+            # TODO fix if newer than 21-01-04
             src = pkgs.fetchFromGitHub {
               owner = "Somelauw";
               repo = "evil-org-mode";

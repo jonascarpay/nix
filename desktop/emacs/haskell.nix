@@ -2,6 +2,7 @@
 let
   my-lsp-haskell = pkgs.emacsPackages.lsp-haskell.overrideAttrs
     (_: {
+      # TODO fix if newer than 21-01-04
       src = pkgs.fetchFromGitHub {
         owner = "emacs-lsp";
         repo = "lsp-haskell";
