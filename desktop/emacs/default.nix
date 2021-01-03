@@ -172,7 +172,10 @@ in
             (require 'smartparens-config)
             (general-define-key
               :states 'insert
-              "C-l" 'sp-forward-sexp)
+              "C-l" 'sp-up-sexp
+              "C-M-l" 'sp-forward-slurp-sexp
+              "C-M-h" 'sp-forward-barf-sexp
+            )
           )
         '';
 
