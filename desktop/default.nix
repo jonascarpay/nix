@@ -39,11 +39,14 @@
     unclutter.enable = true;
     caffeine.enable = true;
     dunst.enable = true;
-    syncthing = {
-      enable = true;
-      tray = true;
-    };
   };
+
+  services.syncthing.enable = true;
+  services.syncthing.tray = true;
+  programs.git.ignores = [
+    ".stversions"
+    "*.sync-confict-*"
+  ];
 
   xsession.enable = true;
 
