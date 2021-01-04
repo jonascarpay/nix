@@ -160,13 +160,21 @@ in
         '';
         lsp-ui.config = ''
           (use-package lsp-ui
-            :after lsp-mode
+            :after lsp-mode general
+            :config
+            (lsp-ui-doc-mode nil)
+            (setq lsp-ui-doc-delay 0)
+            (lmap "ld" 'lsp-ui-doc-mode)
           )
         '';
 
         company.config = ''
           (use-package company
-            :hook ('after-init . global-company-mode))
+            :hook ('after-init . global-company-mode)
+            :config
+            (setq company-minimum-prefix-length 1)
+            (setq company-idle-delay 0.0)
+          )
         '';
 
         smartparens.config = ''
