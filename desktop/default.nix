@@ -27,9 +27,8 @@
     xclip # Doesn't work?
   ];
 
-  home.sessionVariables.TERMCMD = "termite";
+  home.sessionVariables.TERMCMD = "st";
 
-  programs.termite.enable = true;
   programs.firefox.enable = true;
   home.keyboard.options = [ "ctrl:nocaps" ];
   qt.enable = true;
