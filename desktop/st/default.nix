@@ -14,7 +14,7 @@ let
         url = "https://st.suckless.org/patches/scrollback/st-scrollback-mouse-20191024-a2c479c.diff";
         sha256 = "0qg20sv64im5lcnfnphnbbiyizwywrg1g6zhxyxqqyf8g33lpbb7";
       })
-      # mousehweel scroll (broken)
+      # mousehweel scroll (patch does not apply?)
       # (fetchpatch {
       #   url = "https://st.suckless.org/patches/scrollback/st-scrollback-mouse-altscreen-20200416-5703aa0.diff";
       #   sha256 = "0j13prfvv9mjvyjiklachipzhjdradb1dymbmx7fk4d083il06m6";
