@@ -7,6 +7,7 @@
     ./polybar.nix
     ./wal.nix
     ./redshift.nix
+    ./st
     ./xmonad
     ./albert
   ];

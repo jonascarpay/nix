@@ -35,8 +35,8 @@ altMask = mod1Mask
 
 ctrlMask = controlMask
 
-termEmu = "termite -e /home/jmc/.nix-profile/bin/fish"
-
+-- termEmu = "termite -e /home/jmc/.nix-profile/bin/fish"
+termEmu = "st"
 -- termEmu = "urxvt -e /home/jmc/.nix-profile/bin/fish"
 
 data TallDock a = TallDock
