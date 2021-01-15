@@ -154,6 +154,7 @@ myKeys conf = M.fromList myKeyList <> addUnzoom (keys desktopConfig conf)
       where unzoomKeys = [(k,v) | k <- [m,m .|. shiftMask], v <- [xK_j, xK_k]]
     myKeyList = 
       [ ((m, xK_f), spawn "firefox")
+      , ((m .|. shiftMask, xK_f), spawn "clipboard-firefox")
       , ((m, xK_Return), mkTerm)
       , ((m, xK_z), sendMessage ZoomToggle)
       , ((m .|. shiftMask, xK_Return), windows W.swapMaster)
