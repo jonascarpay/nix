@@ -41,6 +41,7 @@ in
         set backspace=2
         set hlsearch
         set incsearch
+        set inccommand=nosplit
         set mouse=a
         set copyindent
         set ignorecase
@@ -133,6 +134,13 @@ in
           '';
         };
 
+        highlight-yank = {
+          plugins = [ np.vim-highlightedyank ];
+          config = ''
+            let g:highlightedyank_highlight_duration = 200
+          '';
+        };
+
         hoogle = {
           config = ''
             function! HoogleSearch()
@@ -172,6 +180,14 @@ in
             set rtp+=~/nix/vim/snippets
           '';
         };
+        autopairs = {
+          plugins = [ np.auto-pairs ];
+          config =
+            let doubleSingle = "''"; in
+            ''
+              autocmd FileType nix let b:AutoPairs = AutoPairsDefine({"${doubleSingle}" : "${doubleSingle}", 'let':'in', '=':';'}, ["'"])
+            '';
+        };
 
         colors = {
           plugins = [ np.nord-vim ];
@@ -204,15 +220,16 @@ in
             set nowritebackup
             set cmdheight=2
             set updatetime=300
-            nmap <silent> ga :CocAction<cr>
-            nmap <silent> <leader>ga <Plug>(coc-fix-current)
-            nmap <leader>lf :<C-u>CocList diagnostics<cr>
-            nmap <silent> [g <Plug>(coc-diagnostic-prev)
-            nmap <silent> ]g <Plug>(coc-diagnostic-next)
-            nmap <silent> gd <Plug>(coc-definition)
-            nmap <silent> gy <Plug>(coc-type-definition)
-            nmap <silent> gi <Plug>(coc-implementation)
-            nnoremap <silent> gh :call CocAction('doHover')<cr>
+            set shortmess+=c
+            nmap <silent> <leader>la :CocAction<cr>
+            nmap <silent> <leader>lr :CocRestart<cr>
+            nmap <silent> <leader>ll :<C-u>CocList diagnostics<cr>
+            nmap <silent> [l <Plug>(coc-diagnostic-prev)
+            nmap <silent> ]l <Plug>(coc-diagnostic-next)
+            nmap <silent> <leader>ld <Plug>(coc-definition)
+            nmap <silent> <leader>ly <Plug>(coc-type-definition)
+            nmap <silent> <leader>li <Plug>(coc-implementation)
+            nnoremap <silent> <leader>lh :call CocAction('doHover')<cr>
             " Highlight the symbol and its references when holding the cursor.
             autocmd CursorHold * silent call CocActionAsync('highlight')
           '';
