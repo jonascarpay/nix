@@ -27,4 +27,5 @@ let
     '';
   });
   # in { home.packages = [ blender ]; } Disabled because don't have time to wait right now
-in { home.packages = [ unstable.blender ]; }
+in
+{ home.packages = [ unstable.blender ]; }
