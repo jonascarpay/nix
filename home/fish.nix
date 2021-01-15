@@ -86,11 +86,6 @@ in
       sscu = "sudo systemctl status";
       sh = "stack haddock; and stack hoogle --no-nix-pure --server";
       sha = "stack haddock --open --no-nix-pure";
-      snc = "sudo nix-channel";
-      sno = "sudo nixos-rebuild";
-      sr = "stack repl";
-      st = "stack";
-      sv = "sudo vim";
       t = "tmux";
       v = "vim";
       vd = "vimdir";
@@ -100,7 +95,4 @@ in
   home.file.".tmux.conf".text =
     "set-option -g default-command /home/jmc/.nix-profile/bin/fish";
 
-
 }
-
-# vim: sw=2:ts=2:fdm=indent:foldcolumn=3:foldlevel=1
