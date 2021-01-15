@@ -23,5 +23,3 @@
 
 
 (defalias 'yes-or-no-p 'y-or-n-p)
-
-(global-hl-line-mode t)

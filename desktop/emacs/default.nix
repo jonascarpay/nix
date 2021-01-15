@@ -1,8 +1,4 @@
-{ pkgs, ... }:
-let
-  unstable = import <unstable> { };
-in
-{
+{ pkgs, ... }: {
   imports = [
     ./init.nix
     ./evil.nix
@@ -10,7 +6,19 @@ in
     ./org.nix
     ./ui.nix
   ];
+  nixpkgs.overlays = [
+    (import (builtins.fetchTarball {
+      # 21/01/04
+      url = https://github.com/nix-community/emacs-overlay/archive/c835ee2d9d790af502e5ea41a965f4002d6f4590.tar.gz;
+    }))
+  ];
+  caches.cachix = [{
+    name = "nix-community";
+    sha256 = "1r0dsyhypwqgw3i5c2rd5njay8gqw9hijiahbc2jvf0h52viyd9i";
+  }];
+  home.packages = [ pkgs.binutils ]; # because gccemacs needs `as`
 
+  programs.emacs.package = pkgs.emacsGcc;
   programs.git.ignores = [
     "**/#*#"
     "*.elc"
@@ -27,6 +35,7 @@ in
     "/elpa/"
     "*.rel"
     "/auto/"
+    "*/ltximg/"
     ".cask/"
     "dist/"
     "flycheck_*.el"
@@ -128,13 +137,15 @@ in
             (menu-bar-mode 0)
             (tool-bar-mode 0)
             (scroll-bar-mode 0)
-            (add-hook 'text-mode-hook 'display-line-numbers-mode)
+            ;; (add-hook 'text-mode-hook 'display-line-numbers-mode)
             (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+            (add-hook 'prog-mode-hook 'hl-line-mode)
             (setq custom-file "~/custom.el")
             (load custom-file)
           '';
         };
 
+        beacon.enable = false;
         beacon.config = ''
           (use-package beacon
             :hook (after-init . beacon-mode))
@@ -155,7 +166,15 @@ in
 
         lsp-mode.config = ''
           (use-package lsp-mode
+            :after general
             :hook (lsp-mode . lsp-enable-which-key-integration)
+            :config
+            (lmap "la" 'lsp-execute-code-action)
+            (lmap "le" 'flycheck-list-errors)
+            (lmap "lp" 'flycheck-previous-error)
+            (lmap "ln" 'flycheck-next-error)
+            (lmap "lr" 'lsp-workspace-restart)
+            (setq read-process-output-max (* 1024 1024))
             :commands lsp)
         '';
         lsp-ui.config = ''
@@ -173,7 +192,7 @@ in
             :hook ('after-init . global-company-mode)
             :config
             (setq company-minimum-prefix-length 1)
-            (setq company-idle-delay 0.0)
+            (setq company-idle-delay 0.2)
           )
         '';
 
@@ -182,9 +201,11 @@ in
             :hook (after-init . smartparens-global-mode)
             :config
             (require 'smartparens-config)
+            (show-smartparens-global-mode)
             (general-define-key
               :states 'insert
-              "C-l" 'sp-up-sexp
+              "C-k" 'sp-up-sexp
+              "C-l" 'sp-forward-sexp
               "C-M-l" 'sp-forward-slurp-sexp
               "C-M-h" 'sp-forward-barf-sexp
             )

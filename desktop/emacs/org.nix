@@ -4,10 +4,11 @@
     sqlite
     ripgrep
     graphviz
+    (texlive.combined.scheme-full)
+    etBook
   ];
   programs.emacs.init.modules = {
     org = {
-      packages = [ ];
       precedence = -1;
       config = ''
         (setq org-hide-emphasis-markers t)
@@ -16,13 +17,18 @@
 
         (setq org-agenda-files '(
           "~/Org/agenda.org"
-          "~/Org/contacts.org"))
+          "~/Org/contacts.org"
+          "~/Org/birthdays.org"
+        ))
 
         (setq system-time-locale "en-US")
-        (global-prettify-symbols-mode t)
+        (setq org-hidden-keywords '(title))
+        (setq org-fontify-quote-and-verse-blocks t)
         (setq-default prettify-symbols-alist '(
           ("#+BEGIN_SRC" . "λ") ("#+begin_src" . "λ")
           ("#+END_SRC"   . "ƛ") ("#+end_src"   . "ƛ")
+          ("#+begin_quote"   . "\"") ("#+BEGIN_QUOTE"   . "\"")
+          ("#+end_quote"   . "\"") ("#+END_QUOTE"   . "\"")
         ))
         (lmap
          "o c" 'org-capture
@@ -44,6 +50,12 @@
           (push '(?_ . ("_" . "_")) evil-surround-pairs-alist)
           (push '(?/ . ("/" . "/")) evil-surround-pairs-alist)
           (visual-line-mode)
+          (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.7))
+          ;;(variable-pitch-mode)
+          (prettify-symbols-mode)
+          (setq line-spacing 0.2)
+          (text-scale-set 1.0)
+          (org-cycle-hide-drawers 'all)
         ))
       '';
     };
@@ -66,6 +78,34 @@
             :states 'insert
             "C-l" 'org-roam-insert
             "C-L" 'org-roam-insert-immediate)
+      )
+    '';
+    org-fragtog.config = ''
+      (use-package org-fragtog
+        :hook (org-mode . org-fragtog-mode))'';
+    org-bullets.config = ''
+      (use-package org-bullets
+        :hook (org-mode . org-bullets-mode)
+      )
+    '';
+    writeroom = {
+      packages = [ "writeroom-mode" "visual-fill-column" ];
+      config = ''
+        (use-package writeroom-mode
+          :hook
+          (org-mode . writeroom-mode)
+        )
+      '';
+    };
+    org-sticky-header.config = ''
+      (use-package org-sticky-header-mode
+        :hook (org-mode . org-sticky-header-mode)
+      )
+    '';
+    mixed-pitch.config = ''
+      (use-package mixed-pitch
+        :hook
+        (org-mode . mixed-pitch-mode)
       )
     '';
   };

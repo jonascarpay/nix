@@ -99,6 +99,7 @@ in
         ]
       '';
       default = [ ];
+      type = with types; listOf (either string attrs);
     };
 
   };

@@ -2,6 +2,12 @@
 {
   programs.emacs.init.modules = {
 
+    undo-tree.config = ''
+      (use-package undo-tree
+        :config
+        (global-undo-tree-mode)
+      )
+    '';
     evil = {
       precedence = 2;
       config = ''
@@ -14,10 +20,33 @@
           (evil-mode 1)
           ;; also exists: https://github.com/rolandwalker/simpleclip
           (setq x-select-enable-clipboard nil)
+          (evil-set-undo-system 'undo-tree)
+          ;; fixes not letting go of ctrl
+          (general-define-key
+            :states 'normal
+            :prefix "C-w"
+            "C-h" 'evil-window-left
+            "C-l" 'evil-window-right
+            "C-j" 'evil-window-down
+            "C-k" 'evil-window-up
+          )
+        (defun turn-off-evil-auto-indent ()
+            (setq-local evil-auto-indent nil))
         )
       '';
     };
 
+    # From Justin's config
+    # (setq-default indent-tabs-mode nil)
+    # (setq-default tab-width 2)
+    # (setq tab-width 2)
+    # (setq-default evil-shift-width 2)
+    # (setq evil-shift-width 2)
+    # 
+    # (superword-mode t)
+    # 
+    # (add-hook 'haskell-mode-hook #'turn-off-evil-auto-indent)
+    # (add-hook 'purescript-mode-hook #'turn-off-evil-auto-indent)
     general = {
       precedence = 1;
       config = ''
@@ -42,19 +71,6 @@
     '';
 
     # https://github.com/Somelauw/evil-org-mode
-    evil-org.packages = [
-      (
-        pkgs.emacsPackages.evil-org.overrideAttrs
-          (old: {
-            # TODO fix if newer than 21-01-04
-            src = pkgs.fetchFromGitHub {
-              owner = "Somelauw";
-              repo = "evil-org-mode";
-              rev = "80ef38fb378541937f6ddfe836809e76eda1e355";
-              sha256 = "19028laqnsl0h5nii7ykfh39srg94zhydhj1rcv52fs9nlg6c6dq";
-            };
-          }))
-    ];
     evil-org.config = ''
       (use-package evil-org
         :after org
@@ -105,6 +121,12 @@
           "B" 'evil-avy-goto-word-0
         )
       )
+    '';
+
+    evil-commentary.config = ''
+      (use-package evil-commentary
+        :after evil
+        :config  (evil-commentary-mode))
     '';
 
   };
