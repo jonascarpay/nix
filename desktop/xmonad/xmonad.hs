@@ -53,10 +53,16 @@ instance LayoutClass TallDock a where
   description _ = "TallDock"
 
   pureLayout (TallDock m rd rs zoom) rect (W.Stack x pre post) =
-      (x, bool winX (interpolateRect 0.7 winX (pad (-15) rect)) zoom)
+      (x, zoomRect r)
         : zip (reverse pre) winsPre <> zip post winsPost
     where
+      r | zoom = Just 0.7
+        -- | not (null pre) = Just 0.02 -- this window is not master
+        | otherwise = Nothing
       n = length pre + length post + 1
+      zoomRect Nothing = winX
+      zoomRect (Just z) = unpad $ interpolateRect z winX rect
+        where unpad = pad (-8)
       (winsPre, winX : winsPost) = splitAt (length pre) rects
 
       rects
@@ -98,7 +104,7 @@ instance LayoutClass TallDock a where
       togglezoom ZoomUnzoom = TallDock m rd rs False
 
 defaultTallDock :: TallDock a
-defaultTallDock = TallDock 1 (3/4) (1/2) False
+defaultTallDock = TallDock 1 (3/4) (3/5) False
 
 myLayout = avoidStruts $ spacingWithEdge 10 $ defaultTallDock
 -- myLayout = avoidStruts $ defaultTallDock
@@ -152,17 +158,8 @@ myKeys conf = M.fromList myKeyList <> addUnzoom (keys desktopConfig conf)
       , ((m, xK_z), sendMessage ZoomToggle)
       , ((m .|. shiftMask, xK_Return), windows W.swapMaster)
       , ((m, xK_s), windows W.swapDown >> windows W.focusUp)
-      , ((m, xK_b), wal "haishoku" True False)
       , ((m, xK_c), spawn "emacsclient --create-frame --no-wait")
       -- , ((m, xK_c), spawn "emacs")
-      , ((m .|. shiftMask, xK_b), wal "wal" True True)
-      , ((m .|. shiftMask .|. ctrlMask, xK_1), wal "wal" False False)
-      , ((m .|. shiftMask .|. ctrlMask, xK_2), wal "colorz" False False)
-      , ((m .|. shiftMask .|. ctrlMask, xK_3), wal "haishoku" False False)
-      , ((m .|. shiftMask .|. ctrlMask, xK_q), wal "wal" False True)
-      , ((m .|. shiftMask .|. ctrlMask, xK_w), wal "colorz" False True)
-      , ((m .|. shiftMask .|. ctrlMask, xK_e), wal "haishoku" False True)
-    
       , ((m .|. shiftMask, xK_h), sendMessage VShrink)
       , ((m .|. shiftMask, xK_l), sendMessage VExpand)
       , ((m, xK_n), CW.moveTo CW.Next CW.HiddenWS)
@@ -188,15 +185,6 @@ myKeys conf = M.fromList myKeyList <> addUnzoom (keys desktopConfig conf)
                          , (controlMask, \n -> W.view n . W.shift n) -- TODO greedyview vs view?
                          ]
       ]
-
-wal backend newpape light = do
-  pape <-
-    if newpape
-      then return $ "/home/jmc/Wallpapers/papes/"
-      else wrap "\"" "\"" <$> liftIO (readFile "/home/jmc/.cache/wal/wal")
-  let cmd = unwords $ ["wal", "--backend", backend, "-i", pape] ++ (if light then ["-l"] else [])
-  -- liftIO $ writeFile "/home/jmc/tmp" cmd
-  spawn cmd
 
 mkTerm = withWindowSet launchTerminal
   where
@@ -228,7 +216,7 @@ polybarLog dbus = do
       }
     base = DL.pad . weebify
     rev = DL.wrap "%{R}" "%{R-}"
-    greyOut = fg "#444444"
+    greyOut = fg "#81a1c1"
     ul hex = DL.wrap ("%{u" <> hex <> "}%{+u}") "%{-u}"
     ul' = DL.wrap "%{+u}" "%{-u}"
     fg hex = DL.wrap ("%{F" <> hex <> "}") "%{F-}"

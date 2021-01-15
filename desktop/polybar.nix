@@ -30,7 +30,8 @@ lib.mkIf (config.xsession.enable) {
         font-1 = "SauceCodePro Nerd Font:style=Bold:size=8;2";
         font-2 = "IPAPGothic:style=Bold:size=8;3";
         tray-position = "right";
-        background = "\${colors.background}";
+        # background = "\${colors.nord1}";
+        background = "#232831"; # colorpicked the darkest bg
         foreground = "\${colors.foreground}";
         module-margin = "1";
         modules-left = "xmonad";
@@ -40,12 +41,25 @@ lib.mkIf (config.xsession.enable) {
       };
 
       "colors" = {
-        background = "\${xrdb:color0:#222}";
-        foreground = "\${xrdb:color7:#222}";
-        foreground-alt = "\${xrdb:color7:#222}";
-        primary = "\${xrdb:color1:#222}";
-        secondary = "\${xrdb:color2:#222}";
-        alert = "\${xrdb:color3:#222}";
+        # background = "\${xrdb:color0:#222}";
+        # foreground = "\${xrdb:color7:#222}";
+        # foreground-alt = "\${xrdb:color7:#222}";
+        # primary = "\${xrdb:color1:#222}";
+        # secondary = "\${xrdb:color2:#222}";
+        # alert = "\${xrdb:color3:#222}";
+        background = "#2E3440";
+        buffer = "#4c566a";
+        foreground = "#D8DEE9";
+        nord1 = "#3B4252";
+        nord6 = "#ECEFF4";
+        nord7 = "#8FBCBB";
+        nord8 = "#88C0D0";
+        nord9 = "#81A1C1";
+        urgent = "#BF616A";
+        warning = "# D08770";
+        notify = "#EBCB8B";
+        success = "#A3BE8C";
+        function = "#B48EAD";
       };
 
       "bar/hidpi" = {

@@ -174,12 +174,8 @@ in
         };
 
         colors = {
-          plugins = [ np.wal-vim np.molokai ];
-          config = ''
-            colorscheme wal
-            hi Normal ctermbg=NONE
-            hi VertSplit cterm=NONE ctermfg=8 ctermbg=NONE
-          '';
+          plugins = [ np.nord-vim ];
+          config = "colorscheme nord";
         };
 
         languageclient-neovim = {

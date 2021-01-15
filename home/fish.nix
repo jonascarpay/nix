@@ -10,19 +10,6 @@ let
     end
   '';
 
-  powerline-fish =
-    let
-      fish-powerline-pkg = fetchGit {
-        name = "theme-bobthefish";
-        url = "https://github.com/oh-my-fish/theme-bobthefish";
-      };
-    in
-    ''
-      source ${fish-powerline-pkg}/functions/__bobthefish_glyphs.fish
-      source ${fish-powerline-pkg}/functions/__bobthefish_colors.fish
-      source ${fish-powerline-pkg}/fish_prompt.fish
-    '';
-
 in
 {
   programs.fish = {
@@ -32,13 +19,11 @@ in
         ${if config.programs.fzf.enable then "fzf_key_bindings" else ""}
       end
 
-      set fish_greeting
-
       function gi
         curl -sL https://www.gitignore.io/api/$argv
       end
 
-      ${powerline-fish}
+      ${powerline-go}
 
     '';
     shellAbbrs = {

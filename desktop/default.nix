@@ -5,7 +5,6 @@
     ./emacs
     ./picom.nix
     ./polybar.nix
-    ./wal.nix
     ./redshift.nix
     ./st
     ./xmonad
@@ -39,6 +38,11 @@
     unclutter.enable = true;
     caffeine.enable = true;
     dunst.enable = true;
+  };
+  services.random-background = {
+    enable = true;
+    imageDirectory = "%h/Wallpapers/papes";
+    interval = "30m";
   };
 
   services.syncthing.enable = true;
