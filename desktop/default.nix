@@ -34,7 +34,7 @@
   fonts.fontconfig.enable = true;
   services = {
     flameshot.enable = true;
-    dropbox.enable = true;
+    # dropbox.enable = true;
     unclutter.enable = true;
     caffeine.enable = true;
     dunst.enable = true;
