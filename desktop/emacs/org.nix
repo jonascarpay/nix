@@ -24,6 +24,9 @@
         (setq system-time-locale "en-US")
         (setq org-hidden-keywords '(title))
         (setq org-fontify-quote-and-verse-blocks t)
+        (setq org-todo-keywords '(
+          (sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")
+        ))
         (setq-default prettify-symbols-alist '(
           ("#+BEGIN_SRC" . "λ") ("#+begin_src" . "λ")
           ("#+END_SRC"   . "ƛ") ("#+end_src"   . "ƛ")
@@ -40,8 +43,6 @@
           ("a" "Agenda"       entry (file+datetree "~/Org/agenda.org") "* %?")
           ("j" "Journal"      entry (file+datetree "~/Org/journal.org") "* %(format-time-string \"%H:%M\")\n%?")
           ("d" "Diary"        entry (file+datetree "~/Org/diary.org") "* %(format-time-string \"%H:%M\")\n%?")
-          ;; ("j" "Journal"      entry (file+datetree jmc/org-capture-file) "* %?")
-          ;; ("J" "Journal+link" entry (file+datetree jmc/org-capture-file) "* %?\n  %i\n  %a")
         ))
         (setq org-startup-indented t)
 
