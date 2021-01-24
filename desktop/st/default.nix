@@ -1,9 +1,8 @@
 { pkgs, ... }:
 let
   inherit (pkgs) fetchurl;
-  unstable = import <unstable> { };
   configFile = pkgs.writeText "config.def.h" (builtins.readFile ./config.h);
-  myst = unstable.st.overrideAttrs (old: {
+  myst = pkgs.st.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [ pkgs.harfbuzz ];
     patches = old.patches ++ [
       # Scrollback
