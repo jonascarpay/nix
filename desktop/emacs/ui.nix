@@ -88,10 +88,10 @@
         (setq dashboard-show-shortcuts t)
         (setq dashboard-page-separator "\n \n") ;; That's not a normal space
         (setq dashboard-items
-          '((agenda . 5)
-            (projects . 10)
-            (recents  . 10)
-            (bookmarks . 5)
+          '((agenda . 10)
+            ;; (projects . 10)
+            (recents  . 20)
+            ;; (bookmarks . 5)
             ))
         :config
         (dashboard-setup-startup-hook)
