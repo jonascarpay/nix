@@ -6,6 +6,7 @@
 import qualified Codec.Binary.UTF8.String as UTF8
 import Control.Monad
 import Data.Bool (bool)
+import Data.Int (Int32)
 import Control.Applicative
 import qualified DBus as D
 import qualified DBus.Client as D
@@ -22,10 +23,11 @@ import XMonad.Hooks.DynamicLog as DL
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Layout.NoBorders
-import XMonad.Layout.Spacing
+import qualified XMonad.Layout.Spacing as SP
 import qualified XMonad.StackSet as W
 import qualified XMonad.Util.WorkspaceCompare as WC
 import qualified XMonad.Actions.CycleWS as CW
+import qualified XMonad.Layout.LayoutModifier as LM
 import XMonad.Util.EZConfig (additionalKeys)
 import XMonad.Util.NamedWindows (getName)
 import XMonad.Util.Run
@@ -49,6 +51,7 @@ data TallDock a = TallDock
 
 data ZoomState
 
+-- TODO move zoom to layout modifier
 instance LayoutClass TallDock a where
   description _ = "TallDock"
 
@@ -56,6 +59,8 @@ instance LayoutClass TallDock a where
       (x, zoomRect r)
         : zip (reverse pre) winsPre <> zip post winsPost
     where
+      rOffset :: Int32 -> Int32 -> Rectangle -> Rectangle
+      rOffset dx dy (Rectangle x y w h) = Rectangle (x+dx) (y+dy) w h
       r | zoom = Just 0.7
         -- | not (null pre) = Just 0.02 -- this window is not master
         | otherwise = Nothing
@@ -106,8 +111,31 @@ instance LayoutClass TallDock a where
 defaultTallDock :: TallDock a
 defaultTallDock = TallDock 1 (3/4) (3/5) False
 
-myLayout = avoidStruts $ spacingWithEdge 10 $ defaultTallDock
--- myLayout = avoidStruts $ defaultTallDock
+data LiftFocused a = LiftFocused Int32 Int32
+  deriving (Eq, Read, Show)
+
+instance LM.LayoutModifier LiftFocused Window where
+  redoLayout (LiftFocused dx dy) rect _ wins = do
+      curr <- gets (W.stack . W.workspace . W.current . windowset)
+      case curr of
+        Just (W.Stack wid _ _) ->
+          pure $ (fmap (zoom wid) wins, Nothing)
+        Nothing -> pure (wins, Nothing)
+    where
+      offsetRect dx dy (Rectangle x y w h) = Rectangle (x+dx) (y+dy) w h
+      zoom needle (wid, rect)
+        | needle == wid = (wid, offsetRect dx dy rect)
+        | otherwise = (wid, rect)
+
+liftFocused :: Int32 -> Int32 -> l a -> LM.ModifiedLayout LiftFocused l a
+liftFocused dx dy = LM.ModifiedLayout (LiftFocused dx dy)
+
+defaultSpacing, spacingDelta :: Int -- global constant to share value between reset key and layout
+defaultSpacing = 60
+spacingDelta = 15
+
+-- myLayout = liftFocused (-15) (-17) $ avoidStruts $ spacingWithEdge 30  $ defaultTallDock
+myLayout = avoidStruts $ SP.spacingWithEdge defaultSpacing $ defaultTallDock
 
 data VResizeMsg = VShrink | VExpand
   deriving (Eq, Show, Typeable, Message)
@@ -170,6 +198,10 @@ myKeys conf = M.fromList myKeyList <> addUnzoom (keys desktopConfig conf)
       , ((m .|. shiftMask, xK_n), CW.shiftTo CW.Next CW.HiddenWS >> CW.moveTo CW.Next CW.HiddenNonEmptyWS)
       , ((m .|. shiftMask, xK_p), CW.shiftTo CW.Prev CW.HiddenWS >> CW.moveTo CW.Prev CW.HiddenNonEmptyWS)
       , ((m, xK_grave), CW.moveTo CW.Next CW.HiddenNonEmptyWS)
+      -- Border control
+      , ((m, xK_equal), SP.incScreenWindowSpacing $ fromIntegral spacingDelta)
+      , ((m, xK_minus), SP.decScreenWindowSpacing $ fromIntegral spacingDelta)
+      , ((m, xK_0), SP.setScreenWindowSpacing $ fromIntegral defaultSpacing)
       ] <>
       [((m .|. mask, k), windows f)
             | (i, k) <- zip (XM.workspaces conf) [xK_1 .. xK_9]
@@ -181,7 +213,7 @@ myKeys conf = M.fromList myKeyList <> addUnzoom (keys desktopConfig conf)
       [((m .|. mask, key), screenWorkspace scr >>= flip whenJust (windows . f))
           | (key, scr) <- zip [xK_w, xK_e, xK_r] [0..]
           -- | (key, scr) <- zip [xK_e, xK_w] [0..]
-          , (mask, f) <- [ (0, W.view)
+                                              , (mask, f) <- [ (0, W.view)
                          , (shiftMask, \n -> W.shift n)
                          , (controlMask, \n -> W.view n . W.shift n) -- TODO greedyview vs view?
                          ]
