@@ -1,47 +1,42 @@
-{ pkgs, lib, ... }:
-{
-
-  services.picom = {
+{ pkgs, lib, config, ... }:
+let
+  base = {
     enable = true;
-    experimentalBackends = true;
-
-    # package = pkgs.picom.overrideAttrs (_: {
-    #   src = pkgs.fetchFromGitHub {
-    #     repo = "picom";
-    #     owner = "yshui";
-    #     rev = "3d358a06f2ef19d55f6cdca01dbfa51e112fcac7";
-    #     sha256 = "1bjm9vl3dy4sbm4h2jvldjfpkx6rsrz7m81y9kikmf6ggl3a4x1z";
-    #   };
-    # });
-
-    fade = true;
-    fadeDelta = 4;
-
-    shadow = true;
-    noDockShadow = false;
-    # shadowExclude = [ "!focused" ]; # breaks shit
-
-    # blurExclude = [
-    #   "class_i = 'Blender'"
-    #   "class_i = 'gl'"
-    # ];
-
-    # opacityRule = [
-    #   "100:class_i = 'Blender'"
-    #   "100:class_i = 'gl'"
-    # ];
-
-    # inactiveOpacity = "0.9";
-    # activeOpacity = "1";
-    inactiveDim = "0.23";
-
+    package = pkgs.picom.overrideAttrs (_: {
+      src = pkgs.fetchFromGitHub {
+        repo = "picom";
+        owner = "yshui";
+        rev = "d974367a0446f4f1939daaada7cb6bca84c893ef";
+        sha256 = "0mjm544vck493sdcvr90d9ycg5sxin28a13w61q1kqkycilv87lv";
+      };
+    });
     vSync = true;
-
-    # extraOptions = ''
-    #   blur = true;
-    #   blur-method = "dual_kawase";
-    #   blur-strength = 10;
-    # '';
+    shadow = true;
   };
 
-}
+  shadowFocus = {
+    shadowExclude = [ "!focused" ]; # breaks shit
+    shadowOffsets = [ 0 0 ];
+    inactiveDim = "0.30";
+  };
+
+  blur = {
+    blur = false;
+    experimentalBackends = true;
+    noDockShadow = false;
+    fade = true;
+    fadeDelta = 4;
+    extraOptions = ''
+      blur-method = "dual_kawase";
+      blur-strength = 12;
+    '';
+    blurExclude = [ "class_i != 'st-256color'" ];
+    inactiveOpacity = "0.85";
+    activeOpacity = "1";
+    inactiveDim = "0.20";
+    opacityRule = [ "100:class_i != 'st-256color'" ];
+  };
+
+in
+# { services.picom = base // shadowFocus; }
+{ services.picom = base // blur; }
