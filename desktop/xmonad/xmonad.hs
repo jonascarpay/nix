@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TupleSections #-}
@@ -42,74 +43,47 @@ termEmu = "st"
 -- termEmu = "urxvt -e /home/jmc/.nix-profile/bin/fish"
 
 data TallDock a = TallDock
-  { tdNMain :: !Int
+  { tdNDock :: !Int
   , tdRatioDock :: !Rational
   , tdRatioSide :: !Rational
-  , tdZoomSide :: Bool
   }
   deriving (Show, Read)
 
-data ZoomState
-
--- TODO move zoom to layout modifier
+-- TODO cycle
 instance LayoutClass TallDock a where
   description _ = "TallDock"
 
-  pureLayout (TallDock m rd rs zoom) rect (W.Stack x pre post) =
-      (x, zoomRect r)
-        : zip (reverse pre) winsPre <> zip post winsPost
+  pureLayout (TallDock ndock rd rs) rect (W.Stack x pre post) =
+      zip wins rects
     where
-      rOffset :: Int32 -> Int32 -> Rectangle -> Rectangle
-      rOffset dx dy (Rectangle x y w h) = Rectangle (x+dx) (y+dy) w h
-      r | zoom = Just 0.7
-        -- | not (null pre) = Just 0.02 -- this window is not master
-        | otherwise = Nothing
-      n = length pre + length post + 1
-      zoomRect Nothing = winX
-      zoomRect (Just z) = unpad $ interpolateRect z winX rect
-        where unpad = pad (-8)
-      (winsPre, winX : winsPost) = splitAt (length pre) rects
+      wins = reverse pre <> (x : post)
+      ([main], rest) = splitAt 1 wins
+      (tall, dock) = splitAt (length rest - ndock) rest
 
-      rects
-        | m == 0 = splitVertically n rect
-        | m >= n = tileDock n rect
-        | otherwise = let (l,r) = splitHorizontallyBy rs rect
-                       in tileDock m l <> splitVertically (n - m) r
+      rects =
+        let (left, tallrects)
+              | null tall = (rect, []) 
+              | otherwise = splitVertically (length tall) <$> splitHorizontallyBy rs rect
+            (mainrect, dockrects)
+              | null dock = (left, []) 
+              | otherwise = (reverse . splitHorizontally (length dock)) <$> splitVerticallyBy rd left
+         in mainrect : tallrects <> dockrects
 
-      tileDock 0 _ = []
-      tileDock 1 r = [r]
-      tileDock n r = top : bottoms
-        where (top, bottom) = splitVerticallyBy rd r
-              bottoms = splitHorizontally (n - 1) bottom
-
-      pad :: Integer -> Rectangle -> Rectangle
-      pad x = UR.withBorder x x x x 0
-
-      interpolateRect :: Double -> Rectangle -> Rectangle -> Rectangle
-      interpolateRect r (Rectangle x y w h) (Rectangle x' y' w' h') =
-          Rectangle (x <-> x') (y <-> y') (w <-> w') (h <-> h')
-        where
-          (<->) :: Integral a => a -> a -> a
-          a <-> b = round $ realToFrac a * (1-r) + realToFrac b * r
-
-  pureMessage (TallDock m rd rs z) msg
+  pureMessage (TallDock m rd rs) msg
       =   fmap resize (fromMessage msg)
       <|> fmap vresize (fromMessage msg)
       <|> fmap incDock (fromMessage msg)
-      <|> fmap togglezoom (fromMessage msg)
 
     where
       delta = 3 / 100
-      resize Shrink = TallDock m rd (max 0.1 $ rs-delta) False
-      resize Expand = TallDock m rd (min 0.9 $ rs+delta) False
-      vresize VShrink = TallDock m (max 0.1 $ rd-delta) rs False
-      vresize VExpand = TallDock m (min 0.9 $ rd+delta) rs False
-      incDock (IncMasterN d) = TallDock (max 0 (m+d)) rd rs False
-      togglezoom ZoomToggle = TallDock m rd rs (not z)
-      togglezoom ZoomUnzoom = TallDock m rd rs False
+      resize Shrink = TallDock m rd (max 0.1 $ rs-delta)
+      resize Expand = TallDock m rd (min 0.9 $ rs+delta)
+      vresize VShrink = TallDock m (max 0.1 $ rd-delta) rs
+      vresize VExpand = TallDock m (min 0.9 $ rd+delta) rs
+      incDock (IncMasterN d) = TallDock (max 0 (m+d)) rd rs
 
 defaultTallDock :: TallDock a
-defaultTallDock = TallDock 1 (3/4) (3/5) False
+defaultTallDock = TallDock 0 (3/4) (3/5)
 
 data LiftFocused a = LiftFocused Int32 Int32
   deriving (Eq, Read, Show)
@@ -140,9 +114,6 @@ myLayout = avoidStruts $ SP.spacingWithEdge defaultSpacing $ defaultTallDock
 data VResizeMsg = VShrink | VExpand
   deriving (Eq, Show, Typeable, Message)
 
-data ZoomMsg = ZoomToggle | ZoomUnzoom
-  deriving (Eq, Show, Typeable, Message)
-
 splitVerticallyDiv :: Int -> Int -> Int -> Rectangle -> [Rectangle]
 splitVerticallyDiv n x r (Rectangle rx ry rw rh) = (\ry' -> Rectangle rx (fromIntegral ry') rw (fromIntegral rh')) <$> ys
   where
@@ -161,6 +132,20 @@ main = do
     $ ewmh
     $ dcfg dbus
 
+cycleNonFocusDown :: W.Stack a -> W.Stack a
+cycleNonFocusDown (W.Stack f us ds) = W.Stack f us' (reverse ds')
+  where wins = us <> reverse ds
+        wins' = let (h,t) = splitAt 1 wins
+                 in t <> h
+        (us',ds') = splitAt (length us) wins'
+
+cycleNonFocusUp :: W.Stack a -> W.Stack a
+cycleNonFocusUp (W.Stack f us ds) = W.Stack f (reverse us') ds'
+  where wins = ds <> reverse us
+        wins' = let (h,t) = splitAt 1 wins
+                 in t <> h
+        (ds',us') = splitAt (length ds) wins'
+
 dcfg dbus =
   desktopConfig
     { terminal = termEmu,
@@ -175,16 +160,14 @@ dcfg dbus =
       handleEventHook = handleEventHook def <+> fullscreenEventHook
     }
 
-myKeys conf = M.fromList myKeyList <> addUnzoom (keys desktopConfig conf)
+myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
   where
     m = modMask conf
-    addUnzoom km = foldr (\k m' -> M.adjust (sendMessage ZoomUnzoom >>) k m') km unzoomKeys
-      where unzoomKeys = [(k,v) | k <- [m,m .|. shiftMask], v <- [xK_j, xK_k]]
     myKeyList = 
       [ ((m, xK_f), spawn "firefox")
       , ((m .|. shiftMask, xK_f), spawn "clipboard-firefox")
       , ((m, xK_Return), mkTerm)
-      , ((m, xK_z), sendMessage ZoomToggle)
+      -- , ((m, xK_z), sendMessage ZoomToggle)
       , ((m .|. shiftMask, xK_Return), windows W.swapMaster)
       , ((m, xK_s), windows W.swapDown >> windows W.focusUp)
       , ((m, xK_c), spawn "emacsclient --create-frame --no-wait")
@@ -198,9 +181,11 @@ myKeys conf = M.fromList myKeyList <> addUnzoom (keys desktopConfig conf)
       , ((m .|. shiftMask, xK_n), CW.shiftTo CW.Next CW.HiddenWS >> CW.moveTo CW.Next CW.HiddenNonEmptyWS)
       , ((m .|. shiftMask, xK_p), CW.shiftTo CW.Prev CW.HiddenWS >> CW.moveTo CW.Prev CW.HiddenNonEmptyWS)
       , ((m, xK_grave), CW.moveTo CW.Next CW.HiddenNonEmptyWS)
+      , ((m, xK_y), windows $ W.modify' cycleNonFocusDown)
+      , ((m .|. shiftMask, xK_y), windows $ W.modify' cycleNonFocusUp)
       -- Border control
-      , ((m, xK_equal), SP.incScreenWindowSpacing $ fromIntegral spacingDelta)
-      , ((m, xK_minus), SP.decScreenWindowSpacing $ fromIntegral spacingDelta)
+      , ((m, xK_minus), SP.incScreenWindowSpacing $ fromIntegral spacingDelta)
+      , ((m, xK_equal), SP.decScreenWindowSpacing $ fromIntegral spacingDelta)
       , ((m, xK_0), SP.setScreenWindowSpacing $ fromIntegral defaultSpacing)
       ] <>
       [((m .|. mask, k), windows f)
