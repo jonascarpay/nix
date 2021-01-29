@@ -56,7 +56,13 @@
           (general-create-definer lmap
             :prefix "SPC"
             :keymaps 'normal)
-          (lmap "w" 'save-buffer))
+          (lmap "w" 'save-buffer)
+          (general-define-key
+            :states 'normal
+            "j" 'evil-next-visual-line
+            "k" 'evil-previous-visual-line
+          )
+        )
       '';
     };
 
