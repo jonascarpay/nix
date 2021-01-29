@@ -9,6 +9,7 @@
     ./st
     ./xmonad
     ./albert
+    ./neuron.nix
   ];
   home.packages = with pkgs; [
     anki
