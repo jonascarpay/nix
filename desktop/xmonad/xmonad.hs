@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
@@ -11,7 +12,7 @@ import Data.Int (Int32)
 import Control.Applicative
 import qualified DBus as D
 import qualified DBus.Client as D
-import Data.List (isPrefixOf, sortBy)
+import Data.List (findIndex, isPrefixOf)
 import qualified Data.Map as M
 import Data.Monoid ((<>))
 import Data.Bool (bool)
@@ -46,6 +47,7 @@ data TallDock a = TallDock
   { tdNDock :: !Int
   , tdRatioDock :: !Rational
   , tdRatioSide :: !Rational
+  , tdZoomTall :: !Bool
   }
   deriving (Show, Read)
 
@@ -53,37 +55,57 @@ data TallDock a = TallDock
 instance LayoutClass TallDock a where
   description _ = "TallDock"
 
-  pureLayout (TallDock ndock rd rs) rect (W.Stack x pre post) =
-      zip wins rects
+  pureLayout (TallDock ndock rd rs zoom) rect (W.Stack x pre post) =
+      zip (fst <$> wins) rects
     where
-      wins = reverse pre <> (x : post)
+      wins :: [(a, Bool)]
+      wins = ((,False) <$> reverse pre) <> [(x, True)] <> ((,False) <$> post)
       ([main], rest) = splitAt 1 wins
       (tall, dock) = splitAt (length rest - ndock) rest
+
+      splitTall :: Rectangle -> [Rectangle]
+      splitTall rect
+        | zoom, Just n <- findIndex snd tall
+          = let rects = splitVertically (ntall + weight - 1) rect
+                (pre,(focus, post)) = splitAt weight <$> splitAt n rects
+             in pre <> (stack focus : post)
+        | otherwise = splitVertically ntall rect
+        where
+          stack :: [Rectangle] -> Rectangle
+          stack rects@(Rectangle x y w _ :_) = Rectangle x y w (sum $ rect_height <$> rects)
+          ntall = length tall
+          weight = 3
 
       rects =
         let (left, tallrects)
               | null tall = (rect, []) 
-              | otherwise = splitVertically (length tall) <$> splitHorizontallyBy rs rect
+              | otherwise = splitTall <$> splitHorizontallyBy rs rect
             (mainrect, dockrects)
               | null dock = (left, []) 
               | otherwise = (reverse . splitHorizontally (length dock)) <$> splitVerticallyBy rd left
          in mainrect : tallrects <> dockrects
 
-  pureMessage (TallDock m rd rs) msg
+  pureMessage (TallDock m rd rs z) msg
       =   fmap resize (fromMessage msg)
       <|> fmap vresize (fromMessage msg)
       <|> fmap incDock (fromMessage msg)
+      <|> fmap zoomToggle (fromMessage msg)
 
     where
       delta = 3 / 100
-      resize Shrink = TallDock m rd (max 0.1 $ rs-delta)
-      resize Expand = TallDock m rd (min 0.9 $ rs+delta)
-      vresize VShrink = TallDock m (max 0.1 $ rd-delta) rs
-      vresize VExpand = TallDock m (min 0.9 $ rd+delta) rs
-      incDock (IncMasterN d) = TallDock (max 0 (m+d)) rd rs
+      resize Shrink = TallDock m rd (max 0.1 $ rs-delta) z
+      resize Expand = TallDock m rd (min 0.9 $ rs+delta) z
+      vresize VShrink = TallDock m (max 0.1 $ rd-delta) rs z
+      vresize VExpand = TallDock m (min 0.9 $ rd+delta) rs z
+      incDock (IncMasterN d) = TallDock (max 0 (m+d)) rd rs z
+      zoomToggle ZoomToggle = TallDock m rd rs (not z)
+
+data ZoomToggle = ZoomToggle
+
+instance Message ZoomToggle
 
 defaultTallDock :: TallDock a
-defaultTallDock = TallDock 0 (3/4) (3/5)
+defaultTallDock = TallDock 0 (3/4) (3/5) False
 
 data LiftFocused a = LiftFocused Int32 Int32
   deriving (Eq, Read, Show)
@@ -166,8 +188,9 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
     myKeyList = 
       [ ((m, xK_f), spawn "firefox")
       , ((m .|. shiftMask, xK_f), spawn "clipboard-firefox")
-      , ((m, xK_Return), mkTerm)
-      -- , ((m, xK_z), sendMessage ZoomToggle)
+      , ((m, xK_Return), mkTerm "/home/jmc/.nix-profile/bin/fish")
+      , ((m .|. ctrlMask, xK_Return), mkTerm "/home/jmc/.nix-profile/bin/tmux")
+      , ((m, xK_z), sendMessage ZoomToggle)
       , ((m .|. shiftMask, xK_Return), windows W.swapMaster)
       , ((m, xK_s), windows W.swapDown >> windows W.focusUp)
       , ((m, xK_c), spawn "emacsclient --create-frame --no-wait")
@@ -204,9 +227,8 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
                          ]
       ]
 
-mkTerm = withWindowSet launchTerminal
+mkTerm shell = withWindowSet launchTerminal
   where
-    shell = "/home/jmc/.nix-profile/bin/fish"
     launchTerminal ws =
       flip catchX (runInTerm "" shell) $ do
         Just xid <- pure $ W.peek ws
