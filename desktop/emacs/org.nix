@@ -14,6 +14,7 @@
         (setq org-hide-emphasis-markers t)
         (setq org-startup-indented t)
         (setq org-agenda-start-on-weekday nil)
+        (setq sentence-end-double-space nil)
 
         (setq org-agenda-files '(
           "~/Org/agenda.org"
@@ -95,6 +96,9 @@
         (use-package writeroom-mode
           :hook
           (org-mode . writeroom-mode)
+          (markdown-mode . writeroom-mode)
+          :config
+          (setq writeroom-maximize-window nil)
         )
       '';
     };
