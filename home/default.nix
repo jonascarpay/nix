@@ -4,7 +4,12 @@ let
 in
 {
   imports = [
-    ./caches.nix
+    (
+      let
+        declCachix = builtins.fetchTarball "https://github.com/jonascarpay/declarative-cachix/archive/2d37297b3aa1281193b1a3ca208c77467772cf5c.tar.gz";
+      in
+      import "${declCachix}/home-manager.nix"
+    )
     ./fish.nix
     ./ranger.nix
     ./scripts.nix
@@ -17,12 +22,12 @@ in
       name = "jmc";
       sha256 = "1bk08lvxi41ppvry72y1b9fi7bb6qvsw6bn1ifzsn46s3j0idq0a";
     }];
-    extraCaches = {
-      iohk-hydra = {
+    extraCaches = [
+      {
         url = "https://hydra.iohk.io";
         key = "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=";
-      };
-    };
+      }
+    ];
   };
 
   manual.manpages.enable = true;
