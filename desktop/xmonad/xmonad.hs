@@ -187,6 +187,7 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
     m = modMask conf
     myKeyList = 
       [ ((m, xK_f), spawn "firefox")
+      , ((m, xK_d), withPwd $ maybe (spawn "dolphin") (\pwd -> spawn $ "dolphin " <> pwd))
       , ((m .|. shiftMask, xK_f), spawn "clipboard-firefox")
       , ((m, xK_Return), mkTerm "/home/jmc/.nix-profile/bin/fish")
       , ((m .|. ctrlMask, xK_Return), mkTerm "/home/jmc/.nix-profile/bin/tmux")
@@ -227,16 +228,17 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
                          ]
       ]
 
-mkTerm shell = withWindowSet launchTerminal
-  where
-    launchTerminal ws =
-      flip catchX (runInTerm "" shell) $ do
-        Just xid <- pure $ W.peek ws
-        (_ : _ : pid : _) <- words <$> runProcessWithInput "xprop" ["-id", show xid, "_NET_WM_PID"] ""
-        (child : _) <- words <$> runProcessWithInput "ps" ["--ppid", pid, "-o", "pid="] ""
-        (_ : cwd : _) <- words <$> runProcessWithInput "pwdx" [child] ""
-        False <- pure $ "/proc/" `isPrefixOf` cwd
-        runInTerm ("-d " <> cwd) shell
+mkTerm shell = withPwd $ maybe (runInTerm "" shell) (\cwd -> runInTerm ("-d" <> cwd) shell)
+
+withPwd :: (Maybe FilePath -> X a) -> X a
+withPwd f = withWindowSet $ \ws ->
+  flip catchX (f Nothing) $ do
+    Just xid <- pure $ W.peek ws
+    (_ : _ : pid : _) <- words <$> runProcessWithInput "xprop" ["-id", show xid, "_NET_WM_PID"] ""
+    (child : _) <- words <$> runProcessWithInput "ps" ["--ppid", pid, "-o", "pid="] ""
+    (_ : cwd : _) <- words <$> runProcessWithInput "pwdx" [child] ""
+    False <- pure $ "/proc/" `isPrefixOf` cwd
+    f (Just cwd)
 
 polybarLog :: D.Client -> X ()
 polybarLog dbus = do
