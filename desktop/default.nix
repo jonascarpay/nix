@@ -4,6 +4,7 @@
     ./blender.nix
     ./emacs
     ./picom.nix
+    ./anki.nix
     ./polybar.nix
     ./redshift.nix
     ./st
@@ -12,7 +13,6 @@
     ./neuron.nix
   ];
   home.packages = with pkgs; [
-    anki
     celluloid
     gnome3.nautilus
     okular
