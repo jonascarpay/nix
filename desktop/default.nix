@@ -43,7 +43,7 @@
   services.random-background = {
     enable = true;
     imageDirectory = "%h/Wallpapers/papes";
-    interval = "30m";
+    interval = "1h";
   };
 
   services.syncthing.enable = true;
