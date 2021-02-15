@@ -18,7 +18,6 @@
 
         (setq org-agenda-files '(
           "~/Org/agenda.org"
-          "~/Org/contacts.org"
           "~/Org/birthdays.org"
         ))
 
@@ -42,7 +41,7 @@
 
         (setq org-capture-templates `(
           ("a" "Agenda"       entry (file+datetree "~/Org/agenda.org") "* %?")
-          ("j" "Journal"      entry (file+datetree "~/Org/journal.org") "* %(format-time-string \"%H:%M\")\n%?")
+          ; ("j" "Journal"      entry (file+datetree "~/Org/journal.org") "* %(format-time-string \"%H:%M\")\n%?")
           ("d" "Diary"        entry (file+datetree "~/Org/diary.org") "* %(format-time-string \"%H:%M\")\n%?")
         ))
         (setq org-startup-indented t)
@@ -62,6 +61,7 @@
       '';
     };
 
+    org-roam.enable = false;
     org-roam.config = ''
       (use-package org-roam
         :ensure t
@@ -107,6 +107,7 @@
         :hook (org-mode . org-sticky-header-mode)
       )
     '';
+    mixed-pitch.enable = false;
     mixed-pitch.config = ''
       (use-package mixed-pitch
         :hook

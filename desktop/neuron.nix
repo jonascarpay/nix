@@ -24,7 +24,9 @@ in
       (setq-default markdown-hide-markup t)
       (general-define-key
         :states '(normal insert)
+        :keymaps 'neuron-mode-map
         "C-c C-t" 'neuron-toggle-connection-type
+        "C-c C-c C-l" 'neuron-toggle-id-visibility
       )
     )
   '';
