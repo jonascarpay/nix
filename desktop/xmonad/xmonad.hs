@@ -16,6 +16,7 @@ import Data.List (findIndex, isPrefixOf)
 import qualified Data.Map as M
 import Data.Monoid ((<>))
 import Data.Bool (bool)
+import Data.Maybe (isJust)
 import Numeric
 import System.IO
 import XMonad as XM
@@ -28,7 +29,7 @@ import XMonad.Layout.NoBorders
 import qualified XMonad.Layout.Spacing as SP
 import qualified XMonad.StackSet as W
 import qualified XMonad.Util.WorkspaceCompare as WC
-import qualified XMonad.Actions.CycleWS as CW
+import qualified XMonad.Actions.CycleRecentWS as CW
 import qualified XMonad.Layout.LayoutModifier as LM
 import XMonad.Util.EZConfig (additionalKeys)
 import XMonad.Util.NamedWindows (getName)
@@ -182,6 +183,18 @@ dcfg dbus =
       handleEventHook = handleEventHook def <+> fullscreenEventHook
     }
 
+myCycleRecentWS :: [KeySym] -> KeySym -> KeySym -> X ()
+myCycleRecentWS = CW.cycleWindowSets options
+ where
+   options w = map (flip W.view w) (recentTags w)
+   recentTags w = W.tag <$> rotate (filterNonEmpty workspaces)
+     where
+       workspaces = W.workspaces w
+       filterNonEmpty ws = case filter (isJust . W.stack) ws of
+                             [] -> ws
+                             ws' -> ws'
+       rotate (x : xs) = xs ++ [x]
+
 myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
   where
     m = modMask conf
@@ -198,13 +211,7 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
       -- , ((m, xK_c), spawn "emacs")
       , ((m .|. shiftMask, xK_h), sendMessage VShrink)
       , ((m .|. shiftMask, xK_l), sendMessage VExpand)
-      , ((m, xK_n), CW.moveTo CW.Next CW.HiddenWS)
-      , ((m, xK_p), CW.moveTo CW.Prev CW.HiddenWS)
-      , ((m .|. controlMask, xK_n), CW.shiftTo CW.Next CW.HiddenWS)
-      , ((m .|. controlMask, xK_p), CW.shiftTo CW.Prev CW.HiddenWS)
-      , ((m .|. shiftMask, xK_n), CW.shiftTo CW.Next CW.HiddenWS >> CW.moveTo CW.Next CW.HiddenNonEmptyWS)
-      , ((m .|. shiftMask, xK_p), CW.shiftTo CW.Prev CW.HiddenWS >> CW.moveTo CW.Prev CW.HiddenNonEmptyWS)
-      , ((m, xK_grave), CW.moveTo CW.Next CW.HiddenNonEmptyWS)
+      , ((m, xK_grave), myCycleRecentWS [xK_Super_L] xK_grave xK_grave)
       , ((m, xK_y), windows $ W.modify' cycleNonFocusDown)
       , ((m .|. shiftMask, xK_y), windows $ W.modify' cycleNonFocusUp)
       -- Border control
