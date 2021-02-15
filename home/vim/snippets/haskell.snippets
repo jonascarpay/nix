@@ -57,3 +57,13 @@ snippet des
 
 snippet hlint
 	{-# ANN module "hlint: ignore" #-}
+
+snippet td
+	${1:fn} :: a
+	$1 = error "$1: not yet implemented"
+
+snippet nt
+	newtype ${1:Wrap} = $1 { un$1 :: ${2} }
+
+snippet iq
+	import qualified ${1} as ${0}
