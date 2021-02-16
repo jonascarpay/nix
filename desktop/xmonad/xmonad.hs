@@ -12,7 +12,7 @@ import Data.Int (Int32)
 import Control.Applicative
 import qualified DBus as D
 import qualified DBus.Client as D
-import Data.List (findIndex, isPrefixOf)
+import Data.List (partition, findIndex, isPrefixOf)
 import qualified Data.Map as M
 import Data.Monoid ((<>))
 import Data.Bool (bool)
@@ -42,97 +42,39 @@ ctrlMask = controlMask
 
 -- termEmu = "termite -e /home/jmc/.nix-profile/bin/fish"
 termEmu = "st"
--- termEmu = "urxvt -e /home/jmc/.nix-profile/bin/fish"
 
-data TallDock a = TallDock
-  { tdNDock :: !Int
-  , tdRatioDock :: !Rational
-  , tdRatioSide :: !Rational
-  , tdZoomTall :: !Bool
-  }
-  deriving (Show, Read)
 
--- TODO cycle
-instance LayoutClass TallDock a where
-  description _ = "TallDock"
-
-  pureLayout (TallDock ndock rd rs zoom) rect (W.Stack x pre post) =
-      zip (fst <$> wins) rects
-    where
-      wins :: [(a, Bool)]
-      wins = ((,False) <$> reverse pre) <> [(x, True)] <> ((,False) <$> post)
-      ([main], rest) = splitAt 1 wins
-      (tall, dock) = splitAt (length rest - ndock) rest
-
-      splitTall :: Rectangle -> [Rectangle]
-      splitTall rect
-        | zoom, Just n <- findIndex snd tall
-          = let rects = splitVertically (ntall + weight - 1) rect
-                (pre,(focus, post)) = splitAt weight <$> splitAt n rects
-             in pre <> (stack focus : post)
-        | otherwise = splitVertically ntall rect
-        where
-          stack :: [Rectangle] -> Rectangle
-          stack rects@(Rectangle x y w _ :_) = Rectangle x y w (sum $ rect_height <$> rects)
-          ntall = length tall
-          weight = 3
-
-      rects =
-        let (left, tallrects)
-              | null tall = (rect, []) 
-              | otherwise = splitTall <$> splitHorizontallyBy rs rect
-            (mainrect, dockrects)
-              | null dock = (left, []) 
-              | otherwise = (reverse . splitHorizontally (length dock)) <$> splitVerticallyBy rd left
-         in mainrect : tallrects <> dockrects
-
-  pureMessage (TallDock m rd rs z) msg
-      =   fmap resize (fromMessage msg)
-      <|> fmap vresize (fromMessage msg)
-      <|> fmap incDock (fromMessage msg)
-      <|> fmap zoomToggle (fromMessage msg)
-
-    where
-      delta = 3 / 100
-      resize Shrink = TallDock m rd (max 0.1 $ rs-delta) z
-      resize Expand = TallDock m rd (min 0.9 $ rs+delta) z
-      vresize VShrink = TallDock m (max 0.1 $ rd-delta) rs z
-      vresize VExpand = TallDock m (min 0.9 $ rd+delta) rs z
-      incDock (IncMasterN d) = TallDock (max 0 (m+d)) rd rs z
-      zoomToggle ZoomToggle = TallDock m rd rs (not z)
-
-data ZoomToggle = ZoomToggle
-
-instance Message ZoomToggle
-
-defaultTallDock :: TallDock a
-defaultTallDock = TallDock 0 (3/4) (3/5) False
-
-data LiftFocused a = LiftFocused Int32 Int32
+data ToggleCenter w = TCActive | TCInactive
   deriving (Eq, Read, Show)
 
-instance LM.LayoutModifier LiftFocused Window where
-  redoLayout (LiftFocused dx dy) rect _ wins = do
-      curr <- gets (W.stack . W.workspace . W.current . windowset)
-      case curr of
-        Just (W.Stack wid _ _) ->
-          pure $ (fmap (zoom wid) wins, Nothing)
-        Nothing -> pure (wins, Nothing)
-    where
-      offsetRect dx dy (Rectangle x y w h) = Rectangle (x+dx) (y+dy) w h
-      zoom needle (wid, rect)
-        | needle == wid = (wid, offsetRect dx dy rect)
-        | otherwise = (wid, rect)
+data CenterToggle = CenterToggle
 
-liftFocused :: Int32 -> Int32 -> l a -> LM.ModifiedLayout LiftFocused l a
-liftFocused dx dy = LM.ModifiedLayout (LiftFocused dx dy)
+instance Message CenterToggle
+instance LM.LayoutModifier ToggleCenter Window where
+  pureModifier _ _ Nothing layout = (layout, Nothing)
+  pureModifier TCInactive _ _ layout = (layout, Nothing)
+  pureModifier TCActive screen (Just stk) layout = 
+    let (fg, bg) = partition ((== W.focus stk) . fst) layout
+        fg' = fmap (\(wid, _) -> (wid, shrink screen)) fg
+     in (fg' ++ bg, Nothing)
+
+  pureMess tc msg = tgl tc <$> fromMessage msg
+    where
+      tgl TCActive CenterToggle = TCInactive
+      tgl TCInactive CenterToggle = TCActive
+
+shrink :: Rectangle -> Rectangle
+shrink (Rectangle x y w h) = Rectangle (x+pad) (y+pad) (w - 2 * fromIntegral pad) (h - 2 * fromIntegral pad)
+  where
+    pad = round $ (fromIntegral w * 0.05 :: Double)
+
+toggleCenter = LM.ModifiedLayout TCInactive
 
 defaultSpacing, spacingDelta :: Int -- global constant to share value between reset key and layout
 defaultSpacing = 60
 spacingDelta = 15
 
--- myLayout = liftFocused (-15) (-17) $ avoidStruts $ spacingWithEdge 30  $ defaultTallDock
-myLayout = avoidStruts $ SP.spacingWithEdge defaultSpacing $ defaultTallDock
+myLayout = avoidStruts $ toggleCenter $ SP.spacingWithEdge defaultSpacing $ Tall 1 (3/100) (3/5)
 
 data VResizeMsg = VShrink | VExpand
   deriving (Eq, Show, Typeable, Message)
@@ -149,8 +91,6 @@ main = do
     dbus
     (D.busName_ "org.xmonad.Log")
     [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
-  -- forM [".xmonad-worspace-log", ".xmonad-title-log"] $ \file ->
-  --   safeSpawn "mkfifo" ["/tmp/" ++ file]
   xmonad
     $ ewmh
     $ dcfg dbus
@@ -204,7 +144,7 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
       , ((m .|. shiftMask, xK_f), spawn "clipboard-firefox")
       , ((m, xK_Return), mkTerm "/home/jmc/.nix-profile/bin/fish")
       , ((m .|. ctrlMask, xK_Return), mkTerm "/home/jmc/.nix-profile/bin/tmux")
-      , ((m, xK_z), sendMessage ZoomToggle)
+      , ((m, xK_z), sendMessage CenterToggle)
       , ((m .|. shiftMask, xK_Return), windows W.swapMaster)
       , ((m, xK_s), windows W.swapDown >> windows W.focusUp)
       , ((m, xK_c), spawn "emacsclient --create-frame --no-wait")
