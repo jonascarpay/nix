@@ -44,46 +44,38 @@ ctrlMask = controlMask
 termEmu = "st"
 
 
-data ToggleCenter w = TCActive | TCInactive
+data ToggleZoom w = TZActive | TZInactive
   deriving (Eq, Read, Show)
 
-data CenterToggle = CenterToggle
+data ToggleZoomMsg = ToggleZoom
 
-instance Message CenterToggle
-instance LM.LayoutModifier ToggleCenter Window where
+instance Message ToggleZoomMsg
+instance LM.LayoutModifier ToggleZoom Window where
   pureModifier _ _ Nothing layout = (layout, Nothing)
-  pureModifier TCInactive _ _ layout = (layout, Nothing)
-  pureModifier TCActive screen (Just stk) layout = 
+  pureModifier TZInactive _ _ layout = (layout, Nothing)
+  pureModifier TZActive screen (Just stk) layout = 
     let (fg, bg) = partition ((== W.focus stk) . fst) layout
-        fg' = fmap (\(wid, _) -> (wid, shrink screen)) fg
+        fg' = fmap (\(wid, rect) -> (wid, interp 0.5 rect screen)) fg
      in (fg' ++ bg, Nothing)
 
   pureMess tc msg = tgl tc <$> fromMessage msg
     where
-      tgl TCActive CenterToggle = TCInactive
-      tgl TCInactive CenterToggle = TCActive
+      tgl TZActive ToggleZoom = TZInactive
+      tgl TZInactive ToggleZoom = TZActive
 
-shrink :: Rectangle -> Rectangle
-shrink (Rectangle x y w h) = Rectangle (x+pad) (y+pad) (w - 2 * fromIntegral pad) (h - 2 * fromIntegral pad)
+interp :: Double -> Rectangle -> Rectangle -> Rectangle
+interp r (Rectangle xa ya wa ha) (Rectangle xb yb wb hb) = Rectangle (s xa xb) (s ya yb) (s wa wb) (s ha hb)
   where
-    pad = round $ (fromIntegral w * 0.05 :: Double)
+    s :: Integral a => a -> a -> a
+    s a b = round $ fromIntegral a * (1-r) + fromIntegral b * r
 
-toggleCenter = LM.ModifiedLayout TCInactive
+toggleZoom = LM.ModifiedLayout TZInactive
 
 defaultSpacing, spacingDelta :: Int -- global constant to share value between reset key and layout
 defaultSpacing = 60
 spacingDelta = 15
 
-myLayout = avoidStruts $ toggleCenter $ SP.spacingWithEdge defaultSpacing $ Tall 1 (3/100) (3/5)
-
-data VResizeMsg = VShrink | VExpand
-  deriving (Eq, Show, Typeable, Message)
-
-splitVerticallyDiv :: Int -> Int -> Int -> Rectangle -> [Rectangle]
-splitVerticallyDiv n x r (Rectangle rx ry rw rh) = (\ry' -> Rectangle rx (fromIntegral ry') rw (fromIntegral rh')) <$> ys
-  where
-    rh' = div (fromIntegral rh - r) n
-    ys = [ i*fromIntegral rh' + fromIntegral ry + bool 0 r (i >= x) | i <- take n [0..]]
+myLayout = avoidStruts $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ Tall 1 (3/100) (3/5)
 
 main = do
   dbus <- D.connectSession
@@ -144,13 +136,11 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
       , ((m .|. shiftMask, xK_f), spawn "clipboard-firefox")
       , ((m, xK_Return), mkTerm "/home/jmc/.nix-profile/bin/fish")
       , ((m .|. ctrlMask, xK_Return), mkTerm "/home/jmc/.nix-profile/bin/tmux")
-      , ((m, xK_z), sendMessage CenterToggle)
+      , ((m, xK_z), sendMessage ToggleZoom)
       , ((m .|. shiftMask, xK_Return), windows W.swapMaster)
       , ((m, xK_s), windows W.swapDown >> windows W.focusUp)
       , ((m, xK_c), spawn "emacsclient --create-frame --no-wait")
       -- , ((m, xK_c), spawn "emacs")
-      , ((m .|. shiftMask, xK_h), sendMessage VShrink)
-      , ((m .|. shiftMask, xK_l), sendMessage VExpand)
       , ((m, xK_grave), myCycleRecentWS [xK_Super_L] xK_grave xK_grave)
       , ((m, xK_y), windows $ W.modify' cycleNonFocusDown)
       , ((m .|. shiftMask, xK_y), windows $ W.modify' cycleNonFocusUp)
