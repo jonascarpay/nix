@@ -77,7 +77,6 @@
       dataDir = "/mnt/exthd";
       guiAddress = "0.0.0.0:8384";
     };
-    davfs2.enable = true;
 
     transmission = {
       enable = false;
