@@ -196,7 +196,7 @@ in
           config =
             let doubleSingle = "''"; in
             ''
-              autocmd FileType nix let b:AutoPairs = AutoPairsDefine({"${doubleSingle}" : "${doubleSingle}", 'let':'in', '=':';'}, ["'"])
+              autocmd FileType nix let b:AutoPairs = AutoPairsDefine({"${doubleSingle}" : "${doubleSingle}", '=':';'}, ["'"])
             '';
         };
 
