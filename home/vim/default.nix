@@ -108,6 +108,13 @@ in
           '';
         };
 
+        mundo = {
+          plugins = [ np.vim-mundo ];
+          config = ''
+            nnoremap <leader>u :MundoToggle<CR>
+          '';
+        };
+
         git = {
           plugins = [ np.fugitive np.vim-gitgutter ];
           config = ''
