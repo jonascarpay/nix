@@ -56,16 +56,16 @@ in
         vn < <gv
         let mapleader = "\<space>"
         let maplocalleader = "\<space>"
-        set tabstop=4
-        set softtabstop=4
-        set shiftwidth=4
+        " set tabstop=4
+        " set softtabstop=4
+        " set shiftwidth=4
         au BufNewFile,BufRead *.md  set spell
         nn <leader>w :w<CR>
         nn <leader>lo :lopen<CR>
         nn <leader>hl :nohl<CR>
       '';
       plugins = [
-        np.sleuth
+        # np.sleuth # Included in polyglot apparently
         np.surround
         np.commentary
         np.vim-indent-object
