@@ -23,6 +23,7 @@
     spotify
     steam
     sxiv
+    tdesktop
     transmission-gtk
     xclip # Doesn't work?
   ];
