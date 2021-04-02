@@ -76,6 +76,11 @@ in
     };
   };
 
+  nixpkgs.overlays = [
+    (self: super: {
+      fzf = unstable.fzf;
+    })
+  ];
   programs = {
     fzf.enable = true;
 

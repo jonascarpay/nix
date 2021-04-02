@@ -122,7 +122,7 @@ in
         };
 
         fzf = {
-          plugins = [ np.fzf-vim np.fzfWrapper ];
+          plugins = [ unp.fzf-vim unp.fzfWrapper ];
           config = ''
             nn <leader>ff :Files<CR>
             nn <leader>fg :Ag<CR>
