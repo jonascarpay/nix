@@ -49,6 +49,40 @@ data ToggleZoom w = TZActive | TZInactive
 
 data ToggleZoomMsg = ToggleZoom
 
+data TallAccordion a = TallAccordion !Rational !Rational
+  deriving (Eq, Show, Read)
+
+instance XM.LayoutClass TallAccordion a where
+  pureLayout (TallAccordion rm rs) screen stk@(W.Stack cur pre post) =
+      case stk of 
+        (W.Stack _ [] []) -> [(cur, screen)]
+        (W.Stack _ [wmain] []) -> [(cur, side), (wmain, prim)]
+        (W.Stack _ [] [wside]) -> [(cur, prim), (wside, side)]
+        _ -> (cur, rcur) : zip (reverse pre) rpre <> zip post rpost
+    where
+      n = length pre + length post + 1
+
+      (prim,side) = splitHorizontallyBy rm screen
+      (sec, rest) = splitVertically (n-2) <$> splitVerticallyBy rs side
+
+      rects = prim : sec : rest
+      (rpre, rcur : rpost) = splitAt (length pre) rects
+
+      interleave [] bs = bs
+      interleave (a:as) bs = a : interleave bs as
+
+  pureMessage (TallAccordion rm rs) msg = fmap mainResize (fromMessage msg) <|> fmap sideResize (fromMessage msg)
+    where
+      delta = 3/100
+      mainResize Expand = TallAccordion (rm + delta) rs
+      mainResize Shrink = TallAccordion (rm - delta) rs
+      sideResize VExpand = TallAccordion rm (rs + delta)
+      sideResize VShrink = TallAccordion rm (rs - delta)
+
+data VExpand = VExpand | VShrink
+
+instance Message VExpand
+
 instance Message ToggleZoomMsg
 instance LM.LayoutModifier ToggleZoom Window where
   pureModifier _ _ Nothing layout = (layout, Nothing)
@@ -75,7 +109,8 @@ defaultSpacing, spacingDelta :: Int -- global constant to share value between re
 defaultSpacing = 60
 spacingDelta = 15
 
-myLayout = avoidStruts $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ Tall 1 (3/100) (3/5)
+-- myLayout = avoidStruts $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ Tall 1 (3/100) (3/5)
+myLayout = avoidStruts $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ TallAccordion (3/5) (3/5)
 
 main = do
   dbus <- D.connectSession
@@ -137,6 +172,8 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
       , ((m, xK_Return), mkTerm "/home/jmc/.nix-profile/bin/fish")
       , ((m .|. ctrlMask, xK_Return), mkTerm "/home/jmc/.nix-profile/bin/tmux")
       , ((m, xK_z), sendMessage ToggleZoom)
+      , ((m .|. shiftMask, xK_h), sendMessage VShrink)
+      , ((m .|. shiftMask, xK_l), sendMessage VExpand)
       , ((m .|. shiftMask, xK_Return), windows W.swapMaster)
       , ((m, xK_s), windows W.swapDown >> windows W.focusUp)
       , ((m, xK_c), spawn "emacsclient --create-frame --no-wait")
