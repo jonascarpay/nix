@@ -33,9 +33,8 @@
       ''
         (use-package haskell-mode
           :mode "\\.hs\\'"
-          :after evil
+          :after evil reformatter
           :config
-            (require 'reformatter)
             (reformatter-define ormolu
               :program "ormolu"
               :lighter " OHF")
