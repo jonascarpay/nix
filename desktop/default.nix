@@ -1,7 +1,6 @@
 { pkgs, ... }:
 {
   imports = [
-    ./blender.nix
     ./emacs
     ./picom.nix
     ./anki.nix
@@ -13,6 +12,7 @@
     ./neuron.nix
   ];
   home.packages = with pkgs; [
+    blender
     celluloid
     gnome3.nautilus
     okular
