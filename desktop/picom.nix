@@ -24,7 +24,7 @@ let
     blur = false;
     experimentalBackends = true;
     noDockShadow = false;
-    fade = true;
+    fade = false;
     fadeDelta = 4;
     extraOptions = ''
       blur-method = "dual_kawase";
