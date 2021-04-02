@@ -180,11 +180,15 @@ in
         };
 
         snippets = {
-          plugins = [ np.vim-snipmate np.vim-snippets ];
+          plugins = [
+            np.vim-snipmate
+            np.vim-snippets
+          ];
+          # TODO
           config = ''
-            imap <C-c> <Plug>snipMateNextOrTrigger
-            imap <C-b> <Plug>snipMateBack
-            set rtp+=~/nix/vim/snippets
+            " "imap <C-x> <Plug>snipMateNextOrTrigger
+            " "imap <C-b> <Plug>snipMateBack
+            set rtp+=${./.}
           '';
         };
         autopairs = {
