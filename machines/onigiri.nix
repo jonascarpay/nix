@@ -101,6 +101,10 @@
     # };
   };
 
+  services.journald.extraConfig = ''
+    SystemMaxUse=16M
+  '';
+
   system.stateVersion = "21.03"; # Did you read the comment?
 
   fileSystems = {
