@@ -45,6 +45,7 @@ in
       unzip
       weechat
       unstable.youtube-dl
+      manpages
     ];
 
     sessionVariables = {
