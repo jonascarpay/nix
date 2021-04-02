@@ -16,6 +16,7 @@ in
     ./vim
     ../secrets/xcjp-cache.nix
     ./tmux.nix
+    ./lorri.nix
   ];
 
   caches = {
@@ -41,7 +42,6 @@ in
       neofetch
       s-tui
       tealdeer
-      unstable.cached-nix-shell
       unzip
       weechat
       unstable.youtube-dl

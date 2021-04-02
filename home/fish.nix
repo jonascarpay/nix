@@ -64,12 +64,7 @@ in
       ncu = "nix-channel --update";
       ne = "nix-env";
       ng = "nix-collect-garbage";
-      ns = "cached-nix-shell";
-      nsf = "cached-nix-shell --run fish";
       nsp = "nix-shell -p";
-      nsr = "cached-nix-shell --run";
-      nsv = "cached-nix-shell --run vim";
-      nse = "cached-nix-shell --run emacs";
       rf = "rm -rf";
       rn = "ranger";
       s = "sudo";
