@@ -1,7 +1,7 @@
 { pkgs, ... }:
 let
   port = "8932";
-  neuronRev = "2547c2132783c6909b6f15837ccd92988c389e8e"; # Dec 2020
+  neuronRev = "ed96d7fde277e31924d5d9cf2a315ba4c81f340d";
   neuron = import (builtins.fetchTarball "https://github.com/srid/neuron/archive/${neuronRev}.tar.gz") { };
   neuronBin = "${neuron}/bin/neuron";
   notesDir = "/home/jmc/slipbox";
