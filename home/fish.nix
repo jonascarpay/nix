@@ -1,12 +1,15 @@
 { pkgs, config, ... }:
 let
-  powerline-go = ''
+  unstable = import <unstable> { };
+  powerline = unstable.powerline-go.overrideAttrs (old: {
+    patches = [ ./powerline-go.diff ];
+  });
+  powerline-fish = ''
     function fish_prompt
-      ${pkgs.powerline-go}/bin/powerline-go \
+      ${powerline}/bin/powerline-go \
         -error $status \
         -shell bare \
-        -ignore-repos /home/jmc \
-        -modules venv,ssh,cwd,perms,git,exit,nix-shell,jobs,root
+        -modules venv,ssh,cwd,perms,git,exit,nix-shell,jobs
     end
   '';
 
@@ -23,7 +26,7 @@ in
         curl -sL https://www.gitignore.io/api/$argv
       end
 
-      ${powerline-go}
+      ${powerline-fish}
 
     '';
     shellAbbrs = {

@@ -1,0 +1,16 @@
+diff --git a/segment-nix-shell.go b/segment-nix-shell.go
+index 00f8c45..86085db 100644
+--- a/segment-nix-shell.go
++++ b/segment-nix-shell.go
+@@ -13,8 +13,8 @@ func segmentNixShell(p *powerline) []pwl.Segment {
+ 	}
+ 	return []pwl.Segment{{
+ 		Name:       "nix-shell",
+-		Content:    nixShell,
+-		Foreground: p.theme.NixShellFg,
+-		Background: p.theme.NixShellBg,
++		Content:    "",
++		Foreground: 15,
++		Background: 69,
+ 	}}
+ }
