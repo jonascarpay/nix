@@ -16,7 +16,7 @@ in
     ./vim
     ../secrets/xcjp-cache.nix
     ./tmux.nix
-    ./lorri.nix
+    ./direnv.nix
   ];
 
   caches = {
