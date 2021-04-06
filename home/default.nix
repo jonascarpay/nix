@@ -91,7 +91,10 @@ in
       userName = "Jonas Carpay";
       userEmail = "jonascarpay@gmail.com";
       ignores = [ "result" "result-*" ];
-      extraConfig.commit.verbose = true;
+      extraConfig = {
+        commit.verbose = true;
+        init.defaultBranch = "master";
+      };
     };
   };
 
