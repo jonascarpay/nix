@@ -9,7 +9,8 @@ let
       ${powerline}/bin/powerline-go \
         -error $status \
         -shell bare \
-        -modules venv,ssh,cwd,perms,git,exit,nix-shell,jobs
+        -modules venv,ssh,cwd,perms,git,exit,nix-shell,jobs \
+        -jobs (jobs -p | wc -l)
     end
   '';
 
