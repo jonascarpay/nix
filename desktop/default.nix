@@ -12,7 +12,7 @@
     ./neuron.nix
   ];
   home.packages = with pkgs; [
-    blender
+    (import <unstable> { }).blender
     celluloid
     gnome3.nautilus
     okular
