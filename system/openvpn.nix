@@ -21,6 +21,7 @@ in
     nord-hk = mkServ "hk251" false;
     # nord-nl = mkServ "nl707" false;
     # nord-us = mkServ "us4629" false;
+    nord-jp = mkServ "jp586" false;
     nord-ca = mkServ "ca977" false;
   };
 
