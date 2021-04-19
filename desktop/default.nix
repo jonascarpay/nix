@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 {
   imports = [
     ./emacs
@@ -12,7 +12,7 @@
     ./neuron.nix
   ];
   home.packages = with pkgs; [
-    (import <unstable> { }).blender
+    config.channels.unstable.blender
     celluloid
     gnome3.nautilus
     okular

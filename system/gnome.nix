@@ -1,6 +1,6 @@
 { pkgs, config, ... }:
 let
-  unstable = import <unstable> {};
+  unstable = config.channels.unstable;
   matshell = pkgs.stdenv.mkDerivation {
     pname = "material-shell";
     version = "4";
@@ -18,14 +18,14 @@ let
   };
   ppwm = unstable.gnomeExtensions.paperwm.overrideAttrs (
     old:
-      {
-        src = pkgs.fetchFromGitHub {
-          owner = "paperwm";
-          repo = "PaperWM";
-          rev = "40a750918845f3c708dd1b51a4";
-          sha256 = "01r2ifwrl8w735d0ckzlwhvclax9dxd2ld5y2svv5bp444zbjsag";
-        };
-      }
+    {
+      src = pkgs.fetchFromGitHub {
+        owner = "paperwm";
+        repo = "PaperWM";
+        rev = "40a750918845f3c708dd1b51a4";
+        sha256 = "01r2ifwrl8w735d0ckzlwhvclax9dxd2ld5y2svv5bp444zbjsag";
+      };
+    }
   );
 
 in

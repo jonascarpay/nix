@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 let
-  unstable = import <unstable> { };
+  unstable = config.channels.unstable;
   declCachix = builtins.fetchTarball {
     url = "https://github.com/jonascarpay/declarative-cachix/archive/2d37297b3aa1281193b1a3ca208c77467772cf5c.tar.gz";
     sha256 = "1lv4v367a17qq4wvmqy95s86g5ias08hx0lwf8r9mbgk61fmfb68";
@@ -8,6 +8,7 @@ let
 in
 {
   imports = [
+    ./pins.nix
     (import "${declCachix}/home-manager.nix")
     ./fish.nix
     ./ranger.nix

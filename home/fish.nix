@@ -1,6 +1,6 @@
 { pkgs, config, ... }:
 let
-  unstable = import <unstable> { };
+  unstable = config.channels.unstable;
   powerline = unstable.powerline-go.overrideAttrs (old: {
     patches = [ ./powerline-go.diff ];
   });
