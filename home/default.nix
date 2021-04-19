@@ -14,7 +14,6 @@ in
     ./ranger.nix
     ./scripts.nix
     ./vim
-    ../secrets/xcjp-cache.nix
     ./tmux.nix
     ./direnv.nix
   ];
