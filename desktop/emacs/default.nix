@@ -20,7 +20,7 @@
   }];
   home.packages = [ pkgs.binutils ]; # because gccemacs needs `as`
 
-  programs.emacs.package = pkgs.emacsGcc;
+  # programs.emacs.package = pkgs.emacsGcc;
   programs.git.ignores = [
     "**/#*#"
     "*.elc"
