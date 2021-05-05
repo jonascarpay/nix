@@ -8,7 +8,7 @@ let
 in
 {
   imports = [
-    ./pins.nix
+    ./channels.nix
     (import "${declCachix}/home-manager.nix")
     ./fish.nix
     ./ranger.nix
