@@ -44,10 +44,6 @@ ctrlMask = controlMask
 termEmu = "st"
 
 
-data ToggleZoom w = TZActive | TZInactive
-  deriving (Eq, Read, Show)
-
-data ToggleZoomMsg = ToggleZoom
 
 data TallAccordion a = TallAccordion !Rational !Rational
   deriving (Eq, Show, Read)
@@ -84,6 +80,12 @@ data VExpand = VExpand | VShrink
 instance Message VExpand
 
 instance Message ToggleZoomMsg
+
+data ToggleZoom w = TZActive | TZInactive
+  deriving (Eq, Read, Show)
+
+data ToggleZoomMsg = ToggleZoom
+
 instance LM.LayoutModifier ToggleZoom Window where
   pureModifier _ _ Nothing layout = (layout, Nothing)
   pureModifier TZInactive _ _ layout = (layout, Nothing)
