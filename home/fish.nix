@@ -40,6 +40,7 @@ in
       ga = "git add";
       gaa = "git add --all";
       gap = "git add --patch";
+      gau = "git add --update";
       gb = "git branch";
       gbd = "git branch -d";
       gc = "git commit";
