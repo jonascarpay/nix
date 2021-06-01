@@ -1,25 +1,15 @@
-{ pkgs, lib, ... }: {
+{ pkgs, lib, config, ... }:
+let
+  channels = import ../channels.nix;
+in
+{
 
-  imports = [
-    ../system/openvpn.nix
-    ../secrets/accounts.nix
-  ];
-
-  boot = {
-    initrd.availableKernelModules = [ "usbhid" ];
-    initrd.kernelModules = [ ];
-    kernelModules = [ ];
-    extraModulePackages = [ ];
-    loader = {
-      grub.enable = false;
-      raspberryPi = {
-        enable = true;
-        version = 4;
-        firmwareConfig = "gpu_mem=320\ndtoverlay=vc4-kms-v3d-pi4";
-      };
-    };
-    kernelPackages = pkgs.linuxPackages_rpi4;
-  };
+  imports =
+    [
+      ../system/openvpn.nix
+      ../secrets/accounts.nix
+      "${channels.nixos-hardware}/raspberry-pi/4/"
+    ];
 
   networking = {
     hostName = "onigiri";
@@ -31,7 +21,6 @@
         8384 # syncthing GUI
         8096 # jellyfin HTTP
         8920 # jellyfin HTTPS
-        9091 # transmission
         22000 # syncthing
         8090 # rclone webdav # TODO move to module
       ];
@@ -51,6 +40,8 @@
     git
     fish
     tmux
+    ncdu
+    gotop
     ranger
     libraspberrypi
     htop # TODO move to globals # TODO import globals?
@@ -74,37 +65,29 @@
     };
     syncthing = {
       enable = true;
+      package = channels.unstable.syncthing;
       dataDir = "/mnt/exthd";
       guiAddress = "0.0.0.0:8384";
     };
-
     transmission = {
       enable = false;
+      openFirewall = true;
       settings = {
         download-dir = "/mnt/exthd/Transmission";
         incomplete-dir = "/mnt/exthd/Transmission";
-        rpc-bind-address = "0.0.0.0";
-        rpc-port = 9091;
         rpc-whitelist = "192.168.1.3";
       };
     };
 
-    jellyfin = {
-      # enable = true;
-      # group = "jellyfin,video";
-    };
-    # xserver = {
-    #   enable = true;
-    #   videoDrivers = [ "modesetting" ];
-    #   displayManager.lightdm.enable = true;
-    # };
+    jellyfin.enable = true;
+    # jellyfin.package = channels.unstable.jellyfin;
   };
 
   services.journald.extraConfig = ''
     SystemMaxUse=16M
   '';
 
-  system.stateVersion = "21.03"; # Did you read the comment?
+  system.stateVersion = "21.03";
 
   fileSystems = {
     "/" = {
@@ -126,7 +109,7 @@
   };
   systemd.services = {
     rclone = {
-      enable = true;
+      enable = false; # TODO re-enable
       script = ''
         ${pkgs.rclone}/bin/rclone serve webdav /mnt/exthd/ --addr :8090 --user dav --pass dav
       '';
@@ -136,23 +119,7 @@
     };
   };
 
-  hardware = {
-    enableRedistributableFirmware = true;
-    # deviceTree = {
-    #   kernelPackage = pkgs.device-tree_rpi;
-    #   overlays = [ "${pkgs.device-tree_rpi.overlays}/vc4-fkms-v3d.dtbo" ];
-    # };
-    opengl = {
-      enable = true;
-      setLdLibraryPath = true;
-      package = pkgs.mesa_drivers;
-      # extraPackages = with pkgs; [
-      #   # vaapiIntel
-      #   vaapiVdpau
-      #   libvdpau-va-gl
-      # ];
-    };
-  };
+  hardware.raspberry-pi."4".fkms-3d.enable = true;
 }
 
 # vim: fdm=indent:foldlevel=1:foldcolumn=2
