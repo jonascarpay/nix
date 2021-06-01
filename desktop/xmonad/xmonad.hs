@@ -79,7 +79,24 @@ data VExpand = VExpand | VShrink
 
 instance Message VExpand
 
-instance Message ToggleZoomMsg
+data ToggleReflect w = TRActive | TRInactive
+  deriving (Eq, Show, Read)
+
+data ToggleReflectMsg = ToggleReflectMsg
+instance Message ToggleReflectMsg
+
+instance LM.LayoutModifier ToggleReflect Window where 
+  pureModifier _ _ Nothing layout = (layout, Nothing)
+  pureModifier TRInactive _ _ layout = (layout, Nothing)
+  pureModifier TRActive (Rectangle sx sy sw sh) _ layout = (fmap flip <$> layout, Nothing)
+    where
+      flip (Rectangle x y w h) = Rectangle (fromIntegral sw - x - fromIntegral w) y w h
+  pureMess tr msg = toggle tr <$> fromMessage msg
+    where
+      toggle TRActive ToggleReflectMsg = TRInactive
+      toggle TRInactive ToggleReflectMsg = TRActive
+
+toggleReflect = LM.ModifiedLayout TRInactive
 
 data ToggleZoom w = TZActive | TZInactive
   deriving (Eq, Read, Show)
@@ -99,6 +116,8 @@ instance LM.LayoutModifier ToggleZoom Window where
       tgl TZActive ToggleZoom = TZInactive
       tgl TZInactive ToggleZoom = TZActive
 
+instance Message ToggleZoomMsg
+
 interp :: Double -> Rectangle -> Rectangle -> Rectangle
 interp r (Rectangle xa ya wa ha) (Rectangle xb yb wb hb) = Rectangle (s xa xb) (s ya yb) (s wa wb) (s ha hb)
   where
@@ -112,7 +131,7 @@ defaultSpacing = 60
 spacingDelta = 15
 
 -- myLayout = avoidStruts $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ Tall 1 (3/100) (3/5)
-myLayout = avoidStruts $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ TallAccordion (3/5) (3/5)
+myLayout = avoidStruts $ toggleReflect $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ TallAccordion (3/5) (3/5)
 
 main = do
   dbus <- D.connectSession
@@ -174,6 +193,7 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
       , ((m, xK_Return), mkTerm "/home/jmc/.nix-profile/bin/fish")
       , ((m .|. ctrlMask, xK_Return), mkTerm "/home/jmc/.nix-profile/bin/tmux")
       , ((m, xK_z), sendMessage ToggleZoom)
+      , ((m, xK_m), sendMessage ToggleReflectMsg)
       , ((m .|. shiftMask, xK_h), sendMessage VShrink)
       , ((m .|. shiftMask, xK_l), sendMessage VExpand)
       , ((m .|. shiftMask, xK_Return), windows W.swapMaster)
