@@ -13,6 +13,7 @@
   ];
   home.packages = with pkgs; [
     config.channels.unstable.blender
+    config.channels.unstable.darktable
     celluloid
     gnome3.nautilus
     okular
