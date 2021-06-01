@@ -185,11 +185,12 @@ in
           ];
           # TODO
           config = ''
-            " "imap <C-x> <Plug>snipMateNextOrTrigger
-            " "imap <C-b> <Plug>snipMateBack
+            " imap <C-s> <Plug>snipMateNextOrTrigger
+            " imap <C-b> <Plug>snipMateBack
             set rtp+=${./.}
           '';
         };
+
         autopairs = {
           plugins = [ np.auto-pairs ];
           config =

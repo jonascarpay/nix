@@ -6,7 +6,9 @@
       file
       git
       htop
+      ncdu
       ranger
+      sshfs
       tree
       vim
     ];

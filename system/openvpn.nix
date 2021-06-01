@@ -2,7 +2,7 @@
 let
   serverdb = pkgs.fetchzip {
     url = "https://downloads.nordcdn.com/configs/archives/servers/ovpn.zip";
-    sha256 = "1bvzy58j36cv2s6bziqb2qd8s8k6mf3npday3f1gpg4vcn4yy3df";
+    sha256 = "sha256:0y7v3frv1rpwpch5jgx42bnqv5fh4675xmsdn0h2g2bx15kb4qf7";
     stripRoot = false;
   };
 
