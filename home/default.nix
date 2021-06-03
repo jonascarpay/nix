@@ -93,6 +93,7 @@ in
       ignores = [ "result" "result-*" ];
       extraConfig = {
         commit.verbose = true;
+        pull.rebase = true;
         init.defaultBranch = "master";
       };
     };
