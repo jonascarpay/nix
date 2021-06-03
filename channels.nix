@@ -14,10 +14,10 @@ in
   # nightingale
   "20.09" = fromVersion "20.09" "c835750c0e9bc9f5ce5423f83331ea478c09347d42c7698116561ba5b204a4af";
 
-  # 2020-04-29 10:00 JST
+  # 2020-06-04 08:00 JST
   unstable = pkgsTarball
-    "https://github.com/NixOS/nixpkgs/archive/ae96c292c0ead2fdabb6abc631cf3c869f4de3d6.tar.gz"
-    "1z1p5whvbkxwgw16r8yhrgjfcsvdng85v5rvxg4y367c2658g6gk";
+    "https://github.com/NixOS/nixpkgs/archive/07759172ec997850eb73c937e2ecb12418cc426e.tar.gz"
+    "028lpad46p6nwjwy8z4np1wypgn31gyrqch6f7qpm3v0wx7yzml5";
 
   nixos-hardware = builtins.fetchTarball {
     url = "https://github.com/NixOS/nixos-hardware/archive/936e4649098d6a5e0762058cb7687be1b2d90550.tar.gz";
