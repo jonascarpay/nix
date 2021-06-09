@@ -6,10 +6,12 @@
       file
       git
       htop
+      gotop
       ncdu
       ranger
       sshfs
       tree
+      tmux
       vim
     ];
     variables = {

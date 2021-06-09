@@ -8,6 +8,7 @@ in
     [
       ../system/openvpn.nix
       ../secrets/accounts.nix
+      ../system/global.nix
       "${channels.nixos-hardware}/raspberry-pi/4/"
     ];
 
@@ -32,37 +33,14 @@ in
     };
   };
 
-  security.sudo.wheelNeedsPassword = false;
-  programs.bash.enableCompletion = true;
-
-  environment.systemPackages = with pkgs; [
-    vim
-    git
-    fish
-    tmux
-    ncdu
-    gotop
-    ranger
-    libraspberrypi
-    htop # TODO move to globals # TODO import globals?
-  ];
-
-
   time.timeZone = "Asia/Tokyo";
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
 
   users.users.jmc = {
-    isNormalUser = true;
-    createHome = true;
-    extraGroups = [ "wheel" "networkmanager" ];
     shell = pkgs.fish;
   };
 
   services = {
-    openssh = {
-      enable = true;
-      passwordAuthentication = false;
-    };
     syncthing = {
       enable = true;
       package = channels.unstable.syncthing;
@@ -122,4 +100,4 @@ in
   hardware.raspberry-pi."4".fkms-3d.enable = true;
 }
 
-# vim: fdm=indent:foldlevel=1:foldcolumn=2
+# vim: fdm=indent:foldlevel=2:foldcolumn=2
