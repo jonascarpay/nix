@@ -51,6 +51,9 @@ in
         # ];
         include = "${adblockLocalZones}";
       };
+      remote-control = {
+        control-enable = true;
+      };
       forward-zone = {
         name = ".";
         forward-addr = [
