@@ -9,6 +9,7 @@ in
       ../system/openvpn.nix
       ../secrets/accounts.nix
       ../system/global.nix
+      ../system/unbound.nix
       "${channels.nixos-hardware}/raspberry-pi/4/"
     ];
 
