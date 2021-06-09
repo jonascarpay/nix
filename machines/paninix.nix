@@ -14,10 +14,6 @@ in
     enableIPv6 = false;
     hostName = "xc-jonas";
     networkmanager = {
-      insertNameservers = [
-        "45.90.30.244"
-        "45.90.28.244"
-      ];
       enable = true;
     };
     firewall = {
