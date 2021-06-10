@@ -15,7 +15,6 @@ in
 
   networking = {
     hostName = "onigiri";
-    # networking.wireless.enable = true;
     networkmanager.enable = true;
     firewall = {
       enable = true;
@@ -70,14 +69,15 @@ in
 
   fileSystems = {
     "/" = {
-      device = "/dev/disk/by-uuid/44444444-4444-4444-8888-888888888888";
+      # device = "/dev/disk/by-uuid/44444444-4444-4444-8888-888888888888";
+      device = "/dev/disk/by-uuid/3dd7b7cc-8570-4501-836f-fed55833d1c0";
       fsType = "ext4";
     };
 
-    "/boot" = {
-      device = "/dev/disk/by-uuid/2178-694E";
-      fsType = "vfat";
-    };
+    # "/boot" = {
+    #   device = "/dev/disk/by-uuid/2178-694E";
+    #   fsType = "vfat";
+    # };
 
     "/mnt/exthd" = {
       device = "/dev/disk/by-uuid/2A76DE2B76DDF811";
