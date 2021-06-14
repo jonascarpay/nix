@@ -32,10 +32,7 @@ in
     '';
     shellAbbrs = {
       c = "cd";
-      dc = "cd ~/Documents/";
-      dn = "cd ~/Downloads/";
       dv = "cd ~/Dev/";
-      ft = "rm tags; and fast-tags -Rv .";
       g = "git";
       ga = "git add";
       gaa = "git add --all";
@@ -45,7 +42,6 @@ in
       gbd = "git branch -d";
       gc = "git commit";
       gca = "git commit --amend";
-      gcm = "git checkout master";
       gco = "git checkout";
       gd = "git diff";
       gl = "git pull";
@@ -56,7 +52,6 @@ in
       grh = "git reset HEAD --hard";
       gri = "git rebase -i";
       gs = "git status";
-      hm = "home-manager";
       hms = "home-manager switch";
       l = "ls";
       ll = "ls -lah";
@@ -67,16 +62,18 @@ in
       nc = "nix-channel";
       ncl = "nix-channel --list";
       ncu = "nix-channel --update";
-      ne = "nix-env";
       ng = "nix-collect-garbage";
+      sng = "sudo nix-collect-garbage";
       nsp = "nix-shell -p";
-      rf = "rm -rf";
       rn = "ranger";
       s = "sudo";
-      sb = "stack build";
       sc = "systemctl --user";
       sca = "systemctl --user start";
       sco = "systemctl --user stop";
+      snr = "sudo nixos-rebuild";
+      snrs = "sudo nixos-rebuild switch";
+      snrb = "sudo nixos-rebuild boot";
+      snrbu = "sudo nixos-rebuild boot --upgrade";
       scr = "systemctl --user restart";
       scu = "systemctl --user status";
       ssc = "sudo systemctl";
@@ -84,8 +81,6 @@ in
       ssco = "sudo systemctl stop";
       sscr = "sudo systemctl restart";
       sscu = "sudo systemctl status";
-      sh = "stack haddock; and stack hoogle --no-nix-pure --server";
-      sha = "stack haddock --open --no-nix-pure";
       t = "tmux";
       v = "vim";
       vd = "vimdir";
