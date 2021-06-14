@@ -42,6 +42,8 @@ in
         hide-version = true;
         prefetch = true;
         tls-cert-bundle = "/etc/ssl/certs/ca-certificates.crt";
+        cache-max-ttl = 14400;
+        cache-min-ttl = 1200;
         # local-zone goes in the server!
         # local-zone = [
         #   ''"test.lan" redirect''
@@ -51,9 +53,7 @@ in
         # ];
         include = "${adblockLocalZones}";
       };
-      remote-control = {
-        control-enable = true;
-      };
+      remote-control.control-enable = true;
       forward-zone = {
         name = ".";
         forward-addr = [
