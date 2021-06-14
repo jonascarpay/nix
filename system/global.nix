@@ -2,6 +2,7 @@
 {
   environment = {
     systemPackages = with pkgs; [
+      dnsutils
       exfat
       file
       git
