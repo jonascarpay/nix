@@ -40,7 +40,26 @@
     # dropbox.enable = true;
     unclutter.enable = true;
     caffeine.enable = true;
-    dunst.enable = true;
+    dunst = {
+      enable = true;
+      settings = {
+        colors.foreground = "#d8dee9";
+        global = {
+          follow = "keyboard";
+          geometry = "0-15+45"; # tweaked for bar size 30
+          padding = 8; # vertical
+          horizontal_padding = 8;
+          text_icon_padding = 16;
+          markup = "full";
+          font = "SauceCodePro Nerd Font 10";
+          format = "%s\n%b";
+          max_icon_size = 160;
+        };
+        urgency_low.background = "#232831";
+        urgency_normal.background = "#232831";
+        urgency_critical.background = "#4c566a";
+      };
+    };
   };
   services.random-background = {
     enable = true;
