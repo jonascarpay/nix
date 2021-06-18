@@ -34,9 +34,9 @@ let
         url = "https://st.suckless.org/patches/ligatures/0.8.3/st-ligatures-scrollback-20200430-0.8.3.diff";
         sha256 = "0c7g3wcacxlrs7v0j2drgqg2wksggjicsym6pqawca8fi15bkbfq";
       })
-
+      ./url.diff
       ./font.diff
-      ./zoom.diff
+      ./keys.diff
     ];
   });
 in
