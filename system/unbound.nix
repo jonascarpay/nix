@@ -3,22 +3,18 @@ let
 
   adblockLocalZones = pkgs.stdenv.mkDerivation {
     name = "unbound-zones-adblock";
-
+    #TODO Move to niv
     src = (pkgs.fetchFromGitHub
       {
         owner = "StevenBlack";
         repo = "hosts";
         rev = "3.7.8";
         sha256 = "054bryxr17f99s2yfq1r2pkicbk4nbrin04jkq980gxad66j9q6g";
-
       } + "/hosts");
-
     phases = [ "installPhase" ];
-
     installPhase = ''
       ${pkgs.gawk}/bin/awk '{sub(/\r$/,"")} {sub(/^127\.0\.0\.1/,"0.0.0.0")} BEGIN { OFS = "" } NF == 2 && $1 == "0.0.0.0" { print "local-zone: \"", $2, "\" static"}' $src | tr '[:upper:]' '[:lower:]' | sort -u >  $out
     '';
-
   };
 
 in
