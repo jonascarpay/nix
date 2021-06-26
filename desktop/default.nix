@@ -17,6 +17,7 @@
     celluloid
     gnome3.nautilus
     okular
+    discord
     pavucontrol
     signal-desktop
     skype
