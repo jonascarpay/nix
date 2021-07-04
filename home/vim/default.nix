@@ -74,7 +74,7 @@ in
         np.vim-eunuch
         np.vim-easymotion
       ];
-      modules = gh: {
+      modules = _: {
 
         airline = {
           plugins = [ np.vim-airline ];
@@ -158,8 +158,7 @@ in
         };
 
         neoformat = {
-          # plugins = [ np.neoformat ];
-          plugins = [ (gh "sbdchd/neoformat" { rev = "7e458dafae64b7f14f8c2eaecb886b7a85b8f66d"; }) ];
+          plugins = [ np.neoformat ];
           config = ''
             let g:neoformat_basic_format_trim = 1
             augroup fmt
@@ -246,27 +245,6 @@ in
           '';
         };
 
-        scheme = {
-          plugins = [
-            (gh "guns/vim-sexp" {
-              rev = "12292941903d9ac8151513189d2007e1ccfc95f0";
-            })
-            (gh "sjl/tslime.vim" {
-              rev = "113b1f14a1fb92b9c026a71485c9ed402a2045f8";
-            })
-            (gh "tpope/vim-sexp-mappings-for-regular-people" {
-              rev = "f5b66e73c81a3b4c0c8f5a8141fb09a5a213f711";
-            })
-          ];
-          config = ''
-            let g:tslime_ensure_trailing_newlines = 1
-            let g:tslime_normal_mapping = '<leader>t'
-            let g:tslime_visual_mapping = '<leader>t'
-            let g:tslime_vars_mapping = '<leader>T'
-            let g:sexp_mappings = { 'sexp_round_head_wrap_element': '<LocalLeader>r' ,
-            \ 'sexp_round_tail_wrap_element': '<LocalLeader>R' } " avoid clashes with <Leader>{w,W}
-          '';
-        };
       };
     };
   };
