@@ -5,7 +5,7 @@ let
   unp = unstable.vimPlugins;
 in
 {
-  imports = [ ./vim-init.nix ];
+  imports = [ ./init.nix ];
 
   programs.git.ignores = [ "*~" "*.swp" "*.swo" "tags" "TAGS" ];
 
@@ -28,94 +28,80 @@ in
     viAlias = true;
     init = {
       enable = true;
-      preConfig = ''
-        set nocompatible
-        filetype indent plugin on
-        syntax on
-        set hidden
-        set confirm
-        set wildmenu
-        set showcmd
-        set nostartofline
-        set backspace=2
-        set hlsearch
-        set incsearch
-        set inccommand=nosplit
-        set mouse=a
-        set copyindent
-        set ignorecase
-        set smartcase
-        set number
-        let g:tex_flavor = "latex"
-        nn j gj
-        nn k gk
-        vn j gj
-        vn k gk
-        vn > >gv
-        vn < <gv
-        let mapleader = "\<space>"
-        let maplocalleader = "\<space>"
-        " set tabstop=4
-        " set softtabstop=4
-        " set shiftwidth=4
-        au BufNewFile,BufRead *.md  set spell
-        nn <leader>w :w<CR>
-        nn <leader>lo :lopen<CR>
-        nn <leader>hl :nohl<CR>
-      '';
-      plugins = [
-        # np.sleuth # Included in polyglot apparently
-        np.surround
-        np.commentary
-        np.vim-indent-object
-        np.vim-polyglot
-        np.vim-repeat
-        np.vim-unimpaired
-        np.vim-eunuch
-        np.vim-easymotion
-      ];
-      modules = _: {
+      modules = {
 
-        airline = {
-          plugins = [ np.vim-airline ];
+        preamble = {
+          packages = [
+            np.surround
+            np.commentary
+            np.vim-indent-object
+            np.vim-polyglot
+            np.vim-repeat
+            np.vim-unimpaired
+            np.vim-eunuch
+            np.vim-easymotion
+          ];
+          precedence = 5;
           config = ''
-            let g:airline_powerline_fonts = 1
-            let g:airline#extensions#branch#displayed_head_limit = 10
-          '';
-        };
-
-        easy-align = {
-          plugins = [ np.vim-easy-align ];
-          config = ''
-            xmap <Enter> <Plug>(LiveEasyAlign)
-          '';
-        };
-        sharedClipboard = {
-          config = ''
+            set nocompatible
+            filetype indent plugin on
+            syntax on
+            set hidden
+            set confirm
+            set wildmenu
+            set showcmd
+            set nostartofline
+            set backspace=2
+            set hlsearch
+            set incsearch
+            set inccommand=nosplit
+            set mouse=a
+            set copyindent
+            set ignorecase
+            set smartcase
+            set number
+            let g:tex_flavor = "latex"
+            nn j gj
+            nn k gk
+            vn j gj
+            vn k gk
+            vn > >gv
+            vn < <gv
+            let mapleader = "\<space>"
+            let maplocalleader = "\<space>"
+            " set tabstop=4
+            " set softtabstop=4
+            " set shiftwidth=4
+            au BufNewFile,BufRead *.md  set spell
+            nn <leader>w :w<CR>
+            nn <leader>lo :lopen<CR>
+            nn <leader>hl :nohl<CR>
+            inoremap hj <esc>
             vmap <leader>y :w! /tmp/vitmp<CR>
             nmap <leader>p :r! cat /tmp/vitmp<CR>
           '';
         };
 
-        escapeKeys = { config = "inoremap hj <esc>"; };
+        airline.config = ''
+          let g:airline_powerline_fonts = 1
+          let g:airline#extensions#branch#displayed_head_limit = 10
+        '';
 
-        emmet = {
-          plugins = [ np.emmet-vim ];
-          config = ''
-            let g:user_emmet_install_global = 0
-            autocmd FileType html,css EmmetInstall
-          '';
-        };
+        vim-easy-align.config = ''
+          xmap <Enter> <Plug>(LiveEasyAlign)
+        '';
 
-        mundo = {
-          plugins = [ np.vim-mundo ];
-          config = ''
-            nnoremap <leader>u :MundoToggle<CR>
-          '';
-        };
+        emmet-vim.config = ''
+          let g:user_emmet_install_global = 0
+          autocmd FileType html,css EmmetInstall
+        '';
+
+        vim-mundo.config = ''
+          nnoremap <leader>u :MundoToggle<CR>
+        '';
 
         git = {
-          plugins = [ np.fugitive np.vim-gitgutter ];
+          packages = [ np.fugitive np.vim-gitgutter ];
           config = ''
             nn <leader>gs :Gstatus<CR>
             nn <leader>ga :GitGutterStageHunk<CR>
@@ -128,7 +114,7 @@ in
         };
 
         fzf = {
-          plugins = [ unp.fzf-vim unp.fzfWrapper ];
+          packages = [ unp.fzf-vim unp.fzfWrapper ];
           config = ''
             nn <leader>ff :Files<CR>
             nn <leader>fg :Ag<CR>
@@ -140,14 +126,12 @@ in
           '';
         };
 
-        highlight-yank = {
-          plugins = [ np.vim-highlightedyank ];
-          config = ''
-            let g:highlightedyank_highlight_duration = 200
-          '';
-        };
+        vim-highlightedyank.config = ''
+          let g:highlightedyank_highlight_duration = 200
+        '';
 
         hoogle = {
+          packages = [ ];
           config = ''
             function! HoogleSearch()
              let searchterm = expand("<cword>")
@@ -157,73 +141,48 @@ in
           '';
         };
 
-        neoformat = {
-          plugins = [ np.neoformat ];
-          config = ''
-            let g:neoformat_basic_format_trim = 1
-            augroup fmt
-            autocmd!
-            autocmd BufWritePre * silent Neoformat
-            augroup END
-            let g:neoformat_enabled_javascript = []
-            nn <leader>fm :Neoformat<CR>
-            nn <leader>fo :Neoformat ormolu<CR>
-            nn <leader>fs :Neoformat stylishhaskell<CR>
-          '';
-        };
+        neoformat.config = ''
+          let g:neoformat_basic_format_trim = 1
+          augroup fmt
+          autocmd!
+          autocmd BufWritePre * silent Neoformat
+          augroup END
+          let g:neoformat_enabled_javascript = []
+          nn <leader>fm :Neoformat<CR>
+          nn <leader>fo :Neoformat ormolu<CR>
+          nn <leader>fs :Neoformat stylishhaskell<CR>
+        '';
 
-        nerdtree = {
-          plugins = [ np.nerdtree ];
-          config = "nn <C-n> :NERDTreeToggle<CR>";
-        };
+        nerdtree.config = ''
+          nn <C-n> :NERDTreeToggle<CR>
+        '';
 
         snippets = {
-          plugins = [
+          packages = [
             np.vim-snipmate
             np.vim-snippets
           ];
-          # TODO
           config = ''
-            " imap <C-s> <Plug>snipMateNextOrTrigger
-            " imap <C-b> <Plug>snipMateBack
             set rtp+=${./.}
           '';
         };
 
-        autopairs = {
-          plugins = [ np.auto-pairs ];
-          config =
-            let doubleSingle = "''"; in
-            ''
-              autocmd FileType nix let b:AutoPairs = AutoPairsDefine({"${doubleSingle}" : "${doubleSingle}", '=':';'}, ["'"])
-            '';
-        };
+        auto-pairs.config =
+          let doubleSingle = "''"; in
+          ''
+            autocmd FileType nix let b:AutoPairs = AutoPairsDefine({"${doubleSingle}" : "${doubleSingle}", '=':';'}, ["'"])
+          '';
 
         colors = {
-          plugins = [ np.nord-vim ];
+          packages = [ np.nord-vim ];
           config = "colorscheme nord";
-        };
-
-        languageclient-neovim = {
-          enable = false;
-          plugins = [ unp.LanguageClient-neovim ];
-          config = ''
-            let g:LanguageClient_rootMarkers = ['*.cabal', 'stack.yaml']
-            let g:LanguageClient_serverCommands = { 'haskell': ['ghcide', '--lsp'] }
-            let g:LanguageClient_floatingHoverHighlight = "Normal:NormalFloat"
-            " let g:LanguageClient_hoverPreview = "Always"
-            nnoremap <leader>lc :call LanguageClient_contextMenu()<CR>
-            nnoremap <silent> <leader>lh :call LanguageClient#textDocument_hover()<CR>
-            nnoremap <silent> <leader>ld :call LanguageClient#textDocument_definition()<CR>
-            nnoremap <silent> <leader>lr :call LanguageClient#textDocument_rename()<CR>
-          '';
         };
 
         # note; uses the ~/.config/nvim/coc-settings.json file.
         # ideally we'd have that declaratively, or just not use such a crappy system.
         # or emacs
         coc = {
-          plugins = [ unp.coc-nvim unp.coc-python ];
+          packages = [ unp.coc-nvim unp.coc-python ];
           config = ''
             set hidden
             set nobackup
