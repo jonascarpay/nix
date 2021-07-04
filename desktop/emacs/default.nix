@@ -18,7 +18,10 @@
     name = "nix-community";
     sha256 = "1r0dsyhypwqgw3i5c2rd5njay8gqw9hijiahbc2jvf0h52viyd9i";
   }];
-  home.packages = [ pkgs.binutils ]; # because gccemacs needs `as`
+  home.packages = [
+    pkgs.binutils # because gccemacs needs `as`
+    pkgs.ispell
+  ];
 
   # programs.emacs.package = pkgs.emacsGcc;
   programs.git.ignores = [
