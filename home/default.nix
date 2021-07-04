@@ -42,6 +42,7 @@ in
       neofetch
       s-tui
       tealdeer
+      niv
       unzip
       weechat
       unstable.youtube-dl
