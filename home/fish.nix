@@ -77,7 +77,7 @@ in
       ssco = "sudo systemctl stop";
       sscr = "sudo systemctl restart";
       sscu = "sudo systemctl status";
-      t = "tmux";
+      t = "cd (mktemp -d)";
       v = "vim";
       vd = "vimdir";
       vn = "vimdir ~/nix";
