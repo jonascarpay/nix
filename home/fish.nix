@@ -14,10 +14,6 @@ in
   programs.fish = {
     enable = true;
     shellInit = ''
-      function fish_user_key_bindings
-        ${if config.programs.fzf.enable then "fzf_key_bindings" else ""}
-      end
-
       function gi
         curl -sL https://www.gitignore.io/api/$argv
       end

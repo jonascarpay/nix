@@ -77,13 +77,11 @@ in
     };
   };
 
-  nixpkgs.overlays = [
-    (self: super: {
-      fzf = unstable.fzf;
-    })
-  ];
   programs = {
-    fzf.enable = true;
+    fzf = {
+      enable = true;
+      package = unstable.fzf;
+    };
 
     home-manager.enable = true;
 
