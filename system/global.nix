@@ -6,13 +6,13 @@
       exfat
       file
       git
-      htop
       gotop
+      htop
       ncdu
       ranger
       sshfs
-      tree
       tmux
+      tree
       vim
     ];
     variables = {

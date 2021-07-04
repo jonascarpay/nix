@@ -6,11 +6,11 @@ in
 
   imports =
     [
-      ../system/openvpn.nix
+      "${channels.nixos-hardware}/raspberry-pi/4/"
       ../secrets/accounts.nix
       ../system/global.nix
+      ../system/openvpn.nix
       ../system/unbound.nix
-      "${channels.nixos-hardware}/raspberry-pi/4/"
     ];
 
   networking = {

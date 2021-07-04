@@ -8,15 +8,15 @@ let
 in
 {
   imports = [
-    ./channels.nix
     (import "${declCachix}/home-manager.nix")
+    ../secrets/xcjp-cache.nix
+    ./channels.nix
+    ./direnv.nix
     ./fish.nix
     ./ranger.nix
     ./scripts.nix
-    ./vim
-    ../secrets/xcjp-cache.nix
     ./tmux.nix
-    ./direnv.nix
+    ./vim
   ];
 
   caches = {
@@ -39,14 +39,14 @@ in
       ag
       entr
       killall
+      manpages
       neofetch
+      niv
       s-tui
       tealdeer
-      niv
+      unstable.youtube-dl
       unzip
       weechat
-      unstable.youtube-dl
-      manpages
     ];
 
     sessionVariables = {

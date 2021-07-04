@@ -3,11 +3,11 @@ let integrated = false;
 in
 {
   imports = [
-    ../system/global.nix
-    ../system/openvpn.nix
-    ../system/jp.nix
-    ../system/fonts.nix
     ../secrets/accounts.nix
+    ../system/fonts.nix
+    ../system/global.nix
+    ../system/jp.nix
+    ../system/openvpn.nix
   ];
 
   networking = {

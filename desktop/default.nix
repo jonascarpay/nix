@@ -1,24 +1,24 @@
 { pkgs, config, ... }:
 {
   imports = [
-    ./emacs
-    ./picom.nix
+    ./albert
     ./anki.nix
-    ./polybar.nix
-    ./redshift.nix
     ./blender.nix
     ./dunst.nix
+    ./emacs
+    ./neuron.nix
+    ./picom.nix
+    ./polybar.nix
+    ./redshift.nix
     ./st
     ./xmonad
-    ./albert
-    ./neuron.nix
   ];
   home.packages = with pkgs; [
-    config.channels.unstable.darktable
     celluloid
+    config.channels.unstable.darktable
+    discord
     gnome3.nautilus
     okular
-    discord
     pavucontrol
     signal-desktop
     skype

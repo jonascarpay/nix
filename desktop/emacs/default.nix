@@ -1,8 +1,8 @@
 { pkgs, ... }: {
   imports = [
-    ./init.nix
     ./evil.nix
     ./haskell.nix
+    ./init.nix
     ./org.nix
     ./proof-general.nix
     ./ui.nix
@@ -24,26 +24,26 @@
   programs.git.ignores = [
     "**/#*#"
     "*.elc"
-    "auto-save-list"
-    "/.emacs.desktop"
-    "/.emacs.desktop.lock"
-    "tramp"
-    ".#*"
-    ".org-id-locations"
+    "*.rel"
+    "*/ltximg/"
     "*_archive"
     "*_flymake.*"
-    "/eshell/*"
-    "/elpa/"
-    "/elpa/"
-    "*.rel"
-    "/auto/"
-    "*/ltximg/"
+    ".#*"
     ".cask/"
+    ".dir-locals.el"
+    ".org-id-locations"
+    "/.emacs.desktop"
+    "/.emacs.desktop.lock"
+    "/auto/"
+    "/elpa/"
+    "/elpa/"
+    "/eshell/*"
+    "/network-security.data"
+    "/server/"
+    "auto-save-list"
     "dist/"
     "flycheck_*.el"
-    "/server/"
-    ".dir-locals.el"
-    "/network-security.data"
+    "tramp"
   ];
   services.emacs.enable = true;
 

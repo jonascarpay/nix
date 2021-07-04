@@ -21,12 +21,12 @@ in
   fonts = {
     enableDefaultFonts = true;
     fonts = with pkgs; [
-      nerdfonts
       corefonts
+      dm-mono
+      liberation_ttf
+      nerdfonts
       powerline-fonts
       tewi-font
-      liberation_ttf
-      dm-mono
     ];
     fontconfig = {
       enable = true;

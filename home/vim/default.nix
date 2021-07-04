@@ -32,14 +32,14 @@ in
 
         preamble = {
           packages = [
-            np.surround
             np.commentary
+            np.surround
+            np.vim-easymotion
+            np.vim-eunuch
             np.vim-indent-object
             np.vim-polyglot
             np.vim-repeat
             np.vim-unimpaired
-            np.vim-eunuch
-            np.vim-easymotion
           ];
           precedence = 5;
           config = ''
