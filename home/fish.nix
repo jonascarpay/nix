@@ -9,16 +9,6 @@ let
       sha256 = "1psr2b31faqi9ks6fzpbx80ldcdxww7afd7k4bgvkalsgws4r60y";
     };
   });
-  powerline-fish = ''
-    function fish_prompt
-      ${powerline}/bin/powerline-go \
-        -error $status \
-        -shell bare \
-        -modules venv,ssh,cwd,perms,git,exit,nix-shell,jobs \
-        -jobs (jobs -p | wc -l)
-    end
-  '';
-
 in
 {
   programs.fish = {
@@ -32,7 +22,13 @@ in
         curl -sL https://www.gitignore.io/api/$argv
       end
 
-      ${powerline-fish}
+      function fish_prompt
+        ${powerline}/bin/powerline-go \
+          -error $status \
+          -shell bare \
+          -modules venv,ssh,cwd,perms,git,exit,nix-shell,jobs \
+          -jobs (jobs -p | wc -l)
+      end
 
     '';
     shellAbbrs = {
