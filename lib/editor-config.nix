@@ -10,9 +10,13 @@ let
           type = bool;
           example = false;
         };
-        packages = mkOption {
+        plugins = mkOption {
           default = [ name ];
           type = listOf (either str package);
+        };
+        packages = mkOption {
+          default = [ ];
+          type = listOf package;
         };
         precedence = mkOption {
           type = int;
@@ -41,10 +45,11 @@ let
     in
     {
       config = concatStringsSep "\n" (map (mod: mod.config) sorted);
-      packages = pkgs:
+      plugins = pkgs:
         map
           (pkg: if builtins.isString pkg then pkgs."${pkg}" else pkg)
-          (builtins.concatMap (mod: mod.packages) sorted);
+          (builtins.concatMap (mod: mod.plugins) sorted);
+      packages = builtins.concatMap (mod: mod.packages) sorted;
     };
 
 in

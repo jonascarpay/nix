@@ -1,11 +1,9 @@
 { pkgs, ... }:
 {
 
-  home.packages = with pkgs; [
-    emacs-all-the-icons-fonts
-  ];
   programs.emacs.init.modules = {
 
+    all-the-icons.packages = [ pkgs.emacs-all-the-icons-fonts ];
     all-the-icons.config = ''
       (use-package all-the-icons)
     '';
@@ -72,6 +70,7 @@
       (use-package treemacs-evil
         :after treemacs evil)
     '';
+
     treemacs-all-the-icons.config = ''
       (use-package treemacs-all-the-icons
         :defer t)

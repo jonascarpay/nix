@@ -1,15 +1,12 @@
 { pkgs, ... }:
 {
-  home.packages = with pkgs; [
-    sqlite
-    ripgrep
-    graphviz
-    (texlive.combined.scheme-full)
-    etBook
-  ];
   programs.emacs.init.modules = {
     org = {
       precedence = -1;
+      packages = with pkgs; [
+        texlive.combined.scheme-full
+        etBook
+      ];
       config = ''
         (setq org-hide-emphasis-markers t)
         (setq org-startup-indented t)
@@ -62,6 +59,11 @@
     };
 
     org-roam.enable = false;
+    org-roam.packages = with pkgs; [
+      sqlite
+      ripgrep
+      graphviz
+    ];
     org-roam.config = ''
       (use-package org-roam
         :ensure t
@@ -91,7 +93,7 @@
       )
     '';
     writeroom = {
-      packages = [ "writeroom-mode" "visual-fill-column" ];
+      plugins = [ "writeroom-mode" "visual-fill-column" ];
       config = ''
         (use-package writeroom-mode
           :hook

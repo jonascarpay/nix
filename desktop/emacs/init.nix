@@ -20,7 +20,8 @@ in
           target = ".emacs.d/init.el";
           text = assembled.config;
         };
-        programs.emacs.extraPackages = assembled.packages;
+        programs.emacs.extraPackages = assembled.plugins;
+        home.packages = assembled.packages;
       }
     );
 }

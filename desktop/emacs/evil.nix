@@ -96,7 +96,7 @@
     '';
 
     surround = {
-      packages = [ "evil-surround" "embrace" "evil-embrace" ];
+      plugins = [ "evil-surround" "embrace" "evil-embrace" ];
       config = ''
         (use-package evil-surround
           :config

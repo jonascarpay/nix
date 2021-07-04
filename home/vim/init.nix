@@ -18,8 +18,9 @@ in
       {
         programs.neovim = {
           extraConfig = assembled.config;
-          plugins = assembled.packages pkgs.vimPlugins;
+          plugins = assembled.plugins pkgs.vimPlugins;
         };
+        home.packages = assembled.packages;
       }
     );
 }

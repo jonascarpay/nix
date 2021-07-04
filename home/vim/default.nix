@@ -9,18 +9,6 @@ in
 
   programs.git.ignores = [ "*~" "*.swp" "*.swo" "tags" "TAGS" ];
 
-  home.packages = [
-    # for coc
-    pkgs.nodejs
-
-    # formatters
-    pkgs.nixpkgs-fmt
-    unstable.haskellPackages.cabal-fmt
-    pkgs.shfmt
-    pkgs.uncrustify
-    pkgs.clang-tools
-  ];
-
   programs.neovim = {
     enable = true;
     vimAlias = true;
@@ -31,7 +19,7 @@ in
       modules = {
 
         preamble = {
-          packages = [
+          plugins = [
             np.commentary
             np.surround
             np.vim-easymotion
@@ -101,7 +89,7 @@ in
         '';
 
         git = {
-          packages = [ np.fugitive np.vim-gitgutter ];
+          plugins = [ np.fugitive np.vim-gitgutter ];
           config = ''
             nn <leader>gs :Gstatus<CR>
             nn <leader>ga :GitGutterStageHunk<CR>
@@ -114,7 +102,7 @@ in
         };
 
         fzf = {
-          packages = [ unp.fzf-vim unp.fzfWrapper ];
+          plugins = [ unp.fzf-vim unp.fzfWrapper ];
           config = ''
             nn <leader>ff :Files<CR>
             nn <leader>fg :Ag<CR>
@@ -131,7 +119,7 @@ in
         '';
 
         hoogle = {
-          packages = [ ];
+          plugins = [ ];
           config = ''
             function! HoogleSearch()
              let searchterm = expand("<cword>")
@@ -141,24 +129,33 @@ in
           '';
         };
 
-        neoformat.config = ''
-          let g:neoformat_basic_format_trim = 1
-          augroup fmt
-          autocmd!
-          autocmd BufWritePre * silent Neoformat
-          augroup END
-          let g:neoformat_enabled_javascript = []
-          nn <leader>fm :Neoformat<CR>
-          nn <leader>fo :Neoformat ormolu<CR>
-          nn <leader>fs :Neoformat stylishhaskell<CR>
-        '';
+        neoformat = {
+          packages = [
+            pkgs.nixpkgs-fmt
+            unstable.haskellPackages.cabal-fmt
+            pkgs.shfmt
+            pkgs.uncrustify
+            pkgs.clang-tools
+          ];
+          config = ''
+            let g:neoformat_basic_format_trim = 1
+            augroup fmt
+            autocmd!
+            autocmd BufWritePre * silent Neoformat
+            augroup END
+            let g:neoformat_enabled_javascript = []
+            nn <leader>fm :Neoformat<CR>
+            nn <leader>fo :Neoformat ormolu<CR>
+            nn <leader>fs :Neoformat stylishhaskell<CR>
+          '';
+        };
 
         nerdtree.config = ''
           nn <C-n> :NERDTreeToggle<CR>
         '';
 
         snippets = {
-          packages = [
+          plugins = [
             np.vim-snipmate
             np.vim-snippets
           ];
@@ -174,7 +171,7 @@ in
           '';
 
         colors = {
-          packages = [ np.nord-vim ];
+          plugins = [ np.nord-vim ];
           config = "colorscheme nord";
         };
 
@@ -182,7 +179,8 @@ in
         # ideally we'd have that declaratively, or just not use such a crappy system.
         # or emacs
         coc = {
-          packages = [ unp.coc-nvim unp.coc-python ];
+          plugins = [ unp.coc-nvim unp.coc-python ];
+          packages = [ pkgs.nodejs ];
           config = ''
             set hidden
             set nobackup

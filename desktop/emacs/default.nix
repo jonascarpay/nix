@@ -65,7 +65,7 @@
 
         gcSettings = {
           precedence = 9;
-          packages = [ "gcmh" ];
+          plugins = [ "gcmh" ];
           config = ''
             ;; https://github.com/hlissner/doom-emacs/blob/develop/docs/faq.org#avoid-garbage-collection-at-startup
             (setq gc-cons-threshold most-positive-fixnum
@@ -86,7 +86,7 @@
         # https://www.reddit.com/r/emacs/comments/f3ed3r/how_is_doom_emacs_so_damn_fast/
         earlyInit = {
           precedence = 8;
-          packages = [ ];
+          plugins = [ ];
           config = ''
             ;; Prevent the glimpse of un-styled Emacs by disabling these UI elements early.
             (push '(menu-bar-lines . 0) default-frame-alist)
@@ -129,12 +129,12 @@
         '';
 
         customInit = {
-          packages = [ ];
+          plugins = [ ];
           config = builtins.readFile ./init.el;
         };
 
         customConfig = {
-          packages = [ ];
+          plugins = [ ];
           config = ''
             (menu-bar-mode 0)
             (tool-bar-mode 0)
