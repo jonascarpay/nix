@@ -1,7 +1,4 @@
 { pkgs, lib, config, ... }:
-let
-  channels = import ../channels.nix;
-in
 {
 
   imports =
@@ -43,7 +40,7 @@ in
   services = {
     syncthing = {
       enable = true;
-      package = channels.unstable.syncthing;
+      package = pkgs.unstable.syncthing;
       dataDir = "/mnt/exthd";
       guiAddress = "0.0.0.0:8384";
     };

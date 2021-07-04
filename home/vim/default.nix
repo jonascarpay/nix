@@ -1,6 +1,6 @@
-args @{ pkgs ? (import <nixpkgs> { }), config, ... }:
+{ pkgs, config, ... }:
 let
-  unstable = args.unstable or config.channels.unstable;
+  unstable = pkgs.unstable;
   np = pkgs.vimPlugins;
   unp = unstable.vimPlugins;
 in

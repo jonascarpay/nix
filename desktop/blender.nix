@@ -1,7 +1,7 @@
 { pkgs, config, ... }:
 let
 
-  unstable = config.channels.unstable;
+  unstable = pkgs.unstable;
 
   blender3 =
     let

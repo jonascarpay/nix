@@ -1,7 +1,6 @@
 { pkgs, config, ... }:
 let
-  unstable = config.channels.unstable;
-  powerline = unstable.powerline-go.overrideAttrs (old: {
+  powerline = pkgs.unstable.powerline-go.overrideAttrs (old: {
     src = pkgs.fetchFromGitHub {
       owner = "jonascarpay";
       repo = "powerline-go";

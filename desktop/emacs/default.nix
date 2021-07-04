@@ -7,13 +7,6 @@
     ./proof-general.nix
     ./ui.nix
   ];
-  nixpkgs.overlays = [
-    (import (builtins.fetchTarball {
-      # 21/01/04
-      url = https://github.com/nix-community/emacs-overlay/archive/65e4ae8ddec6c94263aefb4ec9d8294b600280ae.tar.gz;
-      sha256 = "1m434qh28ii1pp0xjnp3wqy009z2pn3km36iffr87d1sk4122f2h";
-    }))
-  ];
   caches.cachix = [{
     name = "nix-community";
     sha256 = "1r0dsyhypwqgw3i5c2rd5njay8gqw9hijiahbc2jvf0h52viyd9i";

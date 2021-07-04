@@ -1,9 +1,8 @@
 { pkgs, ... }:
 let
   port = "8932";
-  neuronRev = "ed96d7fde277e31924d5d9cf2a315ba4c81f340d";
-  neuron = import (builtins.fetchTarball "https://github.com/srid/neuron/archive/${neuronRev}.tar.gz") { };
-  neuronBin = "${neuron}/bin/neuron";
+  neuronPkg = pkgs.flakes.neuron.defaultPackage."x86_64-linux";
+  neuronBin = "${neuronPkg}/bin/neuron";
   notesDir = "/home/jmc/slipbox";
 in
 {

@@ -15,7 +15,7 @@
   ];
   home.packages = with pkgs; [
     celluloid
-    config.channels.unstable.darktable
+    pkgs.unstable.darktable
     discord
     gnome3.nautilus
     okular
@@ -72,11 +72,11 @@
       package = pkgs.numix-icon-theme;
       name = "Numix";
     };
-    gtk3.extraCss = ''
-      VteTerminal, vte-terminal {
-        padding: 9px;
-      }
-    ''; # Termite padding goes here
+    # gtk3.extraCss = ''
+    #   VteTerminal, vte-terminal {
+    #     padding: 9px;
+    #   }
+    # ''; # Termite padding goes here
   };
 
 }

@@ -10,12 +10,11 @@ let
     config = builtins.readFile "${serverdb}/ovpn_tcp/${serv}.nordvpn.com.tcp.ovpn";
     autoStart = auto;
     updateResolvConf = true;
-    authUserPass = config.secrets.openvpn;
+    authUserPass = pkgs.flakes.secrets.openvpn;
   };
 
 in
 {
-
   services.openvpn.servers = {
     nord-hk = mkServ "hk251" false;
     # nord-nl = mkServ "nl707" false;
