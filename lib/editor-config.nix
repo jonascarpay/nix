@@ -1,25 +1,25 @@
 lib: with lib;
 let
 
-  moduleType = types.submodule
+  moduleType = with types; submodule
     ({ name, config, ... }: {
       options = {
         enable = mkOption {
           default = true;
           description = "Whether to enable ${name}";
-          type = types.bool;
+          type = bool;
           example = false;
         };
         packages = mkOption {
           default = [ name ];
-          type = with types; listOf (either str package);
+          type = listOf (either str package);
         };
         precedence = mkOption {
-          type = types.int;
+          type = int;
           default = 0;
         };
         config = mkOption {
-          type = types.lines;
+          type = lines;
           default = "";
         };
       };
