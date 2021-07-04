@@ -2,7 +2,12 @@
 let
   unstable = config.channels.unstable;
   powerline = unstable.powerline-go.overrideAttrs (old: {
-    patches = [ ./powerline-go.diff ];
+    src = pkgs.fetchFromGitHub {
+      owner = "jonascarpay";
+      repo = "powerline-go";
+      rev = "fce0e2a528beac0491eb84dffedda6afc89e0963";
+      sha256 = "1psr2b31faqi9ks6fzpbx80ldcdxww7afd7k4bgvkalsgws4r60y";
+    };
   });
   powerline-fish = ''
     function fish_prompt
