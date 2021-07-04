@@ -38,7 +38,7 @@
       description = "Jonas Carpay";
       createHome = true;
       extraGroups = [ "wheel" "networkmanager" "audio" ];
-      openssh.authorizedKeys.keyFiles = [ /home/jmc/.ssh/id_rsa.pub ];
+      openssh.authorizedKeys.keyFiles = [ ../../.ssh/id_rsa.pub ];
       hashedPassword = "$1$Nh9Zc.7Y$Zw9...mvYbA0qWE/PXKm7.";
     };
   };
