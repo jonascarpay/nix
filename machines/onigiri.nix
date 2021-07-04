@@ -100,5 +100,3 @@ in
 
   hardware.raspberry-pi."4".fkms-3d.enable = true;
 }
-
-# vim: fdm=indent:foldlevel=2:foldcolumn=2

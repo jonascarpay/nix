@@ -168,5 +168,3 @@ in
 
   programs.dconf.enable = true; # TODO ?
 }
-
-# vim: fdm=indent:foldlevel=2:foldcolumn=2
