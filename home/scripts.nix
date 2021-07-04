@@ -12,9 +12,6 @@ let
     nix-fancy-uninstall = ''
       nix-env -q | fzf | xargs -I{} nix-env -e {}
     '';
-    stack-clean-all = ''
-      find Dev -type d -name ".stack-work" -exec rm -rf {} \;
-    '';
     zap = ''
       xprop | grep -oP "PID\(CARDINAL\) = \K\d+" | xargs kill -9
     '';
