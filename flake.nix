@@ -28,7 +28,7 @@
         anpan = inputs.nixpkgs.lib.nixosSystem {
           inherit system;
           modules = [
-            ./machines/nixc.nix
+            ./machines/anpan.nix
             ({
               nixpkgs.overlays = [
                 (_:_: overlay)
