@@ -22,6 +22,7 @@
         8920 # jellyfin HTTPS
         22000 # syncthing
         8090 # rclone webdav # TODO move to module
+        9091 # transmission
       ];
       allowedUDPPorts = [
         1900 # jellyfin
@@ -47,16 +48,14 @@
     };
     transmission = {
       enable = false;
-      openFirewall = true;
       settings = {
         download-dir = "/tank/Transmission";
         incomplete-dir = "/tank/Transmission";
-        rpc-whitelist = "192.168.1.3";
+        rpc-whitelist = "192.168.1.*";
       };
     };
 
     jellyfin.enable = true;
-    # jellyfin.package = channels.unstable.jellyfin;
   };
 
   services.journald.extraConfig = ''
@@ -80,7 +79,7 @@
   };
   systemd.services = {
     rclone = {
-      enable = false; # TODO re-enable
+      enable = true; # TODO re-enable
       script = ''
         ${pkgs.rclone}/bin/rclone serve webdav /tank/ --addr :8090 --user dav --pass dav
       '';
