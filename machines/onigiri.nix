@@ -8,6 +8,7 @@
       ../system/global.nix
       ../system/openvpn.nix
       ../system/unbound.nix
+      (import ../system/zfs.nix "3bf3504c")
     ];
 
   networking = {
@@ -40,16 +41,16 @@
   services = {
     syncthing = {
       enable = true;
-      package = pkgs.unstable.syncthing;
-      dataDir = "/mnt/exthd";
+      package = channels.unstable.syncthing;
+      dataDir = "/tank";
       guiAddress = "0.0.0.0:8384";
     };
     transmission = {
       enable = false;
       openFirewall = true;
       settings = {
-        download-dir = "/mnt/exthd/Transmission";
-        incomplete-dir = "/mnt/exthd/Transmission";
+        download-dir = "/tank/Transmission";
+        incomplete-dir = "/tank/Transmission";
         rpc-whitelist = "192.168.1.3";
       };
     };
@@ -76,18 +77,12 @@
     #   fsType = "vfat";
     # };
 
-    "/mnt/exthd" = {
-      device = "/dev/disk/by-uuid/2A76DE2B76DDF811";
-      fsType = "ntfs";
-      neededForBoot = false;
-      noCheck = true;
-    };
   };
   systemd.services = {
     rclone = {
       enable = false; # TODO re-enable
       script = ''
-        ${pkgs.rclone}/bin/rclone serve webdav /mnt/exthd/ --addr :8090 --user dav --pass dav
+        ${pkgs.rclone}/bin/rclone serve webdav /tank/ --addr :8090 --user dav --pass dav
       '';
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
