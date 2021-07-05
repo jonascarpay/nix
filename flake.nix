@@ -25,7 +25,7 @@
     in
     {
       nixosConfigurations = {
-        nixc = inputs.nixpkgs.lib.nixosSystem {
+        anpan = inputs.nixpkgs.lib.nixosSystem {
           inherit system;
           modules = [
             ./machines/nixc.nix

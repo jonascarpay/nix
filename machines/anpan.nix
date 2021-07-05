@@ -9,7 +9,7 @@
   ];
 
   networking = {
-    hostName = "xc-jonas-desktop";
+    hostName = "anpan";
     networkmanager.enable = true;
     networkmanager.insertNameservers = [ "192.168.1.6" ];
     firewall = {
