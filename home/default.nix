@@ -16,6 +16,7 @@ in
     ./scripts.nix
     ./tmux.nix
     ./vim
+    ./zsh
   ];
 
   caches = {
