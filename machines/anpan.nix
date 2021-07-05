@@ -45,7 +45,6 @@
     enableRedistributableFirmware = lib.mkDefault true;
     pulseaudio.enable = true;
     video.hidpi.enable = lib.mkDefault true;
-    # bluetooth.enable = true;
     opengl = {
       enable = true;
       driSupport = true;
@@ -57,7 +56,6 @@
     initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" "sr_mod" ];
     initrd.kernelModules = [ ];
     kernelModules = [ "kvm-intel" ];
-    plymouth.enable = true;
     extraModulePackages = [ ];
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
@@ -74,10 +72,6 @@
       device = "/dev/disk/by-uuid/5673-7655";
       fsType = "vfat";
     };
-    # "/hdd" = {
-    #   device = "/dev/disk/by-label/hdd";
-    #   fsType = "ntfs";
-    # };
   };
   environment = {
     systemPackages = with pkgs; [
@@ -97,20 +91,6 @@
       browsing = true;
       drivers = [ pkgs.brlaser pkgs.gutenprint pkgs.gutenprintBin ];
     };
-    tlp = {
-      enable = false;
-      extraConfig = ''
-        CPU_SCALING_GOVERNOR_ON_BAT=powersave
-        CPU_SCALING_GOVERNOR_ON_AC=performance
-      '';
-    };
-    udev.extraRules = ''
-      ACTION=="add", SUBSYSTEM=="input", ATTR{name}=="TPPS/2 IBM TrackPoint", ATTR{device/sensitivity}="210"
-    '';
-    strongswan = {
-      enable = true;
-      secrets = [ "ipsec.d/ipsec.nm-l2tp.secrets" ];
-    };
 
     fstrim.enable = true;
     xserver = {
@@ -126,8 +106,6 @@
     };
     logind.extraConfig = "RuntimeDirectorySize=2G";
   };
-
-  services.blueman.enable = true;
 
   nix = {
     extraOptions = ''
