@@ -48,7 +48,6 @@ in
       grh = "git reset HEAD --hard";
       gri = "git rebase -i";
       gs = "git status";
-      hms = "home-manager switch";
       l = "ls";
       ll = "ls -lah";
       n = "vim";

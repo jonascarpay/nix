@@ -83,8 +83,6 @@ in
       package = unstable.fzf;
     };
 
-    home-manager.enable = true;
-
     git = {
       enable = true;
       userName = "Jonas Carpay";

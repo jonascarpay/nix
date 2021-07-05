@@ -110,7 +110,6 @@ in
       powertop
       linuxPackages.nvidia_x11
     ];
-    variables.HM_PATH = "https://github.com/rycee/home-manager/archive/release-20.09.tar.gz";
   };
 
   nix.maxJobs = lib.mkDefault 8;
