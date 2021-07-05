@@ -15,39 +15,43 @@
 
   outputs = inputs:
     let
+
       system = "x86_64-linux";
-      overlay = {
-        flakes = inputs;
-        unstable = import inputs.nixpkgs-unstable {
-          inherit system;
-          config.allowUnfree = true;
-        };
+
+      mkSystem = { sysModules, homeModules }: inputs.nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [
+
+          inputs.home-manager.nixosModules.home-manager
+
+          {
+            nixpkgs.overlays = [
+              (_:_: {
+                flakes = inputs;
+                unstable = import inputs.nixpkgs-unstable {
+                  inherit system;
+                  config.allowUnfree = true;
+                };
+              })
+              inputs.emacs-overlay.overlay
+            ];
+          }
+
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.jmc.imports = homeModules;
+          }
+        ] ++ sysModules;
       };
+
     in
+
     {
       nixosConfigurations = {
-        anpan = inputs.nixpkgs.lib.nixosSystem {
-          inherit system;
-          modules = [
-            ./machines/anpan.nix
-            ({
-              nixpkgs.overlays = [
-                (_:_: overlay)
-                inputs.emacs-overlay.overlay
-              ];
-            })
-            inputs.home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.jmc = {
-                imports = [
-                  ./home
-                  ./desktop
-                ];
-              };
-            }
-          ];
+        anpan = mkSystem {
+          sysModules = [ ./machines/anpan.nix ];
+          homeModules = [ ./home ./desktop ];
         };
       };
     };
