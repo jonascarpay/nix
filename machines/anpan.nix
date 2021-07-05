@@ -81,17 +81,11 @@
     variables.HM_PATH = "https://github.com/rycee/home-manager/archive/release-20.09.tar.gz";
   };
 
-  nix.maxJobs = lib.mkDefault 8;
+  nix.maxJobs = lib.mkDefault 12;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
   time.timeZone = "Asia/Tokyo";
   services = {
-    printing = {
-      enable = true;
-      browsing = true;
-      drivers = [ pkgs.brlaser pkgs.gutenprint pkgs.gutenprintBin ];
-    };
-
     fstrim.enable = true;
     xserver = {
       dpi = 140;
