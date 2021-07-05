@@ -149,17 +149,13 @@
     },
     "secrets": {
       "locked": {
-        "lastModified": 1625450729,
-        "narHash": "sha256-3VAqslEFeANerMQSTRwkb6K6Py4n9noBrWMlVK7kbRc=",
-        "ref": "master",
-        "rev": "ba841230503b4b2928025c18ae418d0227e4947c",
-        "revCount": 2,
-        "type": "git",
-        "url": "ssh://git@github.com/jonascarpay/nix-secrets"
+        "narHash": "sha256-8hP/2t3+gbDb4YuafoGz/JguUB5Y3WEKsBaQXQPnS58=",
+        "path": "/home/jmc/nix-secrets",
+        "type": "path"
       },
       "original": {
-        "type": "git",
-        "url": "ssh://git@github.com/jonascarpay/nix-secrets"
+        "path": "/home/jmc/nix-secrets",
+        "type": "path"
       }
     }
   },

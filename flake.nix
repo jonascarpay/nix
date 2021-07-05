@@ -10,15 +10,14 @@
     neuron.url = "github:srid/neuron";
     neuron.inputs.nixpkgs.follows = "nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
-    secrets.url = "git+ssh://git@github.com/jonascarpay/nix-secrets";
+    # secrets.url = "git+ssh://git@github.com/jonascarpay/nix-secrets";
+    secrets.url = "/home/jmc/nix-secrets";
   };
 
   outputs = inputs:
     let
 
-      system = "x86_64-linux";
-
-      mkSystem = { sysModules, homeModules }: inputs.nixpkgs.lib.nixosSystem {
+      mkSystem = { system, sysModules, homeModules }: inputs.nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
 
@@ -50,8 +49,17 @@
     {
       nixosConfigurations = {
         anpan = mkSystem {
+          system = "x86_64-linux";
           sysModules = [ ./machines/anpan.nix ];
           homeModules = [ ./home ./desktop ];
+        };
+        onigiri = mkSystem {
+          system = "aarch64-linux";
+          sysModules = [
+            inputs.nixos-hardware.nixosModules.raspberry-pi-4
+            ./machines/onigiri.nix
+          ];
+          homeModules = [ ./home ];
         };
       };
     };

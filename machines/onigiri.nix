@@ -1,52 +1,30 @@
 { pkgs, lib, config, ... }:
-{
+let
 
-  imports =
-    [
-      "${channels.nixos-hardware}/raspberry-pi/4/"
-      ../secrets/accounts.nix
-      ../system/global.nix
-      ../system/openvpn.nix
-      ../system/unbound.nix
-      (import ../system/zfs.nix "3bf3504c")
-    ];
-
-  networking = {
-    hostName = "onigiri";
-    networkmanager.enable = true;
-    firewall = {
-      enable = true;
-      allowedTCPPorts = [
-        8384 # syncthing GUI
-        8096 # jellyfin HTTP
-        8920 # jellyfin HTTPS
-        22000 # syncthing
-        8090 # rclone webdav # TODO move to module
-        9091 # transmission
-      ];
-      allowedUDPPorts = [
-        1900 # jellyfin
-        7359 # jellyfin
-        21027 # syncthing
-      ];
+  rclone = {
+    networking.firewall.allowedTCPPorts = [ 8090 ];
+    systemd.services = {
+      rclone = {
+        enable = true;
+        script = ''
+          ${pkgs.rclone}/bin/rclone serve webdav /tank/ --addr :8090 --user dav --pass dav
+        '';
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
+        wantedBy = [ "multi-user.target" ];
+      };
     };
   };
 
-  time.timeZone = "Asia/Tokyo";
-  powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
-
-  users.users.jmc = {
-    shell = pkgs.fish;
+  jellyfin = {
+    services.jellyfin.enable = true;
+    networking.firewall.allowedTCPPorts = [ 8096 8920 ];
+    networking.firewall.allowedUDPPorts = [ 1900 7359 ];
   };
 
-  services = {
-    syncthing = {
-      enable = true;
-      package = channels.unstable.syncthing;
-      dataDir = "/tank";
-      guiAddress = "0.0.0.0:8384";
-    };
-    transmission = {
+  transmission = {
+    networking.firewall.allowedTCPPorts = [ 9091 ];
+    services.transmission = {
       enable = false;
       settings = {
         download-dir = "/tank/Transmission";
@@ -54,40 +32,46 @@
         rpc-whitelist = "192.168.1.*";
       };
     };
-
-    jellyfin.enable = true;
   };
+
+  syncthing = {
+    networking.firewall.allowedTCPPorts = [ 8384 ]; # for GUI
+    services.syncthing = {
+      enable = true;
+      package = pkgs.unstable.syncthing;
+      dataDir = "/tank";
+      guiAddress = "0.0.0.0:8384";
+    };
+  };
+
+in
+{
+  imports =
+    [
+      ../system/global.nix
+      ../system/openvpn.nix
+      ../system/unbound.nix
+      (import ../system/zfs.nix "3bf3504c")
+      rclone
+      jellyfin
+      transmission
+      syncthing
+    ];
+
+  networking.hostName = "onigiri";
+  networking.networkmanager.enable = true;
+  time.timeZone = "Asia/Tokyo";
+  powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
+  system.stateVersion = "21.05";
+  users.users.jmc.shell = pkgs.fish;
+  hardware.raspberry-pi."4".fkms-3d.enable = true;
 
   services.journald.extraConfig = ''
     SystemMaxUse=16M
   '';
 
-  system.stateVersion = "21.03";
-
-  fileSystems = {
-    "/" = {
-      # device = "/dev/disk/by-uuid/44444444-4444-4444-8888-888888888888";
-      device = "/dev/disk/by-uuid/3dd7b7cc-8570-4501-836f-fed55833d1c0";
-      fsType = "ext4";
-    };
-
-    # "/boot" = {
-    #   device = "/dev/disk/by-uuid/2178-694E";
-    #   fsType = "vfat";
-    # };
-
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/3dd7b7cc-8570-4501-836f-fed55833d1c0";
+    fsType = "ext4";
   };
-  systemd.services = {
-    rclone = {
-      enable = true; # TODO re-enable
-      script = ''
-        ${pkgs.rclone}/bin/rclone serve webdav /tank/ --addr :8090 --user dav --pass dav
-      '';
-      wants = [ "network-online.target" ];
-      after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
-    };
-  };
-
-  hardware.raspberry-pi."4".fkms-3d.enable = true;
 }
