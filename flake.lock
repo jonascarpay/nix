@@ -149,7 +149,7 @@
     },
     "secrets": {
       "locked": {
-        "narHash": "sha256-8hP/2t3+gbDb4YuafoGz/JguUB5Y3WEKsBaQXQPnS58=",
+        "narHash": "sha256-BghREZamQQ7BkdOZe/g5FLsGxXemPwtxajUftbcDVWk=",
         "path": "/home/jmc/nix-secrets",
         "type": "path"
       },

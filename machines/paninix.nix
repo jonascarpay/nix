@@ -47,7 +47,6 @@ in
   };
 
   hardware = {
-    enableRedistributableFirmware = lib.mkDefault true;
     pulseaudio = {
       enable = true;
       package = pkgs.pulseaudioFull;

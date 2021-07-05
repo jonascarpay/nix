@@ -16,10 +16,7 @@
     networkmanager.insertNameservers = [ "192.168.1.6" ];
   };
 
-  hardware = {
-    enableRedistributableFirmware = lib.mkDefault true;
-    video.hidpi.enable = lib.mkDefault true;
-  };
+  hardware.video.hidpi.enable = true;
 
   boot = {
     initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" "sr_mod" ];
@@ -41,21 +38,12 @@
       fsType = "vfat";
     };
   };
-  environment = {
-    systemPackages = with pkgs; [
-      dnsutils
-      linuxPackages.nvidia_x11
-    ];
-  };
 
-  nix.maxJobs = lib.mkDefault 12;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
   time.timeZone = "Asia/Tokyo";
   services = {
-    fstrim.enable = true;
     logind.extraConfig = "RuntimeDirectorySize=2G";
-    xserver.videoDrivers = [ "nvidia" ];
     xserver.dpi = 140;
   };
 

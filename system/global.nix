@@ -46,6 +46,8 @@
   };
   programs.bash.enableCompletion = true; # enable tab-completion for nix-* tools
 
+  hardware.enableRedistributableFirmware = true;
+
   users = {
     mutableUsers = false;
     users.jmc = {

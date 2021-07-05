@@ -8,7 +8,6 @@
     };
   };
   services.xserver = {
-    libinput.enable = true;
     enable = true;
     displayManager.autoLogin = {
       enable = true;
