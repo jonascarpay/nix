@@ -16,4 +16,15 @@
     };
     desktopManager.plasma5.enable = true; # TODO disable
   };
+  networking.firewall = {
+    allowedTCPPorts = [
+      27037 # steam
+      27036 # steam
+    ];
+    allowedUDPPorts = [
+      8081 # steam, hoogle
+      27036 # steam
+      27031 # steam
+    ];
+  };
 }

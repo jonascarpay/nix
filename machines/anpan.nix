@@ -14,32 +14,6 @@
     hostName = "anpan";
     networkmanager.enable = true;
     networkmanager.insertNameservers = [ "192.168.1.6" ];
-    firewall = {
-      enable = true;
-      allowedTCPPorts = [
-        22
-        80 # ssh http
-        139
-        445
-        27036
-        27037 # steam
-        8080 # hoogle
-        8081 # hoogle
-        4040 # weird ssh
-        4041 # weird http
-        22000 # syncthing
-      ];
-      allowedUDPPorts = [
-        53
-        15515 # default
-        139
-        138 # samba
-        27031
-        27036 # steam
-        8081 # steam
-        21027 # syncthing
-      ];
-    };
   };
 
   hardware = {
@@ -56,7 +30,6 @@
     loader.efi.canTouchEfiVariables = true;
     blacklistedKernelModules = [ ];
   };
-
 
   fileSystems = {
     "/" = {

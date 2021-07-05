@@ -24,6 +24,20 @@
     pathsToLink = [ "/share/zsh" ];
   };
 
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [
+      22
+      80
+      8080
+      8081
+      22000 # syncthing
+    ];
+    allowedUDPPorts = [
+      21027 # syncthing
+    ];
+  };
+
   nixpkgs.config.allowUnfree = true;
   security.sudo.wheelNeedsPassword = false;
   services.openssh = {
