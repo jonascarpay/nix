@@ -15,12 +15,7 @@ lib.mkIf (config.xsession.enable) {
     enable = true;
     package = pkgs.polybar.override { alsaSupport = true; };
     script = ''
-      polybar t480-intel-edp1 &
-      polybar t480-intel-hdmi2 &
-      polybar t480-dgpu-dp-1-1 &
-      polybar t480-dgpu-dp-1-2 &
-      polybar t480-dgpu-edp-1-1 &
-      polybar t480-dgpu-hdmi-1-2 &
+      polybar hidpi &
     '';
     config = {
       "bar/common" = {
@@ -51,37 +46,6 @@ lib.mkIf (config.xsession.enable) {
         "inherit" = "bar/common";
         height = "18";
         tray-maxsize = "15";
-      };
-
-      "bar/t480-intel-edp1" = {
-        "inherit" = "bar/hidpi";
-        monitor = "eDP1";
-      };
-
-      "bar/t480-intel-hdmi2" = {
-        "inherit" = "bar/lodpi";
-        monitor = "HDMI2";
-      };
-
-      "bar/t480-dgpu-dp-1-1" = {
-        "inherit" = "bar/hidpi";
-        monitor = "\${env:MONITOR:DP-1-1}";
-      };
-
-      "bar/t480-dgpu-dp-1-2" = {
-        "inherit" = "bar/hidpi";
-        monitor = "\${env:MONITOR:DP-1-2}";
-      };
-
-      "bar/t480-dgpu-edp-1-1" = {
-        "inherit" = "bar/hidpi";
-        monitor = "\${env:MONITOR:eDP-1-1}";
-        tray-position = "none";
-      };
-
-      "bar/t480-dgpu-hdmi-1-2" = {
-        "inherit" = "bar/hidpi";
-        monitor = "\${env:MONITOR:HDMI-1-2}";
       };
 
       "module/date" = {
