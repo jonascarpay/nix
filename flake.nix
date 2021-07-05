@@ -9,7 +9,7 @@
     home-manager.url = "github:nix-community/home-manager/release-21.05";
     neuron.url = "github:srid/neuron";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
-    secrets.url = "/home/jmc/nix-secrets";
+    secrets.url = "git+ssh://git@github.com/jonascarpay/nix-secrets";
   };
 
   outputs = inputs:
