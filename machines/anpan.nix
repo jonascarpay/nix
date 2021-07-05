@@ -7,6 +7,7 @@
     ../system/jp.nix
     ../system/openvpn.nix
     ../system/mlfa.nix
+    ../system/graphical.nix
   ];
 
   networking = {
@@ -43,13 +44,7 @@
 
   hardware = {
     enableRedistributableFirmware = lib.mkDefault true;
-    pulseaudio.enable = true;
     video.hidpi.enable = lib.mkDefault true;
-    opengl = {
-      enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
-    };
   };
 
   boot = {
@@ -86,18 +81,9 @@
   time.timeZone = "Asia/Tokyo";
   services = {
     fstrim.enable = true;
-    xserver = {
-      dpi = 140;
-      libinput.enable = true;
-      enable = true;
-      videoDrivers = [ "nvidia" ];
-      displayManager.autoLogin = {
-        enable = true;
-        user = "jmc";
-      };
-      desktopManager.plasma5.enable = true; # TODO disable
-    };
     logind.extraConfig = "RuntimeDirectorySize=2G";
+    xserver.videoDrivers = [ "nvidia" ];
+    xserver.dpi = 140;
   };
 
   nix = {
@@ -107,6 +93,5 @@
     '';
     requireSignedBinaryCaches = false;
   };
-
   programs.dconf.enable = true; # TODO ?
 }
