@@ -7,14 +7,17 @@ let
   };
 
   mkServ = serv: auto: {
-    config = builtins.readFile "${serverdb}/ovpn_tcp/${serv}.nordvpn.com.tcp.ovpn";
+    config = ''
+      ${builtins.readFile "${serverdb}/ovpn_tcp/${serv}.nordvpn.com.tcp.ovpn"}
+      auth-user-pass ${config.age.secrets.openvpn.path}
+    '';
     autoStart = auto;
     updateResolvConf = true;
-    authUserPass = pkgs.flakes.secrets.openvpn;
   };
 
 in
 {
+  age.secrets.openvpn.file = ../secrets/openvpn.age;
   services.openvpn.servers = {
     nord-hk = mkServ "hk251" false;
     # nord-nl = mkServ "nl707" false;

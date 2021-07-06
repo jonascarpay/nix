@@ -1,5 +1,6 @@
 { pkgs, ... }:
 {
+  imports = [ ./xc-cache.nix ];
   environment = {
     systemPackages = with pkgs; [
       dnsutils
@@ -63,7 +64,7 @@
   };
 
   nix = {
-    trustedUsers = [ "root" "jmc" ];
+    trustedUsers = [ "root" "@wheel" ];
     package = pkgs.nixUnstable;
     extraOptions = "experimental-features = nix-command flakes";
   };

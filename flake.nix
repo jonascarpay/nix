@@ -10,8 +10,8 @@
     neuron.url = "github:srid/neuron";
     neuron.inputs.nixpkgs.follows = "nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
-    # secrets.url = "git+ssh://git@github.com/jonascarpay/nix-secrets";
-    secrets.url = "/home/jmc/nix-secrets";
+    agenix.url = "github:ryantm/agenix";
+    declarative-cachix.url = "github:jonascarpay/declarative-cachix";
   };
 
   outputs = inputs:
@@ -22,6 +22,17 @@
         modules = [
 
           inputs.home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.jmc.imports = homeModules;
+          }
+
+          inputs.agenix.nixosModules.age
+          { environment.systemPackages = [ inputs.agenix.defaultPackage."${system}" ]; }
+
+          inputs.declarative-cachix.nixosModules.declarative-cachix
+          { home-manager.users.jmc.imports = [ inputs.declarative-cachix.homeManagerModules.declarative-cachix-experimental ]; }
 
           {
             nixpkgs.overlays = [
@@ -36,16 +47,10 @@
             ];
           }
 
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.jmc.imports = homeModules;
-          }
         ] ++ sysModules;
       };
 
     in
-
     {
       nixosConfigurations = {
         anpan = mkSystem {
@@ -53,7 +58,7 @@
           sysModules = with inputs.nixos-hardware.nixosModules; [
             common-pc-ssd
             common-pc
-            common-gpu-nvidia
+            # common-gpu-nvidia
             ./machines/anpan.nix
           ];
           homeModules = [ ./home ./desktop ];
