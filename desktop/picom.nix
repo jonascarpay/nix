@@ -1,27 +1,17 @@
-{ pkgs, lib, config, ... }:
-let
-  base = {
+{ pkgs, lib, config, ... }: {
+  services.picom = {
     enable = true;
     package = pkgs.picom.overrideAttrs (_: {
       src = pkgs.fetchFromGitHub {
         repo = "picom";
         owner = "yshui";
-        rev = "d974367a0446f4f1939daaada7cb6bca84c893ef";
-        sha256 = "0mjm544vck493sdcvr90d9ycg5sxin28a13w61q1kqkycilv87lv";
+        rev = "5388ba0946bb325b343e04c4dfc66ca05d4d1466";
+        sha256 = "sha256-B3lpZPMLwiGLmOwJ3DAHDfgtv9cMRYPNpKnqmItbKlM=";
       };
     });
     vSync = true;
     shadow = true;
-  };
-
-  shadowFocus = {
-    shadowExclude = [ "!focused" ]; # breaks shit
-    shadowOffsets = [ 0 0 ];
-    inactiveDim = "0.30";
-  };
-
-  blur = {
-    blur = false;
+    blur = true;
     experimentalBackends = true;
     noDockShadow = false;
     fade = false;
@@ -36,7 +26,4 @@ let
     inactiveDim = "0.20";
     opacityRule = [ "100:class_i != 'st-256color'" ];
   };
-
-in
-# { services.picom = base // shadowFocus; }
-{ services.picom = base // blur; }
+}

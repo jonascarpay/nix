@@ -58,7 +58,6 @@
           sysModules = with inputs.nixos-hardware.nixosModules; [
             common-pc-ssd
             common-pc
-            # common-gpu-nvidia
             ./machines/anpan.nix
           ];
           homeModules = [ ./home ./desktop ];

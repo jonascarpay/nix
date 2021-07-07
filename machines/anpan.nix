@@ -45,6 +45,7 @@
   services = {
     logind.extraConfig = "RuntimeDirectorySize=2G";
     xserver.dpi = 140;
+    xserver.videoDrivers = lib.mkDefault [ "nvidia" ];
   };
 
   nix = {
