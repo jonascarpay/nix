@@ -11,6 +11,7 @@
     neuron.inputs.nixpkgs.follows = "nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     agenix.url = "github:ryantm/agenix";
+    agenix.inputs.nixpkgs.follows = "nixpkgs";
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
   };
 
