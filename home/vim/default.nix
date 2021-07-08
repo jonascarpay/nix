@@ -129,6 +129,11 @@ in
           '';
         };
 
+        indent-blankline-nvim.plugins = [ unp.indent-blankline-nvim ];
+        indent-blankline-nvim.config = ''
+          let g:indent_blankline_char = '▏'
+        '';
+
         neoformat = {
           packages = [
             pkgs.nixpkgs-fmt
