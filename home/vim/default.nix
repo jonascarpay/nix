@@ -12,6 +12,7 @@ in
   programs.neovim = {
     enable = true;
     vimAlias = true;
+    package = unstable.neovim-unwrapped;
     vimdiffAlias = true;
     viAlias = true;
     init = {
@@ -67,6 +68,9 @@ in
             inoremap hj <esc>
             vmap <leader>y :w! /tmp/vitmp<CR>
             nmap <leader>p :r! cat /tmp/vitmp<CR>
+            set foldmethod=indent
+            set foldcolumn=0
+            set foldlevel=999
           '';
         };
 
