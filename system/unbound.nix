@@ -1,3 +1,4 @@
+# Adapted from https://www.reddit.com/r/NixOS/comments/innzkw/pihole_style_adblock_with_nix_and_unbound/
 { pkgs, ... }:
 let
 
@@ -19,13 +20,10 @@ let
 
 in
 {
-
   networking.firewall.allowedUDPPorts = [ 53 ];
   networking.firewall.allowedTCPPorts = [ 53 ];
-
   services.unbound = {
     enable = true;
-    # https://nlnetlabs.nl/documentation/unbound/unbound.conf/
     settings = {
       server = {
         interface = [ "0.0.0.0" ];
@@ -40,19 +38,22 @@ in
         tls-cert-bundle = "/etc/ssl/certs/ca-certificates.crt";
         cache-max-ttl = 14400;
         cache-min-ttl = 1200;
-        # local-zone goes in the server!
-        # local-zone = [
-        #   ''"test.lan" redirect''
-        # ];
-        # local-data = [
-        #   ''"test.lan A 123.123.123.123"''
-        # ];
+        local-zone = [
+          ''"onigiri.lan" redirect''
+        ];
+        local-data = [
+          ''"onigiri.lan A 192.168.1.6"''
+        ];
         include = "${adblockLocalZones}";
       };
       remote-control.control-enable = true;
       forward-zone = {
         name = ".";
         forward-addr = [
+          "45.90.28.0#fd2d38.dns1.nextdns.io"
+          "2a07:a8c0::#fd2d38.dns1.nextdns.io"
+          "45.90.30.0#fd2d38.dns2.nextdns.io"
+          "2a07:a8c1::#fd2d38.dns2.nextdns.io"
           "1.1.1.1@53#one.one.one.one"
           "8.8.8.8@53#dns.google"
           "9.9.9.9@53#dns.quad9.net"
