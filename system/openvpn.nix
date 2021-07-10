@@ -1,9 +1,10 @@
 { pkgs, config, ... }:
 let
-  serverdb = pkgs.fetchzip {
-    url = "https://downloads.nordcdn.com/configs/archives/servers/ovpn.zip";
-    sha256 = "sha256-ZCiU/bTzL1mm5+f/k+/GrJne+M3L5ZRrcuit7gYFfCw=";
-    stripRoot = false;
+  serverdb = pkgs.fetchFromGitHub {
+    owner = "jonascarpay";
+    repo = "nord-openvpn-configs";
+    rev = "b7c3e7f90a63423fbe3f57d8b6f2e03a18c8dc07";
+    sha256 = "sha256-8UOScq9+FDOpwst9HmlOTiZDpf/lz64UIWonvMcbkp8=";
   };
 
   mkServ = serv: auto: {
