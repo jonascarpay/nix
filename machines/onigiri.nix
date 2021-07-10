@@ -22,17 +22,22 @@ let
     networking.firewall.allowedUDPPorts = [ 1900 7359 ];
   };
 
-  transmission = {
-    networking.firewall.allowedTCPPorts = [ 9091 ];
-    services.transmission = {
+  transmission =
+    let
       enable = false;
-      settings = {
-        download-dir = "/tank/Transmission";
-        incomplete-dir = "/tank/Transmission";
-        rpc-whitelist = "192.168.1.*";
+    in
+    {
+      networking.firewall.allowedTCPPorts = [ 9091 ];
+      services.openvpn.servers.nord-hk.autoStart = enable;
+      services.transmission = {
+        inherit enable;
+        settings = {
+          download-dir = "/tank/Transmission";
+          incomplete-dir = "/tank/Transmission";
+          rpc-whitelist = "192.168.1.*";
+        };
       };
     };
-  };
 
   syncthing = {
     networking.firewall.allowedTCPPorts = [ 8384 ]; # for GUI
