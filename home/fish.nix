@@ -83,6 +83,5 @@ in
     };
   };
   home.file.".tmux.conf".text =
-    "set-option -g default-command /home/jmc/.nix-profile/bin/fish";
-
+    "set-option -g default-command /etc/profiles/per-user/jmc/bin/fish";
 }
