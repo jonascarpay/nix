@@ -8,8 +8,8 @@ let
       {
         owner = "StevenBlack";
         repo = "hosts";
-        rev = "3.7.8";
-        sha256 = "054bryxr17f99s2yfq1r2pkicbk4nbrin04jkq980gxad66j9q6g";
+        rev = "3.7.13";
+        sha256 = "sha256-nSajiRDpcFp3MwnQPnoBVB/OWnhVqkeSmS7OBrfhMnw=";
       } + "/hosts");
     phases = [ "installPhase" ];
     installPhase = ''
