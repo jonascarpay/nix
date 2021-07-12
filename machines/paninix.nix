@@ -3,7 +3,6 @@ let integrated = false;
 in
 {
   imports = [
-    ../secrets/accounts.nix
     ../system/fonts.nix
     ../system/global.nix
     ../system/jp.nix

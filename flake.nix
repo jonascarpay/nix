@@ -63,6 +63,17 @@
           ];
           homeModules = [ ./home ./desktop ];
         };
+        paninix = mkSystem {
+          system = "x86_64-linux";
+          sysModules = with inputs.nixos-hardware.nixosModules; [
+            lenovo-thinkpad-t480
+            common-pc-laptop
+            common-pc-laptop-ssd
+            # common-gpu-nvidia
+            ./machines/paninix.nix
+          ];
+          homeModules = [ ./home ./desktop ];
+        };
         onigiri = mkSystem {
           system = "aarch64-linux";
           sysModules = [
