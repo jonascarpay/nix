@@ -80,10 +80,7 @@
             inputs.nixos-hardware.nixosModules.raspberry-pi-4
             ./machines/onigiri.nix
           ];
-          homeModules = [
-            ./home
-            ./home/nord-openvpn-configs.nix
-          ];
+          homeModules = [ ./home ];
         };
       };
     };
