@@ -12,8 +12,9 @@ let
         src = pkgs.fetchFromGitHub {
           owner = "blender";
           repo = "blender";
-          rev = "5759bbe9f9e8706356c9d39939f472e3bb717860";
-          sha256 = "0x4yk2zf07msm2x6ic3l5ccahvrz41mrim89vcbvwc4wfmrr2qwz";
+          rev = "22c4323b2169e700fa124b3dfe56b750bc532e49";
+          sha256 = "sha256-Z0AknIAd9LKCV2gBvDQhktJA+Mjz/OVAKmZkQRe5oCw=";
+
           fetchSubmodules = true;
         };
       };
