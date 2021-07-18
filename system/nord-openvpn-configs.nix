@@ -15,11 +15,15 @@ in
         rm -rf ovpn_udp
         DATE=$(date -u)
         curl "${configsUrl}" --output ovpn.zip
-        unzip ovpn.zip
+        unzip -q ovpn.zip
         rm ovpn.zip
-        git add --all
-        git commit -m "Nord configs at $DATE" || true
-        git push
+        git status
+        CHANGED=$(git diff-index --name-only HEAD --)
+        if [ -n "$CHANGED" ]; then
+            git add --all
+            git commit -m "Nord configs at $DATE"
+            git push
+        fi
       '';
       serviceConfig.Type = "oneshot";
       serviceConfig.User = "jmc";
