@@ -31,6 +31,7 @@ in
   home = {
     packages = with pkgs; [
       ag
+      cloc
       entr
       killall
       manpages
