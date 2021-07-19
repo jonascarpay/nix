@@ -18,7 +18,7 @@ in
         unzip -q ovpn.zip
         rm ovpn.zip
         git status
-        CHANGED=$(git diff-index --name-only HEAD --)
+        CHANGED=$(git status --porcelain)
         if [ -n "$CHANGED" ]; then
             git add --all
             git commit -m "Nord configs at $DATE"
