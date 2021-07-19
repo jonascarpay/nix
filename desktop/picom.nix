@@ -2,11 +2,12 @@
   services.picom = {
     enable = true;
     package = pkgs.picom.overrideAttrs (_: {
+      version = "2021-07-14";
       src = pkgs.fetchFromGitHub {
         repo = "picom";
         owner = "yshui";
-        rev = "5388ba0946bb325b343e04c4dfc66ca05d4d1466";
-        sha256 = "sha256-B3lpZPMLwiGLmOwJ3DAHDfgtv9cMRYPNpKnqmItbKlM=";
+        rev = "057a939431a5e856d001a5b2be9b9ba86738e829";
+        sha256 = "01apbg9z4195623j5pi2xrc0aqaffkxpkrf8j53rbyi5xlg9i5gx";
       };
     });
     vSync = true;

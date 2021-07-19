@@ -9,8 +9,8 @@ let
       {
         owner = "StevenBlack";
         repo = "hosts";
-        rev = "3.7.13";
-        sha256 = "sha256-nSajiRDpcFp3MwnQPnoBVB/OWnhVqkeSmS7OBrfhMnw=";
+        rev = "1af14dbc19457d845719944b17e26ed6ebbfd4c7";
+        sha256 = "1f0hli0ldcfy42l565n8rc7mzg3dwfbpqrp75hbvhf4arqg0y35p";
       } + "/hosts");
     phases = [ "installPhase" ];
     installPhase = ''

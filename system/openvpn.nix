@@ -3,8 +3,8 @@ let
   serverdb = pkgs.fetchFromGitHub {
     owner = "jonascarpay";
     repo = "nord-openvpn-configs";
-    rev = "b7c3e7f90a63423fbe3f57d8b6f2e03a18c8dc07";
-    sha256 = "sha256-8UOScq9+FDOpwst9HmlOTiZDpf/lz64UIWonvMcbkp8=";
+    rev = "5e9c413805174444a37ab2c0aaa45b2c3fe6962e";
+    sha256 = "04rbkia4cp3yg4im3gh04kh6kjc12a18n4z0df3kjzffvyrh8fhl";
   };
 
   mkServ = serv: {
