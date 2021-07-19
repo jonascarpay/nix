@@ -36,7 +36,6 @@ in
       killall
       manpages
       neofetch
-      niv
       s-tui
       tealdeer
       unstable.youtube-dl
