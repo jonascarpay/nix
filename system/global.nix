@@ -15,6 +15,7 @@
       tmux
       tree
       vim
+      unzip
     ];
     variables = {
       EDITOR = "vim";

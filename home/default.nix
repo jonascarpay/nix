@@ -39,7 +39,6 @@ in
       s-tui
       tealdeer
       unstable.youtube-dl
-      unzip
       weechat
     ];
 
