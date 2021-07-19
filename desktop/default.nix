@@ -21,7 +21,6 @@
     okular
     pavucontrol
     signal-desktop
-    skype
     slack
     spotify
     steam
