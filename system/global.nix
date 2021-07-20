@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, lib, ... }:
 {
   imports = [ ./xc-cache.nix ];
   environment = {
@@ -68,9 +68,13 @@
     trustedUsers = [ "root" "@wheel" ];
     package = pkgs.nixUnstable;
     extraOptions = "experimental-features = nix-command flakes";
-    # TODO automatically track all
-    registry.nixpkgs.flake = inputs.nixpkgs;
-    registry.unstable.flake = inputs.nixpkgs-unstable;
+    # https://github.com/gytis-ivaskevicius/flake-utils-plus/blob/master/modules/saneFlakeDefaults.nix
+    registry =
+      builtins.mapAttrs
+        (name: v: { flake = v; })
+        (lib.filterAttrs
+          (name: value: value ? outputs)
+          inputs);
   };
 
 }
