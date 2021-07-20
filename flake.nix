@@ -13,6 +13,10 @@
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
+    nord-configs = {
+      url = "github:jonascarpay/nord-openvpn-configs";
+      flake = false;
+    };
   };
 
   outputs = inputs:

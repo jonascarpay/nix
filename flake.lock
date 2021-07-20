@@ -170,6 +170,22 @@
         "type": "github"
       }
     },
+    "nord-configs": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1626716191,
+        "narHash": "sha256-bDoRMG/T9OOBqM0UVsVZzYgjqOdtdYX9+PLI9wu+Xvc=",
+        "owner": "jonascarpay",
+        "repo": "nord-openvpn-configs",
+        "rev": "37f660441e705868b1180dc29c9276ba067b4689",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jonascarpay",
+        "repo": "nord-openvpn-configs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "agenix": "agenix",
@@ -179,7 +195,8 @@
         "neuron": "neuron",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-unstable": "nixpkgs-unstable"
+        "nixpkgs-unstable": "nixpkgs-unstable",
+        "nord-configs": "nord-configs"
       }
     }
   },
