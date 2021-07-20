@@ -200,6 +200,14 @@ in
                 cmd = { "${pkgs.clang-tools}/bin/clangd", "--background-index" }
               }
             EOF
+            nn <leader>la <cmd> lua vim.lsp.buf.code_action()<cr>
+            nn <leader>ld <cmd> lua vim.lsp.buf.definition()<cr>
+            nn <leader>lD <cmd> lua vim.lsp.buf.declaration()<cr>
+            nn <leader>lr <cmd> lua vim.lsp.buf.rename()<cr>
+            nn <leader>lh <cmd> lua vim.lsp.buf.hover()<cr>
+            nn <leader>lk <cmd> lua vim.lsp.buf.signature_help()<cr>
+            nn [l <cmd> lua vim.lsp.diagnostic.goto_prev()<cr>
+            nn ]l <cmd> lua vim.lsp.diagnostic.goto_next()<cr>
           '';
         };
 
