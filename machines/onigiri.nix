@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ pkgs, unstable, lib, config, ... }:
 let
 
   rclone = {
@@ -43,7 +43,7 @@ let
     networking.firewall.allowedTCPPorts = [ 8384 ]; # for GUI
     services.syncthing = {
       enable = true;
-      package = pkgs.unstable.syncthing;
+      package = unstable.syncthing;
       dataDir = "/tank";
       guiAddress = "0.0.0.0:8384";
     };
