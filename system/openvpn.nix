@@ -1,8 +1,8 @@
-{ pkgs, config, lib, ... }:
+{ pkgs, config, inputs, lib, ... }:
 let
   mkServ = serv: {
     config = ''
-      ${builtins.readFile "${pkgs.flakes.nord-configs}/ovpn_tcp/${serv}.nordvpn.com.tcp.ovpn"}
+      ${builtins.readFile "${inputs.nord-configs}/ovpn_tcp/${serv}.nordvpn.com.tcp.ovpn"}
       auth-user-pass ${config.age.secrets.openvpn.path}
     '';
     autoStart = lib.mkDefault false;

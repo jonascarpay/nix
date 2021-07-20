@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 {
   imports = [ ./xc-cache.nix ];
   environment = {
@@ -68,8 +68,9 @@
     trustedUsers = [ "root" "@wheel" ];
     package = pkgs.nixUnstable;
     extraOptions = "experimental-features = nix-command flakes";
-    registry.nixpkgs.flake = pkgs.flakes.nixpkgs;
-    registry.unstable.flake = pkgs.flakes.nixpkgs-unstable;
+    # TODO automatically track all
+    registry.nixpkgs.flake = inputs.nixpkgs;
+    registry.unstable.flake = inputs.nixpkgs-unstable;
   };
 
 }

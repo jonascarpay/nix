@@ -1,7 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 let
   port = "8932";
-  neuronPkg = pkgs.flakes.neuron.defaultPackage."x86_64-linux";
+  neuronPkg = inputs.neuron.defaultPackage."x86_64-linux";
   neuronBin = "${neuronPkg}/bin/neuron";
   notesDir = "/home/jmc/slipbox";
 in

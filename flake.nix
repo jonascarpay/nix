@@ -24,13 +24,17 @@
 
       mkSystem = { system, sysModules, homeModules }: inputs.nixpkgs.lib.nixosSystem {
         inherit system;
+        extraArgs.inputs = inputs;
         modules = [
 
           inputs.home-manager.nixosModules.home-manager
           {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.jmc.imports = homeModules;
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.jmc.imports = homeModules;
+              extraSpecialArgs.inputs = inputs;
+            };
           }
 
           inputs.agenix.nixosModules.age
@@ -42,7 +46,6 @@
           {
             nixpkgs.overlays = [
               (_:_: {
-                flakes = inputs;
                 unstable = import inputs.nixpkgs-unstable {
                   inherit system;
                   config.allowUnfree = true;
