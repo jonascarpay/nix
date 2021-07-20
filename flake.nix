@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.05";
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs";
+    unstable.url = "github:NixOS/nixpkgs";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     home-manager = {
       url = "github:nix-community/home-manager/release-21.05";
@@ -52,7 +52,7 @@
           {
             nixpkgs.overlays = [
               (_:_: {
-                unstable = import inputs.nixpkgs-unstable {
+                unstable = import inputs.unstable {
                   inherit system;
                   config.allowUnfree = true;
                 };

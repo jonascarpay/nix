@@ -155,21 +155,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-unstable": {
-      "locked": {
-        "lastModified": 1626656526,
-        "narHash": "sha256-1rDsDR5sWKXl3DIHluznqg/zgh+a2HmxUggR2ZGQi+k=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "5972cc3119a847ef4d5bf65121c5809c70d66972",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nord-configs": {
       "flake": false,
       "locked": {
@@ -195,8 +180,23 @@
         "neuron": "neuron",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-unstable": "nixpkgs-unstable",
-        "nord-configs": "nord-configs"
+        "nord-configs": "nord-configs",
+        "unstable": "unstable"
+      }
+    },
+    "unstable": {
+      "locked": {
+        "lastModified": 1626799651,
+        "narHash": "sha256-SHRBH8wi/Q7Ll5Slq78RvwBsykg7nLHKjsKgbSn3L1c=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "1b9783191b8f5cef2b8ddcd8d3526a740b19a5f0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "type": "github"
       }
     }
   },
