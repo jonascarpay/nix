@@ -68,6 +68,8 @@
     trustedUsers = [ "root" "@wheel" ];
     package = pkgs.nixUnstable;
     extraOptions = "experimental-features = nix-command flakes";
+    registry.nixpkgs.flake = pkgs.flakes.nixpkgs;
+    registry.unstable.flake = pkgs.flakes.nixpkgs-unstable;
   };
 
 }
