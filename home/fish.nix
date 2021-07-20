@@ -1,14 +1,4 @@
 { pkgs, unstable, config, ... }:
-let
-  powerline = unstable.powerline-go.overrideAttrs (old: {
-    src = pkgs.fetchFromGitHub {
-      owner = "jonascarpay";
-      repo = "powerline-go";
-      rev = "fce0e2a528beac0491eb84dffedda6afc89e0963";
-      sha256 = "1psr2b31faqi9ks6fzpbx80ldcdxww7afd7k4bgvkalsgws4r60y";
-    };
-  });
-in
 {
   programs.fish = {
     enable = true;
@@ -18,7 +8,7 @@ in
       end
 
       function fish_prompt
-        ${powerline}/bin/powerline-go \
+        ${unstable.powerline-go}/bin/powerline-go \
           -error $status \
           -shell bare \
           -modules venv,ssh,cwd,perms,git,exit,nix-shell,jobs \
