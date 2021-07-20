@@ -184,30 +184,22 @@ in
           config = "colorscheme nord";
         };
 
-        # note; uses the ~/.config/nvim/coc-settings.json file.
-        # ideally we'd have that declaratively, or just not use such a crappy system.
-        # or emacs
-        coc = {
-          plugins = [ unp.coc-nvim unp.coc-python ];
-          packages = [ pkgs.nodejs ];
+        lsp = {
+          plugins = [ unp.nvim-lspconfig ];
           config = ''
-            set hidden
-            set nobackup
-            set nowritebackup
-            set cmdheight=2
-            set updatetime=300
-            set shortmess+=c
-            nmap <silent> <leader>la :CocAction<cr>
-            nmap <silent> <leader>lr :CocRestart<cr>
-            nmap <silent> <leader>ll :<C-u>CocList diagnostics<cr>
-            nmap <silent> [l <Plug>(coc-diagnostic-prev)
-            nmap <silent> ]l <Plug>(coc-diagnostic-next)
-            nmap <silent> <leader>ld <Plug>(coc-definition)
-            nmap <silent> <leader>ly <Plug>(coc-type-definition)
-            nmap <silent> <leader>li <Plug>(coc-implementation)
-            nnoremap <silent> <leader>lh :call CocAction('doHover')<cr>
-            " Highlight the symbol and its references when holding the cursor.
-            autocmd CursorHold * silent call CocActionAsync('highlight')
+            lua << EOF
+              require'lspconfig'.pyright.setup{}
+              require'lspconfig'.hls.setup{
+                -- overrides 'haskell-language-server-wrapper'
+                cmd = { 'haskell-language-server', '--lsp' }, 
+              }
+              require'lspconfig'.rnix.setup{
+                cmd = { '${pkgs.rnix-lsp}/bin/rnix-lsp' },
+              }
+              require'lspconfig'.clangd.setup{
+                cmd = { "${pkgs.clang-tools}/bin/clangd", "--background-index" }
+              }
+            EOF
           '';
         };
 
