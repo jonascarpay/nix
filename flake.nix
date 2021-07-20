@@ -27,6 +27,10 @@
       url = "github:StevenBlack/hosts";
       flake = false;
     };
+    picom = {
+      url = "github:yshui/picom/next";
+      flake = false;
+    };
   };
 
   outputs = inputs:

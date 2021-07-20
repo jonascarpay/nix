@@ -187,6 +187,23 @@
         "type": "github"
       }
     },
+    "picom": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1626270452,
+        "narHash": "sha256-/ZWYHu0l+pVHkcjleft0TmEFWO4i3iKHMCUF8tNbVwU=",
+        "owner": "yshui",
+        "repo": "picom",
+        "rev": "057a939431a5e856d001a5b2be9b9ba86738e829",
+        "type": "github"
+      },
+      "original": {
+        "owner": "yshui",
+        "ref": "next",
+        "repo": "picom",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "agenix": "agenix",
@@ -198,6 +215,7 @@
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
         "nord-configs": "nord-configs",
+        "picom": "picom",
         "unstable": "unstable"
       }
     },
