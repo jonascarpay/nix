@@ -15,9 +15,10 @@
   ];
   home.packages = with pkgs; [
     celluloid
-    unstable.darktable
     discord
     gnome3.nautilus
+    google-chrome
+    gparted
     okular
     pavucontrol
     signal-desktop
@@ -27,6 +28,8 @@
     sxiv
     tdesktop
     transmission-gtk
+    ungoogled-chromium
+    unstable.darktable
     xclip # Doesn't work?
   ];
 
