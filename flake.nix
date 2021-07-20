@@ -5,13 +5,19 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
-    home-manager.url = "github:nix-community/home-manager/release-21.05";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    neuron.url = "github:srid/neuron";
-    neuron.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager = {
+      url = "github:nix-community/home-manager/release-21.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    neuron = {
+      url = "github:srid/neuron";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     emacs-overlay.url = "github:nix-community/emacs-overlay";
-    agenix.url = "github:ryantm/agenix";
-    agenix.inputs.nixpkgs.follows = "nixpkgs";
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
     nord-configs = {
       url = "github:jonascarpay/nord-openvpn-configs";
