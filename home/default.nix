@@ -1,7 +1,4 @@
-{ pkgs, config, ... }:
-let
-  unstable = pkgs.unstable;
-in
+{ pkgs, unstable, config, ... }:
 {
   imports = [
     ./direnv.nix

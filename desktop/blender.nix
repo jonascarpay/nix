@@ -1,6 +1,5 @@
-{ pkgs, config, ... }:
+{ pkgs, unstable, config, ... }:
 let
-  unstable = pkgs.unstable;
 
   blender3 =
     let

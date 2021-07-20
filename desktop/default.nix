@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, unstable, config, ... }:
 {
   imports = [
     ./albert
@@ -15,7 +15,7 @@
   ];
   home.packages = with pkgs; [
     celluloid
-    pkgs.unstable.darktable
+    unstable.darktable
     discord
     gnome3.nautilus
     okular

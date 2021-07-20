@@ -28,41 +28,45 @@
   outputs = inputs:
     let
 
-      mkSystem = { system, sysModules, homeModules }: inputs.nixpkgs.lib.nixosSystem {
-        inherit system;
-        extraArgs.inputs = inputs;
-        modules = [
-
-          inputs.home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              users.jmc.imports = homeModules;
-              extraSpecialArgs.inputs = inputs;
+      mkSystem = { system, sysModules, homeModules }:
+        let
+          extraArgs = {
+            inherit inputs;
+            unstable = import inputs.unstable {
+              inherit system;
+              config.allowUnfree = true;
             };
-          }
+          };
 
-          inputs.agenix.nixosModules.age
-          { environment.systemPackages = [ inputs.agenix.defaultPackage."${system}" ]; }
+        in
+        inputs.nixpkgs.lib.nixosSystem {
+          inherit system extraArgs;
+          modules = [
 
-          inputs.declarative-cachix.nixosModules.declarative-cachix
-          { home-manager.users.jmc.imports = [ inputs.declarative-cachix.homeManagerModules.declarative-cachix-experimental ]; }
+            inputs.home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                users.jmc.imports = homeModules;
+                extraSpecialArgs = extraArgs;
+              };
+            }
 
-          {
-            nixpkgs.overlays = [
-              (_:_: {
-                unstable = import inputs.unstable {
-                  inherit system;
-                  config.allowUnfree = true;
-                };
-              })
-              inputs.emacs-overlay.overlay
-            ];
-          }
+            inputs.agenix.nixosModules.age
+            { environment.systemPackages = [ inputs.agenix.defaultPackage."${system}" ]; }
 
-        ] ++ sysModules;
-      };
+            inputs.declarative-cachix.nixosModules.declarative-cachix
+            { home-manager.users.jmc.imports = [ inputs.declarative-cachix.homeManagerModules.declarative-cachix-experimental ]; }
+
+            {
+              nixpkgs.overlays = [
+                inputs.emacs-overlay.overlay
+              ];
+            }
+
+          ] ++ sysModules;
+        };
 
     in
     {

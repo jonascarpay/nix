@@ -1,6 +1,6 @@
-{ pkgs, config, ... }:
+{ pkgs, unstable, config, ... }:
 let
-  powerline = pkgs.unstable.powerline-go.overrideAttrs (old: {
+  powerline = unstable.powerline-go.overrideAttrs (old: {
     src = pkgs.fetchFromGitHub {
       owner = "jonascarpay";
       repo = "powerline-go";

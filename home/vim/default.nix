@@ -1,6 +1,5 @@
-{ pkgs, config, ... }:
+{ pkgs, unstable, config, ... }:
 let
-  unstable = pkgs.unstable;
   np = pkgs.vimPlugins;
   unp = unstable.vimPlugins;
 in
