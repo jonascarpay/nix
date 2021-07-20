@@ -1,17 +1,11 @@
 # Adapted from https://www.reddit.com/r/NixOS/comments/innzkw/pihole_style_adblock_with_nix_and_unbound/
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 let
 
   adblockLocalZones = pkgs.stdenv.mkDerivation {
     name = "unbound-zones-adblock";
     #TODO Move to niv
-    src = (pkgs.fetchFromGitHub
-      {
-        owner = "StevenBlack";
-        repo = "hosts";
-        rev = "1af14dbc19457d845719944b17e26ed6ebbfd4c7";
-        sha256 = "1f0hli0ldcfy42l565n8rc7mzg3dwfbpqrp75hbvhf4arqg0y35p";
-      } + "/hosts");
+    src = inputs.hosts + "/hosts";
     phases = [ "installPhase" ];
     installPhase = ''
       ${pkgs.gawk}/bin/awk '{sub(/\r$/,"")} {sub(/^127\.0\.0\.1/,"0.0.0.0")} BEGIN { OFS = "" } NF == 2 && $1 == "0.0.0.0" { print "local-zone: \"", $2, "\" static"}' $src | tr '[:upper:]' '[:lower:]' | sort -u >  $out

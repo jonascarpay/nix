@@ -102,6 +102,22 @@
         "type": "github"
       }
     },
+    "hosts": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1626711552,
+        "narHash": "sha256-rkyAF1/kPI34nZ57Hqg8QivK0YERZ54jZ1HQ5oXYgxc=",
+        "owner": "StevenBlack",
+        "repo": "hosts",
+        "rev": "377994090740ff22a15551aa4b1a40dc16e5375c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "StevenBlack",
+        "repo": "hosts",
+        "type": "github"
+      }
+    },
     "neuron": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -177,6 +193,7 @@
         "declarative-cachix": "declarative-cachix",
         "emacs-overlay": "emacs-overlay",
         "home-manager": "home-manager",
+        "hosts": "hosts",
         "neuron": "neuron",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
