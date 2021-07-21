@@ -199,6 +199,8 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
       , ((m .|. shiftMask, xK_Return), windows W.swapMaster)
       , ((m, xK_s), windows W.swapDown >> windows W.focusUp)
       , ((m, xK_c), spawn "emacsclient --create-frame --no-wait")
+      , ((m, xK_p), spawn "passmenu")
+      , ((m.|. shiftMask, xK_p), spawn "qtpass")
       -- , ((m, xK_c), spawn "emacs")
       , ((m, xK_grave), myCycleRecentWS [xK_Super_L] xK_grave xK_grave)
       -- , ((m, xK_grave), myCycleRecentWS [xK_Super_R] xK_grave xK_grave)

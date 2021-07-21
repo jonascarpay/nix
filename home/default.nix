@@ -1,6 +1,7 @@
 { pkgs, unstable, config, ... }:
 {
   imports = [
+    ./crypt.nix
     ./direnv.nix
     ./fish.nix
     ./ranger.nix
