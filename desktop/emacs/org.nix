@@ -87,9 +87,9 @@
     org-fragtog.config = ''
       (use-package org-fragtog
         :hook (org-mode . org-fragtog-mode))'';
-    org-bullets.config = ''
-      (use-package org-bullets
-        :hook (org-mode . org-bullets-mode)
+    org-superstar.config = ''
+      (use-package org-superstar
+        :hook (org-mode . org-superstar-mode)
       )
     '';
     writeroom = {
