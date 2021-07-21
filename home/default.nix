@@ -81,6 +81,8 @@
       ignores = [ "result" "result-*" ];
       extraConfig = {
         commit.verbose = true;
+        commit.gpgsign = true;
+        user.signingkey = "3F0D739CC465A323";
         pull.rebase = true;
         init.defaultBranch = "master";
       };
