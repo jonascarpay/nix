@@ -45,6 +45,7 @@
   services.openssh = {
     enable = true;
     passwordAuthentication = false;
+    useDns = true;
   };
   programs.bash.enableCompletion = true; # enable tab-completion for nix-* tools
 
