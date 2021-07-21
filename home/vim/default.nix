@@ -56,7 +56,7 @@ in
             vn > >gv
             vn < <gv
             let mapleader = "\<space>"
-            let maplocalleader = "\<space>"
+            let maplocalleader = "\<space>\<space>"
             " set tabstop=4
             " set softtabstop=4
             " set shiftwidth=4
