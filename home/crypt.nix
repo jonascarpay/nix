@@ -19,5 +19,12 @@
     };
   };
   services.password-store-sync.enable = true;
-  services.gpg-agent.enable = true;
+  services.gpg-agent = rec {
+    enable = true;
+    enableSshSupport = true;
+    defaultCacheTtl = 6 * 3600;
+    maxCacheTtl = 24 * 3600;
+    defaultCacheTtlSsh = defaultCacheTtl;
+    maxCacheTtlSsh = maxCacheTtl;
+  };
 }
