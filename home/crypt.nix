@@ -1,4 +1,4 @@
-{ pkgs, unstable, ... }:
+{ unstable, ... }:
 let passdir = "/home/jmc/passwords";
 in
 {
@@ -29,7 +29,7 @@ in
     maxCacheTtlSsh = maxCacheTtl;
   };
 } // import ../lib/hm-git-sync-service.nix {
-  inherit pkgs;
+  pkgs = unstable;
   name = "pass-sync";
   dir = passdir;
   time = "*:0/5";
