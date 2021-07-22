@@ -117,25 +117,8 @@
       )
     '';
   };
-  systemd.user = {
-    services.orgsync = {
-      Unit.Description = "Org github sync";
-      Service = {
-        Type = "oneshot";
-        ExecStart =
-          let
-            script = pkgs.writeShellScript "org-sync" ''
-              cd ~/Org
-              ${pkgs.gitAndTools.git-sync}/bin/git-sync
-            '';
-          in
-          "${script}";
-      };
-    };
-    timers.orgsync = {
-      Unit.Description = "Org sync timer";
-      Timer.OnCalendar = "*:0/15";
-      Install.WantedBy = [ "timers.target" ];
-    };
-  };
+} // import ../../lib/hm-git-sync-service.nix {
+  inherit pkgs;
+  name = "org-sync";
+  dir = "~/Org";
 }

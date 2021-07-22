@@ -12,23 +12,6 @@ in
       Install.WantedBy = [ "graphical-session.target" ];
       Service.ExecStart = "${neuronBin} -d ${notesDir} gen -ws :${port}";
     };
-    services.neuron-sync = {
-      Unit.Description = "Neuron github sync";
-      Service = {
-        Type = "oneshot";
-        ExecStart =
-          let script = pkgs.writeShellScript "neuron-sync" ''
-            cd ${notesDir}
-            ${pkgs.gitAndTools.git-sync}/bin/git-sync
-          '';
-          in "${script}";
-      };
-    };
-    timers.neuron-sync = {
-      Unit.Description = "Neuron sync timer";
-      Timer.OnCalendar = "*:0/15";
-      Install.WantedBy = [ "timers.target" ];
-    };
   };
   programs.emacs.init.modules.neuron-mode.config = ''
     (use-package neuron-mode
@@ -46,4 +29,8 @@ in
       )
     )
   '';
+} // import ../lib/hm-git-sync-service.nix {
+  inherit pkgs;
+  name = "neuron-sync";
+  dir = notesDir;
 }

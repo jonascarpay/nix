@@ -1,4 +1,6 @@
-{ unstable, ... }:
+{ pkgs, unstable, ... }:
+let passdir = "/home/jmc/passwords";
+in
 {
   home.packages = [ unstable.qtpass ];
   programs = {
@@ -6,7 +8,7 @@
     gpg.package = unstable.gnupg;
     password-store = {
       enable = true;
-      settings.PASSWORD_STORE_DIR = "/home/jmc/passwords";
+      settings.PASSWORD_STORE_DIR = passdir;
       package = unstable.pass.withExtensions (exts: with exts; [
         pass-audit
         pass-checkup
@@ -18,7 +20,6 @@
       ]);
     };
   };
-  services.password-store-sync.enable = true;
   services.gpg-agent = rec {
     enable = true;
     enableSshSupport = true;
@@ -27,4 +28,9 @@
     defaultCacheTtlSsh = defaultCacheTtl;
     maxCacheTtlSsh = maxCacheTtl;
   };
+} // import ../lib/hm-git-sync-service.nix {
+  inherit pkgs;
+  name = "pass-sync";
+  dir = passdir;
+  time = "*:0/5";
 }
