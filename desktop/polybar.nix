@@ -29,7 +29,7 @@ lib.mkIf (config.xsession.enable) {
         foreground = "#d8dee9";
         module-margin = "1";
         modules-left = "xmonad";
-        modules-right = "onigiri wireless wired fs memory temp fan cpu battery date-nl date";
+        modules-right = "zfs onigiri wireless wired fs memory temp fan cpu battery date-nl date";
         line-color = "#d8dee9";
         line-size = "3";
       };
@@ -86,6 +86,19 @@ lib.mkIf (config.xsession.enable) {
           type = "custom/script";
           exec = "${singleping}";
           interval = "30";
+        };
+
+      "module/zfs" =
+        let
+          zfscmd = fs: "/run/current-system/sw/bin/zfs get mounted ${fs} -H -o value";
+          check = cmd: ''$([[ $(${cmd}) == "yes" ]] && echo "" || echo "%{F#f00}%{F-}")'';
+          zfs = fs: check (zfscmd fs);
+          ssh = fs: check "/run/current-system/sw/bin/ssh 192.168.1.6 '${zfscmd fs}'";
+        in
+        {
+          type = "custom/script";
+          exec = ''echo " ${zfs "tank"} ${zfs "tank/vault"} ${zfs "tank/dump"}  ${ssh "tank"} ${ssh "tank/vault"}"'';
+          interval = builtins.toString (60 * 15);
         };
 
       "module/temp" = {
