@@ -48,7 +48,9 @@
       ncl = "nix-channel --list";
       ncu = "nix-channel --update";
       ng = "nix-collect-garbage";
-      nsp = "nix-shell -p";
+      nsp = "nix shell nixpkgs#";
+      ns = "nix shell";
+      nd = "nix develop";
       rn = "ranger";
       s = "sudo";
       sc = "systemctl --user";
