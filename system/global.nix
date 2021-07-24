@@ -9,13 +9,14 @@
       git
       gotop
       htop
+      lnav
       ncdu
       ranger
       sshfs
       tmux
       tree
-      vim
       unzip
+      vim
     ];
     variables = {
       EDITOR = "vim";
