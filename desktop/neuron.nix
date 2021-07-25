@@ -17,7 +17,7 @@ in
     (use-package neuron-mode
       :after general
       :config
-      (setq neuron-default-zettelkasten-directory ${notesDir})
+      (setq neuron-default-zettelkasten-directory "${notesDir}")
       (setq neuron-executable "${neuronBin}")
       (setq neuron-rib-server-port ${port})
       (setq-default markdown-hide-markup t)
