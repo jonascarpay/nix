@@ -22,21 +22,20 @@ let
     networking.firewall.allowedUDPPorts = [ 1900 7359 ];
   };
 
-  transmission = lib.optionalAttrs true
-    {
-      networking.firewall.allowedTCPPorts = [ 9091 ];
-      services.openvpn.servers.nord-hk.autoStart = true;
-      services.transmission = {
-        enable = true;
-        settings = {
-          download-dir = "/tank/Transmission";
-          incomplete-dir = "/tank/Transmission";
-          rpc-whitelist = "127.0.0.1,192.168.1.*";
-          rpc-bind-address = "0.0.0.0";
-          utp-enabled = true;
-        };
+  transmission = {
+    networking.firewall.allowedTCPPorts = [ 9091 ];
+    services.openvpn.servers.nord-hk.autoStart = true;
+    services.transmission = {
+      enable = true;
+      settings = {
+        download-dir = "/tank/Transmission";
+        incomplete-dir = "/tank/Transmission";
+        rpc-whitelist = "127.0.0.1,192.168.1.*";
+        rpc-bind-address = "0.0.0.0";
+        utp-enabled = true;
       };
     };
+  };
 
   syncthing = {
     # might no longer be necessary after kernel version > 5.10
@@ -82,7 +81,7 @@ in
       (import ../system/zfs.nix "3bf3504c")
       rclone
       jellyfin
-      transmission
+      # transmission
       syncthing
       git-sync
     ];
