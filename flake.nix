@@ -68,6 +68,7 @@
           {
             nixpkgs.overlays = [
               inputs.emacs-overlay.overlay
+              (_: _: { syncthing = extraArgs.unstable.syncthing; })
             ];
           }
 
