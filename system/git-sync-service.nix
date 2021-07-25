@@ -64,7 +64,7 @@ with lib;
                   setMessage =
                     if isNull message
                     then "git config --local --unset branch.$branch_name.syncCommitMsg || true"
-                    else "git config --local branch.$branch_name.syncCommitMsg ${message}";
+                    else "git config --local branch.$branch_name.syncCommitMsg \"${message}\"";
                 in
                 ''
                   cd ${directory}

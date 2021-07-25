@@ -48,12 +48,33 @@ let
       guiAddress = "0.0.0.0:8384";
     };
   };
+
   git-sync = {
     imports = [ ../system/git-sync-service.nix ];
     services.git-sync = {
       passwords.directory = "/tank/vault/Passwords";
       slipbox.directory = "/tank/vault/Slipbox";
       org.directory = "/tank/vault/Org";
+      nord-openvpn-configs =
+        let
+          rm = "${pkgs.coreutils}/bin/rm";
+          url = "https://downloads.nordcdn.com/configs/archives/servers/ovpn.zip";
+          script = pkgs.writeShellScript "nord-fetch" ''
+            set -eux
+            ${rm} -rf ovpn_tcp
+            ${rm} -rf ovpn_udp
+            DATE=$(${pkgs.coreutils}/bin/date -u)
+            ${pkgs.curl}/bin/curl "${url}" --output ovpn.zip
+            ${pkgs.unzip}/bin/unzip -q ovpn.zip
+            ${rm} ovpn.zip
+          '';
+        in
+        {
+          directory = "/home/jmc/nord-openvpn-configs";
+          preSync = "${script}";
+          time = "daily";
+          message = "Nord configs at $DATE";
+        };
     };
   };
 
@@ -64,7 +85,6 @@ in
       ../system/global.nix
       ../system/openvpn.nix
       ../system/unbound.nix
-      ../system/nord-openvpn-configs.nix
       (import ../system/zfs.nix "3bf3504c")
       rclone
       jellyfin
