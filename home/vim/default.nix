@@ -198,6 +198,7 @@ in
               require'lspconfig'.clangd.setup{
                 cmd = { "${pkgs.clang-tools}/bin/clangd", "--background-index" }
               }
+              require'lspconfig'.tsserver.setup{}
             EOF
             nn <leader>la <cmd> lua vim.lsp.buf.code_action()<cr>
             nn <leader>ld <cmd> lua vim.lsp.buf.definition()<cr>
