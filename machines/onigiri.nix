@@ -53,6 +53,7 @@ let
     services.git-sync = {
       passwords.directory = "/tank/vault/Passwords";
       slipbox.directory = "/tank/vault/Slipbox";
+      org.directory = "/tank/vault/Org";
     };
   };
 
