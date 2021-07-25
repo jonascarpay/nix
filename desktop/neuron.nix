@@ -3,7 +3,7 @@ let
   port = "8932";
   neuronPkg = inputs.neuron.defaultPackage."x86_64-linux";
   neuronBin = "${neuronPkg}/bin/neuron";
-  notesDir = "/home/jmc/slipbox";
+  notesDir = "/home/jmc/Slipbox";
 in
 {
   systemd.user = {
