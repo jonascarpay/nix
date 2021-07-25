@@ -78,7 +78,7 @@
       enable = true;
       userName = "Jonas Carpay";
       userEmail = "jonascarpay@gmail.com";
-      ignores = [ "result" "result-*" ];
+      ignores = [ ".stfolder" ".stversions" ".stignore" "result" "result-*" ];
       extraConfig = {
         commit.verbose = true;
         # commit.gpgsign = true;

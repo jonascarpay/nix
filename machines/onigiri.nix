@@ -39,12 +39,20 @@ let
     };
 
   syncthing = {
+    # might no longer be necessary after kernel version > 5.10
+    boot.kernel.sysctl."fs.inotify.max_user_watches" = 32784;
     networking.firewall.allowedTCPPorts = [ 8384 ]; # for GUI
     services.syncthing = {
       enable = true;
       package = unstable.syncthing;
-      dataDir = "/tank";
       guiAddress = "0.0.0.0:8384";
+    };
+  };
+  git-sync = {
+    imports = [ ../system/git-sync-service.nix ];
+    services.git-sync = {
+      passwords.directory = "/tank/vault/Passwords";
+      slipbox.directory = "/tank/vault/Slipbox";
     };
   };
 
@@ -61,6 +69,7 @@ in
       jellyfin
       transmission
       syncthing
+      git-sync
     ];
 
   networking.hostName = "onigiri";
