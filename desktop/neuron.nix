@@ -29,8 +29,8 @@ in
       )
     )
   '';
-} // import ../lib/hm-git-sync-service.nix {
-  inherit pkgs;
-  name = "neuron-sync";
-  dir = notesDir;
+  services.git-sync.neuron = {
+    enable = true;
+    path = notesDir;
+  };
 }

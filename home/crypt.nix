@@ -1,5 +1,6 @@
 { unstable, ... }:
-let passdir = "/home/jmc/passwords";
+let
+  passdir = "/home/jmc/passwords";
 in
 {
   home.packages = [ unstable.qtpass ];
@@ -28,9 +29,8 @@ in
     defaultCacheTtlSsh = defaultCacheTtl;
     maxCacheTtlSsh = maxCacheTtl;
   };
-} // import ../lib/hm-git-sync-service.nix {
-  pkgs = unstable;
-  name = "pass-sync";
-  dir = passdir;
-  time = "*:0/5";
+  services.git-sync.passwords = {
+    enable = true;
+    path = passdir;
+  };
 }

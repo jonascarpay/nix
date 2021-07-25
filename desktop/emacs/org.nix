@@ -117,8 +117,8 @@
       )
     '';
   };
-} // import ../../lib/hm-git-sync-service.nix {
-  inherit pkgs;
-  name = "org-sync";
-  dir = "~/Org";
+  services.git-sync.org = {
+    enable = true;
+    path = "~/Org";
+  };
 }
