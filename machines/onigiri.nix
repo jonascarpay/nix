@@ -55,26 +55,20 @@ let
       passwords.directory = "/tank/vault/Passwords";
       slipbox.directory = "/tank/vault/Slipbox";
       org.directory = "/tank/vault/Org";
-      nord-openvpn-configs =
-        let
-          rm = "${pkgs.coreutils}/bin/rm";
-          url = "https://downloads.nordcdn.com/configs/archives/servers/ovpn.zip";
-          script = pkgs.writeShellScript "nord-fetch" ''
+      nord-openvpn-configs = {
+        directory = "/home/jmc/nord-openvpn-configs";
+        preSync = let rm = "${pkgs.coreutils}/bin/rm"; in
+          ''
             set -eux
             ${rm} -rf ovpn_tcp
             ${rm} -rf ovpn_udp
-            DATE=$(${pkgs.coreutils}/bin/date -u)
-            ${pkgs.curl}/bin/curl "${url}" --output ovpn.zip
+            ${pkgs.curl}/bin/curl "https://downloads.nordcdn.com/configs/archives/servers/ovpn.zip" --output ovpn.zip
             ${pkgs.unzip}/bin/unzip -q ovpn.zip
             ${rm} ovpn.zip
           '';
-        in
-        {
-          directory = "/home/jmc/nord-openvpn-configs";
-          preSync = "${script}";
-          time = "daily";
-          message = "Nord configs at $DATE";
-        };
+        time = "daily";
+        message = "Nord configs at $(${pkgs.coreutils}/bin/date -u)";
+      };
     };
   };
 

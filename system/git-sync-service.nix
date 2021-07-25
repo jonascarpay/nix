@@ -72,7 +72,7 @@ with lib;
                   ${preSync}
 
                   branch_name=$(git symbolic-ref -q HEAD)
-                  branch_name=\$${branch_name##refs/heads/}
+                  branch_name=''${branch_name##refs/heads/}
                   ${setMessage}
 
                   git-sync ${optionalString syncNewFiles "-n"} ${optionalString (!requireFlag) "-s"} sync
