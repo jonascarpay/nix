@@ -1,6 +1,6 @@
 { unstable, ... }:
 let
-  passdir = "/home/jmc/passwords";
+  passdir = "/home/jmc/Passwords";
 in
 {
   home.packages = [ unstable.qtpass ];
@@ -28,9 +28,5 @@ in
     maxCacheTtl = 24 * 3600;
     defaultCacheTtlSsh = defaultCacheTtl;
     maxCacheTtlSsh = maxCacheTtl;
-  };
-  services.git-sync.passwords = {
-    enable = true;
-    path = passdir;
   };
 }

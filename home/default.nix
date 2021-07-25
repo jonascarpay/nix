@@ -9,7 +9,6 @@
     ./tmux.nix
     ./vim
     ./zsh.nix
-    ../lib/hm-git-sync-service.nix
   ];
 
   caches = {

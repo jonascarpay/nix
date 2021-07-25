@@ -29,8 +29,4 @@ in
       )
     )
   '';
-  services.git-sync.neuron = {
-    enable = true;
-    path = notesDir;
-  };
 }

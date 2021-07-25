@@ -117,8 +117,4 @@
       )
     '';
   };
-  services.git-sync.org = {
-    enable = true;
-    path = "~/Org";
-  };
 }

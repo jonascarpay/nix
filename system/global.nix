@@ -16,9 +16,7 @@
       tree
       unzip
       vim
-    ] ++ lib.optional (pkgs.system == "x86_64-linux") [
-      lnav # https://github.com/tstack/lnav/issues/882
-    ];
+    ] ++ lib.optional (system == "x86_64-linux") lnav; # https://github.com/tstack/lnav/issues/882
     variables = {
       EDITOR = "vim";
       PAGER = "less";
