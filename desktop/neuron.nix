@@ -11,6 +11,11 @@ in
       Unit.Description = "Neuron zettelkasten service";
       Install.WantedBy = [ "graphical-session.target" ];
       Service.ExecStart = "${neuronBin} -d ${notesDir} gen -ws :${port}";
+      # The most common cause of failure is the directory not existing, since
+      # it lives on an encrypted volume which may not be mounted. We don't need
+      # maximum uptime, we just need to periodically retry.
+      Service.Restart = "on-failure";
+      Service.RestartSec = "15m";
     };
   };
   programs.emacs.init.modules.neuron-mode.config = ''
