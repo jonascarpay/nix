@@ -1,5 +1,4 @@
-{ pkgs, unstable, config, ... }:
-{
+{ pkgs, unstable, config, ... }: {
   imports = [
     ./crypt.nix
     ./direnv.nix
@@ -35,7 +34,7 @@
       manpages
       neofetch
       s-tui
-      tealdeer
+      tldr
       unstable.youtube-dl
       weechat
     ];
