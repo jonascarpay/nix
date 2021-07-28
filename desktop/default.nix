@@ -1,4 +1,19 @@
 { pkgs, unstable, config, ... }:
+let
+  syncthing = {
+    services.syncthing = {
+      enable = true;
+      tray.enable = true;
+      tray.command = "syncthingtray --wait";
+    };
+    programs.git.ignores = [
+      ".stversions"
+      "*.sync-confict-*"
+      ".stignore"
+      ".stfolder"
+    ];
+  };
+in
 {
   imports = [
     ./albert
@@ -12,6 +27,7 @@
     ./redshift.nix
     ./st
     ./xmonad
+    syncthing
   ];
   home.packages = with pkgs; [
     celluloid
@@ -51,19 +67,6 @@
     interval = "1h";
   };
 
-  services.syncthing = {
-    enable = true;
-    tray.enable = true;
-    tray.command = "syncthingtray --wait";
-  };
-
-  programs.git.ignores = [
-    ".stversions"
-    "*.sync-confict-*"
-    ".stignore"
-    ".stfolder"
-  ];
-
   xsession.enable = true;
 
   gtk = {
@@ -76,11 +79,5 @@
       package = pkgs.numix-icon-theme;
       name = "Numix";
     };
-    # gtk3.extraCss = ''
-    #   VteTerminal, vte-terminal {
-    #     padding: 9px;
-    #   }
-    # ''; # Termite padding goes here
   };
-
 }
