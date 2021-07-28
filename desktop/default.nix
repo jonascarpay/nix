@@ -60,6 +60,8 @@
   programs.git.ignores = [
     ".stversions"
     "*.sync-confict-*"
+    ".stignore"
+    ".stfolder"
   ];
 
   xsession.enable = true;

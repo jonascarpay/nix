@@ -78,11 +78,9 @@
       enable = true;
       userName = "Jonas Carpay";
       userEmail = "jonascarpay@gmail.com";
-      ignores = [ ".stfolder" ".stversions" ".stignore" "result" "result-*" ];
+      ignores = [ "result" "result-*" ];
       extraConfig = {
         commit.verbose = true;
-        # commit.gpgsign = true;
-        # user.signingkey = "3F0D739CC465A323";
         pull.rebase = true;
         init.defaultBranch = "master";
       };
