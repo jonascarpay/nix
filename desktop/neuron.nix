@@ -10,7 +10,9 @@ in
     services.neuron = {
       Unit.Description = "Neuron zettelkasten service";
       Install.WantedBy = [ "graphical-session.target" ];
-      Service.ExecStart = "${neuronBin} -d ${notesDir} gen -ws :${port}";
+      Service.ExecStart = "${neuronBin} gen -ws :${port}";
+      # Watching does not work if ${notesDir} is a symlink, this works around that
+      Service.WorkingDirectory = "${notesDir}";
       # The most common cause of failure is the directory not existing, since
       # it lives on an encrypted volume which may not be mounted. We don't need
       # maximum uptime, we just need to periodically retry.
