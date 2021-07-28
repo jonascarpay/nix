@@ -188,6 +188,7 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
     m = modMask conf
     myKeyList = 
       [ ((m, xK_f), spawn "firefox")
+      , ((m, xK_q), spawn "xmonad --restart") -- overrides the default behavior, which first recompiles
       , ((m, xK_d), withPwd $ maybe (spawn "dolphin") (\pwd -> spawn $ "dolphin " <> pwd))
       , ((m .|. shiftMask, xK_f), spawn "clipboard-firefox")
       , ((m, xK_Return), mkTerm "/etc/profiles/per-user/jmc/bin/fish")
