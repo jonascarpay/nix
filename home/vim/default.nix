@@ -94,7 +94,8 @@ in
         git = {
           plugins = [ np.fugitive np.vim-gitgutter ];
           config = ''
-            nn <leader>gs :Gstatus<CR>
+            nn <leader>gs :Git<CR>
+            nn <leader>gg :Git<CR>
             nn <leader>ga :GitGutterStageHunk<CR>
             nn <leader>gp :GitGutterPreviewHunk<CR>
             nn <leader>gu :GitGutterUndoHunk<CR>
