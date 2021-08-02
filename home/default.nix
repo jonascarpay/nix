@@ -8,6 +8,7 @@
     ./tmux.nix
     ./vim
     ./zsh.nix
+    ./git.nix
   ];
 
   caches = {
@@ -73,17 +74,6 @@
       package = unstable.fzf;
     };
 
-    git = {
-      enable = true;
-      userName = "Jonas Carpay";
-      userEmail = "jonascarpay@gmail.com";
-      ignores = [ "result" "result-*" ];
-      extraConfig = {
-        commit.verbose = true;
-        pull.rebase = true;
-        init.defaultBranch = "master";
-      };
-    };
   };
 
 }
