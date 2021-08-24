@@ -8,8 +8,6 @@ let
 in
 {
   "nord-auth.age".publicKeys = keys;
-  "xc-cache.age".publicKeys = keys;
-  "xc-s3.age".publicKeys = keys;
   "xc-openvpn-config.age".publicKeys = keys;
   "xc-openvpn-auth.age".publicKeys = keys;
 }

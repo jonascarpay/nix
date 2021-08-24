@@ -1,6 +1,5 @@
 { pkgs, unstable, inputs, lib, ... }:
 {
-  imports = [ ./xc-cache.nix ];
   environment = {
     systemPackages = with pkgs; [
       dnsutils
