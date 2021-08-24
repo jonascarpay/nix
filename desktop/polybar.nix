@@ -90,15 +90,14 @@ lib.mkIf (config.xsession.enable) {
 
       "module/zfs" =
         let
-          zfscmd = fs: "/run/current-system/sw/bin/zfs get mounted ${fs} -H -o value";
-          check = cmd: ''$([[ $(${cmd}) == "yes" ]] && echo "" || echo "%{F#f00}%{F-}")'';
-          zfs = fs: check (zfscmd fs);
-          ssh = fs: check "/run/current-system/sw/bin/ssh 192.168.1.6 '${zfscmd fs}'";
+          check = cmd: ''[[ ! $(${cmd}) =~ "no" ]] && echo "" || echo "%{F#f00}%{F-}"'';
+          zfs = "/run/current-system/sw/bin/zfs get mounted -t filesystem";
+          ssh = cmd: "/run/current-system/sw/bin/ssh 192.168.1.6 '${cmd}'";
         in
         {
           type = "custom/script";
-          exec = ''echo " ${zfs "tank"} ${zfs "tank/vault"} ${zfs "tank/dump"}  ${ssh "tank"} ${ssh "tank/vault"}"'';
-          interval = builtins.toString (60 * 15);
+          exec = ''echo " $(${check zfs}) $(${check (ssh zfs)})"'';
+          interval = builtins.toString 60;
         };
 
       "module/temp" = {
