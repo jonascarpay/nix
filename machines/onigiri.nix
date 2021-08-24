@@ -86,6 +86,7 @@ in
       git-sync
     ];
 
+  boot.zfs.requestEncryptionCredentials = false;
   networking.hostName = "onigiri";
   networking.networkmanager.enable = true;
   time.timeZone = "Asia/Tokyo";
