@@ -46,6 +46,10 @@
     logind.extraConfig = "RuntimeDirectorySize=2G";
     xserver.dpi = 140;
     xserver.videoDrivers = lib.mkDefault [ "nvidia" ];
+    ## Wii U USB adapter rule
+    udev.extraRules = ''
+      SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="0337", MODE="0666"
+    '';
   };
 
   nix = {
