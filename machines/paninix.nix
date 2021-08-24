@@ -130,19 +130,13 @@ in
     udev.extraRules = ''
       ACTION=="add", SUBSYSTEM=="input", ATTR{name}=="TPPS/2 IBM TrackPoint", ATTR{device/sensitivity}="210"
     '';
-    strongswan = {
-      enable = true;
-      secrets = [ "ipsec.d/ipsec.nm-l2tp.secrets" ];
-    };
 
     fstrim.enable = true;
     xserver = {
       dpi = 140;
       libinput.enable = true;
       enable = true;
-      videoDrivers = [
-        (if integrated then "intel" else "nvidia")
-      ];
+      videoDrivers = [ (if integrated then "intel" else "nvidia") ];
       displayManager.autoLogin = {
         enable = true;
         user = "jmc";
