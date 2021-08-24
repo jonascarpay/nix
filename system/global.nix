@@ -1,4 +1,4 @@
-{ pkgs, inputs, lib, ... }:
+{ pkgs, unstable, inputs, lib, ... }:
 {
   imports = [ ./xc-cache.nix ];
   environment = {
@@ -10,6 +10,7 @@
       gotop
       htop
       ncdu
+      unstable.nix-tree
       ranger
       sshfs
       tmux
