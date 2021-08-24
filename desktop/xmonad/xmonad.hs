@@ -131,7 +131,7 @@ defaultSpacing = 60
 spacingDelta = 15
 
 -- myLayout = avoidStruts $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ Tall 1 (3/100) (3/5)
-myLayout = avoidStruts $ toggleReflect $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ TallAccordion (3/5) (3/5)
+myLayout = avoidStruts $ toggleReflect $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ TallAccordion (2/3) (2/3)
 
 main = do
   dbus <- D.connectSession
