@@ -136,6 +136,7 @@ in
         indent-blankline-nvim.plugins = [ unp.indent-blankline-nvim ];
         indent-blankline-nvim.config = ''
           let g:indent_blankline_char = '▏'
+          nn <leader>ii :IndentBlanklineToggle<CR>
         '';
 
         neoformat = {
@@ -200,6 +201,7 @@ in
                 cmd = { "${pkgs.clang-tools}/bin/clangd", "--background-index" }
               }
               require'lspconfig'.tsserver.setup{}
+              require'lspconfig'.rust_analyzer.setup{}
             EOF
             nn <leader>la <cmd> lua vim.lsp.buf.code_action()<cr>
             nn <leader>ld <cmd> lua vim.lsp.buf.definition()<cr>
