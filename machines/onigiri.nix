@@ -43,6 +43,7 @@ let
     networking.firewall.allowedTCPPorts = [ 8384 ]; # for GUI
     services.syncthing = {
       enable = true;
+      user = "jmc";
       package = unstable.syncthing;
       guiAddress = "0.0.0.0:8384";
     };

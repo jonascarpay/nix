@@ -1,19 +1,4 @@
 { pkgs, unstable, config, ... }:
-let
-  syncthing = {
-    services.syncthing = {
-      enable = true;
-      tray.enable = true;
-      tray.command = "syncthingtray --wait";
-    };
-    programs.git.ignores = [
-      ".stversions"
-      "*.sync-confict-*"
-      ".stignore"
-      ".stfolder"
-    ];
-  };
-in
 {
   imports = [
     ./albert
@@ -27,7 +12,6 @@ in
     ./redshift.nix
     ./st
     ./xmonad
-    syncthing
   ];
   home.packages = with pkgs; [
     celluloid
@@ -65,6 +49,11 @@ in
     enable = true;
     imageDirectory = "%h/Wallpapers/papes";
     interval = "1h";
+  };
+  services.syncthing = {
+    enable = true;
+    tray.enable = true;
+    tray.command = "syncthingtray --wait";
   };
 
   xsession.enable = true;
