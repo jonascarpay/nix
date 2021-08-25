@@ -63,7 +63,6 @@
           { environment.systemPackages = [ inputs.agenix.defaultPackage."${system}" ]; }
 
           inputs.declarative-cachix.nixosModules.declarative-cachix
-          { home-manager.users.jmc.imports = [ inputs.declarative-cachix.homeManagerModules.declarative-cachix-experimental ]; }
 
           {
             nixpkgs.overlays = [

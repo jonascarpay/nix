@@ -11,17 +11,6 @@
     ./git.nix
   ];
 
-  caches = {
-    cachix = [{
-      name = "jmc";
-      sha256 = "1bk08lvxi41ppvry72y1b9fi7bb6qvsw6bn1ifzsn46s3j0idq0a";
-    }];
-    extraCaches = [{
-      url = "https://hydra.iohk.io";
-      key = "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=";
-    }];
-  };
-
   manual.manpages.enable = true;
 
   home = {

@@ -1,5 +1,28 @@
 { pkgs, unstable, inputs, lib, ... }:
+let
+
+  caches =
+    let
+      cachix = [
+        { name = "jmc"; sha256 = "1bk08lvxi41ppvry72y1b9fi7bb6qvsw6bn1ifzsn46s3j0idq0a"; }
+        { name = "nix-community"; sha256 = "1r0dsyhypwqgw3i5c2rd5njay8gqw9hijiahbc2jvf0h52viyd9i"; }
+      ];
+      caches = [
+        { url = "https://hydra.iohk.io"; key = "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="; }
+      ];
+    in
+    {
+      inherit cachix;
+      nix.binaryCaches = builtins.map (a: a.url) caches;
+      nix.binaryCachePublicKeys = builtins.map (a: a.key) caches;
+    };
+
+in
 {
+  imports = [
+    caches
+    ./xc-cache.nix
+  ];
   environment = {
     systemPackages = with pkgs; [
       dnsutils
@@ -66,7 +89,7 @@
   };
 
   nix = {
-    trustedUsers = [ "root" "@wheel" ];
+    # trustedUsers = [ "root" "@wheel" ];
     package = pkgs.nixUnstable;
     extraOptions = "experimental-features = nix-command flakes";
     # https://github.com/gytis-ivaskevicius/flake-utils-plus/blob/master/modules/saneFlakeDefaults.nix

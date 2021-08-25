@@ -10,6 +10,8 @@ in
   "nord-auth.age".publicKeys = keys;
   "xc-openvpn-config.age".publicKeys = keys;
   "xc-openvpn-auth.age".publicKeys = keys;
+  "xc-nixconf.age".publicKeys = keys;
+  "xc-netrc.age".publicKeys = keys;
 }
 
 # vim: nowrap
