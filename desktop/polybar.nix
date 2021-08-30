@@ -29,7 +29,7 @@ lib.mkIf (config.xsession.enable) {
         foreground = "#d8dee9";
         module-margin = "1";
         modules-left = "xmonad";
-        modules-right = "zfs onigiri wireless wired fs memory temp fan cpu battery date-nl date";
+        modules-right = "zfs onigiri vpn wireless wired fs memory temp fan cpu battery date-nl date";
         line-color = "#d8dee9";
         line-size = "3";
       };
@@ -87,6 +87,12 @@ lib.mkIf (config.xsession.enable) {
           exec = "${singleping}";
           interval = "30";
         };
+
+      "module/vpn" = {
+        type = "custom/script";
+        exec = ''[[ $(/run/current-system/sw/bin/nmcli con show --active) =~ "tun" ]] && echo "%{F#f00} %{F-}" || echo ""'';
+        interval = "5";
+      };
 
       "module/zfs" =
         let
