@@ -30,6 +30,7 @@
       gca = "git commit --amend";
       gco = "git checkout";
       gd = "git diff";
+      ge = "git ls-files | entr -dcs";
       gl = "git pull";
       gp = "git push";
       gr = "git remote";
