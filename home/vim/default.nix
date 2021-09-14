@@ -186,7 +186,7 @@ in
         };
 
         lsp = {
-          plugins = [ unp.nvim-lspconfig unp.nvim-compe ];
+          plugins = [ unp.nvim-lspconfig unp.nvim-compe unp.trouble-nvim ];
           config = ''
             lua << EOF
               require'lspconfig'.pyright.setup{}
@@ -202,6 +202,27 @@ in
               }
               require'lspconfig'.tsserver.setup{}
               require'lspconfig'.rust_analyzer.setup{}
+              -- Compe setup
+              require'compe'.setup {
+                enabled = true;
+                autocomplete = true;
+                debug = false;
+                min_length = 1;
+                preselect = 'enable';
+                throttle_time = 80;
+                source_timeout = 200;
+                incomplete_delay = 400;
+                max_abbr_width = 100;
+                max_kind_width = 100;
+                max_menu_width = 100;
+                documentation = true;
+
+                source = {
+                  path = true;
+                  nvim_lsp = true;
+                };
+              }
+              require("trouble").setup{}
             EOF
             nn <leader>la <cmd> lua vim.lsp.buf.code_action()<cr>
             nn <leader>ld <cmd> lua vim.lsp.buf.definition()<cr>
@@ -211,28 +232,7 @@ in
             nn <leader>lk <cmd> lua vim.lsp.buf.signature_help()<cr>
             nn [l <cmd> lua vim.lsp.diagnostic.goto_prev()<cr>
             nn ]l <cmd> lua vim.lsp.diagnostic.goto_next()<cr>
-            lua << EOF
-            -- Compe setup
-            require'compe'.setup {
-              enabled = true;
-              autocomplete = true;
-              debug = false;
-              min_length = 1;
-              preselect = 'enable';
-              throttle_time = 80;
-              source_timeout = 200;
-              incomplete_delay = 400;
-              max_abbr_width = 100;
-              max_kind_width = 100;
-              max_menu_width = 100;
-              documentation = true;
-
-              source = {
-                path = true;
-                nvim_lsp = true;
-              };
-            }
-            EOF
+            nn <leader>lt :Trouble<CR>
           '';
         };
 
