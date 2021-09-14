@@ -32,11 +32,12 @@ in
       gotop
       htop
       ncdu
-      unstable.nix-tree
+      p7zip
       ranger
       sshfs
       tmux
       tree
+      unstable.nix-tree
       unzip
       vim
     ] ++ lib.optional (system == "x86_64-linux") lnav; # https://github.com/tstack/lnav/issues/882
