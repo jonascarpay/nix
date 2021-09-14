@@ -16,7 +16,7 @@ in
     xc-openvpn-auth.file = ../secrets/xc-openvpn-auth.age;
   };
   services.openvpn.servers = {
-    nord-hk = mkNord "hk251";
+    nord-hk = mkNord "hk-tw2";
     # nord-nl = mkNord "nl707" false;
     # nord-us = mkNord "us4629" false;
     nord-jp = mkNord "jp586";
