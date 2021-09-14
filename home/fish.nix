@@ -18,6 +18,7 @@
     '';
     shellAbbrs = {
       c = "cd";
+      cn = "cd ~/nix/";
       dv = "cd ~/Dev/";
       g = "git";
       ga = "git add";
