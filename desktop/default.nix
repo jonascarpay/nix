@@ -2,7 +2,7 @@
 {
   imports = [
     ./albert
-    ./anki.nix
+    # ./anki.nix
     ./blender.nix
     ./dunst.nix
     ./emacs
