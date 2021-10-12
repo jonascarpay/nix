@@ -17,11 +17,6 @@ let
       nix.binaryCachePublicKeys = builtins.map (a: a.key) caches;
     };
 
-  my-nnn =
-    pkgs.nnn.override {
-      withNerdIcons = true;
-    };
-
 in
 {
   imports = [
@@ -37,9 +32,9 @@ in
       gotop
       htop
       ncdu
+      (nnn.override { withNerdIcons = true; })
       p7zip
       ranger
-      my-nnn
       sshfs
       tmux
       tree
