@@ -34,9 +34,11 @@ in
         cache-min-ttl = 1200;
         local-zone = [
           ''"onigiri.lan" redirect''
+          ''"anpan.lan" redirect''
         ];
         local-data = [
           ''"onigiri.lan A 192.168.1.6"''
+          ''"anpan.lan A 192.168.1.14"''
         ];
         include = "${adblockLocalZones}";
       };
