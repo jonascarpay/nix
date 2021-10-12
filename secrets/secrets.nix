@@ -12,6 +12,9 @@ in
   "xc-openvpn-auth.age".publicKeys = keys;
   "xc-nixconf.age".publicKeys = keys;
   "xc-netrc.age".publicKeys = keys;
+  # Wireguard
+  "wg-onigiri.age".publicKeys = keys;
+  "wg-paninix.age".publicKeys = keys;
 }
 
 # vim: nowrap

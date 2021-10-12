@@ -1,5 +1,22 @@
 { config, lib, pkgs, ... }:
-let integrated = false;
+let
+  integrated = false;
+  wireguard = let port = 51820; in
+    {
+      age.secrets.wg-paninix.file = ../secrets/wg-paninix.age;
+      networking.firewall.allowedUDPPorts = [ port ];
+      networking.wireguard.interfaces.wg0 = {
+        ips = [ "10.100.0.3/24" ];
+        listenPort = port;
+        privateKeyFile = config.age.secrets.wg-paninix.path;
+        peers = [{
+          publicKey = "1DQu3fqcOew1Mxvpiq/0umajstSXEzdcfhY89dcHkHw=";
+          allowedIPs = [ "0.0.0.0/0" ];
+          endpoint = "126.72.124.192:${builtins.toString port}";
+          persistentKeepalive = 25;
+        }];
+      };
+    };
 in
 {
   imports = [
@@ -7,6 +24,7 @@ in
     ../system/global.nix
     ../system/jp.nix
     ../system/openvpn.nix
+    wireguard
   ];
 
   networking = {

@@ -65,6 +65,7 @@ in
       ../system/global.nix
       ../system/openvpn.nix
       ../system/unbound.nix
+      ../system/wireguard.nix
       (import ../system/zfs.nix "3bf3504c")
       rclone
       jellyfin
