@@ -17,6 +17,13 @@ let
       nix.binaryCachePublicKeys = builtins.map (a: a.key) caches;
     };
 
+  myNnn =
+    let nnn = pkgs.nnn.override { withNerdIcons = true; };
+    in
+    pkgs.writeShellScriptBin "nnn" ''
+      ${nnn}/bin/nnn -e $@
+    '';
+
 in
 {
   imports = [
@@ -32,7 +39,7 @@ in
       gotop
       htop
       ncdu
-      (nnn.override { withNerdIcons = true; })
+      myNnn
       p7zip
       ranger
       sshfs
