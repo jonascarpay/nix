@@ -127,11 +127,11 @@ interp r (Rectangle xa ya wa ha) (Rectangle xb yb wb hb) = Rectangle (s xa xb) (
 toggleZoom = LM.ModifiedLayout TZInactive
 
 defaultSpacing, spacingDelta :: Int -- global constant to share value between reset key and layout
-defaultSpacing = 60
+defaultSpacing = 45
 spacingDelta = 15
 
--- myLayout = avoidStruts $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ Tall 1 (3/100) (3/5)
-myLayout = avoidStruts $ toggleReflect $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ TallAccordion (2/3) (2/3)
+-- myLayout = avoidStruts $ toggleReflect $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ TC.ThreeColMid 1 (3/100) (1/2) -- SP.spacingWithEdge defaultSpacing $ TallAccordion (3/4) (3/4)
+myLayout = avoidStruts $ toggleReflect $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ TallAccordion (3/4) (3/4)
 
 main = do
   dbus <- D.connectSession
