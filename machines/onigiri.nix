@@ -7,7 +7,7 @@ let
       rclone = {
         enable = true;
         script = ''
-          ${pkgs.rclone}/bin/rclone serve webdav /tank/ --addr :8090 --user dav --pass dav
+          ${pkgs.rclone}/bin/rclone serve webdav /tank/Vault/ --addr :8090 --user dav --pass dav
         '';
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
@@ -37,9 +37,9 @@ let
   git-sync = {
     imports = [ ../system/git-sync-service.nix ];
     services.git-sync = {
-      passwords.directory = "/tank/vault/Passwords";
-      slipbox.directory = "/tank/vault/Slipbox";
-      org.directory = "/tank/vault/Org";
+      passwords.directory = "/tank/Vault/Passwords";
+      slipbox.directory = "/tank/Vault/Slipbox";
+      org.directory = "/tank/Vault/Org";
       nord-openvpn-configs = {
         directory = "/home/jmc/nord-openvpn-configs";
         preSync = let rm = "${pkgs.coreutils}/bin/rm"; in
