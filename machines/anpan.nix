@@ -1,4 +1,25 @@
 { config, lib, pkgs, ... }:
+let
+
+  transmission = {
+    # networking.firewall.allowedTCPPorts = [ 9091 ];
+    systemd.services."transmission" = {
+      bindsTo = [ "openvpn-nord-hk.service" ];
+      wantedBy = lib.mkForce [ ];
+    };
+    services.transmission = {
+      enable = true;
+      settings = {
+        download-dir = "/tank/Transmission";
+        incomplete-dir = "/tank/Transmission";
+        # rpc-whitelist = "127.0.0.1,192.168.1.*";
+        rpc-bind-address = "0.0.0.0";
+        utp-enabled = true;
+      };
+    };
+  };
+
+in
 {
   imports = [
     (import ../system/zfs.nix "d2a9a7c0")
@@ -8,6 +29,7 @@
     ../system/openvpn.nix
     ../system/mlfa.nix
     ../system/graphical.nix
+    transmission
   ];
 
   networking = {
@@ -22,7 +44,6 @@
     initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" "sr_mod" ];
     initrd.kernelModules = [ ];
     kernelModules = [ "kvm-intel" ];
-    extraModulePackages = [ ];
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
     blacklistedKernelModules = [ ];
