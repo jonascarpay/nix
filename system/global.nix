@@ -95,6 +95,11 @@ in
       hashedPassword = "$1$Nh9Zc.7Y$Zw9...mvYbA0qWE/PXKm7.";
     };
   };
+  documentation = {
+    nixos.includeAllModules = true;
+    man.generateCaches = true;
+    dev.enable = true;
+  };
 
   nix = {
     # trustedUsers = [ "root" "@wheel" ];
