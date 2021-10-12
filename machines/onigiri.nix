@@ -29,6 +29,7 @@ let
     services.syncthing = {
       enable = true;
       user = "jmc";
+      group = "tank";
       package = unstable.syncthing;
       guiAddress = "0.0.0.0:8384";
     };
@@ -80,6 +81,8 @@ in
   system.stateVersion = "21.05";
   users.users.jmc.shell = pkgs.fish;
   hardware.raspberry-pi."4".fkms-3d.enable = true;
+
+  users.groups = { tank.members = [ "jmc" ]; };
 
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/3dd7b7cc-8570-4501-836f-fed55833d1c0";
