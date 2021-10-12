@@ -61,6 +61,13 @@
       package = unstable.fzf;
     };
 
+    z-lua = {
+      enable = true;
+      options = [ "enhanced" "once" "fzf" ];
+      enableAliases = true;
+      # https://github.com/nix-community/home-manager/blob/master/modules/programs/z-lua.nix#L9
+    };
+
     git = {
       enable = true;
       userName = "Jonas Carpay";

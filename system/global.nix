@@ -17,6 +17,11 @@ let
       nix.binaryCachePublicKeys = builtins.map (a: a.key) caches;
     };
 
+  my-nnn =
+    pkgs.nnn.override {
+      withNerdIcons = true;
+    };
+
 in
 {
   imports = [
@@ -34,10 +39,12 @@ in
       ncdu
       p7zip
       ranger
+      my-nnn
       sshfs
       tmux
       tree
       unstable.nix-tree
+      unstable.btop
       unzip
       vim
     ] ++ lib.optional (system == "x86_64-linux") lnav; # https://github.com/tstack/lnav/issues/882
