@@ -89,6 +89,10 @@
         init.defaultBranch = "master";
       };
     };
+    ssh = {
+      enable = true;
+      matchBlocks."pichanaki.xc".user = "jonas";
+      matchBlocks."anakin.xc".user = "jonas";
+    };
   };
-
 }
