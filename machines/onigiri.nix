@@ -9,9 +9,8 @@ let
         script = ''
           ${pkgs.rclone}/bin/rclone serve webdav /tank/Vault/ --addr :8090 --user dav --pass dav
         '';
-        wants = [ "network-online.target" ];
-        after = [ "network-online.target" ];
-        wantedBy = [ "multi-user.target" ];
+        bindsTo = [ "tank-Vault.mount" ];
+        after = [ "tank-Vault.mount" ];
       };
     };
   };
@@ -26,6 +25,10 @@ let
     # might no longer be necessary after kernel version > 5.10
     boot.kernel.sysctl."fs.inotify.max_user_watches" = 32784;
     networking.firewall.allowedTCPPorts = [ 8384 ]; # for GUI
+    systemd.services.syncthing = {
+      bindsTo = [ "tank-Vault.mount" ];
+      after = [ "tank-Vault.mount" ];
+    };
     services.syncthing = {
       enable = true;
       user = "jmc";
