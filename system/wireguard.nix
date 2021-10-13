@@ -22,10 +22,22 @@ in
       ${iptables} -t nat -D POSTROUTING -s 10.100.0.0/24 -o ${ext} -j MASQUERADE
     '';
     privateKeyFile = config.age.secrets.wg-onigiri.path;
-    peers = [{
-      # iPhone
-      publicKey = "yHZaq+bpKBOz1qDXKwtnZ9IY4vC5ZLtmuk5dHjHMVy4=";
-      allowedIPs = [ "10.100.0.2/32" ];
-    }];
+    peers = [
+      {
+        # iPhone
+        publicKey = "yHZaq+bpKBOz1qDXKwtnZ9IY4vC5ZLtmuk5dHjHMVy4=";
+        allowedIPs = [ "10.100.0.2/32" ];
+      }
+      {
+        # paninix
+        publicKey = "blQ/jJ3tKciOyuS/1TJSrRF9kU8gbtMrF8uhlwFWOCY=";
+        allowedIPs = [ "10.100.0.3/32" ];
+      }
+      {
+        # iPad
+        publicKey = "tuMonMT00UkTneRrbn+0o4+jKvRYfWDSkVgqK7rOFUw=";
+        allowedIPs = [ "10.100.0.4/32" ];
+      }
+    ];
   };
 }
