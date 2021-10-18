@@ -57,6 +57,16 @@ in
     homeBinInPath = true;
     # required for zsh autoCompletion according to home-configuration.nix
     pathsToLink = [ "/share/zsh" ];
+    etc."words.txt".source =
+      let
+        src = pkgs.fetchFromGitHub {
+          owner = "dwyl";
+          repo = "english-words";
+          rev = "11735d0d68f051b817ad224e14d999acc94fcf00";
+          sha256 = "sha256-xdCsKX04Zc2mtUTic+WDtBL+02lFYzHne7gm7pXd50o=";
+        };
+      in
+      "${src}/words_alpha.txt";
   };
 
   networking.firewall = {
