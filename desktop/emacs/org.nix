@@ -38,8 +38,7 @@
 
         (setq org-capture-templates `(
           ("a" "Agenda"       entry (file+datetree "~/Org/agenda.org") "* %?")
-          ; ("j" "Journal"      entry (file+datetree "~/Org/journal.org") "* %(format-time-string \"%H:%M\")\n%?")
-          ("d" "Diary"        entry (file+datetree "~/Org/diary.org") "* %(format-time-string \"%H:%M\")\n%?")
+          ("f" "Finance"      entry (file+datetree "~/Org/Finance.org") "* %?\n%(format-time-string \"%H:%M\")")
         ))
         (setq org-startup-indented t)
 
