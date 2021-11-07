@@ -2,7 +2,6 @@
 {
   imports = [
     ./albert
-    # ./anki.nix
     ./blender.nix
     ./dunst.nix
     ./emacs
@@ -14,6 +13,7 @@
     ./xmonad
   ];
   home.packages = with pkgs; [
+    anki-bin
     celluloid
     discord
     gnome3.nautilus
