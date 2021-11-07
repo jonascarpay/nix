@@ -90,6 +90,7 @@ in
     passwordAuthentication = false;
     useDns = true;
   };
+  services.tuptime.enable = true;
   programs.bash.enableCompletion = true; # enable tab-completion for nix-* tools
 
   hardware.enableRedistributableFirmware = true;
