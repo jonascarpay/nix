@@ -13,7 +13,7 @@
     ./xmonad
   ];
   home.packages = with pkgs; [
-    anki-bin
+    unstable.anki-bin
     celluloid
     discord
     gnome3.nautilus
