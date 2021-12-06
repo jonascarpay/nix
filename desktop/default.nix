@@ -26,7 +26,7 @@
     spotify
     steam
     sxiv
-    tdesktop
+    unstable.tdesktop
     transmission-gtk
     ungoogled-chromium
     unstable.darktable
