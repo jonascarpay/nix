@@ -8,6 +8,9 @@ in
 
   programs.git.ignores = [ "*~" "*.swp" "*.swo" "tags" "TAGS" ];
 
+  xdg.configFile."nvim/coc-settings.json".text = builtins.readFile ./coc-settings.json;
+  home.packages = [ pkgs.nodejs ];
+
   programs.neovim = {
     enable = true;
     vimAlias = true;
@@ -185,7 +188,31 @@ in
           config = "colorscheme nord";
         };
 
-        lsp = {
+        coc = {
+          plugins = [ np.coc-nvim ];
+          config = ''
+            set hidden
+            set nobackup
+            set nowritebackup
+            set cmdheight=2
+            set updatetime=300
+            set shortmess+=c
+            if has("nvim-0.5.0") || has("patch-8.1.1564")
+              " Recently vim can merge signcolumn and number column into one
+              set signcolumn=number
+            else
+              set signcolumn=yes
+            endif
+            nmap <silent> [l <Plug>(coc-diagnostic-prev)
+            nmap <silent> ]l <Plug>(coc-diagnostic-next)
+            nnoremap <silent> <leader>lh :call CocActionAsync('doHover')<cr>
+            nmap <leader>la <Plug>(coc-codeaction)
+            nmap <leader>ll <Plug>(coc-codelens-action)
+          '';
+        };
+
+        nvim-lsp.enable = false;
+        nvim-lsp = {
           plugins = [ np.nvim-lspconfig ];
           config = ''
             lua << EOF
