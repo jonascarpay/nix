@@ -67,3 +67,10 @@ snippet nt
 
 snippet iq
 	import qualified ${1} as ${0}
+
+snippet dl
+	data ${1:Data} = $1
+		{ ${0}
+		}
+
+	makeLenses ''$1
