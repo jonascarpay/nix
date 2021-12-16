@@ -181,7 +181,7 @@ in
         auto-pairs.config =
           let doubleSingle = "''"; in
           ''
-            autocmd FileType nix let b:AutoPairs = AutoPairsDefine({"${doubleSingle}" : "${doubleSingle}", 'with':';', '=':';'}, ["'"])
+            autocmd FileType nix let b:AutoPairs = AutoPairsDefine({"${doubleSingle}" : "${doubleSingle}", '=':';'}, ["'"])
           '';
 
         colors = {
