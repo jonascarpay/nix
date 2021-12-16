@@ -198,12 +198,6 @@ in
             set cmdheight=2
             set updatetime=300
             set shortmess+=c
-            if has("nvim-0.5.0") || has("patch-8.1.1564")
-              " Recently vim can merge signcolumn and number column into one
-              set signcolumn=number
-            else
-              set signcolumn=yes
-            endif
             nmap <silent> [l <Plug>(coc-diagnostic-prev)
             nmap <silent> ]l <Plug>(coc-diagnostic-next)
             nnoremap <silent> <leader>lh :call CocActionAsync('doHover')<cr>
