@@ -115,6 +115,7 @@ in
             nn <leader>fg :Ag<CR>
             nn <leader>ft :Tags<CR>
             nn <leader>fh :Helptags<CR>
+            nn <leader>fb :Buffers<CR>
             autocmd FileType haskell let g:fzf_tags_command = 'fast-tags -R'
             au BufWritePost *.hs silent! !${pkgs.haskellPackages.fast-tags}/bin/fast-tags -R . &
             let $FZF_DEFAULT_COMMAND = 'ag -g ""'
