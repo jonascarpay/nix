@@ -203,8 +203,8 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
       , ((m, xK_p), spawn "passmenu")
       , ((m.|. shiftMask, xK_p), spawn "qtpass")
       -- , ((m, xK_c), spawn "emacs")
-      , ((m, xK_grave), myCycleRecentWS [xK_Super_L] xK_grave xK_grave)
-      -- , ((m, xK_grave), myCycleRecentWS [xK_Super_R] xK_grave xK_grave)
+      , ((m, xK_grave), myCycleRecentWS [xK_Super_L] xK_grave xK_grave) -- TODO switch to cycleRecentNonEmptyWS from xmonad-contrib 0.17
+      , ((m, xK_Escape), myCycleRecentWS [xK_Super_L] xK_Escape xK_Escape) -- TODO switch to cycleRecentNonEmptyWS from xmonad-contrib 0.17
       , ((m, xK_y), windows $ W.modify' cycleNonFocusDown)
       , ((m .|. shiftMask, xK_y), windows $ W.modify' cycleNonFocusUp)
       -- Border control
