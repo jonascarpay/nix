@@ -4,7 +4,6 @@ let
 
   adblockLocalZones = pkgs.stdenv.mkDerivation {
     name = "unbound-zones-adblock";
-    #TODO Move to niv
     src = inputs.hosts + "/hosts";
     phases = [ "installPhase" ];
     installPhase = ''
