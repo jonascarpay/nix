@@ -16,7 +16,7 @@ in
     xc-openvpn-auth.file = ../secrets/xc-openvpn-auth.age;
   };
   services.openvpn.servers = {
-    nord = mkNord "jp53";
+    nord = mkNord "jp590";
     offshore = mkNord "hk-tw2";
     cross-compass-vpn = {
       autoStart = false;
