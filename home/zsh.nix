@@ -14,6 +14,6 @@
     };
 
     # NOTE currently only works with ZSH for some reason
-    powerline-go.enable = true;
+    # powerline-go.enable = true;
   };
 }

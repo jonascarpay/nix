@@ -8,7 +8,7 @@
       end
 
       function fish_prompt
-        ${unstable.powerline-go}/bin/powerline-go \
+        ${pkgs.powerline-go}/bin/powerline-go \
           -error $status \
           -shell bare \
           -modules venv,ssh,cwd,perms,git,exit,nix-shell,jobs \
