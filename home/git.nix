@@ -1,20 +1,10 @@
 { pkgs, ... }:
 let
-  delta = let deltaBin = "${pkgs.delta}/bin/delta"; in
+  delta = let fancyBin = "${pkgs.diff-so-fancy}/bin/diff-so-fancy"; in
     {
       programs.git.extraConfig = {
-        pager = {
-          diff = deltaBin;
-          log = deltaBin;
-          reflog = deltaBin;
-          show = deltaBin;
-        };
-        delta = {
-          navigate = true;
-          line-numbers = true;
-          side-by-side = false;
-        };
-        interactive.diffFilter = "${deltaBin} --color-only --features=interactive";
+        core.pager = "${fancyBin} | less --tabs=4 -RFX;";
+        interactive.diffFilter = "${fancyBin} --patch";
       };
     };
 in
