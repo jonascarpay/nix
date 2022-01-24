@@ -137,7 +137,7 @@ in
           '';
         };
 
-        indent-blankline-nvim.plugins = [ unp.indent-blankline-nvim ];
+        indent-blankline-nvim.plugins = [ np.indent-blankline-nvim ];
         indent-blankline-nvim.config = ''
           let g:indent_blankline_char = '▏'
           nn <leader>ii :IndentBlanklineToggle<CR>
@@ -154,13 +154,10 @@ in
           config = ''
             let g:neoformat_basic_format_trim = 1
             augroup fmt
-            autocmd!
-            autocmd BufWritePre * silent Neoformat
+              autocmd!
+              autocmd BufWritePre * silent Neoformat
             augroup END
-            let g:neoformat_enabled_javascript = []
-            nn <leader>fm :Neoformat<CR>
-            nn <leader>fo :Neoformat ormolu<CR>
-            nn <leader>fs :Neoformat stylishhaskell<CR>
+            let g:neoformat_enabled_haskell = ['ormolu']
           '';
         };
 
