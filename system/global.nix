@@ -66,7 +66,7 @@ in
           sha256 = "sha256-xdCsKX04Zc2mtUTic+WDtBL+02lFYzHne7gm7pXd50o=";
         };
       in
-      "${src}/words_alpha.txt";
+      "${src}/words.txt";
   };
 
   networking.firewall = {
