@@ -30,6 +30,7 @@ import qualified XMonad.Layout.Spacing as SP
 import qualified XMonad.StackSet as W
 import qualified XMonad.Util.WorkspaceCompare as WC
 import qualified XMonad.Actions.CycleRecentWS as CW
+import qualified XMonad.Actions.Submap as SM
 import qualified XMonad.Layout.LayoutModifier as LM
 import XMonad.Util.EZConfig (additionalKeys)
 import XMonad.Util.NamedWindows (getName)
@@ -201,6 +202,21 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
       , ((m, xK_s), windows W.swapDown >> windows W.focusUp)
       , ((m, xK_c), spawn "emacsclient --create-frame --no-wait")
       , ((m, xK_p), spawn "passmenu")
+      , ((m, xK_o), SM.submap . M.fromList $
+        [ ((m, xK_c), spawn "rofi -show calc -modi calc -no-show-match -no-sort -calc-command \"echo -n '{result}' | xclip -sel clip\"")
+        , ((m, xK_p), spawn "rofi-pass")
+        , ((m, xK_o), spawn "rofi -show drun")
+        , ((m, xK_r), spawn "rofi -show run")
+        , ((m, xK_s), spawn "rofi-systemd")
+        , ((m, xK_e), spawn "rofimoji")
+        , ((m, xK_q), spawn "rofi -show p -modi p:rofi-power-menu")
+        , ((m, xK_d), spawn "rofi-duckduckgo-search")
+        , ((m, xK_l), spawn "rofi-hoogle-local-search")
+        , ((m, xK_h), spawn "rofi-hoogle-search")
+        , ((m, xK_k), spawn "rofi-hackage-search")
+        , ((m, xK_g), spawn "rofi-google-search")
+        ]
+        )
       , ((m.|. shiftMask, xK_p), spawn "qtpass")
       -- , ((m, xK_c), spawn "emacs")
       , ((m, xK_grave), myCycleRecentWS [xK_Super_L] xK_grave xK_grave) -- TODO switch to cycleRecentNonEmptyWS from xmonad-contrib 0.17
