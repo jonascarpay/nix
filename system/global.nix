@@ -109,8 +109,8 @@ in
     };
   };
   documentation = {
-    nixos.includeAllModules = true;
-    man.generateCaches = true;
+    # nixos.includeAllModules = true;
+    # man.generateCaches = true;
     dev.enable = true;
   };
 
