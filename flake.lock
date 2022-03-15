@@ -68,6 +68,21 @@
     },
     "flake-utils": {
       "locked": {
+        "lastModified": 1631561581,
+        "narHash": "sha256-3VQMV5zvxaVLvqqUrNz3iJelLw30mIVSfZmAaauM3dA=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "7e5bf3925f6fbdfaf50a2a7ca0be2879c4261d19",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_2": {
+      "locked": {
         "lastModified": 1617631617,
         "narHash": "sha256-PARRCz55qN3gy07VJZIlFeOX420d0nGF0RzGI/9hVlw=",
         "owner": "numtide",
@@ -78,6 +93,27 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "frecently": {
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1647348446,
+        "narHash": "sha256-YCAWeqrjGpKRkXl2M/bn6QaZlR+ZmmxOAArOfrV2whY=",
+        "owner": "jonascarpay",
+        "repo": "frecently",
+        "rev": "0be02712d31f812deed3be13a958dfd2ddf5bc7b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jonascarpay",
+        "repo": "frecently",
         "type": "github"
       }
     },
@@ -121,7 +157,7 @@
     "neuron": {
       "inputs": {
         "flake-compat": "flake-compat",
-        "flake-utils": "flake-utils",
+        "flake-utils": "flake-utils_2",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -209,6 +245,7 @@
         "agenix": "agenix",
         "declarative-cachix": "declarative-cachix",
         "emacs-overlay": "emacs-overlay",
+        "frecently": "frecently",
         "home-manager": "home-manager",
         "hosts": "hosts",
         "neuron": "neuron",

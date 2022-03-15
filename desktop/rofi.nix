@@ -1,18 +1,6 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 let
-  mkSearch = name: url: pkgs.writeShellScriptBin "rofi-${name}-search" ''
-    HISTORY=~/.local/share/rofi/rofi-${name}-search-hisory
-    touch $HISTORY
-    QUERY=$(tac $HISTORY | rofi -dmenu -i -matching fuzzy -p "${name} search")
-
-    if [[ -n $QUERY ]]; then
-      URL="${url}$QUERY"
-      xdg-open "$URL"
-      sed --quiet "/$QUERY/!p" -i $HISTORY
-      echo "$QUERY" >>$HISTORY
-      head -n -100 $HISTORY
-    fi
-  '';
+  rofi-web-search = pkgs.writeShellScriptBin "rofi-web-search" (builtins.readFile ./rofi/web-search.sh);
 in
 {
   home.packages = [
@@ -22,11 +10,8 @@ in
     # pkgs.rofi-vpn
     # pkgs.rofi-mpd
     pkgs.rofi-pass
-    (mkSearch "duckduckgo" "https://www.duckduckgo.com/?q=")
-    (mkSearch "google" "https://www.google.com/search?q=")
-    (mkSearch "hoogle-local" "http://localhost:8080/?hoogle=")
-    (mkSearch "hoogle" "https://hoogle.haskell.org/?hoogle=")
-    (mkSearch "hackage" "https://hackage.haskell.org/packages/search?terms=")
+    rofi-web-search
+    inputs.frecently.defaultPackage.${pkgs.system}
   ];
   programs.rofi = {
     enable = true;

@@ -31,6 +31,10 @@
       url = "github:yshui/picom/next";
       flake = false;
     };
+    frecently = {
+      url = "github:jonascarpay/frecently";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs:
