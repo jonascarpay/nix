@@ -55,8 +55,10 @@ in
       PAGER = "less";
     };
     homeBinInPath = true;
-    # required for zsh autoCompletion according to home-configuration.nix
-    pathsToLink = [ "/share/zsh" ];
+    # zsh needs this for autoCompletion according to home-configuration
+    # for fish, direnv suddenly stopped working, home-configuration suggested adding this and that seemed to have fixed it.
+    # TODO occasionally see if I can safely remove this
+    pathsToLink = [ "/share/zsh" "/share/fish" ];
     etc."words.txt".source =
       let
         src = pkgs.fetchFromGitHub {
