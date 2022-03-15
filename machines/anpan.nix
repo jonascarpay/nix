@@ -21,6 +21,7 @@ let
 
 in
 {
+  # TODO move these to flake.nix, especially things like "graphical"
   imports = [
     (import ../system/zfs.nix "d2a9a7c0")
     ../system/fonts.nix
