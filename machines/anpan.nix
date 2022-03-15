@@ -19,6 +19,17 @@ let
     };
   };
 
+  docker = {
+    virtualisation.docker = {
+      enable = true;
+      autoPrune = {
+        enable = true;
+        flags = [ "--all" ];
+      };
+    };
+    users.users.jmc.extraGroups = [ "docker" ];
+  };
+
 in
 {
   # TODO move these to flake.nix, especially things like "graphical"
@@ -31,6 +42,7 @@ in
     ../system/mlfa.nix
     ../system/graphical.nix
     transmission
+    docker
   ];
 
   networking = {
