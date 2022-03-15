@@ -9,11 +9,19 @@
   };
   services.xserver = {
     enable = true;
-    displayManager.autoLogin = {
-      enable = true;
-      user = "jmc";
+    displayManager = {
+      autoLogin = {
+        enable = true;
+        user = "jmc";
+      };
+      # https://unix.stackexchange.com/questions/597358/nixos-how-to-configure-custom-desktop-session
+      session = [{
+        manage = "desktop";
+        name = "mysession";
+        start = ''exec $HOME/.xsession'';
+      }];
+      defaultSession = "mysession";
     };
-    desktopManager.plasma5.enable = true; # TODO disable
   };
   networking.firewall = {
     allowedTCPPorts = [

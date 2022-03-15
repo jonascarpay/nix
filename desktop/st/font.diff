@@ -8,7 +8,7 @@ index 6f05dce..2eb7750 100644
   */
 -static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
 -static int borderpx = 2;
-+static char *font = "DM Mono:pixelsize=18:antialias=true:autohint=true";
++static char *font = "DMMono Nerd Font:pixelsize=18:antialias=true:autohint=true";
 +static int borderpx = 9;
 
  /*

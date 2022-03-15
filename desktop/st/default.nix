@@ -40,4 +40,7 @@ let
     ];
   });
 in
-{ home.packages = [ myst ]; }
+{
+  home.packages = [ myst ];
+  home.sessionVariables.TERMCMD = "st";
+}

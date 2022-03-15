@@ -1,4 +1,21 @@
 { pkgs, unstable, config, ... }:
+let
+  widgets = {
+    home.packages = [ pkgs.breeze-icons ];
+    qt.enable = true;
+    gtk = {
+      enable = true;
+      theme = {
+        package = pkgs.numix-gtk-theme;
+        name = "Numix";
+      };
+      iconTheme = {
+        package = pkgs.numix-icon-theme;
+        name = "Numix";
+      };
+    };
+  };
+in
 {
   imports = [
     ./blender.nix
@@ -11,6 +28,7 @@
     ./redshift.nix
     ./st
     ./xmonad
+    widgets
   ];
   home.packages = with pkgs; [
     unstable.anki-bin
@@ -33,11 +51,8 @@
     xclip # Doesn't work?
   ];
 
-  home.sessionVariables.TERMCMD = "st";
-
   programs.firefox.enable = true;
   home.keyboard.options = [ "ctrl:nocaps" ];
-  qt.enable = true;
   fonts.fontconfig.enable = true;
   services = {
     flameshot.enable = true;
@@ -57,16 +72,4 @@
   };
 
   xsession.enable = true;
-
-  gtk = {
-    enable = true;
-    theme = {
-      package = pkgs.numix-gtk-theme;
-      name = "Numix";
-    };
-    iconTheme = {
-      package = pkgs.numix-icon-theme;
-      name = "Numix";
-    };
-  };
 }

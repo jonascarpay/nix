@@ -19,6 +19,7 @@ let
     };
 in
 {
+  # TODO use graphical.nix
   imports = [
     ../system/fonts.nix
     ../system/global.nix
