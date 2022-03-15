@@ -1,16 +1,22 @@
 {
-  programs.direnv.enable = true;
-  programs.direnv.nix-direnv.enable = true;
-  programs.direnv.nix-direnv.enableFlakes = true;
-  programs.git.ignores = [
-    ".envrc"
-    ".direnv"
-  ];
-  programs.fish.shellAbbrs = {
-    nde = "echo 'use nix' > .envrc; and direnv allow";
-    ndf = "echo 'use flake' > .envrc; and direnv allow";
+  programs = {
+    direnv = {
+      enable = true;
+      # enableBashIntegration = true;
+      # enableFishIntegration = true;
+      nix-direnv.enable = true;
+      nix-direnv.enableFlakes = true;
+    };
+    git.ignores = [
+      ".envrc"
+      ".direnv"
+    ];
+    fish.shellAbbrs = {
+      nde = "echo 'use nix' > .envrc; and direnv allow";
+      ndf = "echo 'use flake' > .envrc; and direnv allow";
+    };
+    fish.shellInit = ''
+      set -x DIRENV_LOG_FORMAT ""
+    '';
   };
-  programs.fish.shellInit = ''
-    set -x DIRENV_LOG_FORMAT ""
-  '';
 }
