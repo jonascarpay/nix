@@ -44,8 +44,6 @@ ctrlMask = controlMask
 -- termEmu = "termite -e /home/jmc/.nix-profile/bin/fish"
 termEmu = "st"
 
-
-
 data TallAccordion a = TallAccordion !Rational !Rational
   deriving (Eq, Show, Read)
 
@@ -103,6 +101,23 @@ data ToggleZoom w = TZActive | TZInactive
   deriving (Eq, Read, Show)
 
 data ToggleZoomMsg = ToggleZoom
+
+data ResetWhenEmpty m a = ResetWhenEmpty
+  { rweDefault :: m a
+  , rweCurrent :: m a
+  }
+  deriving (Read, Show)
+
+instance XM.LayoutClass m a => XM.LayoutClass (ResetWhenEmpty m) a where
+  description = description . rweCurrent
+  handleMessage (ResetWhenEmpty def cur) msg = (fmap . fmap) (ResetWhenEmpty def) (handleMessage cur msg)
+  runLayout (W.Workspace tag (ResetWhenEmpty def cur) mstack) rect =
+    case mstack of
+      Nothing -> pure ([], Just (ResetWhenEmpty def def))
+      Just stack -> (fmap . fmap . fmap) (ResetWhenEmpty def) (runLayout (W.Workspace tag cur mstack) rect)
+
+resetWhenEmpty :: m a -> ResetWhenEmpty m a
+resetWhenEmpty l = ResetWhenEmpty l l
 
 instance LM.LayoutModifier ToggleZoom Window where
   pureModifier _ _ Nothing layout = (layout, Nothing)
@@ -165,7 +180,7 @@ dcfg dbus =
       borderWidth = 0, -- Necessary to remove borders from floating windows
       focusFollowsMouse = False,
       logHook = polybarLog dbus,
-      layoutHook = myLayout ||| Full,
+      layoutHook = resetWhenEmpty $ myLayout ||| Full,
       -- startupHook = startupHook desktopConfig,
       keys = myKeys,
       workspaces = show <$> [1..5],
