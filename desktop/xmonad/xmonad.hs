@@ -68,7 +68,7 @@ instance XM.LayoutClass TallAccordion a where
 
   pureMessage (TallAccordion rm rs) msg = fmap mainResize (fromMessage msg) <|> fmap sideResize (fromMessage msg)
     where
-      delta = 3/100
+      delta = 5/100
       mainResize Expand = TallAccordion (rm + delta) rs
       mainResize Shrink = TallAccordion (rm - delta) rs
       sideResize VExpand = TallAccordion rm (rs + delta)
