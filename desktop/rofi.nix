@@ -25,7 +25,17 @@ in
   ];
   programs.rofi = {
     enable = true;
-    theme = "Pop-Dark";
+    theme =
+      let
+        theme-source = pkgs.fetchFromGitHub {
+          owner = "lr-tech";
+          repo = "rofi-themes-collection";
+          rev = "5ae9b23ef58893229b0df57ad750ad84801a632e";
+          sha256 = "sha256-ecCQcDVWXpSilER99OROW9wutIq58llUGjFTn9rH2RM=";
+        };
+      in
+      "${theme-source}/themes/nord.rasi"
+    ;
     pass = {
       enable = true;
       stores = [ "~/Passwords/" ];
