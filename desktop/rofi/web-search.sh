@@ -8,6 +8,7 @@ URLS=(
   ["Hoogle-local"]="http://localhost:8080/?hoogle="
   ["Hoogle"]="https://hoogle.haskell.org/?hoogle="
   ["Hackage"]="https://hackage.haskell.org/packages/search?terms="
+  ["Wolfram-alpha"]="https://www.wolframalpha.com/input?i="
 )
 
 gen_list() {
