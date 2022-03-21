@@ -104,15 +104,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1647348446,
-        "narHash": "sha256-YCAWeqrjGpKRkXl2M/bn6QaZlR+ZmmxOAArOfrV2whY=",
+        "lastModified": 1647868071,
+        "narHash": "sha256-HOaxaVSHNLQFGPn//N0mPb3/PdjWSfd3U2bhs3NhHtk=",
         "owner": "jonascarpay",
         "repo": "frecently",
-        "rev": "0be02712d31f812deed3be13a958dfd2ddf5bc7b",
+        "rev": "3902956066ffc65fb2c5aa2764adb152329dee68",
         "type": "github"
       },
       "original": {
         "owner": "jonascarpay",
+        "ref": "recency-bonus",
         "repo": "frecently",
         "type": "github"
       }
