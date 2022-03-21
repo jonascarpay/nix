@@ -9,6 +9,7 @@ URLS=(
   ["Hoogle"]="https://hoogle.haskell.org/?hoogle="
   ["Hackage"]="https://hackage.haskell.org/packages/search?terms="
   ["Wolfram-alpha"]="https://www.wolframalpha.com/input?i="
+  ["URL"]="https://"
 )
 
 gen_list() {
@@ -23,7 +24,7 @@ ENGINE=$( (gen_list) | xargs frecently $ENGINE_HISTORY view | rofi -dmenu -i -ma
 
 if [[ -n "$ENGINE" ]]; then
 
-  HISTORY=~/.local/share/rofi/rofi-$ENGINE-search-hisory
+  HISTORY=~/.local/share/rofi/rofi-$ENGINE-search-history
 
   QUERY=$(frecently $HISTORY view | rofi -dmenu -i -matching fuzzy -p "$ENGINE search")
 
