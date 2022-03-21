@@ -221,6 +221,7 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
       , ((m, xK_p), SM.submap . M.fromList $
         [ ((m, xK_c), spawn "rofi -show calc -modi calc -no-show-match -no-sort -calc-command \"echo -n '{result}' | xclip -sel clip\"")
         , ((m, xK_p), spawn "rofi-pass")
+        , ((m, xK_d), spawn "rofi-directory")
         , ((m, xK_o), spawn "rofi -show drun")
         , ((m, xK_s), spawn "rofi-systemd")
         , ((m, xK_e), spawn "rofimoji")
