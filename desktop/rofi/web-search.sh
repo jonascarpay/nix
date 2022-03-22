@@ -7,7 +7,8 @@ URLS=(
   ["Google"]="https://www.google.com/search?q="
   ["Hoogle-local"]="http://localhost:8080/?hoogle="
   ["Hoogle"]="https://hoogle.haskell.org/?hoogle="
-  ["Hackage"]="https://hackage.haskell.org/packages/search?terms="
+  ["Hackage"]="https://hackage.haskell.org/package/"
+  ["Hackage-search"]="https://hackage.haskell.org/packages/search?terms="
   ["Wolfram-alpha"]="https://www.wolframalpha.com/input?i="
   ["URL"]="https://"
 )
