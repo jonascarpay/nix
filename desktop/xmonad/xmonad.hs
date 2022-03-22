@@ -1,41 +1,40 @@
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TupleSections #-}
 
 import qualified Codec.Binary.UTF8.String as UTF8
-import Control.Monad
-import Data.Bool (bool)
-import Data.Int (Int32)
 import Control.Applicative
+import Control.Monad
 import qualified DBus as D
 import qualified DBus.Client as D
-import Data.List (partition, findIndex, isPrefixOf)
-import qualified Data.Map as M
-import Data.Monoid ((<>))
 import Data.Bool (bool)
+import Data.Int (Int32)
+import Data.List (findIndex, isPrefixOf, partition)
+import qualified Data.Map as M
 import Data.Maybe (isJust)
+import Data.Monoid ((<>))
 import Numeric
 import System.IO
 import XMonad as XM
+import qualified XMonad.Actions.CycleRecentWS as CW
+import qualified XMonad.Actions.Submap as SM
 import XMonad.Config.Desktop as DC
 import XMonad.Core
 import XMonad.Hooks.DynamicLog as DL
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
+import qualified XMonad.Layout.LayoutModifier as LM
 import XMonad.Layout.NoBorders
 import qualified XMonad.Layout.Spacing as SP
 import qualified XMonad.StackSet as W
-import qualified XMonad.Util.WorkspaceCompare as WC
-import qualified XMonad.Actions.CycleRecentWS as CW
-import qualified XMonad.Actions.Submap as SM
-import qualified XMonad.Layout.LayoutModifier as LM
 import XMonad.Util.EZConfig (additionalKeys)
 import XMonad.Util.NamedWindows (getName)
-import XMonad.Util.Run
 import qualified XMonad.Util.Rectangle as UR
+import XMonad.Util.Run
+import qualified XMonad.Util.WorkspaceCompare as WC
 
 altMask = mod1Mask
 
@@ -49,26 +48,26 @@ data TallAccordion a = TallAccordion !Rational !Rational
 
 instance XM.LayoutClass TallAccordion a where
   pureLayout (TallAccordion rm rs) screen stk@(W.Stack cur pre post) =
-      case stk of 
-        (W.Stack _ [] []) -> [(cur, screen)]
-        (W.Stack _ [wmain] []) -> [(cur, side), (wmain, prim)]
-        (W.Stack _ [] [wside]) -> [(cur, prim), (wside, side)]
-        _ -> (cur, rcur) : zip (reverse pre) rpre <> zip post rpost
+    case stk of
+      (W.Stack _ [] []) -> [(cur, screen)]
+      (W.Stack _ [wmain] []) -> [(cur, side), (wmain, prim)]
+      (W.Stack _ [] [wside]) -> [(cur, prim), (wside, side)]
+      _ -> (cur, rcur) : zip (reverse pre) rpre <> zip post rpost
     where
       n = length pre + length post + 1
 
-      (prim,side) = splitHorizontallyBy rm screen
-      (sec, rest) = splitVertically (n-2) <$> splitVerticallyBy rs side
+      (prim, side) = splitHorizontallyBy rm screen
+      (sec, rest) = splitVertically (n -2) <$> splitVerticallyBy rs side
 
       rects = prim : sec : rest
       (rpre, rcur : rpost) = splitAt (length pre) rects
 
       interleave [] bs = bs
-      interleave (a:as) bs = a : interleave bs as
+      interleave (a : as) bs = a : interleave bs as
 
   pureMessage (TallAccordion rm rs) msg = fmap mainResize (fromMessage msg) <|> fmap sideResize (fromMessage msg)
     where
-      delta = 5/100
+      delta = 1 / 10
       mainResize Expand = TallAccordion (rm + delta) rs
       mainResize Shrink = TallAccordion (rm - delta) rs
       sideResize VExpand = TallAccordion rm (rs + delta)
@@ -82,9 +81,10 @@ data ToggleReflect w = TRActive | TRInactive
   deriving (Eq, Show, Read)
 
 data ToggleReflectMsg = ToggleReflectMsg
+
 instance Message ToggleReflectMsg
 
-instance LM.LayoutModifier ToggleReflect Window where 
+instance LM.LayoutModifier ToggleReflect Window where
   pureModifier _ _ Nothing layout = (layout, Nothing)
   pureModifier TRInactive _ _ layout = (layout, Nothing)
   pureModifier TRActive (Rectangle sx sy sw sh) _ layout = (fmap flip <$> layout, Nothing)
@@ -103,8 +103,8 @@ data ToggleZoom w = TZActive | TZInactive
 data ToggleZoomMsg = ToggleZoom
 
 data ResetWhenEmpty m a = ResetWhenEmpty
-  { rweDefault :: m a
-  , rweCurrent :: m a
+  { rweDefault :: m a,
+    rweCurrent :: m a
   }
   deriving (Read, Show)
 
@@ -122,7 +122,7 @@ resetWhenEmpty l = ResetWhenEmpty l l
 instance LM.LayoutModifier ToggleZoom Window where
   pureModifier _ _ Nothing layout = (layout, Nothing)
   pureModifier TZInactive _ _ layout = (layout, Nothing)
-  pureModifier TZActive screen (Just stk) layout = 
+  pureModifier TZActive screen (Just stk) layout =
     let (fg, bg) = partition ((== W.focus stk) . fst) layout
         fg' = fmap (\(wid, rect) -> (wid, interp 0.5 rect screen)) fg
      in (fg' ++ bg, Nothing)
@@ -138,7 +138,7 @@ interp :: Double -> Rectangle -> Rectangle -> Rectangle
 interp r (Rectangle xa ya wa ha) (Rectangle xb yb wb hb) = Rectangle (s xa xb) (s ya yb) (s wa wb) (s ha hb)
   where
     s :: Integral a => a -> a -> a
-    s a b = round $ fromIntegral a * (1-r) + fromIntegral b * r
+    s a b = round $ fromIntegral a * (1 - r) + fromIntegral b * r
 
 toggleZoom = LM.ModifiedLayout TZInactive
 
@@ -146,7 +146,7 @@ defaultSpacing, spacingDelta :: Int -- global constant to share value between re
 defaultSpacing = 45
 spacingDelta = 15
 
-myLayout = avoidStruts $ toggleReflect $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ TallAccordion (3/5) (3/5)
+myLayout = avoidStruts $ toggleReflect $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ TallAccordion (3 / 5) (3 / 5)
 
 main = do
   dbus <- D.connectSession
@@ -154,23 +154,27 @@ main = do
     dbus
     (D.busName_ "org.xmonad.Log")
     [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
-  xmonad
-    $ ewmh
-    $ dcfg dbus
+  xmonad $
+    ewmh $
+      dcfg dbus
 
 cycleNonFocusDown :: W.Stack a -> W.Stack a
 cycleNonFocusDown (W.Stack f us ds) = W.Stack f us' (reverse ds')
-  where wins = us <> reverse ds
-        wins' = let (h,t) = splitAt 1 wins
-                 in t <> h
-        (us',ds') = splitAt (length us) wins'
+  where
+    wins = us <> reverse ds
+    wins' =
+      let (h, t) = splitAt 1 wins
+       in t <> h
+    (us', ds') = splitAt (length us) wins'
 
 cycleNonFocusUp :: W.Stack a -> W.Stack a
 cycleNonFocusUp (W.Stack f us ds) = W.Stack f (reverse us') ds'
-  where wins = ds <> reverse us
-        wins' = let (h,t) = splitAt 1 wins
-                 in t <> h
-        (ds',us') = splitAt (length ds) wins'
+  where
+    wins = ds <> reverse us
+    wins' =
+      let (h, t) = splitAt 1 wins
+       in t <> h
+    (ds', us') = splitAt (length ds) wins'
 
 dcfg dbus =
   desktopConfig
@@ -182,77 +186,80 @@ dcfg dbus =
       layoutHook = resetWhenEmpty $ myLayout ||| Full,
       -- startupHook = startupHook desktopConfig,
       keys = myKeys,
-      workspaces = show <$> [1..5],
+      workspaces = show <$> [1 .. 5],
       handleEventHook = handleEventHook def <+> fullscreenEventHook
     }
 
 myCycleRecentWS :: [KeySym] -> KeySym -> KeySym -> X ()
 myCycleRecentWS = CW.cycleWindowSets options
- where
-   options w = map (flip W.view w) (recentTags w)
-   recentTags w = W.tag <$> rotate (filterNonEmpty workspaces)
-     where
-       workspaces = W.workspaces w
-       filterNonEmpty ws = case filter (isJust . W.stack) ws of
-                             [] -> ws
-                             ws' -> ws'
-       rotate (x : xs) = xs ++ [x]
+  where
+    options w = map (flip W.view w) (recentTags w)
+    recentTags w = W.tag <$> rotate (filterNonEmpty workspaces)
+      where
+        workspaces = W.workspaces w
+        filterNonEmpty ws = case filter (isJust . W.stack) ws of
+          [] -> ws
+          ws' -> ws'
+        rotate (x : xs) = xs ++ [x]
 
 myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
   where
     m = modMask conf
-    myKeyList = 
-      [ ((m, xK_f), spawn "firefox")
-      , ((m, xK_q), spawn "xmonad --restart") -- overrides the default behavior, which first recompiles
-      , ((m, xK_d), withPwd $ maybe (spawn "dolphin") (\pwd -> spawn $ "dolphin " <> pwd))
-      , ((m .|. shiftMask, xK_f), spawn "clipboard-firefox")
-      , ((m, xK_Return), mkTerm "/etc/profiles/per-user/jmc/bin/fish")
-      , ((m .|. ctrlMask, xK_Return), mkTerm "/etc/profiles/per-user/jmc/bin/fish")
-      , ((m, xK_z), sendMessage ToggleZoom)
-      , ((m, xK_m), sendMessage ToggleReflectMsg)
-      , ((m .|. shiftMask, xK_h), sendMessage VShrink)
-      , ((m .|. shiftMask, xK_l), sendMessage VExpand)
-      , ((m .|. shiftMask, xK_Return), windows W.swapMaster)
-      , ((m, xK_s), windows W.swapDown >> windows W.focusUp)
-      , ((m, xK_c), spawn "emacsclient --create-frame --no-wait")
-      , ((m, xK_s), spawn "rofi-web-search")
-      , ((m, xK_o), spawn "rofi -show run")
-      , ((m, xK_p), SM.submap . M.fromList $
-        [ ((m, xK_c), spawn "rofi -show calc -modi calc -no-show-match -no-sort -calc-command \"echo -n '{result}' | xclip -sel clip\"")
-        , ((m, xK_p), spawn "rofi-pass")
-        , ((m, xK_d), spawn "rofi-directory")
-        , ((m, xK_o), spawn "rofi -show drun")
-        , ((m, xK_s), spawn "rofi-systemd")
-        , ((m, xK_e), spawn "rofimoji")
-        , ((m, xK_q), spawn "rofi -show p -modi p:rofi-power-menu")
-        ]
-        )
-      , ((m.|. shiftMask, xK_p), spawn "qtpass")
-      -- , ((m, xK_c), spawn "emacs")
-      , ((m, xK_grave), myCycleRecentWS [xK_Super_L] xK_grave xK_grave) -- TODO switch to cycleRecentNonEmptyWS from xmonad-contrib 0.17
-      , ((m, xK_Escape), myCycleRecentWS [xK_Super_L] xK_Escape xK_Escape) -- TODO switch to cycleRecentNonEmptyWS from xmonad-contrib 0.17
-      , ((m, xK_y), windows $ W.modify' cycleNonFocusDown)
-      , ((m .|. shiftMask, xK_y), windows $ W.modify' cycleNonFocusUp)
-      -- Border control
-      , ((m, xK_minus), SP.incScreenWindowSpacing $ fromIntegral spacingDelta)
-      , ((m, xK_equal), SP.decScreenWindowSpacing $ fromIntegral spacingDelta)
-      , ((m, xK_0), SP.setScreenWindowSpacing $ fromIntegral defaultSpacing)
-      ] <>
-      [((m .|. mask, k), windows f)
-            | (i, k) <- zip (XM.workspaces conf) [xK_1 .. xK_9]
-            , (mask, f) <- [ (0, W.greedyView i)
-                           , (shiftMask, W.shift i)
-                           , (controlMask, W.greedyView i . W.shift i)
-                           ]
-      ] <>
-      [((m .|. mask, key), screenWorkspace scr >>= flip whenJust (windows . f))
-          | (key, scr) <- zip [xK_w, xK_e, xK_r] [0..]
-          -- | (key, scr) <- zip [xK_e, xK_w] [0..]
-                                              , (mask, f) <- [ (0, W.view)
-                         , (shiftMask, \n -> W.shift n)
-                         , (controlMask, \n -> W.view n . W.shift n) -- TODO greedyview vs view?
-                         ]
+    myKeyList =
+      [ ((m, xK_f), spawn "firefox"),
+        ((m, xK_q), spawn "xmonad --restart"), -- overrides the default behavior, which first recompiles
+        ((m, xK_d), withPwd $ maybe (spawn "dolphin") (\pwd -> spawn $ "dolphin " <> pwd)),
+        ((m .|. shiftMask, xK_f), spawn "clipboard-firefox"),
+        ((m, xK_Return), mkTerm "/etc/profiles/per-user/jmc/bin/fish"),
+        ((m .|. ctrlMask, xK_Return), mkTerm "/etc/profiles/per-user/jmc/bin/fish"),
+        ((m, xK_z), sendMessage ToggleZoom),
+        ((m, xK_m), sendMessage ToggleReflectMsg),
+        ((m .|. shiftMask, xK_h), sendMessage VShrink),
+        ((m .|. shiftMask, xK_l), sendMessage VExpand),
+        ((m .|. shiftMask, xK_Return), windows W.swapMaster),
+        ((m, xK_s), windows W.swapDown >> windows W.focusUp),
+        ((m, xK_c), spawn "emacsclient --create-frame --no-wait"),
+        ((m, xK_s), spawn "rofi-web-search"),
+        ((m, xK_o), spawn "rofi -show run"),
+        ( (m, xK_p),
+          SM.submap . M.fromList $
+            [ ((m, xK_c), spawn "rofi -show calc -modi calc -no-show-match -no-sort -calc-command \"echo -n '{result}' | xclip -sel clip\""),
+              ((m, xK_p), spawn "rofi-pass"),
+              ((m, xK_d), spawn "rofi-directory"),
+              ((m, xK_o), spawn "rofi -show drun"),
+              ((m, xK_s), spawn "rofi-systemd"),
+              ((m, xK_e), spawn "rofimoji"),
+              ((m, xK_q), spawn "rofi -show p -modi p:rofi-power-menu")
+            ]
+        ),
+        ((m .|. shiftMask, xK_p), spawn "qtpass"),
+        -- , ((m, xK_c), spawn "emacs")
+        ((m, xK_grave), myCycleRecentWS [xK_Super_L] xK_grave xK_grave), -- TODO switch to cycleRecentNonEmptyWS from xmonad-contrib 0.17
+        ((m, xK_Escape), myCycleRecentWS [xK_Super_L] xK_Escape xK_Escape), -- TODO switch to cycleRecentNonEmptyWS from xmonad-contrib 0.17
+        ((m, xK_y), windows $ W.modify' cycleNonFocusDown),
+        ((m .|. shiftMask, xK_y), windows $ W.modify' cycleNonFocusUp),
+        -- Border control
+        ((m, xK_minus), SP.incScreenWindowSpacing $ fromIntegral spacingDelta),
+        ((m, xK_equal), SP.decScreenWindowSpacing $ fromIntegral spacingDelta),
+        ((m, xK_0), SP.setScreenWindowSpacing $ fromIntegral defaultSpacing)
       ]
+        <> [ ((m .|. mask, k), windows f)
+             | (i, k) <- zip (XM.workspaces conf) [xK_1 .. xK_9],
+               (mask, f) <-
+                 [ (0, W.greedyView i),
+                   (shiftMask, W.shift i),
+                   (controlMask, W.greedyView i . W.shift i)
+                 ]
+           ]
+        <> [ ((m .|. mask, key), screenWorkspace scr >>= flip whenJust (windows . f))
+             | (key, scr) <- zip [xK_w, xK_e, xK_r] [0 ..],
+               -- . | (key, scr) <- zip [xK_e, xK_w] [0..]
+               (mask, f) <-
+                 [ (0, W.view),
+                   (shiftMask, \n -> W.shift n),
+                   (controlMask, \n -> W.view n . W.shift n) -- TODO greedyview vs view?
+                 ]
+           ]
 
 mkTerm shell = withPwd $ maybe (runInTerm "" shell) (\cwd -> runInTerm ("-d" <> cwd) shell)
 
@@ -270,18 +277,19 @@ polybarLog :: D.Client -> X ()
 polybarLog dbus = do
   dynamicLogWithPP eventLogHook
   where
-    eventLogHook = def
-      { ppOutput = dbusOutput dbus
-      , ppLayout = const ""
-      , ppCurrent          = rev . base
-      , ppVisible          = ul' . base
-      , ppVisibleNoWindows = Just (ul' . greyOut . base)
-      , ppHidden           = base
-      , ppHiddenNoWindows  = greyOut . base
-      , ppWsSep = ""
-      , ppSep = "   "
-      , ppTitle = font2 . DL.shorten 80
-      }
+    eventLogHook =
+      def
+        { ppOutput = dbusOutput dbus,
+          ppLayout = const "",
+          ppCurrent = rev . base,
+          ppVisible = ul' . base,
+          ppVisibleNoWindows = Just (ul' . greyOut . base),
+          ppHidden = base,
+          ppHiddenNoWindows = greyOut . base,
+          ppWsSep = "",
+          ppSep = "   ",
+          ppTitle = font2 . DL.shorten 80
+        }
     base = DL.pad . weebify
     rev = DL.wrap "%{R}" "%{R-}"
     greyOut = fg "#81a1c1"
