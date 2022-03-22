@@ -78,8 +78,25 @@
         ] ++ sysModules;
       };
 
+      xmonad-shell =
+        let
+          pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+          hspkgs = pkgs.haskellPackages;
+        in
+        pkgs.mkShell {
+          packages = [
+            (hspkgs.ghcWithPackages (p: [
+              p.dbus
+              p.xmonad
+              p.xmonad-contrib
+            ]))
+            hspkgs.ormolu
+            hspkgs.haskell-language-server
+          ];
+        };
     in
     {
+      devShell.x86_64-linux = xmonad-shell;
       nixosConfigurations = {
         anpan = mkSystem {
           system = "x86_64-linux";
