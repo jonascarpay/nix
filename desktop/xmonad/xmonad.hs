@@ -146,8 +146,7 @@ defaultSpacing, spacingDelta :: Int -- global constant to share value between re
 defaultSpacing = 45
 spacingDelta = 15
 
--- myLayout = avoidStruts $ toggleReflect $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ TC.ThreeColMid 1 (3/100) (1/2) -- SP.spacingWithEdge defaultSpacing $ TallAccordion (3/4) (3/4)
-myLayout = avoidStruts $ toggleReflect $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ TallAccordion (3/4) (3/4)
+myLayout = avoidStruts $ toggleReflect $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ TallAccordion (3/5) (3/5)
 
 main = do
   dbus <- D.connectSession
