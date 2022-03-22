@@ -91,6 +91,7 @@
               p.xmonad-contrib
             ]))
             hspkgs.ormolu
+            hspkgs.hlint
             hspkgs.haskell-language-server
           ];
         };

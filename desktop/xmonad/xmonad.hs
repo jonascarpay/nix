@@ -4,49 +4,32 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TupleSections #-}
+{-# OPTIONS_GHC -Wall -Wno-deprecations -Wno-name-shadowing -Wno-missing-signatures #-}
 
 import qualified Codec.Binary.UTF8.String as UTF8
 import Control.Applicative
 import Control.Monad
 import qualified DBus as D
 import qualified DBus.Client as D
-import Data.Bool (bool)
-import Data.Int (Int32)
-import Data.List (findIndex, isPrefixOf, partition)
+import Data.List (isPrefixOf, partition)
 import qualified Data.Map as M
 import Data.Maybe (isJust)
-import Data.Monoid ((<>))
-import Numeric
-import System.IO
-import XMonad as XM
+import XMonad
 import qualified XMonad.Actions.CycleRecentWS as CW
 import qualified XMonad.Actions.Submap as SM
 import XMonad.Config.Desktop as DC
-import XMonad.Core
 import XMonad.Hooks.DynamicLog as DL
-import XMonad.Hooks.EwmhDesktops
-import XMonad.Hooks.ManageDocks
+import qualified XMonad.Hooks.EwmhDesktops as EMWH
+import qualified XMonad.Hooks.ManageDocks as MD
 import qualified XMonad.Layout.LayoutModifier as LM
-import XMonad.Layout.NoBorders
 import qualified XMonad.Layout.Spacing as SP
 import qualified XMonad.StackSet as W
-import XMonad.Util.EZConfig (additionalKeys)
-import XMonad.Util.NamedWindows (getName)
-import qualified XMonad.Util.Rectangle as UR
 import XMonad.Util.Run
-import qualified XMonad.Util.WorkspaceCompare as WC
-
-altMask = mod1Mask
-
-ctrlMask = controlMask
-
--- termEmu = "termite -e /home/jmc/.nix-profile/bin/fish"
-termEmu = "st"
 
 data TallAccordion a = TallAccordion !Rational !Rational
   deriving (Eq, Show, Read)
 
-instance XM.LayoutClass TallAccordion a where
+instance LayoutClass TallAccordion a where
   pureLayout (TallAccordion rm rs) screen stk@(W.Stack cur pre post) =
     case stk of
       (W.Stack _ [] []) -> [(cur, screen)]
@@ -61,9 +44,6 @@ instance XM.LayoutClass TallAccordion a where
 
       rects = prim : sec : rest
       (rpre, rcur : rpost) = splitAt (length pre) rects
-
-      interleave [] bs = bs
-      interleave (a : as) bs = a : interleave bs as
 
   pureMessage (TallAccordion rm rs) msg = fmap mainResize (fromMessage msg) <|> fmap sideResize (fromMessage msg)
     where
@@ -87,7 +67,7 @@ instance Message ToggleReflectMsg
 instance LM.LayoutModifier ToggleReflect Window where
   pureModifier _ _ Nothing layout = (layout, Nothing)
   pureModifier TRInactive _ _ layout = (layout, Nothing)
-  pureModifier TRActive (Rectangle sx sy sw sh) _ layout = (fmap flip <$> layout, Nothing)
+  pureModifier TRActive (Rectangle _ _ sw _) _ layout = (fmap flip <$> layout, Nothing)
     where
       flip (Rectangle x y w h) = Rectangle (fromIntegral sw - x - fromIntegral w) y w h
   pureMess tr msg = toggle tr <$> fromMessage msg
@@ -95,6 +75,7 @@ instance LM.LayoutModifier ToggleReflect Window where
       toggle TRActive ToggleReflectMsg = TRInactive
       toggle TRInactive ToggleReflectMsg = TRActive
 
+toggleReflect :: l a -> LM.ModifiedLayout ToggleReflect l a
 toggleReflect = LM.ModifiedLayout TRInactive
 
 data ToggleZoom w = TZActive | TZInactive
@@ -108,13 +89,13 @@ data ResetWhenEmpty m a = ResetWhenEmpty
   }
   deriving (Read, Show)
 
-instance XM.LayoutClass m a => XM.LayoutClass (ResetWhenEmpty m) a where
+instance LayoutClass m a => LayoutClass (ResetWhenEmpty m) a where
   description = description . rweCurrent
   handleMessage (ResetWhenEmpty def cur) msg = (fmap . fmap) (ResetWhenEmpty def) (handleMessage cur msg)
   runLayout (W.Workspace tag (ResetWhenEmpty def cur) mstack) rect =
     case mstack of
       Nothing -> pure ([], Just (ResetWhenEmpty def def))
-      Just stack -> (fmap . fmap . fmap) (ResetWhenEmpty def) (runLayout (W.Workspace tag cur mstack) rect)
+      Just _ -> (fmap . fmap . fmap) (ResetWhenEmpty def) (runLayout (W.Workspace tag cur mstack) rect)
 
 resetWhenEmpty :: m a -> ResetWhenEmpty m a
 resetWhenEmpty l = ResetWhenEmpty l l
@@ -140,22 +121,25 @@ interp r (Rectangle xa ya wa ha) (Rectangle xb yb wb hb) = Rectangle (s xa xb) (
     s :: Integral a => a -> a -> a
     s a b = round $ fromIntegral a * (1 - r) + fromIntegral b * r
 
+toggleZoom :: l a -> LM.ModifiedLayout ToggleZoom l a
 toggleZoom = LM.ModifiedLayout TZInactive
 
 defaultSpacing, spacingDelta :: Int -- global constant to share value between reset key and layout
 defaultSpacing = 45
 spacingDelta = 15
 
-myLayout = avoidStruts $ toggleReflect $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ TallAccordion (3 / 5) (3 / 5)
+myLayout = MD.avoidStruts $ toggleReflect $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ TallAccordion (3 / 5) (3 / 5)
 
+main :: IO ()
 main = do
   dbus <- D.connectSession
-  D.requestName
-    dbus
-    (D.busName_ "org.xmonad.Log")
-    [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
+  void $
+    D.requestName
+      dbus
+      (D.busName_ "org.xmonad.Log")
+      [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
   xmonad $
-    ewmh $
+    EMWH.ewmh $
       dcfg dbus
 
 cycleNonFocusDown :: W.Stack a -> W.Stack a
@@ -178,7 +162,7 @@ cycleNonFocusUp (W.Stack f us ds) = W.Stack f (reverse us') ds'
 
 dcfg dbus =
   desktopConfig
-    { terminal = termEmu,
+    { terminal = "st",
       modMask = mod4Mask,
       borderWidth = 0, -- Necessary to remove borders from floating windows
       focusFollowsMouse = False,
@@ -186,8 +170,8 @@ dcfg dbus =
       layoutHook = resetWhenEmpty $ myLayout ||| Full,
       -- startupHook = startupHook desktopConfig,
       keys = myKeys,
-      workspaces = show <$> [1 .. 5],
-      handleEventHook = handleEventHook def <+> fullscreenEventHook
+      workspaces = show <$> [1 :: Int .. 5],
+      handleEventHook = handleEventHook def <+> EMWH.fullscreenEventHook
     }
 
 myCycleRecentWS :: [KeySym] -> KeySym -> KeySym -> X ()
@@ -201,6 +185,7 @@ myCycleRecentWS = CW.cycleWindowSets options
           [] -> ws
           ws' -> ws'
         rotate (x : xs) = xs ++ [x]
+        rotate _ = error "no worspaces?"
 
 myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
   where
@@ -211,7 +196,6 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
         ((m, xK_d), withPwd $ maybe (spawn "dolphin") (\pwd -> spawn $ "dolphin " <> pwd)),
         ((m .|. shiftMask, xK_f), spawn "clipboard-firefox"),
         ((m, xK_Return), mkTerm "/etc/profiles/per-user/jmc/bin/fish"),
-        ((m .|. ctrlMask, xK_Return), mkTerm "/etc/profiles/per-user/jmc/bin/fish"),
         ((m, xK_z), sendMessage ToggleZoom),
         ((m, xK_m), sendMessage ToggleReflectMsg),
         ((m .|. shiftMask, xK_h), sendMessage VShrink),
@@ -244,7 +228,7 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
         ((m, xK_0), SP.setScreenWindowSpacing $ fromIntegral defaultSpacing)
       ]
         <> [ ((m .|. mask, k), windows f)
-             | (i, k) <- zip (XM.workspaces conf) [xK_1 .. xK_9],
+             | (i, k) <- zip (workspaces conf) [xK_1 .. xK_9],
                (mask, f) <-
                  [ (0, W.greedyView i),
                    (shiftMask, W.shift i),
@@ -256,7 +240,7 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
                -- . | (key, scr) <- zip [xK_e, xK_w] [0..]
                (mask, f) <-
                  [ (0, W.view),
-                   (shiftMask, \n -> W.shift n),
+                   (shiftMask, W.shift),
                    (controlMask, \n -> W.view n . W.shift n) -- TODO greedyview vs view?
                  ]
            ]
@@ -293,10 +277,8 @@ polybarLog dbus = do
     base = DL.pad . weebify
     rev = DL.wrap "%{R}" "%{R-}"
     greyOut = fg "#81a1c1"
-    ul hex = DL.wrap ("%{u" <> hex <> "}%{+u}") "%{-u}"
     ul' = DL.wrap "%{+u}" "%{-u}"
     fg hex = DL.wrap ("%{F" <> hex <> "}") "%{F-}"
-    bg hex = DL.wrap ("%{B" <> hex <> "}") "%{B-}"
     font2 = DL.wrap "%{T2}" "%{T-}"
 
     weebify "1" = "壱" -- "一"
