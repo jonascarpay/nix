@@ -5,6 +5,7 @@ let
   rofi-directory =
     let
       script = pkgs.writeShellScriptBin "rofi-directory" ''
+        set -e
         HISTORY=~/.local/share/rofi/rofi-directory-history
         DIR=$(frecently $HISTORY view | sed "s#$HOME#~#" | rofi -dmenu -i -matching fuzzy -p Directory)
         DIR_REAL=$(realpath "''${DIR/#\~/$HOME}")
