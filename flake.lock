@@ -104,16 +104,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1647868071,
-        "narHash": "sha256-HOaxaVSHNLQFGPn//N0mPb3/PdjWSfd3U2bhs3NhHtk=",
+        "lastModified": 1648001695,
+        "narHash": "sha256-tMHqJoexKQi4mTwydJNIYOR89sm8fZgC/0xQqIaU/kE=",
         "owner": "jonascarpay",
         "repo": "frecently",
-        "rev": "3902956066ffc65fb2c5aa2764adb152329dee68",
+        "rev": "6f5c51119d0668b004ea4a5ae658b6181b6e5573",
         "type": "github"
       },
       "original": {
         "owner": "jonascarpay",
-        "ref": "recency-bonus",
+        "ref": "hourly-energy",
         "repo": "frecently",
         "type": "github"
       }

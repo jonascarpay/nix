@@ -32,7 +32,7 @@
       flake = false;
     };
     frecently = {
-      url = "github:jonascarpay/frecently/recency-bonus";
+      url = "github:jonascarpay/frecently/hourly-energy";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

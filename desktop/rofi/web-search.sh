@@ -30,9 +30,9 @@ if [[ -n "$ENGINE" ]]; then
   QUERY=$(frecently $HISTORY view | rofi -dmenu -i -matching fuzzy -p "$ENGINE search")
 
   if [[ -n "$QUERY" ]]; then
-    URL=${URLS[$ENGINE]}$QUERY
-    xdg-open "$URL"
     frecently $ENGINE_HISTORY bump "$ENGINE"
     frecently "$HISTORY" bump "$QUERY"
+    URL=${URLS[$ENGINE]}$QUERY
+    xdg-open "$URL"
   fi
 fi
