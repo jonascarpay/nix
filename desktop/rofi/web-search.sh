@@ -5,6 +5,8 @@ declare -A URLS
 URLS=(
   ["Duckduckgo"]="https://www.duckduckgo.com/?q="
   ["Google"]="https://www.google.com/search?q="
+  ["Github-nixpkgs"]="https://github.com/NixOS/nixpkgs/search?q="
+  ["Github-repo"]="https://github.com/"
   ["Hoogle-local"]="http://localhost:8080/?hoogle="
   ["Hoogle"]="https://hoogle.haskell.org/?hoogle="
   ["Hackage"]="https://hackage.haskell.org/package/"
