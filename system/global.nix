@@ -118,6 +118,8 @@ in
     dev.enable = true;
   };
 
+  boot.cleanTmpDir = true;
+
   nix = {
     # trustedUsers = [ "root" "@wheel" ];
     package = pkgs.nixUnstable;
