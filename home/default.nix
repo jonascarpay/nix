@@ -56,6 +56,7 @@
   };
 
   programs = {
+    man.generateCaches = true;
     fzf = {
       enable = true;
       package = unstable.fzf;
