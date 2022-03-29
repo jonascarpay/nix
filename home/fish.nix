@@ -7,6 +7,11 @@
         curl -sL https://www.gitignore.io/api/$argv
       end
 
+      function take -a dir
+        mkdir -p $dir
+        cd $dir
+      end
+
       function fish_prompt
         ${pkgs.powerline-go}/bin/powerline-go \
           -error $status \
@@ -71,7 +76,9 @@
       ssco = "sudo systemctl stop";
       sscr = "sudo systemctl restart";
       sscu = "sudo systemctl status";
-      t = "cd (mktemp -d)";
+      tmp = "cd (mktemp -d)";
+      tm = "tmux";
+      tk = "take";
       v = "vim";
       vd = "vimdir";
       vn = "vimdir ~/nix";
