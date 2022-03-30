@@ -35,6 +35,22 @@
         "type": "github"
       }
     },
+    "dmenu": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1648661139,
+        "narHash": "sha256-qK0fEKtD7M8ZgK6pcY+CDNqN2wHzLP6ORtM4EBpTswg=",
+        "owner": "jonascarpay",
+        "repo": "dmenu",
+        "rev": "65bc2852463661de8e9863ecba6fcd5d507f87f4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jonascarpay",
+        "repo": "dmenu",
+        "type": "github"
+      }
+    },
     "emacs-overlay": {
       "locked": {
         "lastModified": 1648005315,
@@ -245,6 +261,7 @@
       "inputs": {
         "agenix": "agenix",
         "declarative-cachix": "declarative-cachix",
+        "dmenu": "dmenu",
         "emacs-overlay": "emacs-overlay",
         "frecently": "frecently",
         "home-manager": "home-manager",

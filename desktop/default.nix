@@ -25,6 +25,7 @@ in
     ./neuron.nix
     ./picom.nix
     ./polybar.nix
+    ./dmenu
     ./redshift.nix
     ./st
     ./xmonad

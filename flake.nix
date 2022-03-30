@@ -35,6 +35,10 @@
       url = "github:jonascarpay/frecently/hourly-energy";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    dmenu = {
+      url = "github:jonascarpay/dmenu";
+      flake = false;
+    };
   };
 
   outputs = inputs:
