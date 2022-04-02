@@ -187,7 +187,10 @@ in
         };
 
         coc = {
-          plugins = [ np.coc-nvim ];
+          plugins = [
+            np.coc-nvim
+            np.coc-pyright
+          ];
           config = ''
             set hidden
             set nobackup
