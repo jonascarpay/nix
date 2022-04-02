@@ -94,6 +94,7 @@ in
   };
   services.tuptime.enable = true;
   programs.bash.enableCompletion = true; # enable tab-completion for nix-* tools
+  programs.mosh.enable = true;
 
   hardware.enableRedistributableFirmware = true;
 
