@@ -20,7 +20,6 @@ in
   imports = [
     ./blender.nix
     ./dunst.nix
-    ./rofi.nix
     ./emacs
     ./neuron.nix
     ./picom.nix

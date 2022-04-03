@@ -36,13 +36,18 @@
       }
     },
     "dmenu": {
-      "flake": false,
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
       "locked": {
-        "lastModified": 1648661139,
-        "narHash": "sha256-qK0fEKtD7M8ZgK6pcY+CDNqN2wHzLP6ORtM4EBpTswg=",
+        "lastModified": 1648671012,
+        "narHash": "sha256-131T/At2wmhz95voHgVf2vrrL3OLjkP2J+dm3GZGhdY=",
         "owner": "jonascarpay",
         "repo": "dmenu",
-        "rev": "65bc2852463661de8e9863ecba6fcd5d507f87f4",
+        "rev": "68821d7d3f06a42284e5eb84f7ba5797c2c6060e",
         "type": "github"
       },
       "original": {
@@ -84,6 +89,21 @@
     },
     "flake-utils": {
       "locked": {
+        "lastModified": 1648297722,
+        "narHash": "sha256-W+qlPsiZd8F3XkzXOzAoR+mpFqzm3ekQkJNa+PIh1BQ=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "0f8662f1319ad6abf89b3380dd2722369fc51ade",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_2": {
+      "locked": {
         "lastModified": 1631561581,
         "narHash": "sha256-3VQMV5zvxaVLvqqUrNz3iJelLw30mIVSfZmAaauM3dA=",
         "owner": "numtide",
@@ -97,7 +117,7 @@
         "type": "github"
       }
     },
-    "flake-utils_2": {
+    "flake-utils_3": {
       "locked": {
         "lastModified": 1617631617,
         "narHash": "sha256-PARRCz55qN3gy07VJZIlFeOX420d0nGF0RzGI/9hVlw=",
@@ -114,22 +134,21 @@
     },
     "frecently": {
       "inputs": {
-        "flake-utils": "flake-utils",
+        "flake-utils": "flake-utils_2",
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1648276651,
-        "narHash": "sha256-BUbUNnBny7sExtnKsZysJ7qZ09dbrS+ismQYEuIFcKA=",
+        "lastModified": 1648962119,
+        "narHash": "sha256-rfkyAbXIR4JazFQoXmqNb/WMVNi8f57mxocrHV2uko8=",
         "owner": "jonascarpay",
         "repo": "frecently",
-        "rev": "20096656f0a559b0e901839dd7c093350e38cbaf",
+        "rev": "457ec9237e80e1da619556ed4c5acaaff6fa2b85",
         "type": "github"
       },
       "original": {
         "owner": "jonascarpay",
-        "ref": "hourly-energy",
         "repo": "frecently",
         "type": "github"
       }
@@ -174,7 +193,7 @@
     "neuron": {
       "inputs": {
         "flake-compat": "flake-compat",
-        "flake-utils": "flake-utils_2",
+        "flake-utils": "flake-utils_3",
         "nixpkgs": [
           "nixpkgs"
         ]

@@ -203,18 +203,13 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
         ((m .|. shiftMask, xK_Return), windows W.swapMaster),
         ((m, xK_s), windows W.swapDown >> windows W.focusUp),
         ((m, xK_c), spawn "emacsclient --create-frame --no-wait"),
-        ((m, xK_s), spawn "rofi-web-search"),
-        ((m, xK_o), spawn "rofi -show run"),
+        ((m, xK_s), spawn "dmenu-web-search"),
+        ((m, xK_o), spawn "dmenu-run"),
         ( (m, xK_p),
           SM.submap . M.fromList $
-            [ ((m, xK_c), spawn "rofi -show calc -modi calc -no-show-match -no-sort -calc-command \"echo -n '{result}' | xclip -sel clip\""),
-              ((m, xK_p), spawn "rofi-pass"),
-              ((m, xK_d), spawn "rofi-directory"),
-              ((m, xK_r), spawn "rofi-command"),
-              ((m, xK_o), spawn "rofi -show drun"),
-              ((m, xK_s), spawn "rofi-systemd"),
-              ((m, xK_e), spawn "rofimoji"),
-              ((m, xK_q), spawn "rofi -show p -modi p:rofi-power-menu")
+            [ ((m, xK_p), spawn "dmenu-pass"),
+              ((m, xK_d), spawn "dmenu-directory"),
+              ((m, xK_r), spawn "dmenu-command")
             ]
         ),
         ((m .|. shiftMask, xK_p), spawn "qtpass"),

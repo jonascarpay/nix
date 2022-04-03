@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 declare -A URLS
 
 URLS=(
@@ -21,19 +23,19 @@ gen_list() {
   done
 }
 
-ENGINE_HISTORY=~/.local/share/rofi/rofi-engine-history
+ENGINE_HISTORY=~/.local/share/frecently/search-engine-history
 
-ENGINE=$( (gen_list) | xargs frecently $ENGINE_HISTORY view | rofi -dmenu -i -matching fuzzy -no-custom -p "Engine")
+ENGINE=$(gen_list | frecently view $ENGINE_HISTORY -ar | dmenu -i -sr -p "Engine")
 
 if [[ -n "$ENGINE" ]]; then
 
-  HISTORY=~/.local/share/rofi/rofi-$ENGINE-search-history
+  HISTORY=~/.local/share/frecently/search-$ENGINE-history
 
-  QUERY=$(frecently $HISTORY view | rofi -dmenu -i -matching fuzzy -p "$ENGINE search")
+  QUERY=$(frecently view $HISTORY | dmenu -p "$ENGINE Query")
 
   if [[ -n "$QUERY" ]]; then
-    frecently $ENGINE_HISTORY bump "$ENGINE"
-    frecently "$HISTORY" bump "$QUERY"
+    frecently bump "$ENGINE_HISTORY" "$ENGINE"
+    frecently bump "$HISTORY" "$QUERY"
     URL=${URLS[$ENGINE]}$QUERY
     xdg-open "$URL"
   fi
