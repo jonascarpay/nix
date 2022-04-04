@@ -14,7 +14,7 @@ let
               frecently delete ${history} "$dir"
             fi
           done
-          DIR=$(frecently view ${history} | sed "s#$HOME#~#" | dmenu -p Directory)
+          DIR=$(frecently view ${history} | sed "s#$HOME#~#" | dmenu -p " ")
           DIR_REAL=$(realpath "''${DIR/#\~/$HOME}")
           if [ -d $DIR_REAL ]; then
             frecently bump ${history} "$DIR_REAL"
@@ -36,7 +36,7 @@ let
       history = "${history-root}/command-history";
       script = pkgs.writeShellScriptBin "dmenu-command" ''
         set -e
-        CMD=$(frecently view ${history} | dmenu -p Command)
+        CMD=$(frecently view ${history} | dmenu -p " ")
         frecently bump "${history}" "$CMD"
         st -e $CMD
       '';
@@ -55,7 +55,7 @@ let
   dmenu-run = let history = "${history-root}/run-history"; in
     pkgs.writeShellScriptBin "dmenu-run" ''
       set -e
-      CMD=$(dmenu_path | frecently view ${history} -ar | dmenu -sr -p "Run")
+      CMD=$(dmenu_path | frecently view ${history} -ar | dmenu -sr -p " ")
       frecently bump ${history} "$CMD"
       echo $CMD | ''${SHELL:-"/bin/sh"} &
     '';
@@ -70,7 +70,7 @@ let
       password_files=( "$prefix"/**/*.gpg )
       password_files=( "''${password_files[@]#"$prefix"/}" )
       password_files=( "''${password_files[@]%.gpg}" )
-      password=$(printf '%s\n' "''${password_files[@]}" | frecently view ${history} -ar | dmenu -sr -p Password -i)
+      password=$(printf '%s\n' "''${password_files[@]}" | frecently view ${history} -ar | dmenu -sr -p "ﳳ " -i)
 
       [[ -n $password ]] || exit
 
@@ -83,7 +83,7 @@ let
 
   dmenu-delete = pkgs.writeShellScriptBin "dmenu-delete" ''
     set -eo pipefail
-    frecently view "$@" | dmenu -mr | xargs frecently delete "$@"
+    frecently view "$@" | dmenu -mr | xargs frecently delete "$@" -p " "
   '';
 
 in

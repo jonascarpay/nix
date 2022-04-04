@@ -25,13 +25,13 @@ gen_list() {
 
 ENGINE_HISTORY=~/.local/share/frecently/search-engine-history
 
-ENGINE=$(gen_list | frecently view $ENGINE_HISTORY -ar | dmenu -i -sr -p "Engine")
+ENGINE=$(gen_list | frecently view $ENGINE_HISTORY -ar | dmenu -i -sr -p "爵 ")
 
 if [[ -n "$ENGINE" ]]; then
 
   HISTORY=~/.local/share/frecently/search-$ENGINE-history
 
-  QUERY=$(frecently view $HISTORY | dmenu -p "$ENGINE Query")
+  QUERY=$(frecently view $HISTORY | dmenu -p "$ENGINE")
 
   if [[ -n "$QUERY" ]]; then
     frecently bump "$ENGINE_HISTORY" "$ENGINE"
