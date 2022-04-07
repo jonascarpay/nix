@@ -45,7 +45,8 @@ let
       home.packages = [ script ];
       programs.fish.shellInit = ''
         function __rofi-command-hook --on-event fish_postexec --description 'add command to command frecency history'
-          if test $status -eq 0
+          # Only accept if the status was success, and it was a one-liner
+          if test $status -eq 0 -a (echo "$argv" | wc -l) -eq 1
             frecently bump ${history} "$argv"
           end
         end
