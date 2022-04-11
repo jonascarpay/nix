@@ -84,7 +84,7 @@ let
 
   dmenu-delete = pkgs.writeShellScriptBin "dmenu-delete" ''
     set -eo pipefail
-    frecently view "$@" | dmenu -mr | xargs frecently delete "$@" -p " "
+    frecently view "$@" | dmenu -mr -p " " | xargs frecently delete "$@"
   '';
 
 in
