@@ -6,19 +6,20 @@
 {-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall -Wno-deprecations -Wno-name-shadowing -Wno-missing-signatures #-}
 
-import qualified Codec.Binary.UTF8.String as UTF8
+module Main (main) where
+
 import Control.Applicative
 import Control.Monad
 import qualified DBus as D
 import qualified DBus.Client as D
-import Data.List (isPrefixOf, partition)
+import Data.List (isPrefixOf, isSuffixOf, partition, sortOn)
 import qualified Data.Map as M
 import Data.Maybe (isJust)
 import XMonad
 import qualified XMonad.Actions.CycleRecentWS as CW
 import qualified XMonad.Actions.Submap as SM
 import XMonad.Config.Desktop as DC
-import XMonad.Hooks.DynamicLog as DL
+import qualified XMonad.Hooks.DynamicLog as DL
 import qualified XMonad.Hooks.EwmhDesktops as EMWH
 import qualified XMonad.Hooks.ManageDocks as MD
 import qualified XMonad.Layout.LayoutModifier as LM
@@ -166,11 +167,11 @@ dcfg dbus =
       modMask = mod4Mask,
       borderWidth = 0, -- Necessary to remove borders from floating windows
       focusFollowsMouse = False,
-      logHook = polybarLog dbus,
+      logHook = polybar dbus,
       layoutHook = resetWhenEmpty $ myLayout ||| Full,
       -- startupHook = startupHook desktopConfig,
       keys = myKeys,
-      workspaces = show <$> [1 :: Int .. 5],
+      workspaces = show <$> take 9 [1 :: Int ..],
       handleEventHook = handleEventHook def <+> EMWH.fullscreenEventHook
     }
 
@@ -178,9 +179,12 @@ myCycleRecentWS :: [KeySym] -> KeySym -> KeySym -> X ()
 myCycleRecentWS = CW.cycleWindowSets options
   where
     options w = map (flip W.view w) (recentTags w)
-    recentTags w = W.tag <$> rotate (filterNonEmpty workspaces)
+    recentTags = fmap W.tag . filterNonScratch . filterNonEmpty . rotate . W.workspaces
       where
-        workspaces = W.workspaces w
+        filterNonScratch ws =
+          case filter ((<= (5 :: Int)) . read . W.tag) ws of
+            ws'@(_ : _ : _) -> ws'
+            _ -> ws
         filterNonEmpty ws = case filter (isJust . W.stack) ws of
           [] -> ws
           ws' -> ws'
@@ -253,49 +257,83 @@ withPwd f = withWindowSet $ \ws ->
     False <- pure $ "/proc/" `isPrefixOf` cwd
     f (Just cwd)
 
-polybarLog :: D.Client -> X ()
-polybarLog dbus = do
-  dynamicLogWithPP eventLogHook
+polybar :: D.Client -> X ()
+polybar dbus = do
+  winset <- gets windowset
+  workspaceIcons <- do
+    namedWindows <- (traverse . traverse . traverse) getHints (windows' winset)
+    let currentWS :: Int = read . W.currentTag $ winset
+    pure $ formatWorkspaces currentWS namedWindows
+  title <- case fmap W.focus . W.stack . W.workspace . W.current $ winset of
+    Nothing -> pure id
+    Just wid -> do
+      str <- runQuery title wid
+      pure (showString " - " . bold (showString (DL.shorten 80 str)))
+  io $ dbusOutput dbus (showString " " . workspaceIcons . title $ "")
   where
-    eventLogHook =
-      def
-        { ppOutput = dbusOutput dbus,
-          ppLayout = const "",
-          ppCurrent = rev . base,
-          ppVisible = ul' . base,
-          ppVisibleNoWindows = Just (ul' . greyOut . base),
-          ppHidden = base,
-          ppHiddenNoWindows = greyOut . base,
-          ppWsSep = "",
-          ppSep = "   ",
-          ppTitle = font2 . DL.shorten 80
-        }
-    base = DL.pad . weebify
-    rev = DL.wrap "%{R}" "%{R-}"
-    greyOut = fg "#81a1c1"
-    ul' = DL.wrap "%{+u}" "%{-u}"
-    fg hex = DL.wrap ("%{F" <> hex <> "}") "%{F-}"
-    font2 = DL.wrap "%{T2}" "%{T-}"
+    bold :: ShowS -> ShowS
+    bold = wrap "%{T2}" "%{T-}"
 
-    weebify "1" = "壱" -- "一"
-    weebify "2" = "弐" -- "二"
-    weebify "3" = "参" -- "三"
-    weebify "4" = "四"
-    weebify "5" = "五"
-    weebify "6" = "六"
-    weebify "7" = "七"
-    weebify "8" = "八"
-    weebify "9" = "九"
-    weebify str = str
+    formatWorkspaces :: Int -> [(Int, [(String, String)])] -> ShowS
+    formatWorkspaces cur wss = pre . post
+      where
+        cat :: [ShowS] -> ShowS
+        cat = foldr (.) id
+
+        (wsAlways, wsExtra) = splitAt 5 (sortOn fst wss)
+
+        pre = cat (uncurry formatWorkspace <$> wsAlways)
+        post =
+          let nonEmptyExtra = filter (\(wid, wins) -> wid == cur || not (null wins)) wsExtra
+           in if null nonEmptyExtra && cur <= 5
+                then id
+                else showString " | " . cat (uncurry formatWorkspace <$> nonEmptyExtra)
+
+        formatWorkspace :: Int -> [(String, String)] -> ShowS
+        formatWorkspace n wins = style $ showChar ' ' . shows n . (if null wins then id else showChar ' ') . wins' . showChar ' '
+          where
+            wins' = formatWindows wins
+            style
+              | cur == n = wrap "%{R}" "%{R-}"
+              | null wins = wrap "%{F#81a1c1}" "%{F-}"
+              | otherwise = id
+
+        formatWindows :: [(String, String)] -> ShowS
+        formatWindows = cat . fmap (\win -> showChar (uncurry iconize win) . showChar ' ')
+
+    wrap :: String -> String -> ShowS -> ShowS
+    wrap p q i = showString p . i . showString q
+
+    windows' :: W.StackSet WorkspaceId a Window b c -> [(Int, [Window])]
+    windows' = fmap (\(W.Workspace i _ stk) -> (read i, maybe [] W.integrate stk)) . W.workspaces
+
+    getHints :: Window -> X (String, String)
+    getHints = runQuery (liftA2 (,) title className)
+
+iconize :: String -> String -> Char
+iconize title "firefox"
+  | "YouTube — Mozilla Firefox" `isSuffixOf` title = '\xFAC2'
+  | "Wikipedia — Mozilla Firefox" `isSuffixOf` title = '\xF266'
+  | "Hacker News — Mozilla Firefox" `isSuffixOf` title = '\xF1D4'
+  | "GitHub — Mozilla Firefox" `isSuffixOf` title = '\xF408'
+  | "Twitter — Mozilla Firefox" `isSuffixOf` title = '\xF099'
+  | otherwise = '\xF269'
+iconize title "st-256color"
+  | "vim" `isPrefixOf` title = '\xE62B'
+  | "htop" `isPrefixOf` title = '\xF080'
+  | "hoogle" `isPrefixOf` title = '\xF98A'
+  | otherwise = '\xF489'
+iconize _ "Slack" = '\xF198'
+iconize _ "Spotify" = '\xF1BC'
+iconize _ "Google-chrome" = '\xF268'
+iconize _ "Chromium-browser" = '\xF7AE'
+iconize _ "Blender" = '\xF5AA'
+iconize _ _ = '\xF2D0'
 
 dbusOutput :: D.Client -> String -> IO ()
-dbusOutput dbus str = do
-  let signal =
-        (D.signal objectPath interfaceName memberName)
-          { D.signalBody = [D.toVariant $ UTF8.decodeString str]
-          }
-  D.emit dbus signal
+dbusOutput dbus str = D.emit dbus signal
   where
     objectPath = D.objectPath_ "/org/xmonad/Log"
     interfaceName = D.interfaceName_ "org.xmonad.Log"
     memberName = D.memberName_ "Update"
+    signal = (D.signal objectPath interfaceName memberName) {D.signalBody = [D.toVariant str]}
