@@ -51,9 +51,6 @@
       nb = "nix build";
       nbl = "nix build -L";
       nbo = ''nix build -L --option substituters ""'';
-      nc = "nix-channel";
-      ncl = "nix-channel --list";
-      ncu = "nix-channel --update";
       ng = "nix-collect-garbage";
       nsp = "nix shell nixpkgs#";
       ns = "nix shell";
