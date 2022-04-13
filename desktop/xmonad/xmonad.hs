@@ -323,6 +323,7 @@ iconize title "st-256color"
   | "vim" `isPrefixOf` title = '\xE62B'
   | "htop" `isPrefixOf` title = '\xF080'
   | "hoogle" `isPrefixOf` title = '\xF98A'
+  | "pydoc" `isPrefixOf` title = '\xF98A'
   | "ranger" `isPrefixOf` title = '\xF0DB' -- 
   | otherwise = '\xE795' -- 
 iconize _ "Slack" = '\xF198'
@@ -331,6 +332,8 @@ iconize _ "Google-chrome" = '\xF268'
 iconize _ "Chromium-browser" = '\xF7AE'
 iconize _ "Blender" = '\xF5AA'
 iconize _ "Steam" = '\xF1B7'
+iconize _ "TelegramDesktop" = '\xF2C6'
+iconize _ "Signal" = '\xF860'
 iconize _ _ = '\xF2D0'
 
 dbusOutput :: D.Client -> String -> IO ()
