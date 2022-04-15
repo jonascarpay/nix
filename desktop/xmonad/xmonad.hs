@@ -2,6 +2,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall -Wno-deprecations -Wno-name-shadowing -Wno-missing-signatures #-}
@@ -9,7 +10,9 @@
 module Main (main) where
 
 import Control.Applicative
+import Control.Lens
 import Control.Monad
+import Control.Monad.State
 import qualified DBus as D
 import qualified DBus.Client as D
 import Data.List (isPrefixOf, isSuffixOf, partition, sortOn)
@@ -141,8 +144,8 @@ main = do
       (D.busName_ "org.xmonad.Log")
       [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
   xmonad $
-    EMWH.ewmh $
-      dcfg dbus
+    -- EMWH.ewmh $
+    dcfg dbus
 
 cycleNonFocusDown :: W.Stack a -> W.Stack a
 cycleNonFocusDown (W.Stack f us ds) = W.Stack f us' (reverse ds')
@@ -197,6 +200,7 @@ myCycleRecentWS = CW.cycleWindowSets options
         rotate (x : xs) = xs ++ [x]
         rotate _ = error "no worspaces?"
 
+myKeys :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
   where
     m = modMask conf
@@ -238,18 +242,41 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
                (mask, f) <-
                  [ (0, W.greedyView i),
                    (shiftMask, W.shift i),
-                   (controlMask, W.greedyView i . W.shift i)
+                   (controlMask, W.greedyView i . W.shift i),
+                   (shiftMask .|. controlMask, swapWorkspaces i)
                  ]
            ]
-        <> [ ((m .|. mask, key), screenWorkspace scr >>= flip whenJust (windows . f))
-             | (key, scr) <- zip [xK_w, xK_e, xK_r] [0 ..],
-               -- . | (key, scr) <- zip [xK_e, xK_w] [0..]
-               (mask, f) <-
-                 [ (0, W.view),
-                   (shiftMask, W.shift),
-                   (controlMask, \n -> W.view n . W.shift n) -- TODO greedyview vs view?
-                 ]
-           ]
+
+-- swapWorkspaces :: forall i l a sid sd. Eq i => i -> W.StackSet i l a sid sd -> W.StackSet i l a sid sd
+swapWorkspaces :: WorkspaceId -> WindowSet -> WindowSet
+swapWorkspaces other cur =
+  case putGet (ssWorkspace other . workspaceContents) (cur ^. currentWorkspace . workspaceContents) cur of
+    (ss, [ws']) -> ss & currentWorkspace . workspaceContents .~ ws'
+    _ -> cur
+
+putGet :: forall s t a b. Traversal s t a b -> b -> s -> (t, [a])
+putGet l b s = runState (l f s) []
+  where
+    f :: a -> State [a] b
+    f a = b <$ modify (a :)
+
+currentWorkspace :: Lens' (W.StackSet i l a sid sd) (W.Workspace i l a)
+currentWorkspace = ssCurrent . scrWorkspace
+
+ssCurrent :: Lens' (W.StackSet i l a sid sd) (W.Screen i l a sid sd)
+ssCurrent f (W.StackSet cur vis hid flt) = (\cur' -> W.StackSet cur' vis hid flt) <$> f cur
+
+ssWorkspace :: Eq i => i -> Traversal' (W.StackSet i l a sid sd) (W.Workspace i l a)
+ssWorkspace ix f = ssWorkspaces (\ws -> if W.tag ws == ix then f ws else pure ws)
+
+workspaceContents :: Lens (W.Workspace i l a) (W.Workspace i l' a') (l, Maybe (W.Stack a)) (l', Maybe (W.Stack a'))
+workspaceContents f (W.Workspace i l ms) = uncurry (W.Workspace i) <$> f (l, ms)
+
+ssWorkspaces :: Traversal (W.StackSet i l a sid sd) (W.StackSet i' l' a sid sd) (W.Workspace i l a) (W.Workspace i' l' a)
+ssWorkspaces f (W.StackSet cur vis hid flt) = W.StackSet <$> scrWorkspace f cur <*> (traverse . scrWorkspace) f vis <*> traverse f hid <*> pure flt
+
+scrWorkspace :: Lens (W.Screen i l a sid sd) (W.Screen i' l' a' sid sd) (W.Workspace i l a) (W.Workspace i' l' a')
+scrWorkspace f (W.Screen ws sid sd) = (\ws' -> W.Screen ws' sid sd) <$> f ws
 
 mkTerm shell = withPwd $ maybe (runInTerm "" shell) (\cwd -> runInTerm ("-d" <> cwd) shell)
 

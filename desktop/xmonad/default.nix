@@ -8,6 +8,9 @@
     enable = true;
     enableContribAndExtras = true;
     config = ./xmonad.hs;
-    extraPackages = hpkgs: [ pkgs.wmctrl hpkgs.dbus ];
+    extraPackages = hpkgs: [
+      pkgs.wmctrl
+      hpkgs.dbus
+    ];
   };
 }
