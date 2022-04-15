@@ -22,6 +22,7 @@ import XMonad.Config.Desktop as DC
 import qualified XMonad.Hooks.DynamicLog as DL
 import qualified XMonad.Hooks.EwmhDesktops as EMWH
 import qualified XMonad.Hooks.ManageDocks as MD
+import qualified XMonad.Hooks.ManageHelpers as MH
 import qualified XMonad.Layout.LayoutModifier as LM
 import qualified XMonad.Layout.Spacing as SP
 import qualified XMonad.StackSet as W
@@ -169,7 +170,12 @@ dcfg dbus =
       focusFollowsMouse = False,
       logHook = polybar dbus,
       layoutHook = resetWhenEmpty $ myLayout ||| Full,
-      -- startupHook = startupHook desktopConfig,
+      manageHook =
+        composeAll
+          [ manageHook desktopConfig,
+            className =? "Gnome-calculator" --> MH.doCenterFloat,
+            className =? "Pavucontrol" --> MH.doCenterFloat
+          ],
       keys = myKeys,
       workspaces = show <$> take 9 [1 :: Int ..],
       handleEventHook = handleEventHook def <+> EMWH.fullscreenEventHook
