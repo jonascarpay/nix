@@ -325,6 +325,7 @@ iconize title "st-256color"
   | "hoogle" `isPrefixOf` title = '\xF98A'
   | "pydoc" `isPrefixOf` title = '\xF98A'
   | "ranger" `isPrefixOf` title = '\xF0DB' -- 
+  | "tmux" `isPrefixOf` title = '\xFB3F' -- ﬿
   | otherwise = '\xE795' -- 
 iconize _ "Slack" = '\xF198'
 iconize _ "Spotify" = '\xF1BC'
