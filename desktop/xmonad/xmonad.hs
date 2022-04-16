@@ -368,6 +368,7 @@ iconize _ "Blender" = '\xF5AA'
 iconize _ "Steam" = '\xF1B7'
 iconize _ "TelegramDesktop" = '\xF2C6'
 iconize _ "Signal" = '\xF860'
+iconize _ "Sxiv" = '\xF7E8'
 iconize _ _ = '\xF2D0'
 
 dbusOutput :: D.Client -> String -> IO ()
