@@ -47,7 +47,6 @@ in
     steam
     sxiv
     unstable.tdesktop
-    transmission-gtk
     ungoogled-chromium
     unstable.darktable
     xclip # Doesn't work?
