@@ -31,6 +31,27 @@ let
       '';
     };
 
+  dmenu-notes =
+    let
+      history = "${history-root}/notes-history";
+      note-dir = "/home/jmc/Documents/Notes";
+    in
+    pkgs.writeShellScriptBin "dmenu-notes" ''
+      set -e
+      for note in $(frecently view ${history}); do
+        if [ ! -e "${note-dir}/$note.md" ]; then
+          echo "Removing $note" 
+          frecently delete ${history} "$note"
+        fi
+      done
+      NOTE=$(find ${note-dir}/ -type f -name '*.md' | sed -E 's#${note-dir}/(.*).md#\1#' | frecently view ${history} -a | dmenu -i -p "Note")
+      frecently bump ${history} "$NOTE"
+      SUBDIR="${note-dir}/$(echo "$NOTE" | sed -E 's#(.*/)*.*#\1#')"
+      mkdir -p "$SUBDIR"
+      st -d ${note-dir} -e vim "$NOTE.md"
+    ''
+  ;
+
   dmenu-command =
     let
       history = "${history-root}/command-history";
@@ -100,5 +121,6 @@ in
     dmenu-pass
     dmenu-web-search
     dmenu-delete
+    dmenu-notes
   ];
 }
