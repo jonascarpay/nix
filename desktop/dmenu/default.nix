@@ -38,7 +38,7 @@ let
     in
     pkgs.writeShellScriptBin "dmenu-notes" ''
       set -e
-      for note in $(frecently view ${history}); do
+      frecently view ${history} | while read -r note; do
         if [ ! -e "${note-dir}/$note.md" ]; then
           echo "Removing $note" 
           frecently delete ${history} "$note"
