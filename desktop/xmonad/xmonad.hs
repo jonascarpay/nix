@@ -219,6 +219,11 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
         ((m, xK_c), spawn "emacsclient --create-frame --no-wait"),
         ((m, xK_s), spawn "dmenu-web-search"),
         ((m, xK_o), spawn "dmenu-run"),
+        ( (m, xK_r),
+          SM.submap . M.fromList $
+            [ ((m, xK_c), spawn "gnome-calculator")
+            ]
+        ),
         ( (m, xK_p),
           SM.submap . M.fromList $
             [ ((m, xK_p), spawn "dmenu-pass"),
