@@ -44,7 +44,7 @@ let
           frecently delete ${history} "$note"
         fi
       done
-      NOTE=$(find ${note-dir}/ -type f -name '*.md' | sed -E 's#${note-dir}/(.*).md#\1#' | frecently view ${history} -a | dmenu -i -p "Note")
+      NOTE=$(find ${note-dir}/ -type f -name '*.md' | sed -E 's#${note-dir}/(.*).md#\1#' | frecently view ${history} -a | dmenu -i -p " ")
       frecently bump ${history} "$NOTE"
       SUBDIR="${note-dir}/$(echo "$NOTE" | sed -E 's#(.*/)*.*#\1#')"
       mkdir -p "$SUBDIR"
@@ -71,7 +71,7 @@ let
         done
       }
 
-      PICK=$(gen_list | frecently view ${history} -ar | dmenu -i -sr -p "Link:")
+      PICK=$(gen_list | frecently view ${history} -ar | dmenu -i -sr -p " ")
       frecently bump ${history} "$PICK"
       xdg-open "''${links["$PICK"]}"
     ''
