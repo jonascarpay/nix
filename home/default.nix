@@ -18,6 +18,7 @@
       ag
       cloc
       entr
+      jq
       killall
       manpages
       neofetch
