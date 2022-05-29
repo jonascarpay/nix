@@ -229,7 +229,8 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
             [ ((m, xK_p), spawn "dmenu-pass"),
               ((m, xK_d), spawn "dmenu-directory"),
               ((m, xK_r), spawn "dmenu-command"),
-              ((m, xK_n), spawn "dmenu-notes")
+              ((m, xK_n), spawn "dmenu-notes"),
+              ((m, xK_b), spawn "dmenu-note-bookmarks")
             ]
         ),
         ((m .|. shiftMask, xK_p), spawn "qtpass"),

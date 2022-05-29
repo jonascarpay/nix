@@ -31,10 +31,10 @@ let
       '';
     };
 
+  note-dir = "/home/jmc/Documents/Notes";
   dmenu-notes =
     let
       history = "${history-root}/notes-history";
-      note-dir = "/home/jmc/Documents/Notes";
     in
     pkgs.writeShellScriptBin "dmenu-notes" ''
       set -e
@@ -49,6 +49,31 @@ let
       SUBDIR="${note-dir}/$(echo "$NOTE" | sed -E 's#(.*/)*.*#\1#')"
       mkdir -p "$SUBDIR"
       st -d ${note-dir} -e vim "$NOTE.md"
+    '';
+
+  dmenu-note-bookmarks =
+    let
+      history = "${history-root}/note-bookmark-history";
+    in
+    pkgs.writeShellScriptBin "dmenu-note-bookmarks" ''
+      set -e
+      declare -A links
+
+      while read -r link; do
+        title=$(echo $link | sed -E 's/\[(.*)\]\(.*\)/\1/')
+        url=$(echo $link | sed -E 's/\[.*\]\((.*)\)/\1/')
+        links["$title"]="$url"
+      done < <(grep --no-filename --recursive --only-matching '\[.*\]\(.*\)' ${note-dir}/)
+
+      gen_list() {
+        for i in "''${!links[@]}"; do
+          echo $i
+        done
+      }
+
+      PICK=$(gen_list | frecently view ${history} -ar | dmenu -i -sr -p "Link:")
+      frecently bump ${history} "$PICK"
+      xdg-open "''${links["$PICK"]}"
     ''
   ;
 
@@ -122,5 +147,6 @@ in
     dmenu-web-search
     dmenu-delete
     dmenu-notes
+    dmenu-note-bookmarks
   ];
 }
