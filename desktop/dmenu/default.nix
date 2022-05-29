@@ -60,10 +60,10 @@ let
       declare -A links
 
       while read -r link; do
-        title=$(echo $link | sed -E 's/\[(.*)\]\(.*\)/\1/')
-        url=$(echo $link | sed -E 's/\[.*\]\((.*)\)/\1/')
+        title=$(echo $link | sed -E 's#${note-dir}/(.*)\.md:\[(.*)\].*#\1 - \2#')
+        url=$(echo $link | sed -E 's#${note-dir}/.*\.md:\[.*\]\((.*)\)#\1#')
         links["$title"]="$url"
-      done < <(grep --no-filename --recursive --only-matching '\[.*\]\(.*\)' ${note-dir}/)
+      done < <(grep --recursive --only-matching '\[.*\]\(.*\)' ${note-dir}/)
 
       gen_list() {
         for i in "''${!links[@]}"; do
