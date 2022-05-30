@@ -15,6 +15,7 @@
 
   home = {
     packages = with pkgs; [
+      (writeShellScriptBin "glow" "${glow}/bin/glow --local $@")
       ag
       cloc
       entr
