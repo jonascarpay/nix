@@ -48,7 +48,7 @@ let
       frecently bump ${history} "$NOTE"
       SUBDIR="${note-dir}/$(echo "$NOTE" | sed -E 's#(.*/)*.*#\1#')"
       mkdir -p "$SUBDIR"
-      st -d ${note-dir} -e vim "$NOTE.md"
+      st -d ${note-dir} -e vim + "$NOTE.md"
     '';
 
   note-today = pkgs.writeShellScriptBin "note-today" ''
