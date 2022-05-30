@@ -51,6 +51,36 @@ let
       st -d ${note-dir} -e vim "$NOTE.md"
     '';
 
+  note-today = pkgs.writeShellScriptBin "note-today" ''
+    set -e
+    DIR=${note-dir}/Daily
+    mkdir -p $DIR
+    st -d ${note-dir} -e vim + "$DIR/$(date +"%Y-%m-%d").md"
+  '';
+
+  dmenu-todos = pkgs.writeShellScriptBin "dmenu-todos" ''
+    set -e
+    declare -A files
+    declare -A lines
+
+    while read -r line; do
+      file=$(echo $line | sed -E 's#${note-dir}/(.*):[0-9]+:.*#\1#')
+      linenr=$(echo $line | sed -E 's#${note-dir}/.*:([0-9]+):.*#\1#')
+      title=$(echo $line | sed -E 's#${note-dir}/(.*)\.md:[0-9]+:-\s*\[\s+\]\s*(.*)#\1 - \2#')
+      files["$title"]="$file"
+      lines["$title"]="$linenr"
+    done < <(grep --line-number --recursive "^-\s*\[\s\+\]" ${note-dir})
+
+    gen_list() {
+      for i in "''${!files[@]}"; do
+        echo $i
+      done
+    }
+
+    PICK=$(gen_list | dmenu -i -sr -p " ")
+    st -d ${note-dir} -e vim "+''${lines["$PICK"]}" "''${files["$PICK"]}"
+  '';
+
   dmenu-note-bookmarks =
     let
       history = "${history-root}/note-bookmark-history";
@@ -63,7 +93,7 @@ let
         title=$(echo $link | sed -E 's#${note-dir}/(.*)\.md:\[(.*)\].*#\1 - \2#')
         url=$(echo $link | sed -E 's#${note-dir}/.*\.md:\[.*\]\((.*)\)#\1#')
         links["$title"]="$url"
-      done < <(grep --recursive --only-matching '\[.*\]\(.*\)' ${note-dir}/)
+      done < <(grep --recursive --only-matching '\[.*\](.*)' ${note-dir})
 
       gen_list() {
         for i in "''${!links[@]}"; do
@@ -74,8 +104,7 @@ let
       PICK=$(gen_list | frecently view ${history} -ar | dmenu -i -sr -p " ")
       frecently bump ${history} "$PICK"
       xdg-open "''${links["$PICK"]}"
-    ''
-  ;
+    '';
 
   dmenu-command =
     let
@@ -148,5 +177,7 @@ in
     dmenu-delete
     dmenu-notes
     dmenu-note-bookmarks
+    dmenu-todos
+    note-today
   ];
 }
