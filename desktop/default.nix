@@ -1,4 +1,4 @@
-{ pkgs, unstable, config, ... }:
+{ pkgs, inputs, unstable, config, ... }:
 let
   widgets = {
     home.packages = [ pkgs.breeze-icons ];
@@ -27,11 +27,11 @@ in
     ./dmenu
     ./redshift.nix
     ./random-wallpaper.nix
-    ./st
     ./xmonad
     widgets
   ];
   home.packages = with pkgs; [
+    inputs.st.defaultPackage.${pkgs.system}
     unstable.anki-bin
     celluloid
     discord

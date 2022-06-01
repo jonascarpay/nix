@@ -2,11 +2,11 @@
   description = "nixos";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/release-21.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/release-22.05";
     unstable.url = "github:NixOS/nixpkgs";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     home-manager = {
-      url = "github:nix-community/home-manager/release-21.11";
+      url = "github:nix-community/home-manager/release-22.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     neuron = {
@@ -37,6 +37,10 @@
     };
     dmenu = {
       url = "github:jonascarpay/dmenu";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    st = {
+      url = "github:jonascarpay/st";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -109,6 +113,7 @@
             common-pc-ssd
             common-pc
             ./machines/anpan.nix
+            { system.stateVersion = "21.11"; }
           ];
           homeModules = [ ./home ./desktop ];
         };

@@ -1,31 +1,17 @@
-{ pkgs, inputs, ... }:
+{ config, inputs, ... }:
 let
-  port = "8932";
-  neuronPkg = inputs.neuron.defaultPackage."x86_64-linux";
-  neuronBin = "${neuronPkg}/bin/neuron";
-  notesDir = "/home/jmc/Slipbox";
+  notesDirectory = "/home/jmc/Slipbox";
+  port = "8080";
 in
 {
-  systemd.user = {
-    services.neuron = {
-      Unit.Description = "Neuron zettelkasten service";
-      Install.WantedBy = [ "graphical-session.target" ];
-      Service.ExecStart = "${neuronBin} gen -ws :${port}";
-      # Watching does not work if ${notesDir} is a symlink, this works around that
-      Service.WorkingDirectory = "${notesDir}";
-      # The most common cause of failure is the directory not existing, since
-      # it lives on an encrypted volume which may not be mounted. We don't need
-      # maximum uptime, we just need to periodically retry.
-      Service.Restart = "on-failure";
-      Service.RestartSec = "15m";
-    };
-  };
+  imports = [ inputs.neuron.homeManagerModule ];
+  services.neuron = { inherit port notesDirectory; };
   programs.emacs.init.modules.neuron-mode.config = ''
     (use-package neuron-mode
       :after general
       :config
-      (setq neuron-default-zettelkasten-directory "${notesDir}")
-      (setq neuron-executable "${neuronBin}")
+      (setq neuron-default-zettelkasten-directory "${notesDirectory}")
+      (setq neuron-executable "${config.services.neuron.package}/bin/neuron")
       (setq neuron-rib-server-port ${port})
       (setq-default markdown-hide-markup t)
       (general-define-key

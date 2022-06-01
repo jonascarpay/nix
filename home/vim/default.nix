@@ -31,6 +31,7 @@ in
             np.vim-polyglot
             np.vim-repeat
             np.vim-unimpaired
+            np.vim-localvimrc
           ];
           precedence = 5;
           config = ''

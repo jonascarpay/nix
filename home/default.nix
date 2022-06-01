@@ -16,12 +16,12 @@
   home = {
     packages = with pkgs; [
       (writeShellScriptBin "glow" "${glow}/bin/glow --local $@")
-      ag
+      silver-searcher # TODO do I use this?
       cloc
       entr
       jq
       killall
-      manpages
+      man-pages # TODO does this do anything manual.manpages.enable doesn't do?
       neofetch
       s-tui
       tldr

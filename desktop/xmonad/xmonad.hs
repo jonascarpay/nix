@@ -184,22 +184,6 @@ dcfg dbus =
       handleEventHook = handleEventHook def <+> EMWH.fullscreenEventHook
     }
 
-myCycleRecentWS :: [KeySym] -> KeySym -> KeySym -> X ()
-myCycleRecentWS = CW.cycleWindowSets options
-  where
-    options w = map (flip W.view w) (recentTags w)
-    recentTags = fmap W.tag . filterNonScratch . filterNonEmpty . rotate . W.workspaces
-      where
-        filterNonScratch ws =
-          case filter ((<= (5 :: Int)) . read . W.tag) ws of
-            ws'@(_ : _ : _) -> ws'
-            _ -> ws
-        filterNonEmpty ws = case filter (isJust . W.stack) ws of
-          [] -> ws
-          ws' -> ws'
-        rotate (x : xs) = xs ++ [x]
-        rotate _ = error "no worspaces?"
-
 myKeys :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
   where
@@ -241,8 +225,8 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
         ),
         ((m .|. shiftMask, xK_p), spawn "qtpass"),
         -- , ((m, xK_c), spawn "emacs")
-        ((m, xK_grave), myCycleRecentWS [xK_Super_L] xK_grave xK_grave), -- TODO switch to cycleRecentNonEmptyWS from xmonad-contrib 0.17
-        ((m, xK_Escape), myCycleRecentWS [xK_Super_L] xK_Escape xK_Escape), -- TODO switch to cycleRecentNonEmptyWS from xmonad-contrib 0.17
+        ((m, xK_grave), CW.cycleRecentNonEmptyWS [xK_Super_L] xK_grave xK_grave), -- TODO switch to cycleRecentNonEmptyWS from xmonad-contrib 0.17
+        ((m, xK_Escape), CW.cycleRecentNonEmptyWS [xK_Super_L] xK_Escape xK_Escape), -- TODO switch to cycleRecentNonEmptyWS from xmonad-contrib 0.17
         ((m, xK_y), windows $ W.modify' cycleNonFocusDown),
         ((m .|. shiftMask, xK_y), windows $ W.modify' cycleNonFocusUp),
         -- Border control
@@ -340,7 +324,7 @@ polybar dbus = do
           where
             wins' = formatWindows wins
             style
-              | cur == n = wrap "%{R}" "%{R-}"
+              | cur == n = wrap "%{R}" "%{R}"
               | null wins = wrap "%{F#81a1c1}" "%{F-}"
               | otherwise = id
 
