@@ -44,7 +44,10 @@ let
           frecently delete ${history} "$note"
         fi
       done
-      NOTE=$(find ${note-dir}/ -type f -name '*.md' | sed -E 's#${note-dir}/(.*).md#\1#' | frecently view ${history} -a | dmenu -i -p " ")
+      if [[ $1 == "-today" ]]; then
+        extraflags=(-it "$(date +"%Y-%m-%d")-")
+      fi
+      NOTE=$(find ${note-dir}/ -type f -name '*.md' | sed -E 's#${note-dir}/(.*).md#\1#' | frecently view ${history} -a | dmenu -i -p " " "''${extraflags[@]}")
       frecently bump ${history} "$NOTE"
       SUBDIR="${note-dir}/$(echo "$NOTE" | sed -E 's#(.*/)*.*#\1#')"
       mkdir -p "$SUBDIR"

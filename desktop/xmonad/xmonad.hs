@@ -219,7 +219,8 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
           SM.submap . M.fromList $
             [ ((m, xK_d), spawn "note-today"),
               ((m, xK_b), spawn "dmenu-note-bookmarks"),
-              ((m, xK_n), spawn "dmenu-notes"),
+              ((m, xK_n), spawn "dmenu-notes -today"),
+              ((m, xK_o), spawn "dmenu-notes"),
               ((m, xK_t), spawn "dmenu-todos")
             ]
         ),
