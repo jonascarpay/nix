@@ -85,6 +85,7 @@
         "*.sync-confict-*"
         ".stignore"
         ".stfolder"
+        ".lvimrc"
       ];
       extraConfig = {
         commit.verbose = true;

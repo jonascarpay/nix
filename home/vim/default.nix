@@ -31,7 +31,6 @@ in
             np.vim-polyglot
             np.vim-repeat
             np.vim-unimpaired
-            np.vim-localvimrc
           ];
           precedence = 5;
           config = ''
@@ -80,6 +79,10 @@ in
         airline.config = ''
           let g:airline_powerline_fonts = 1
           let g:airline#extensions#branch#displayed_head_limit = 10
+        '';
+
+        vim-localvimrc.config = ''
+          let g:localvimrc_persistent = 1
         '';
 
         vim-easy-align.config = ''
