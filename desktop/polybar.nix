@@ -29,7 +29,7 @@ lib.mkIf (config.xsession.enable) {
         foreground = "#d8dee9";
         module-margin = "1";
         modules-left = "xmonad";
-        modules-right = "zfs onigiri vpn wireless wired fs memory temp fan cpu battery date-nl date";
+        modules-right = "todos zfs onigiri vpn wireless wired fs memory temp fan cpu battery date-nl date";
         line-color = "#d8dee9";
         line-size = "3";
       };
@@ -119,7 +119,27 @@ lib.mkIf (config.xsession.enable) {
         interval = "30";
       };
 
-      "module/pulseaudio" = { type = "internal/pulseaudio"; };
+      "module/todos" =
+        let
+          script = pkgs.writeShellScript "todos" ''
+            set -e
+            count=$(${pkgs.gnugrep}/bin/grep --recursive "^\s*-\s*\[\s\+\]" ~/Documents/Notes/ | ${pkgs.coreutils}/bin/wc -l)
+            if [[ $count -gt 0 ]]; then
+              echo " $count"
+            else
+              echo ""
+            fi
+          '';
+        in
+        {
+          type = "custom/script";
+          exec = "${script}";
+          interval = builtins.toString 60;
+        };
+
+      "module/pulseaudio" = {
+        type = "internal/pulseaudio";
+      };
 
       "module/battery" = {
         type = "internal/battery";
