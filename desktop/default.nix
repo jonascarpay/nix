@@ -36,7 +36,7 @@ in
     celluloid
     discord
     gnome3.nautilus
-    gnome3.gnome-calculator
+    qalculate-gtk
     google-chrome
     gparted
     okular

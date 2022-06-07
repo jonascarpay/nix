@@ -176,7 +176,7 @@ dcfg dbus =
       manageHook =
         composeAll
           [ manageHook desktopConfig,
-            className =? "Gnome-calculator" --> MH.doCenterFloat,
+            className =? "Qalculate-gtk" --> MH.doCenterFloat,
             className =? "Pavucontrol" --> MH.doCenterFloat
           ],
       keys = myKeys,
@@ -200,7 +200,8 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
         ((m .|. shiftMask, xK_l), sendMessage VExpand),
         ((m .|. shiftMask, xK_Return), windows W.swapMaster),
         ((m, xK_s), windows W.swapDown >> windows W.focusUp),
-        ((m, xK_c), spawn "emacsclient --create-frame --no-wait"),
+        -- ((m, xK_c), spawn "emacsclient --create-frame --no-wait"),
+        ((m, xK_c), spawn "qalculate-gtk"),
         ((m, xK_s), spawn "dmenu-web-search"),
         ((m, xK_o), spawn "dmenu-run"),
         ( (m, xK_r),
