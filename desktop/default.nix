@@ -18,7 +18,7 @@ let
 in
 {
   imports = [
-    ./blender.nix
+
     ./dunst.nix
     ./emacs
     ./neuron.nix
@@ -32,6 +32,7 @@ in
   ];
   home.packages = with pkgs; [
     inputs.st.defaultPackage.${pkgs.system}
+    inputs.blender.packages.${pkgs.system}.default
     anki-bin
     celluloid
     discord

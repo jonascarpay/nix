@@ -43,6 +43,10 @@
       url = "github:jonascarpay/st";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    blender = {
+      url = "github:edolstra/nix-warez?dir=blender";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs:

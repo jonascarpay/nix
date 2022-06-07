@@ -20,6 +20,28 @@
         "type": "github"
       }
     },
+    "blender": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "dir": "blender",
+        "lastModified": 1652872259,
+        "narHash": "sha256-XFP9sOlRJul42QWknfiYMUtVnwddmAzHiqNsoa2KgbA=",
+        "owner": "edolstra",
+        "repo": "nix-warez",
+        "rev": "36f4dfd2c2a97895352ec348be6966fa915bc1b0",
+        "type": "github"
+      },
+      "original": {
+        "dir": "blender",
+        "owner": "edolstra",
+        "repo": "nix-warez",
+        "type": "github"
+      }
+    },
     "declarative-cachix": {
       "locked": {
         "lastModified": 1644208524,
@@ -325,6 +347,7 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
+        "blender": "blender",
         "declarative-cachix": "declarative-cachix",
         "dmenu": "dmenu",
         "emacs-overlay": "emacs-overlay",
