@@ -32,7 +32,7 @@ in
   ];
   home.packages = with pkgs; [
     inputs.st.defaultPackage.${pkgs.system}
-    unstable.anki-bin
+    anki-bin
     celluloid
     discord
     gnome3.nautilus
@@ -46,9 +46,9 @@ in
     spotify
     steam
     sxiv
-    unstable.tdesktop
+    tdesktop
     ungoogled-chromium
-    unstable.darktable
+    darktable
     xclip # Doesn't work?
   ];
 

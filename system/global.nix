@@ -45,8 +45,8 @@ in
       sshfs
       tmux
       tree
-      unstable.nix-tree
-      unstable.btop
+      nix-tree
+      btop
       unzip
       vim
     ] ++ lib.optional (system == "x86_64-linux") lnav; # https://github.com/tstack/lnav/issues/882

@@ -1,16 +1,15 @@
-{ unstable, ... }:
+{ pkgs, ... }:
 let
   passdir = "/home/jmc/Passwords";
 in
 {
-  home.packages = [ unstable.qtpass ];
+  home.packages = [ pkgs.qtpass ];
   programs = {
     gpg.enable = true;
-    gpg.package = unstable.gnupg;
     password-store = {
       enable = true;
       settings.PASSWORD_STORE_DIR = passdir;
-      package = unstable.pass.withExtensions (exts: with exts; [
+      package = pkgs.pass.withExtensions (exts: with exts; [
         pass-audit
         pass-checkup
         pass-genphrase

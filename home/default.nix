@@ -1,4 +1,4 @@
-{ pkgs, unstable, config, ... }: {
+{ pkgs, config, ... }: {
   imports = [
     ./crypt.nix
     ./direnv.nix
@@ -25,7 +25,7 @@
       neofetch
       s-tui
       tldr
-      unstable.youtube-dl
+      youtube-dl
       weechat
     ];
 
@@ -59,10 +59,7 @@
 
   programs = {
     man.generateCaches = true;
-    fzf = {
-      enable = true;
-      package = unstable.fzf;
-    };
+    fzf.enable = true;
 
     z-lua = {
       enable = true;

@@ -1,7 +1,6 @@
-{ pkgs, unstable, config, ... }:
+{ pkgs, config, ... }:
 let
   np = pkgs.vimPlugins;
-  unp = unstable.vimPlugins;
 in
 {
   imports = [ ./init.nix ];
@@ -14,7 +13,7 @@ in
   programs.neovim = {
     enable = true;
     vimAlias = true;
-    package = unstable.neovim-unwrapped;
+    package = pkgs.neovim-unwrapped;
     vimdiffAlias = true;
     viAlias = true;
     init = {
@@ -150,7 +149,7 @@ in
         neoformat = {
           packages = [
             pkgs.nixpkgs-fmt
-            unstable.haskellPackages.cabal-fmt
+            pkgs.haskellPackages.cabal-fmt
             pkgs.shfmt
             pkgs.uncrustify
             pkgs.clang-tools

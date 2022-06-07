@@ -1,7 +1,7 @@
-{ unstable, inputs, ... }: {
+{ pkgs, inputs, ... }: {
   services.picom = {
     enable = true;
-    package = unstable.picom.overrideAttrs (_: { src = inputs.picom; });
+    package = pkgs.picom.overrideAttrs (_: { src = inputs.picom; });
     vSync = true;
     shadow = true;
     blur = true;
