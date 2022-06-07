@@ -171,10 +171,11 @@ in
 
         snippets = {
           plugins = [
-            np.vim-snipmate
+            np.UltiSnips
             np.vim-snippets
           ];
           config = ''
+            nn <leader>fs :Snippets<CR>
             set rtp+=${./.}
           '';
         };
