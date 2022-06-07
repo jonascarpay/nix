@@ -10,14 +10,17 @@
 module Main (main) where
 
 import Control.Applicative
+import Control.Exception (bracket_)
 import Control.Lens
 import Control.Monad
 import Control.Monad.State
+import Control.Monad.Trans.Maybe
 import qualified DBus as D
 import qualified DBus.Client as D
 import Data.List (isPrefixOf, isSuffixOf, partition, sortOn)
 import qualified Data.Map as M
 import Data.Maybe (isJust)
+import Data.Streaming.Process (readProcess)
 import XMonad
 import qualified XMonad.Actions.CycleRecentWS as CW
 import qualified XMonad.Actions.Submap as SM
@@ -26,8 +29,11 @@ import qualified XMonad.Hooks.DynamicLog as DL
 import qualified XMonad.Hooks.EwmhDesktops as EMWH
 import qualified XMonad.Hooks.ManageDocks as MD
 import qualified XMonad.Hooks.ManageHelpers as MH
+import qualified XMonad.Layout.BoringWindows as BW
 import qualified XMonad.Layout.LayoutModifier as LM
 import qualified XMonad.Layout.Spacing as SP
+import qualified XMonad.Layout.SubLayouts as SL
+import qualified XMonad.Layout.WindowNavigation as WN
 import qualified XMonad.StackSet as W
 import XMonad.Util.Run
 
@@ -45,7 +51,7 @@ instance LayoutClass TallAccordion a where
       n = length pre + length post + 1
 
       (prim, side) = splitHorizontallyBy rm screen
-      (sec, rest) = splitVertically (n -2) <$> splitVerticallyBy rs side
+      (sec, rest) = splitVertically (n - 2) <$> splitVerticallyBy rs side
 
       rects = prim : sec : rest
       (rpre, rcur : rpost) = splitAt (length pre) rects
@@ -88,6 +94,27 @@ data ToggleZoom w = TZActive | TZInactive
 
 data ToggleZoomMsg = ToggleZoom
 
+instance LM.LayoutModifier ToggleZoom Window where
+  pureModifier _ _ Nothing layout = (layout, Nothing)
+  pureModifier TZInactive _ _ layout = (layout, Nothing)
+  pureModifier TZActive screen (Just stk) layout =
+    let (fg, bg) = partition ((== W.focus stk) . fst) layout
+        fg' = fmap (\(wid, rect) -> (wid, interp 0.5 rect screen)) fg
+     in (fg' ++ bg, Nothing)
+    where
+      interp :: Double -> Rectangle -> Rectangle -> Rectangle
+      interp r (Rectangle xa ya wa ha) (Rectangle xb yb wb hb) = Rectangle (s xa xb) (s ya yb) (s wa wb) (s ha hb)
+        where
+          s :: Integral a => a -> a -> a
+          s a b = round $ fromIntegral a * (1 - r) + fromIntegral b * r
+
+  pureMess tc msg = tgl tc <$> fromMessage msg
+    where
+      tgl TZActive ToggleZoom = TZInactive
+      tgl TZInactive ToggleZoom = TZActive
+
+instance Message ToggleZoomMsg
+
 data ResetWhenEmpty m a = ResetWhenEmpty
   { rweDefault :: m a,
     rweCurrent :: m a
@@ -105,27 +132,6 @@ instance LayoutClass m a => LayoutClass (ResetWhenEmpty m) a where
 resetWhenEmpty :: m a -> ResetWhenEmpty m a
 resetWhenEmpty l = ResetWhenEmpty l l
 
-instance LM.LayoutModifier ToggleZoom Window where
-  pureModifier _ _ Nothing layout = (layout, Nothing)
-  pureModifier TZInactive _ _ layout = (layout, Nothing)
-  pureModifier TZActive screen (Just stk) layout =
-    let (fg, bg) = partition ((== W.focus stk) . fst) layout
-        fg' = fmap (\(wid, rect) -> (wid, interp 0.5 rect screen)) fg
-     in (fg' ++ bg, Nothing)
-
-  pureMess tc msg = tgl tc <$> fromMessage msg
-    where
-      tgl TZActive ToggleZoom = TZInactive
-      tgl TZInactive ToggleZoom = TZActive
-
-instance Message ToggleZoomMsg
-
-interp :: Double -> Rectangle -> Rectangle -> Rectangle
-interp r (Rectangle xa ya wa ha) (Rectangle xb yb wb hb) = Rectangle (s xa xb) (s ya yb) (s wa wb) (s ha hb)
-  where
-    s :: Integral a => a -> a -> a
-    s a b = round $ fromIntegral a * (1 - r) + fromIntegral b * r
-
 toggleZoom :: l a -> LM.ModifiedLayout ToggleZoom l a
 toggleZoom = LM.ModifiedLayout TZInactive
 
@@ -133,7 +139,15 @@ defaultSpacing, spacingDelta :: Int -- global constant to share value between re
 defaultSpacing = 45
 spacingDelta = 15
 
-myLayout = MD.avoidStruts $ toggleReflect $ toggleZoom $ SP.spacingWithEdge defaultSpacing $ TallAccordion (3 / 5) (3 / 5)
+myLayout =
+  MD.avoidStruts
+    . WN.windowNavigation
+    . SL.subTabbed
+    . toggleReflect
+    . toggleZoom
+    . SP.spacingWithEdge defaultSpacing
+    . BW.boringWindows
+    $ TallAccordion (3 / 5) (3 / 5)
 
 main :: IO ()
 main = do
@@ -191,12 +205,12 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
     myKeyList =
       [ ((m, xK_f), spawn "firefox"),
         ((m, xK_q), spawn "xmonad --restart"), -- overrides the default behavior, which first recompiles
-        ((m, xK_d), withPwd $ maybe (spawn "dolphin") (\pwd -> spawn $ "dolphin " <> pwd)),
+        ((m, xK_d), guessDir >>= maybe (spawn "dolphin") (\pwd -> spawn $ "dolphin " <> pwd)),
         ((m .|. shiftMask, xK_f), spawn "clipboard-firefox"),
         ((m, xK_Return), mkTerm "/etc/profiles/per-user/jmc/bin/fish"),
         ((m, xK_z), sendMessage ToggleZoom),
         ((m, xK_m), sendMessage ToggleReflectMsg),
-        ((m .|. shiftMask, xK_h), sendMessage VShrink),
+        -- ((m .|. shiftMask, xK_h), sendMessage VShrink),
         ((m .|. shiftMask, xK_l), sendMessage VExpand),
         ((m .|. shiftMask, xK_Return), windows W.swapMaster),
         ((m, xK_s), windows W.swapDown >> windows W.focusUp),
@@ -204,11 +218,6 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
         ((m, xK_c), spawn "qalculate-gtk"),
         ((m, xK_s), spawn "dmenu-web-search"),
         ((m, xK_o), spawn "dmenu-run"),
-        ( (m, xK_r),
-          SM.submap . M.fromList $
-            [ ((m, xK_c), spawn "gnome-calculator")
-            ]
-        ),
         ( (m, xK_p),
           SM.submap . M.fromList $
             [ ((m, xK_p), spawn "dmenu-pass"),
@@ -234,7 +243,18 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
         -- Border control
         ((m, xK_minus), SP.incScreenWindowSpacing $ fromIntegral spacingDelta),
         ((m, xK_equal), SP.decScreenWindowSpacing $ fromIntegral spacingDelta),
-        ((m, xK_0), SP.setScreenWindowSpacing $ fromIntegral defaultSpacing)
+        ((m, xK_0), SP.setScreenWindowSpacing $ fromIntegral defaultSpacing),
+        ((m .|. controlMask, xK_k), sendMessage $ SL.pullGroup MD.U),
+        ((m .|. controlMask, xK_j), sendMessage $ SL.pullGroup MD.D),
+        ((m .|. controlMask, xK_h), sendMessage $ SL.pullGroup MD.L),
+        ((m .|. controlMask, xK_l), sendMessage $ SL.pullGroup MD.R),
+        ((m, xK_Tab), SL.onGroup W.focusDown'),
+        ((m .|. shiftMask, xK_Tab), SL.onGroup W.focusUp'),
+        ((m, xK_k), BW.focusUp),
+        ((m, xK_j), BW.focusDown),
+        ((m, xK_h), sendMessage (WN.Go WN.L)),
+        ((m, xK_l), sendMessage (WN.Go WN.R)),
+        ((m, xK_period), withFocused (sendMessage . SL.UnMerge))
       ]
         <> [ ((m .|. mask, k), windows f)
              | (i, k) <- zip (workspaces conf) [xK_1 .. xK_9],
@@ -277,17 +297,36 @@ ssWorkspaces f (W.StackSet cur vis hid flt) = W.StackSet <$> scrWorkspace f cur 
 scrWorkspace :: Lens (W.Screen i l a sid sd) (W.Screen i' l' a' sid sd) (W.Workspace i l a) (W.Workspace i' l' a')
 scrWorkspace f (W.Screen ws sid sd) = (\ws' -> W.Screen ws' sid sd) <$> f ws
 
-mkTerm shell = withPwd $ maybe (runInTerm "" shell) (\cwd -> runInTerm ("-d" <> cwd) shell)
+mkTerm shell = guessDir >>= maybe (runInTerm "" shell) (\cwd -> runInTerm ("-d" <> cwd) shell)
 
-withPwd :: (Maybe FilePath -> X a) -> X a
-withPwd f = withWindowSet $ \ws ->
-  flip catchX (f Nothing) $ do
-    Just xid <- pure $ W.peek ws
-    (_ : _ : pid : _) <- words <$> runProcessWithInput "xprop" ["-id", show xid, "_NET_WM_PID"] ""
-    (child : _) <- words <$> runProcessWithInput "ps" ["--ppid", pid, "-o", "pid="] ""
-    (_ : cwd : _) <- words <$> runProcessWithInput "pwdx" [child] ""
-    False <- pure $ "/proc/" `isPrefixOf` cwd
-    f (Just cwd)
+guessDir :: X (Maybe FilePath)
+guessDir = runMaybeT (getPwd <|> getFrecent)
+  where
+    safeIndex :: Int -> [a] -> Maybe a
+    safeIndex n (a : as) = if n < 1 then Just a else safeIndex (n - 1) as
+    safeIndex _ _ = Nothing
+    hoist :: Maybe a -> MaybeT X a
+    hoist = maybe empty pure
+    getPwd :: MaybeT X FilePath
+    getPwd = do
+      ws <- lift $ withWindowSet pure
+      xid <- hoist $ W.peek ws
+      pid <- runProcessWithInput "xprop" ["-id", show xid, "_NET_WM_PID"] "" >>= hoist . safeIndex 2 . words
+      child <- runProcessWithInput "ps" ["--ppid", pid, "-o", "pid="] "" >>= hoist . safeIndex 0 . words
+      cwd <- runProcessWithInput "pwdx" [child] "" >>= hoist . safeIndex 1 . words
+      guard $ not $ "/proc/" `isPrefixOf` cwd
+      pure cwd
+    getFrecent :: MaybeT X FilePath
+    getFrecent = do
+      -- XMonad process/signal handling weird shit:
+      -- Without this bracket, the child process crashes on waitForProcess.
+      -- If using runProcessWithInput, this produces no output at all, for some reason
+      -- https://github.com/xmonad/xmonad/issues/115
+      -- https://gitlab.haskell.org/ghc/ghc/-/issues/5212
+      output <-
+        liftIO . bracket_ uninstallSignalHandlers installSignalHandlers $
+          readProcess "frecently" ["view", "/home/jmc/.local/share/frecently/directory-history"] ""
+      hoist $ safeIndex 0 $ lines output
 
 polybar :: D.Client -> X ()
 polybar dbus = do
@@ -350,10 +389,12 @@ iconize title "firefox"
   | "GitHub — Mozilla Firefox" `isSuffixOf` title = '\xF408'
   | "Twitter — Mozilla Firefox" `isSuffixOf` title = '\xF099'
   | "WhatsApp — Mozilla Firefox" `isSuffixOf` title = '\xFAA2'
+  | "Gmail — Mozilla Firefox" `isSuffixOf` title = '\xF7AA'
   | otherwise = '\xF269'
 iconize title "st-256color"
   | "vim" `isPrefixOf` title = '\xE62B'
   | "htop" `isPrefixOf` title = '\xF080'
+  | "sudo htop" `isPrefixOf` title = '\xF080'
   | "hoogle" `isPrefixOf` title = '\xF98A'
   | "pydoc" `isPrefixOf` title = '\xF98A'
   | "ranger" `isPrefixOf` title = '\xF0DB' -- 
