@@ -40,6 +40,7 @@ in
     google-chrome
     gparted
     okular
+    dolphin
     pavucontrol
     signal-desktop
     slack
