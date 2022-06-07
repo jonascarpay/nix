@@ -37,7 +37,7 @@
     "flycheck_*.el"
     "tramp"
   ];
-  services.emacs.enable = true;
+  # services.emacs.enable = true;
 
   programs.emacs = {
     enable = true;
