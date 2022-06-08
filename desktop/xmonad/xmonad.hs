@@ -1,16 +1,12 @@
-{-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall -Wno-deprecations -Wno-name-shadowing -Wno-missing-signatures #-}
 
 module Main (main) where
 
 import Control.Applicative
-import Control.Exception (bracket_)
 import Control.Lens
 import Control.Monad
 import Control.Monad.State
@@ -19,8 +15,6 @@ import qualified DBus as D
 import qualified DBus.Client as D
 import Data.List (isPrefixOf, isSuffixOf, partition, sortOn)
 import qualified Data.Map as M
-import Data.Maybe (isJust)
-import Data.Streaming.Process (readProcess)
 import XMonad
 import qualified XMonad.Actions.CycleRecentWS as CW
 import qualified XMonad.Actions.Submap as SM
@@ -300,7 +294,7 @@ scrWorkspace f (W.Screen ws sid sd) = (\ws' -> W.Screen ws' sid sd) <$> f ws
 mkTerm shell = guessDir >>= maybe (runInTerm "" shell) (\cwd -> runInTerm ("-d" <> cwd) shell)
 
 guessDir :: X (Maybe FilePath)
-guessDir = runMaybeT (getPwd <|> getFrecent)
+guessDir = runMaybeT getPwd
   where
     safeIndex :: Int -> [a] -> Maybe a
     safeIndex n (a : as) = if n < 1 then Just a else safeIndex (n - 1) as
@@ -316,17 +310,6 @@ guessDir = runMaybeT (getPwd <|> getFrecent)
       cwd <- runProcessWithInput "pwdx" [child] "" >>= hoist . safeIndex 1 . words
       guard $ not $ "/proc/" `isPrefixOf` cwd
       pure cwd
-    getFrecent :: MaybeT X FilePath
-    getFrecent = do
-      -- XMonad process/signal handling weird shit:
-      -- Without this bracket, the child process crashes on waitForProcess.
-      -- If using runProcessWithInput, this produces no output at all, for some reason
-      -- https://github.com/xmonad/xmonad/issues/115
-      -- https://gitlab.haskell.org/ghc/ghc/-/issues/5212
-      output <-
-        liftIO . bracket_ uninstallSignalHandlers installSignalHandlers $
-          readProcess "frecently" ["view", "/home/jmc/.local/share/frecently/directory-history"] ""
-      hoist $ safeIndex 0 $ lines output
 
 polybar :: D.Client -> X ()
 polybar dbus = do
