@@ -90,7 +90,7 @@
         ] ++ sysModules;
       };
 
-      xmonad-shell =
+      shell =
         let
           pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
           hspkgs = pkgs.haskellPackages;
@@ -106,11 +106,15 @@
             hspkgs.hlint
             hspkgs.haskell-language-server
             pkgs.bashInteractive
+            pkgs.python3
+            pkgs.pyright
+            pkgs.black
+            pkgs.python3Packages.ipython
           ];
         };
     in
     {
-      devShell.x86_64-linux = xmonad-shell;
+      devShell.x86_64-linux = shell;
       nixosConfigurations = {
         anpan = mkSystem {
           system = "x86_64-linux";

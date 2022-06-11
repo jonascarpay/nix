@@ -222,10 +222,10 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
         ( (m, xK_n),
           SM.submap . M.fromList $
             [ ((m, xK_d), spawn "note-today"),
-              ((m, xK_b), spawn "dmenu-note-bookmarks"),
-              ((m, xK_n), spawn "dmenu-notes -today"),
-              ((m, xK_o), spawn "dmenu-notes"),
-              ((m, xK_t), spawn "dmenu-todos")
+              ((m, xK_b), spawn "note-bookmarks"),
+              ((m, xK_n), spawn "note-open -today"),
+              ((m, xK_o), spawn "note-open"),
+              ((m, xK_t), spawn "note-todos")
             ]
         ),
         ((m .|. shiftMask, xK_p), spawn "qtpass"),

@@ -18,7 +18,6 @@ let
 in
 {
   imports = [
-
     ./dunst.nix
     ./emacs
     ./neuron.nix
@@ -28,6 +27,7 @@ in
     ./redshift.nix
     ./random-wallpaper.nix
     ./xmonad
+    ./notes
     widgets
   ];
   home.packages = with pkgs; [
