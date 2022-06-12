@@ -1,4 +1,4 @@
-{ pkgs, unstable, lib, config, ... }:
+{ pkgs, lib, config, ... }:
 let
 
   rclone = {
@@ -33,7 +33,7 @@ let
       enable = true;
       user = "jmc";
       group = "tank";
-      package = unstable.syncthing;
+      package = syncthing;
       guiAddress = "0.0.0.0:8384";
     };
   };

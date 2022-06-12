@@ -1,4 +1,4 @@
-{ unstable, lib, config, ... }:
+{ pkgs, lib, config, ... }:
 
 let cfg = config.services.git-sync; in
 with lib;
@@ -58,7 +58,7 @@ with lib;
           {
             services."${name}" = {
               inherit description;
-              path = with unstable.gitAndTools; [ git git-sync ];
+              path = with pkgs.gitAndTools; [ git git-sync ];
               script =
                 let
                   setMessage =

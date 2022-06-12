@@ -1,4 +1,4 @@
-{ pkgs, unstable, inputs, lib, ... }:
+{ pkgs, inputs, lib, ... }:
 let
 
   caches =

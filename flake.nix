@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
-    unstable.url = "github:NixOS/nixpkgs";
+    unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     home-manager = {
       url = "github:nix-community/home-manager/release-22.05";
@@ -52,18 +52,21 @@
   outputs = inputs:
     let
 
+      namedInputs = system: {
+        inherit inputs;
+        unstable = import inputs.unstable {
+          inherit system;
+          config.allowUnfree = true;
+        };
+      };
+
       mkSystem = { system, sysModules, homeModules }: inputs.nixpkgs.lib.nixosSystem rec {
         inherit system;
 
-        extraArgs = {
-          inherit inputs;
-          unstable = import inputs.unstable {
-            inherit system;
-            config.allowUnfree = true;
-          };
-        };
-
         modules = [
+
+          # TODO the old extraArgs has been deprecated, but this seems kinda hacky at best
+          { config._module.args = namedInputs system; }
 
           inputs.home-manager.nixosModules.home-manager
           {
@@ -71,7 +74,7 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               users.jmc.imports = homeModules;
-              extraSpecialArgs = extraArgs;
+              extraSpecialArgs = namedInputs system;
             };
           }
 
@@ -80,12 +83,7 @@
 
           inputs.declarative-cachix.nixosModules.declarative-cachix
 
-          {
-            nixpkgs.overlays = [
-              inputs.emacs-overlay.overlay
-              (_: _: { syncthing = extraArgs.unstable.syncthing; })
-            ];
-          }
+          { nixpkgs.overlays = [ inputs.emacs-overlay.overlay ]; }
 
         ] ++ sysModules;
       };

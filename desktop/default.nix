@@ -1,4 +1,4 @@
-{ pkgs, inputs, unstable, config, ... }:
+{ pkgs, inputs, config, ... }:
 let
   widgets = {
     home.packages = [ pkgs.breeze-icons ];
