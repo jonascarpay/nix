@@ -6,8 +6,8 @@ import re
 import subprocess
 import sys
 
-regex_named_url: re.Pattern = re.compile(r"\[(.*)\]\((.*)\)")
-regex_bare_url: re.Pattern = re.compile(r"<([^ ]*)>")
+regex_named_url: re.Pattern = re.compile(r"\[([^\]]+)\]\(([^\)]+)\)")
+regex_bare_url: re.Pattern = re.compile(r"<(\S+)>")
 
 urls: Dict[str, str] = dict()
 note_root: str = sys.argv[1]
