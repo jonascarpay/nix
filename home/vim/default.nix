@@ -194,6 +194,8 @@ in
           plugins = [
             np.coc-nvim
             np.coc-pyright
+            np.coc-rust-analyzer
+            np.coc-json
           ];
           config = ''
             set hidden
