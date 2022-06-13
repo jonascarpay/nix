@@ -225,7 +225,7 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
               ((m, xK_b), spawn "note-bookmarks"),
               ((m, xK_n), spawn "note-open -today"),
               ((m, xK_o), spawn "note-open"),
-              ((m, xK_t), spawn "note-todos")
+              ((m, xK_t), spawn "note-todos open")
             ]
         ),
         ((m .|. shiftMask, xK_p), spawn "qtpass"),

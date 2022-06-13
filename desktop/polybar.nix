@@ -123,7 +123,7 @@ lib.mkIf (config.xsession.enable) {
         let
           script = pkgs.writeShellScript "todos" ''
             set -e
-            count=$(${pkgs.gnugrep}/bin/grep --recursive "^\s*-\s*\[\s\+\]" ~/Documents/Notes/ | ${pkgs.coreutils}/bin/wc -l)
+            count=$(${pkgs.note-todos}/bin/note-todos count)
             if [[ $count -gt 0 ]]; then
               echo " $count"
             else

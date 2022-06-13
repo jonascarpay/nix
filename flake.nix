@@ -71,9 +71,14 @@
           inputs.home-manager.nixosModules.home-manager
           {
             home-manager = {
-              useGlobalPkgs = true;
               useUserPackages = true;
-              users.jmc.imports = homeModules;
+              users.jmc.imports =
+                [{
+                  # this is necessary when not using useGlobalPkgs
+                  _module.args.pkgsPath = builtins.toPath (inputs.nixpkgs);
+                  nixpkgs.config.allowUnfree = true;
+                }]
+                ++ homeModules;
               extraSpecialArgs = namedInputs system;
             };
           }
@@ -82,8 +87,6 @@
           { environment.systemPackages = [ inputs.agenix.defaultPackage."${system}" ]; }
 
           inputs.declarative-cachix.nixosModules.declarative-cachix
-
-          { nixpkgs.overlays = [ inputs.emacs-overlay.overlay ]; }
 
         ] ++ sysModules;
       };

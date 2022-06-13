@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ pkgs, inputs, ... }: {
   imports = [
     ./evil.nix
     ./haskell.nix
@@ -38,6 +38,8 @@
     "tramp"
   ];
   # services.emacs.enable = true;
+
+  nixpkgs.overlays = [ inputs.emacs-overlay.overlay ];
 
   programs.emacs = {
     enable = true;

@@ -32,35 +32,26 @@ let
     st -d ${note-dir} -e vim + "$DIR/$(date +"%Y-%m-%d").md"
   '';
 
-  note-todos = pkgs.writeShellScriptBin "note-todos" ''
-    set -e
-    declare -A files
-    declare -A lines
-
-    while read -r line; do
-      file=$(echo $line | sed -E 's#${note-dir}/(.*):[0-9]+:.*#\1#')
-      linenr=$(echo $line | sed -E 's#${note-dir}/.*:([0-9]+):.*#\1#')
-      title=$(echo $line | sed -E 's#${note-dir}/(.*)\.md:[0-9]+:-\s*\[\s+\]\s*(.*)#\1 - \2#')
-      files["$title"]="$file"
-      lines["$title"]="$linenr"
-    done < <(grep --line-number --recursive "^-\s*\[\s\+\]" ${note-dir})
-
-    gen_list() {
-      for i in "''${!files[@]}"; do
-        echo $i
-      done
-    }
-
-    PICK=$(gen_list | dmenu -i -sr -p " ")
-    st -d ${note-dir} -e vim "+''${lines["$PICK"]}" "''${files["$PICK"]}"
-  '';
-
-
+  python-compile = src: pkgs.stdenv.mkDerivation {
+    name = "${src}-compiled";
+    unpackPhase = "true";
+    installPhase = ''
+      cp ${src} main.py
+      ${pkgs.python3}/bin/python -m py_compile main.py
+      mv __pycache__/* $out
+    '';
+  };
   note-bookmarks = pkgs.writeShellScriptBin "note-bookmarks" ''
-    ${pkgs.python3}/bin/python ${./bookmarks.py} ${note-dir} ${history-root}/note-bookmarks-history
+    ${pkgs.python3}/bin/python ${python-compile ./bookmarks.py} ${note-dir} ${history-root}/note-bookmarks-history
   '';
+
+  note-todos = pkgs.writeShellScriptBin "note-todos" ''
+    ${pkgs.python3}/bin/python ${python-compile ./todos.py} ${note-dir} $@
+  '';
+
 in
 {
+  nixpkgs.overlays = [ (final: prev: { inherit note-todos; }) ];
   home.packages = [
     note-bookmarks
     note-open
