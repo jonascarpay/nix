@@ -28,11 +28,11 @@
       },
       "locked": {
         "dir": "blender",
-        "lastModified": 1652872259,
-        "narHash": "sha256-XFP9sOlRJul42QWknfiYMUtVnwddmAzHiqNsoa2KgbA=",
+        "lastModified": 1654777471,
+        "narHash": "sha256-MaFjE7StlSGn6Nt4In7h8H6A6Yinn6iUa95luFvTU0c=",
         "owner": "edolstra",
         "repo": "nix-warez",
-        "rev": "36f4dfd2c2a97895352ec348be6966fa915bc1b0",
+        "rev": "60cff69c394cb9beefdda7602053c39bb8d635aa",
         "type": "github"
       },
       "original": {
@@ -84,11 +84,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1654601140,
-        "narHash": "sha256-Be2cAGz4HfdzlkrqbXR2sIH7BV1vHM3tlDNwB6hfUIA=",
+        "lastModified": 1655007331,
+        "narHash": "sha256-OuwzT1Ws5GplRJZhpSR19i+MwnGAgqXSQl9g5pUi4rg=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "a943bdc9f4ff65136e8500586b74092d4570b3ee",
+        "rev": "a4455d4339dab970075856abd0e58b664a92310e",
         "type": "github"
       },
       "original": {
@@ -196,11 +196,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1654482770,
-        "narHash": "sha256-w+WWbouP9z9d3CH99s5u2yMvld9GZP+8Fayw9FS6jiU=",
+        "lastModified": 1654614601,
+        "narHash": "sha256-5rkK2A/cdgECVec5K2/Ff2PhQ/6UCLCJRZY6o3eUZ1E=",
         "owner": "jonascarpay",
         "repo": "frecently",
-        "rev": "d106f4ed83e229b3bdad31a6b22b6c389aed3a63",
+        "rev": "d28be4adef6245d3e8e8d9506dfb9cf41800979d",
         "type": "github"
       },
       "original": {
@@ -233,11 +233,11 @@
     "hosts": {
       "flake": false,
       "locked": {
-        "lastModified": 1654222421,
-        "narHash": "sha256-GuY2qmomZw11FnndcmUwtMbBc6T4fpvOPcVGq7/Mzrg=",
+        "lastModified": 1654831104,
+        "narHash": "sha256-qybp7aELcGKZjcPBR3ouXEoUgMKlfcxGecvCalMvT2w=",
         "owner": "StevenBlack",
         "repo": "hosts",
-        "rev": "2631aa887174c8053447744f19c8117a7808f861",
+        "rev": "11b8c3d9ac5b154ff4a5f5ff203b822e9fc27d11",
         "type": "github"
       },
       "original": {
@@ -286,8 +286,8 @@
     "nixpkgs": {
       "locked": {
         "lastModified": 0,
-        "narHash": "sha256-w9V12lfhgDyc8a2+0GVoRENyY1Sm0dXaSHFOQV+AZnE=",
-        "path": "/nix/store/17gca8mh4wm9ah0bzlhfk0mywigw920l-source",
+        "narHash": "sha256-dYJ79gt85hwIbPlX52eAwnkYzMexLyNRmRcTRpMn+Gw=",
+        "path": "/nix/store/zfywv8rxpx1r3spxnyckgkr6khwa34np-source",
         "type": "path"
       },
       "original": {
@@ -297,11 +297,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1654442937,
-        "narHash": "sha256-dYJ79gt85hwIbPlX52eAwnkYzMexLyNRmRcTRpMn+Gw=",
+        "lastModified": 1654936503,
+        "narHash": "sha256-soKzdhI4jTHv/rSbh89RdlcJmrPgH8oMb/PLqiqIYVQ=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "ca2629644d4a5098004e20cb9ca179345f2acd8e",
+        "rev": "dab6df51387c3878cdea09f43589a15729cae9f4",
         "type": "github"
       },
       "original": {
@@ -314,11 +314,11 @@
     "nord-configs": {
       "flake": false,
       "locked": {
-        "lastModified": 1654268419,
-        "narHash": "sha256-dbSZJirYIUxfLvOTUk5HqKt6vaPCQo5V5Z+MQGLej5k=",
+        "lastModified": 1654700413,
+        "narHash": "sha256-Cid8PGY/Q+8/jNQD3Q0ST/AhUH6EhMJXipqVJe3SIn0=",
         "owner": "jonascarpay",
         "repo": "nord-openvpn-configs",
-        "rev": "0d25bfb5ef7c138017c7b92cb5f0807af6f07dc4",
+        "rev": "d72467b86ca9585832769679f58d1ecd87ba9c9c",
         "type": "github"
       },
       "original": {
