@@ -30,6 +30,7 @@ in
             np.vim-polyglot
             np.vim-repeat
             np.vim-unimpaired
+            np.vim-speeddating
           ];
           precedence = 5;
           config = ''

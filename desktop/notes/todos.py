@@ -7,7 +7,7 @@ from typing import Iterable
 from dataclasses import dataclass
 
 regex: re.Pattern = re.compile(
-    r"^- \[ \](\s+(?P<year>\d\d\d\d)-(?P<month>\d\d)-(?P<day>\d\d)(.(?P<hour>\d\d):(?P<minute>\d\d))?)?\s(?P<text>.*)$"
+    r"^- \[ \]( (?P<year>\d\d\d\d)-(?P<month>\d\d)-(?P<day>\d\d)(.(?P<hour>\d\d):(?P<minute>\d\d))?)?\s+(?P<text>.*)$"
 )
 
 note_root: str = sys.argv[1]

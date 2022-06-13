@@ -49,6 +49,10 @@ let
     ${pkgs.python3}/bin/python ${python-compile ./todos.py} ${note-dir} $@
   '';
 
+  todo-increment = pkgs.writeShellScriptBin "todo-increment" ''
+    ${pkgs.python3}/bin/python ${python-compile ./todo_increment.py}
+  '';
+
 in
 {
   nixpkgs.overlays = [ (final: prev: { inherit note-todos; }) ];
@@ -57,5 +61,6 @@ in
     note-open
     note-today
     note-todos
+    todo-increment
   ];
 }
