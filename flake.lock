@@ -65,15 +65,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1655002737,
-        "narHash": "sha256-f3LlfaKUBzgTVnnChEkY72G7MoxnY0DQKkBLcouvSnY=",
+        "lastModified": 1655127534,
+        "narHash": "sha256-IGvOVGWtSKmbwlDvgYjcDodMvvC444ApkqdjyLI0wTI=",
         "owner": "jonascarpay",
         "repo": "dmenu",
-        "rev": "ba0228f67b33021ae9c11a617d1b42486b7f2184",
+        "rev": "a7e6297fbb6216832d02de5e08949aedc590eef9",
         "type": "github"
       },
       "original": {
         "owner": "jonascarpay",
+        "ref": "magic-match",
         "repo": "dmenu",
         "type": "github"
       }

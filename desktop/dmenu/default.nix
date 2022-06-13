@@ -14,7 +14,7 @@ let
               frecently delete ${history} "$dir"
             fi
           done
-          DIR=$(frecently view ${history} | sed "s#$HOME#~#" | dmenu -i -p " " -fzfchars "/")
+          DIR=$(frecently view ${history} | sed "s#$HOME#~#" | dmenu -i -p " ")
           DIR_REAL=$(realpath "''${DIR/#\~/$HOME}")
           if [ -d $DIR_REAL ]; then
             frecently bump ${history} "$DIR_REAL"
@@ -36,7 +36,7 @@ let
       history = "${history-root}/command-history";
       script = pkgs.writeShellScriptBin "dmenu-command" ''
         set -e
-        CMD=$(frecently view ${history} | dmenu -p " " -fzfchars ' /~|.;')
+        CMD=$(frecently view ${history} | dmenu -p " ")
         frecently bump "${history}" "$CMD"
         st -e $CMD
       '';

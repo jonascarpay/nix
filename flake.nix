@@ -36,7 +36,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     dmenu = {
-      url = "github:jonascarpay/dmenu";
+      url = "github:jonascarpay/dmenu/magic-match";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     st = {

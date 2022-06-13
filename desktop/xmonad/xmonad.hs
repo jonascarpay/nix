@@ -199,7 +199,8 @@ myKeys conf = M.fromList myKeyList <> keys desktopConfig conf
     myKeyList =
       [ ((m, xK_f), spawn "firefox"),
         ((m, xK_q), spawn "xmonad --restart"), -- overrides the default behavior, which first recompiles
-        ((m, xK_d), guessDir >>= maybe (spawn "dolphin") (\pwd -> spawn $ "dolphin " <> pwd)),
+        -- ((m, xK_d), guessDir >>= maybe (spawn "dolphin") (\pwd -> spawn $ "dolphin " <> pwd)),
+        ((m, xK_d), spawn "dmenu-directory"),
         ((m .|. shiftMask, xK_f), spawn "clipboard-firefox"),
         ((m, xK_Return), mkTerm "/etc/profiles/per-user/jmc/bin/fish"),
         ((m, xK_z), sendMessage ToggleZoom),
