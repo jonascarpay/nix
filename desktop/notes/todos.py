@@ -6,8 +6,34 @@ import subprocess
 from typing import Iterable
 from dataclasses import dataclass
 
+# - [ ] [YYYY-MM-DD[ HH:MM][ <[+[+]]nn uu[!|?]>]]text
 regex: re.Pattern = re.compile(
-    r"^- \[ \]( (?P<year>\d\d\d\d)-(?P<month>\d\d)-(?P<day>\d\d)(.(?P<hour>\d\d):(?P<minute>\d\d))?)?\s+(?P<text>.*)$"
+    r"""^
+        -\s\[\s\]\s # leading "- [ ] "
+        (?P<datetime>
+            (?P<year>\d\d\d\d)-
+            (?P<month>\d\d)-
+            (?P<day>\d\d)
+            (?P<time>\s
+                (?P<hour>\d\d):
+                (?P<minute>\d\d)
+            )?
+            (?P<increment>
+                \s<
+                    ( (?P<fromtoday>\+)
+                    | (?P<fromnow>\+\+)
+                    )?
+                    (?P<amount>\d+)\s
+                    (?P<unit>days?|hours?|weeks?|months?|years?)
+                    ( (?P<logtext>!)
+                    | (?P<logquiet>\?)
+                    )?
+                >
+            )?
+        )?
+        (?P<text>.*)
+    $""",
+    re.VERBOSE,
 )
 
 note_root: str = sys.argv[1]
@@ -54,7 +80,7 @@ if command == "count":
 elif command == "open":
     pick = subprocess.run(
         ["dmenu", "-sr", "-p", " ", "-ix"],
-        input="\n".join([f"{todo.file}: {todo.text}" for todo in todolist]),
+        input="\n".join([f"{todo.file}:{todo.text}" for todo in todolist]),
         encoding="utf8",
         capture_output=True,
     )
