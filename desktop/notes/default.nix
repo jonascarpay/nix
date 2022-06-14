@@ -33,7 +33,8 @@ let
   '';
 
   python-compile = src: pkgs.stdenv.mkDerivation {
-    name = "${src}-compiled";
+    # This drops the /nix/store prefix
+    name = "compile-${builtins.substring 44 (-1) src}";
     unpackPhase = "true";
     installPhase = ''
       cp ${src} main.py
