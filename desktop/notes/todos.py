@@ -86,6 +86,10 @@ elif command == "open":
     )
     todo = todolist[int(pick.stdout)]
     # Popen here forks, run doesn't
-    subprocess.Popen(["st", "-d", note_root, "-e", "vim", f"+{todo.line}", todo.path])
+    subprocess.Popen(
+        ["st"]
+        + sys.argv[3:]
+        + ["-d", note_root, "-e", "vim", f"+{todo.line}", todo.path]
+    )
 else:
     print(f"Unknown command: {command}")

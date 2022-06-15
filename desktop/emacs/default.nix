@@ -127,6 +127,14 @@
           config = builtins.readFile ./init.el;
         };
 
+        agda-mode = {
+          plugins = [ ];
+          config = ''
+            (load-file (let ((coding-system-for-read 'utf-8))
+                (shell-command-to-string "agda-mode locate")))
+          '';
+        };
+
         customConfig = {
           plugins = [ ];
           config = ''

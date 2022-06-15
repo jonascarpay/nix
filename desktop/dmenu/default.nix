@@ -18,7 +18,7 @@ let
           DIR_REAL=$(realpath "''${DIR/#\~/$HOME}")
           if [ -d $DIR_REAL ]; then
             frecently bump ${history} "$DIR_REAL"
-            st -d "$DIR_REAL" fish
+            st $@ -d "$DIR_REAL" fish
           fi
         '';
     in
@@ -38,7 +38,7 @@ let
         set -e
         CMD=$(frecently view ${history} | dmenu -p " ")
         frecently bump "${history}" "$CMD"
-        st -e $CMD
+        st $@ -e bash -c "$CMD; read -n1 -r -p 'Press any key to continue...' key"
       '';
     in
     {

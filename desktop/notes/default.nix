@@ -17,12 +17,13 @@ let
       done
       if [[ $1 == "-today" ]]; then
         extraflags=(-it "$(date +"%Y-%m-%d")-")
+        shift
       fi
       NOTE=$(find ${note-dir}/ -type f -name '*.md' | sed -E 's#${note-dir}/(.*).md#\1#' | frecently view ${history} -a | dmenu -i -p " " "''${extraflags[@]}")
       frecently bump ${history} "$NOTE"
       SUBDIR="${note-dir}/$(echo "$NOTE" | sed -E 's#(.*/)*.*#\1#')"
       mkdir -p "$SUBDIR"
-      st -d ${note-dir} -e vim + "$NOTE.md"
+      st $@ -d ${note-dir} -e vim + "$NOTE.md"
     '';
 
   note-today = pkgs.writeShellScriptBin "note-today" ''

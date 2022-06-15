@@ -13,7 +13,7 @@ lib.mkIf (config.xsession.enable) {
   '';
   services.polybar = {
     enable = true;
-    package = pkgs.polybar.override { alsaSupport = true; };
+    package = pkgs.polybar.override { alsaSupport = true; i3GapsSupport = true; };
     script = ''
       polybar hidpi &
     '';
@@ -28,7 +28,7 @@ lib.mkIf (config.xsession.enable) {
         background = "#232831"; # darker than normal nord, slightly more muted
         foreground = "#d8dee9";
         module-margin = "1";
-        modules-left = "xmonad";
+        modules-left = "i3";
         modules-right = "todos zfs onigiri vpn wireless wired fs memory temp fan cpu battery date-nl date";
         line-color = "#d8dee9";
         line-size = "3";
@@ -193,24 +193,9 @@ lib.mkIf (config.xsession.enable) {
         ramp-coreload-7 = "█";
       };
 
-      "module/xmonad" =
-        let
-          dbuswatch = pkgs.writeTextFile
-            {
-              name = "xmonad-log.sh";
-              executable = true;
-              # godverdomme 3 kkuur bezig geweest met uitvinden dat je -u nodig hebt voor sed echt chille zaterdag
-              text = ''
-                ${pkgs.dbus}/bin/dbus-monitor "path=/org/xmonad/Log,interface=org.xmonad.Log,member=Update" | \
-                  ${sed} -nu 's/^   string "\([^:].*\)"$/\1/p'
-              '';
-            };
-        in
-        {
-          type = "custom/script";
-          exec = "${dbuswatch}";
-          tail = "true";
-        };
+      "module/i3" = {
+        type = "internal/i3";
+      };
 
       "module/wired" = {
         type = "internal/network";
