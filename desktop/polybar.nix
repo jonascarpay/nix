@@ -5,6 +5,12 @@ let
   grep = "${pkgs.gnugrep}/bin/grep";
   awk = "${pkgs.gawk}/bin/awk";
   sed = "${pkgs.gnused}/bin/sed";
+  colors = {
+    foreground = "#d8dee9";
+    background = "#232831"; # darker than normal nord, slightly more muted
+    snow0 = "#d8dee9";
+    red = "#BF616A";
+  };
 in
 lib.mkIf (config.xsession.enable) {
 
@@ -13,24 +19,27 @@ lib.mkIf (config.xsession.enable) {
   '';
   services.polybar = {
     enable = true;
-    package = pkgs.polybar.override { alsaSupport = true; i3GapsSupport = true; };
+    package = pkgs.polybar.override {
+      alsaSupport = true;
+      i3GapsSupport = true;
+      pulseSupport = true;
+    };
     script = ''
       polybar hidpi &
     '';
     config = {
       "bar/common" = {
+        inherit (colors) foreground background;
         width = "100%";
         locale = "ja_JP.UTF-8";
         font-0 = "SauceCodePro Nerd Font:style=Regular:size=8;2";
         font-1 = "SauceCodePro Nerd Font:style=Bold:size=8;2";
         font-2 = "IPAPGothic:style=Bold:size=8;3";
         tray-position = "right";
-        background = "#232831"; # darker than normal nord, slightly more muted
-        foreground = "#d8dee9";
         module-margin = "1";
-        modules-left = "i3";
-        modules-right = "todos zfs onigiri vpn wireless wired fs memory temp fan cpu battery date-nl date";
-        line-color = "#d8dee9";
+        modules-left = "i3 xwindow";
+        modules-right = "todos zfs onigiri vpn wireless wired fs memory temp fan cpu battery pulseaudio date-nl date";
+        line-color = colors.snow0;
         line-size = "3";
       };
 
@@ -90,13 +99,13 @@ lib.mkIf (config.xsession.enable) {
 
       "module/vpn" = {
         type = "custom/script";
-        exec = ''[[ $(/run/current-system/sw/bin/nmcli con show --active) =~ "tun" ]] && echo "%{F#f00} %{F-}" || echo ""'';
+        exec = ''[[ $(/run/current-system/sw/bin/nmcli con show --active) =~ "tun" ]] && echo "%{F${colors.red}} %{F-}" || echo ""'';
         interval = "5";
       };
 
       "module/zfs" =
         let
-          check = cmd: ''[[ ! $(${cmd}) =~ "no" ]] && echo "" || echo "%{F#f00}%{F-}"'';
+          check = cmd: ''[[ ! $(${cmd}) =~ "no" ]] && echo "" || echo "%{F${colors.red}}%{F-}"'';
           zfs = "/run/current-system/sw/bin/zfs get mounted -t filesystem";
           ssh = cmd: "/run/current-system/sw/bin/ssh 192.168.1.6 '${cmd}'";
         in
@@ -139,6 +148,14 @@ lib.mkIf (config.xsession.enable) {
 
       "module/pulseaudio" = {
         type = "internal/pulseaudio";
+        use-ui-max = false;
+        format-volume = "<ramp-volume> <label-volume>";
+        format-muted = "ﱝ   0%";
+        label-volume = "%percentage:3%%";
+        ramp-volume-0 = "奄";
+        ramp-volume-1 = "奔";
+        ramp-volume-2 = "墳";
+        click-right = "${pkgs.pavucontrol}/bin/pavucontrol";
       };
 
       "module/battery" = {
@@ -195,6 +212,37 @@ lib.mkIf (config.xsession.enable) {
 
       "module/i3" = {
         type = "internal/i3";
+        pin-workspaces = true;
+        show-urgent = true;
+        wrapping-scroll = false;
+        # The T1 sets the regular font, used just to escape the leading space.
+        # The docs say you can surround with quotes but this doesn't seem to work
+        format = "%{T1} <label-state> <label-mode>%{T-}";
+
+        label-focused = "%index%";
+        label-focused-foreground = colors.background;
+        label-focused-background = colors.foreground;
+        label-focused-padding = 1;
+
+        label-mode-foreground = colors.red;
+        label-mode-padding = 1;
+
+        label-unfocused = "%index%";
+        label-unfocused-padding = 1;
+
+        label-visible = "%index%";
+        label-visible-padding = 1;
+
+        label-urgent = "%index%";
+        label-urgent-foreground = colors.background;
+        label-urgent-background = colors.red;
+        label-urgent-padding = 1;
+      };
+
+      "module/xwindow" = {
+        type = "internal/xwindow";
+        label-maxlen = 80;
+        format = "- %{T2}<label>%{T-}";
       };
 
       "module/wired" = {

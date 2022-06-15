@@ -112,8 +112,8 @@ in
           perDirection = { key, dir }: withMod {
             "${key}" = "focus ${dir}";
             "Shift+${key}" = "move ${dir} 240 px";
-            "Ctrl+${key}" = "resize grow ${dir} 10 px or 10 ppt";
-            "Ctrl+shift+${key}" = "resize shrink ${dir} 10 px or 10 ppt";
+            "Ctrl+${key}" = "resize grow ${dir} 240 px or 10 ppt";
+            "Ctrl+shift+${key}" = "resize shrink ${dir} 240 px or 10 ppt";
           };
           directions = [
             { key = "h"; dir = "left"; }
