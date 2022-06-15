@@ -242,7 +242,7 @@ lib.mkIf (config.xsession.enable) {
       "module/xwindow" = {
         type = "internal/xwindow";
         label-maxlen = 80;
-        format = "- %{T2}<label>%{T-}";
+        label = "- %{T2}%title%%{T-}";
       };
 
       "module/wired" = {

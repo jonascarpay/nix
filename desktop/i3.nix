@@ -62,10 +62,9 @@ in
             "r" = exec "dmenu-command -c floating";
             "shift+d" = exec "dmenu-directory -c floating";
             "n" = "mode notes";
-            "s" = "split v";
-            "shift+s" = "layout toggle splitv tabbed";
-            "v" = "split h";
-            "shift+v" = "layout toggle splith tabbed";
+            "s" = "split toggle";
+            "shift+s" = "layout toggle split";
+            "Ctrl+s" = "layout tabbed";
             "Ctrl+t" = "floating toggle";
             "shift+t" = "floating toggle";
             "t" = "focus mode_toggle";
