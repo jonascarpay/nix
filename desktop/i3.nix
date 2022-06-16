@@ -65,6 +65,7 @@ in
             "o" = exec "dmenu-run";
             "d" = exec "dmenu-directory";
             "r" = exec "dmenu-command -c floating";
+            "g" = exec "dmenu-web-search";
             "shift+d" = exec "dmenu-directory -c floating";
             "n" = "mode notes";
             "s" = "split toggle";
