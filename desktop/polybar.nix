@@ -14,9 +14,9 @@ let
 in
 lib.mkIf (config.xsession.enable) {
 
-  programs.autorandr.hooks.postswitch.restart-polybar = ''
-    systemctl restart --user polybar.service
-  '';
+  # programs.autorandr.hooks.postswitch.restart-polybar = ''
+  #   systemctl restart --user polybar.service
+  # '';
   services.polybar = {
     enable = true;
     package = pkgs.polybar.override {
@@ -150,12 +150,12 @@ lib.mkIf (config.xsession.enable) {
         type = "internal/pulseaudio";
         use-ui-max = false;
         format-volume = "<ramp-volume> <label-volume>";
-        format-muted = "ﱝ   0%";
+        label-muted = "ﱝ ";
         label-volume = "%percentage:3%%";
         ramp-volume-0 = "奄";
         ramp-volume-1 = "奔";
         ramp-volume-2 = "墳";
-        click-right = "${pkgs.pavucontrol}/bin/pavucontrol";
+        click-right = "${pkgs.pavucontrol}/bin/pavucontrol &";
       };
 
       "module/battery" = {

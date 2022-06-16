@@ -4,7 +4,8 @@ let
   concatMapAttrs = f: as: concatAttrs (builtins.map f as);
   m = config.xsession.windowManager.i3.config.modifier;
   escape = builtins.replaceStrings [ "\"" ] [ "\\\\\"" ];
-  exec = str: "exec \"${escape str}\"";
+  exec = str: "exec --no-startup-id \"${escape str}\"";
+  exec' = str: "exec \"${escape str}\"";
   withMod = lib.mapAttrs' (key: value: { name = "${m}+${key}"; value = value; });
 in
 {
@@ -19,6 +20,8 @@ in
 
       gaps.inner = 20;
       gaps.outer = 0;
+
+      startup = [{ command = "systemctl --user restart polybar"; always = true; notification = false; }];
 
       modes =
         let
@@ -40,6 +43,8 @@ in
         { class = "floating"; }
       ];
 
+      bars = [ ];
+
       window.commands = [
         {
           criteria = { class = "floating"; };
@@ -56,7 +61,7 @@ in
             "Ctrl+Return" = exec "st fish";
             "Return" = exec "st -d \"`${pkgs.xcwd}/bin/xcwd`\" fish";
             "shift+Return" = exec "st -c floating -d \"`${pkgs.xcwd}/bin/xcwd`\" fish";
-            "f" = exec "firefox";
+            "f" = exec' "firefox";
             "o" = exec "dmenu-run";
             "d" = exec "dmenu-directory";
             "r" = exec "dmenu-command -c floating";
@@ -66,9 +71,8 @@ in
             "shift+s" = "layout toggle split";
             "Ctrl+s" = "layout tabbed";
             "Ctrl+t" = "floating toggle";
-            "shift+t" = "floating toggle";
+            "shift+t" = "sticky toggle";
             "t" = "focus mode_toggle";
-            "g" = "sticky toggle";
             "q" = "kill";
             "space" = "fullscreen toggle";
             "a" = "focus parent";

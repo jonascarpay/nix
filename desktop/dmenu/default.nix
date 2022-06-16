@@ -38,7 +38,7 @@ let
         set -e
         CMD=$(frecently view ${history} | dmenu -p " ")
         frecently bump "${history}" "$CMD"
-        st $@ -e bash -c "$CMD; read -n1 -r -p 'Press any key to continue...' key"
+        st $@ -e fish -c "$CMD; read -n 1 -p 'echo Press any key to continue...' key"
       '';
     in
     {
