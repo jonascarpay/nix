@@ -7,6 +7,13 @@ let
   exec = str: "exec --no-startup-id \"${escape str}\"";
   exec' = str: "exec \"${escape str}\"";
   withMod = lib.mapAttrs' (key: value: { name = "${m}+${key}"; value = value; });
+  getFocusedPwd = pkgs.writeShellScript "getFocusedPwd" ''
+    export PATH="${lib.makeBinPath [pkgs.procps pkgs.xorg.xprop pkgs.coreutils pkgs.xdotool]}:$PATH"
+    X_WINDOW_ID=$(xdotool getwindowfocus)
+    TERM_PID=$(xprop -id $X_WINDOW_ID _NET_WM_PID | cut -d' ' -f 3)
+    SHELL_PID=$(ps --ppid $TERM_PID -o pid=)
+    pwdx $SHELL_PID | cut -d' ' -f 2
+  '';
 in
 {
   xsession.windowManager.i3 = {
@@ -59,8 +66,8 @@ in
             "Tab" = "workspace next";
             "shift+Tab" = "workspace prev";
             "Ctrl+Return" = exec "st fish";
-            "Return" = exec "st -d \"`${pkgs.xcwd}/bin/xcwd`\" fish";
-            "shift+Return" = exec "st -c floating -d \"`${pkgs.xcwd}/bin/xcwd`\" fish";
+            "Return" = exec "st -d \"`${getFocusedPwd}`\" fish";
+            "shift+Return" = exec "st -c floating -d \"`${getFocusedPwd}`\" fish";
             "f" = exec' "firefox";
             "o" = exec "dmenu-run";
             "d" = exec "dmenu-directory";
