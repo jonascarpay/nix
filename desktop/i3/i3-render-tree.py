@@ -40,8 +40,11 @@ def write_node(node: Node):
 
 
 stdin_filtered = "".join([line for line in sys.stdin if not re.match(r"^\s*//", line)])
-json_strings = [line for line in stdin_filtered.split("\n\n") if len(line) > 0]
-toplevel = [parse_json(json.loads(line)) for line in json_strings]
+toplevel = [
+    parse_json(json.loads(line))
+    for line in stdin_filtered.split("\n\n")
+    if len(line) > 0
+]
 
 print("digraph{")
 for node in toplevel:
