@@ -1,6 +1,6 @@
 { pkgs, inputs, ... }:
 let
-  history-root = "~/.local/share/frecently";
+  history-root = "/home/jmc/.local/share/frecently";
 
   dmenu-directory =
     let
