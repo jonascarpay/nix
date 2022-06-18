@@ -36,7 +36,7 @@ let
       history = "${history-root}/command-history";
       script = pkgs.writeShellScriptBin "dmenu-command" ''
         set -e
-        CMD=$(frecently view ${history} | dmenu -p " ")
+        CMD=$(frecently view ${history} | dmenu -s -p " ")
         frecently bump "${history}" "$CMD"
         st $@ -e fish -c "$CMD; read -n 1 -p 'echo Press any key to continue...' key"
       '';
