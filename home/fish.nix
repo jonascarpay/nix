@@ -8,8 +8,10 @@
       end
 
       function take -a dir
-        mkdir -p $dir
-        cd $dir
+        if test -n "$dir"
+          mkdir -p $dir
+          and cd $dir
+        end
       end
 
       function fish_prompt
