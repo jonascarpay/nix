@@ -13,6 +13,7 @@ class Node:
     id: int
     text: str
     floating: bool
+    layout: bool
     children: List["Node"]
 
 
@@ -24,16 +25,25 @@ def parse_json(x: dict) -> Node:
     layout = x.get("layout")
     if layout:
         return Node(
-            id, layout, floating, [parse_json(child) for child in x.get("nodes", [])]
+            id,
+            layout,
+            floating,
+            True,
+            [parse_json(child) for child in x.get("nodes", [])],
         )
     else:
         text = x.get("name")
-        return Node(id, f"{text:30}..." if len(text) > 30 else text, floating, [])
+        return Node(id, text, floating, False, [])
 
 
 def write_node(node: Node):
-    style = ", style=dashed" if node.floating else ""
-    print(f'  node_{node.id} [label="{node.text[:30]}"{style}];')
+    style = ""
+    if node.floating:
+        style += ", style=dashed"
+    if node.layout:
+        style += ", shape=box"
+    text = node.text if len(node.text) < 30 else f"{node.text[:30].strip()}..."
+    print(f'  node_{node.id} [label="{text}"{style}];')
     for child in node.children:
         write_node(child)
         print(f"  node_{node.id} -> node_{child.id};")
