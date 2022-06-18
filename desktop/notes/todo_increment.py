@@ -39,7 +39,7 @@ for line in sys.stdin:
         text = d["text"]
 
         if not d["datetime"]:
-            print(f"- [x]{text}")
+            print(f"- [x] {text}")
             sys.exit(0)
 
         ts_prev = datetime.datetime(
