@@ -14,6 +14,10 @@ let
     SHELL_PID=$(ps --ppid $TERM_PID -o pid=)
     pwdx $SHELL_PID | cut -d' ' -f 2
   '';
+  showTree = pkgs.writeShellScript "showTree" ''
+    export PATH="${lib.makeBinPath [pkgs.python3 pkgs.graphviz pkgs.feh]}:$PATH"
+    i3-save-tree | python ${./i3-render-tree.py} | dot -T png | feh --class floating -
+  '';
 in
 {
   xsession.windowManager.i3 = {
@@ -52,12 +56,6 @@ in
 
       bars = [ ];
 
-      window.commands = [
-        {
-          criteria = { class = "floating"; };
-          command = "resize set 1320 px 840 px, move position center";
-        }
-      ];
       keybindings =
         let
           generalKeys = withMod {
@@ -82,6 +80,7 @@ in
             "shift+t" = "sticky toggle";
             "t" = "focus mode_toggle";
             "q" = "kill";
+            "slash" = exec "${showTree}";
             "space" = "fullscreen toggle";
             "a" = "focus parent";
             "Shift+a" = "focus child";

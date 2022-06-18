@@ -27,7 +27,7 @@ in
     ./redshift.nix
     ./random-wallpaper.nix
     # ./xmonad
-    ./i3.nix
+    ./i3
     ./notes
     widgets
   ];
