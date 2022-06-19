@@ -18,6 +18,7 @@ let
     export PATH="${lib.makeBinPath [pkgs.python3 pkgs.graphviz pkgs.feh]}:$PATH"
     i3-save-tree | python ${./i3-render-tree.py} | dot -T png | feh --class floating -
   '';
+  clipboard-firefox = pkgs.writeShellScript "clipboard-firefox" "xclip -o | xargs firefox";
 in
 {
   xsession.windowManager.i3 = {
@@ -67,6 +68,7 @@ in
             "Return" = exec "st -d \"`${getFocusedPwd}`\" fish";
             "shift+Return" = exec "st -c floating -d \"`${getFocusedPwd}`\" fish";
             "f" = exec' "firefox";
+            "shift+f" = exec' "${clipboard-firefox}";
             "o" = exec "dmenu-run";
             "d" = exec "dmenu-directory";
             "r" = exec "dmenu-command -c floating";
