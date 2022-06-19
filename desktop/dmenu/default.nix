@@ -14,7 +14,7 @@ let
               frecently delete ${history} "$dir"
             fi
           done
-          DIR=$(frecently view ${history} | sed "s#$HOME#~#" | dmenu -i -p " ")
+          DIR=$(frecently view ${history} | sed "s#$HOME#~#" | dmenu -w -i -p " ")
           DIR_REAL=$(realpath "''${DIR/#\~/$HOME}")
           if [ -d $DIR_REAL ]; then
             frecently bump ${history} "$DIR_REAL"
@@ -33,11 +33,13 @@ let
 
   dmenu-command =
     let
-      history = "${history-root}/command-history";
+      fish-history = "${history-root}/fish-command-history";
+      dmenu-history = "${history-root}/dmenu-command-history";
       script = pkgs.writeShellScriptBin "dmenu-command" ''
         set -e
-        CMD=$(frecently view ${history} | dmenu -s -p " ")
-        frecently bump "${history}" "$CMD"
+        CMD=$(frecently view ${fish-history} | frecently view ${dmenu-history} -a | dmenu -p " ")
+        frecently bump "${dmenu-history}" "$CMD"
+        frecently bump "${fish-history}" "$CMD"
         st $@ -e fish -c "$CMD; read -n 1 -p 'echo Press any key to continue...' key"
       '';
     in
@@ -47,7 +49,7 @@ let
         function __rofi-command-hook --on-event fish_postexec --description 'add command to command frecency history'
           # Only accept if the status was success, and it was a one-liner
           if test $status -eq 0 -a (echo "$argv" | wc -l) -eq 1
-            frecently bump ${history} "$argv"
+            frecently bump ${fish-history} "$argv"
           end
         end
       '';

@@ -32,7 +32,7 @@
       flake = false;
     };
     frecently = {
-      url = "github:jonascarpay/frecently";
+      url = "github:jonascarpay/frecently/preserve-index";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     dmenu = {
