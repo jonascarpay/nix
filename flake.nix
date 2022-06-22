@@ -135,6 +135,7 @@
             common-pc-laptop-ssd
             # common-gpu-nvidia
             ./machines/paninix.nix
+            { system.stateVersion = "21.11"; }
           ];
           homeModules = [ ./home ./desktop ];
         };
