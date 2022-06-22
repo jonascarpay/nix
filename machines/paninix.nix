@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 let
-  integrated = false;
+  integrated = true;
   wireguard = let port = 51820; in
     {
       age.secrets.wg-paninix.file = ../secrets/wg-paninix.age;
@@ -25,7 +25,8 @@ in
     ../system/global.nix
     ../system/jp.nix
     ../system/openvpn.nix
-    wireguard
+    ../system/graphical.nix
+    # wireguard
   ];
 
   networking = {
@@ -43,10 +44,6 @@ in
         445
         27036
         27037 # steam
-        8080 # hoogle
-        8081 # hoogle
-        4040 # weird ssh
-        4041 # weird http
         22000 # syncthing
       ];
       allowedUDPPorts = [
@@ -54,8 +51,6 @@ in
         15515 # default
         139
         138 # samba
-        500 # xc vpn
-        4500 # xc vpn
         27031
         27036 # steam
         8081 # steam
@@ -68,7 +63,6 @@ in
     pulseaudio = {
       enable = true;
       package = pkgs.pulseaudioFull;
-      extraModules = [ pkgs.pulseaudio-modules-bt ]; # Necessary for bt headset
       # Prevents weird fade-ins in Anki -- hopefully
       extraConfig = if integrated then "" else ''
         unload-module module-suspend-on-idle
@@ -154,13 +148,7 @@ in
     xserver = {
       dpi = 140;
       libinput.enable = true;
-      enable = true;
       videoDrivers = [ (if integrated then "intel" else "nvidia") ];
-      displayManager.autoLogin = {
-        enable = true;
-        user = "jmc";
-      };
-      desktopManager.plasma5.enable = true; # TODO disable
     };
     logind.extraConfig = "RuntimeDirectorySize=2G";
   };
