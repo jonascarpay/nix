@@ -53,6 +53,7 @@ in
         { class = "Pavucontrol"; }
         { class = "Qalculate-gtk"; }
         { class = "floating"; }
+        { class = "io.github.celluloid_player.Celluloid"; }
       ];
 
       bars = [ ];
