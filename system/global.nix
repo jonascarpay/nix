@@ -114,7 +114,7 @@ in
     users.root.hashedPassword = "$6$m26D1J9rYXRcv.UX$sMAEzl.q5Bj2GrvJ1S5t09rCS499dQeuL08blpLl3ZdjTNKoD5a7.SkQUZwVMkF5Ui8GWoR26O2kdSdRnyPfK1";
   };
   documentation = {
-    nixos.enable = false;
+    nixos.enable = true;
     # nixos.includeAllModules = true;
     man.generateCaches = true; # Needed for fish man page completions
     dev.enable = true;
