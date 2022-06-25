@@ -126,7 +126,7 @@ in
   nix.maxJobs = lib.mkDefault 8;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
-  time.timeZone = "Asia/Tokyo";
+  time.timeZone = "Europe/Amsterdam";
   services = {
     printing = {
       enable = true;
