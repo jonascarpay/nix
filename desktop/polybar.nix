@@ -1,4 +1,3 @@
-# Click events are broken until 3.5.0
 { pkgs, config, lib, ... }:
 let
   sensors = "${pkgs.lm_sensors}/bin/sensors";
@@ -12,35 +11,31 @@ let
     red = "#BF616A";
   };
 in
-lib.mkIf (config.xsession.enable) {
-
-  # programs.autorandr.hooks.postswitch.restart-polybar = ''
-  #   systemctl restart --user polybar.service
-  # '';
+{
   services.polybar = {
-    enable = true;
+    enable = config.xsession.enable;
     package = pkgs.polybar.override {
       alsaSupport = true;
       i3GapsSupport = true;
       pulseSupport = true;
     };
-    script = ''
-      polybar hidpi &
-    '';
+    script = "polybar $(${pkgs.nettools}/bin/hostname) &";
     config = {
-      "bar/common" = {
-        inherit (colors) foreground background;
-        width = "100%";
-        locale = "ja_JP.UTF-8";
-        font-0 = "SauceCodePro Nerd Font:style=Regular:size=8;2";
-        font-1 = "SauceCodePro Nerd Font:style=Bold:size=8;2";
-        font-2 = "IPAPGothic:style=Bold:size=8;3";
-        tray-position = "right";
-        module-margin = "1";
-        modules-left = "i3 xwindow";
+      "bar/xc-jonas" = {
+        "inherit" = "bar/hidpi";
+        modules-right = "todos vpn wireless wired fs memory temp fan cpu battery pulseaudio date-jpn date";
+      };
+
+      "bar/anpan" = {
+        "inherit" = "bar/hidpi";
         modules-right = "todos zfs onigiri vpn wireless wired fs memory temp fan cpu battery pulseaudio date-nl date";
-        line-color = colors.snow0;
-        line-size = "3";
+      };
+
+      "bar/paninix" = {
+        "inherit" = "bar/common";
+        modules-right = "vpn wireless wired fs memory temp fan cpu battery pulseaudio date-jpn date";
+        height = "18";
+        tray-maxsize = "15";
       };
 
       "bar/hidpi" = {
@@ -51,10 +46,18 @@ lib.mkIf (config.xsession.enable) {
         tray-maxsize = "26";
       };
 
-      "bar/lodpi" = {
-        "inherit" = "bar/common";
-        height = "18";
-        tray-maxsize = "15";
+      "bar/common" = {
+        inherit (colors) foreground background;
+        width = "100%";
+        locale = "ja_JP.UTF-8";
+        font-0 = "SauceCodePro Nerd Font:style=Regular:size=8;2";
+        font-1 = "SauceCodePro Nerd Font:style=Bold:size=8;2";
+        font-2 = "IPAPGothic:style=Bold:size=8;3";
+        tray-position = "right";
+        module-margin = "1";
+        modules-left = "i3 xwindow";
+        line-color = colors.snow0;
+        line-size = "3";
       };
 
       "module/date" = {
@@ -67,7 +70,13 @@ lib.mkIf (config.xsession.enable) {
 
       "module/date-jpn" = {
         type = "custom/script";
-        exec = ''TZ=Asia/Tokyo ${pkgs.coreutils}/bin/date +"JST: %H:%M"'';
+        exec = ''TZ=Asia/Tokyo ${pkgs.coreutils}/bin/date +" %H:%M"'';
+        interval = "30";
+      };
+
+      "module/date-nl" = {
+        type = "custom/script";
+        exec = ''TZ=Europe/Amsterdam ${pkgs.coreutils}/bin/date +" %H:%M"'';
         interval = "30";
       };
 
@@ -120,12 +129,6 @@ lib.mkIf (config.xsession.enable) {
         exec = "${sensors} | ${grep} Package | ${awk} '{print $4; exit}' | ${sed} 's/^.\\([0-9]\\+\\)../\\1/' ";
         label = " %output%";
         interval = "1";
-      };
-
-      "module/date-nl" = {
-        type = "custom/script";
-        exec = ''TZ=Europe/Amsterdam ${pkgs.coreutils}/bin/date +" %H:%M"'';
-        interval = "30";
       };
 
       "module/todos" =
@@ -258,7 +261,6 @@ lib.mkIf (config.xsession.enable) {
         label-connected = "直 %downspeed:9%  %upspeed:9%  ";
         label-disconnected = "睊";
       };
-
     };
   };
 }
