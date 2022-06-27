@@ -16,7 +16,7 @@ in
   # This is necessary to get scripts like note-todos to properly spawn dmenu/st.
   # it's probably more robust to just have i3 start polybar instead, so it's always using the same PATH
   # Most is still written in a style that doesn't assume a PATH, which could then just be ported
-  systemd.user.services.polybar.Service.Environment = lib.mkForce "PATH=/home/jmc/.nix-profile/bin:/etc/profiles/per-user/jmc/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin";
+  systemd.user.services.polybar.Service.Environment = lib.mkForce "PATH=/home/jmc/bin:/run/wrappers/bin:/home/jmc/.nix-profile/bin:/etc/profiles/per-user/jmc/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin";
   services.polybar = {
     enable = config.xsession.enable;
     package = pkgs.polybar.override {
@@ -33,7 +33,7 @@ in
 
       "bar/anpan" = {
         "inherit" = "bar/hidpi";
-        modules-right = "todos zfs onigiri vpn wireless wired fs memory temp fan cpu battery pulseaudio date-nl date";
+        modules-right = "todos zfs onigiri vpn wireless wired fs memory temp fan cpu pulseaudio date-nl date";
       };
 
       "bar/paninix" = {
@@ -169,12 +169,14 @@ in
 
       "module/battery" = {
         type = "internal/battery";
-        label-charging = "🗲 %percentage%";
         full-at = "95";
         battery = "BAT1";
         adapter = "AC";
-        format-charging = "<ramp-capacity>";
-        format-discharging = "<ramp-capacity>";
+        time-format = "%H:%M";
+        format-charging = "<ramp-capacity> <label-charging>";
+        label-charging = "%time%";
+        format-discharging = "<ramp-capacity> <label-discharging>";
+        label-discharging = "%time%";
         ramp-capacity-0 = "";
         ramp-capacity-1 = "";
         ramp-capacity-2 = "";
@@ -186,6 +188,7 @@ in
         ramp-capacity-8 = "";
         ramp-capacity-9 = "";
         ramp-capacity-10 = "";
+        click-left = "st -c floating sudo powertop";
       };
 
       "module/fs" = {
