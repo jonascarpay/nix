@@ -173,6 +173,7 @@ in
         battery = "BAT1";
         adapter = "AC";
         time-format = "%H:%M";
+        format-full = "";
         format-charging = "<ramp-capacity> <label-charging>";
         label-charging = "%time%";
         format-discharging = "<ramp-capacity> <label-discharging>";
