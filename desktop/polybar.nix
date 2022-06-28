@@ -166,12 +166,9 @@ in
       "module/pulseaudio" = {
         type = "internal/pulseaudio";
         use-ui-max = false;
-        format-volume = "<ramp-volume> <label-volume>";
-        label-muted = "ﱝ ";
-        label-volume = "%percentage:3%%";
-        ramp-volume-0 = "奄";
-        ramp-volume-1 = "奔";
-        ramp-volume-2 = "墳";
+        format-volume = "<ramp-volume>";
+        label-muted = "婢  ";
+        ramp-volume = [ "奄  " "奄 ▁" "奄 ▂" "奔 ▃" "奔 ▄" "奔 ▅" "墳 ▆" "墳 ▇" "墳 █" ];
         click-right = "${pkgs.pavucontrol}/bin/pavucontrol &";
       };
 
@@ -186,17 +183,7 @@ in
         label-charging = "%time%";
         format-discharging = "<ramp-capacity> <label-discharging>";
         label-discharging = "%time%";
-        ramp-capacity-0 = "";
-        ramp-capacity-1 = "";
-        ramp-capacity-2 = "";
-        ramp-capacity-3 = "";
-        ramp-capacity-4 = "";
-        ramp-capacity-5 = "";
-        ramp-capacity-6 = "";
-        ramp-capacity-7 = "";
-        ramp-capacity-8 = "";
-        ramp-capacity-9 = "";
-        ramp-capacity-10 = "";
+        ramp-capacity = [ "" "" "" "" "" "" "" "" "" "" "" ];
         click-left = "st -c floating sudo powertop";
       };
 
@@ -220,14 +207,7 @@ in
         # click-left = "firefox";
 
         ramp-coreload-spacing = 0;
-        ramp-coreload-0 = "▁";
-        ramp-coreload-1 = "▂";
-        ramp-coreload-2 = "▃";
-        ramp-coreload-3 = "▄";
-        ramp-coreload-4 = "▅";
-        ramp-coreload-5 = "▆";
-        ramp-coreload-6 = "▇";
-        ramp-coreload-7 = "█";
+        ramp-coreload = [ "▁" "▂" "▃" "▄" "▅" "▆" "▇" "█" ];
       };
 
       "module/i3" = {
