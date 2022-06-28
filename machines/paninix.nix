@@ -143,7 +143,10 @@ in
     };
     udev.extraRules = ''
       ACTION=="add", SUBSYSTEM=="input", ATTR{name}=="TPPS/2 IBM TrackPoint", ATTR{device/sensitivity}="210"
+      ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", RUN="${pkgs.coreutils}/bin/chmod a+w /sys/class/backlight/intel_backlight/brightness"
     '';
+    # This rule should work for brightness, but doesn't for some reason:
+    # ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", GROUP="video", MODE="0666"
 
     fstrim.enable = true;
     xserver = {

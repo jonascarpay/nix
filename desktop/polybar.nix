@@ -25,10 +25,10 @@ in
       pulseSupport = true;
     };
     script = "polybar $(${pkgs.nettools}/bin/hostname) &";
-    config = {
+    settings = {
       "bar/xc-jonas" = {
         "inherit" = "bar/hidpi";
-        modules-right = "todos vpn wireless wired fs memory temp fan cpu battery pulseaudio date-jpn date";
+        modules-right = "todos vpn wireless wired fs memory temp fan cpu battery backlight-t480 pulseaudio date-jpn date";
       };
 
       "bar/anpan" = {
@@ -90,6 +90,14 @@ in
         exec = "${sensors} | ${grep} fan1 | ${awk} '{print $2; exit}'";
         label = " %output% RPM";
         interval = "1";
+      };
+
+      "module/backlight-t480" = {
+        type = "internal/backlight";
+        card = "intel_backlight";
+        format = "<ramp>";
+        ramp = [ " " " " " " " " " " " " " " " " " " " " " " " " " " " " ];
+        enable-scroll = true;
       };
 
       "module/onigiri" =
