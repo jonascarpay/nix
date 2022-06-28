@@ -48,6 +48,7 @@ in
       nix-tree
       btop
       unzip
+      viddy
       vim
     ] ++ lib.optional (system == "x86_64-linux") lnav; # https://github.com/tstack/lnav/issues/882
     variables = {
