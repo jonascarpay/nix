@@ -5,6 +5,7 @@ import datetime
 # - [ ] [YYYY-MM-DD[ HH:MM][ <[+[+]]nn uu[!|?]>]]text
 regex: re.Pattern = re.compile(
     r"""^
+        (?P<indent>\s*)
         -\s\[\s\]\s # leading "- [ ] "
         (?P<datetime>
             (?P<year>\d\d\d\d)-
@@ -37,9 +38,10 @@ for line in sys.stdin:
     if match:
         d = match.groupdict()
         text = d["text"]
+        indent = d["indent"]
 
         if not d["datetime"]:
-            print(f"- [x] {text}")
+            print(f"{indent}- [x] {text}")
             sys.exit(0)
 
         ts_prev = datetime.datetime(
@@ -53,7 +55,7 @@ for line in sys.stdin:
         format_string = "%Y-%m-%d %H:%M" if d["time"] else "%Y-%m-%d"
         increment = d["increment"]
         if not increment:
-            print(f"- [x] {ts_prev.strftime(format_string)}{text}")
+            print(f"{indent}- [x] {ts_prev.strftime(format_string)}{text}")
             sys.exit(0)
 
         amount = int(d["amount"])
@@ -74,8 +76,8 @@ for line in sys.stdin:
             ts_next = (now + delta).replace(hour=ts_prev.hour, minute=ts_prev.minute)
         else:
             ts_next = ts_prev + delta
-        print(f"- [ ] {ts_next.strftime(format_string)}{increment}{text}")
+        print(f"{indent}- [ ] {ts_next.strftime(format_string)}{increment}{text}")
         if d["logtext"]:
-            print(f"- [x] {ts_prev.strftime(format_string)}{text}")
+            print(f"{indent}- [x] {ts_prev.strftime(format_string)}{text}")
         elif d["logquiet"]:
-            print(f"- [x] {ts_prev.strftime(format_string)}")
+            print(f"{indent}- [x] {ts_prev.strftime(format_string)}")
