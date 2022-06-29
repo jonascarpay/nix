@@ -127,13 +127,19 @@
           config = builtins.readFile ./init.el;
         };
 
-        agda-mode = {
-          plugins = [ ];
-          config = ''
-            (load-file (let ((coding-system-for-read 'utf-8))
-                (shell-command-to-string "agda-mode locate")))
-          '';
-        };
+        agda-mode =
+          let
+            locate = pkgs.runCommand "agda-mode-locate" { } ''
+              ${pkgs.agda}/bin/agda-mode locate > $out
+            '';
+          in
+          {
+            plugins = [ ];
+            config = ''
+              (load-file (let ((coding-system-for-read 'utf-8))
+                  "${builtins.readFile locate}"))
+            '';
+          };
 
         customConfig = {
           plugins = [ ];
