@@ -65,6 +65,8 @@
 
         modules = [
 
+          { system.stateVersion = "21.11"; }
+
           # TODO the old extraArgs has been deprecated, but this seems kinda hacky at best
           { config._module.args = namedInputs system; }
 
@@ -113,36 +115,34 @@
             pkgs.python3Packages.ipython
           ];
         };
+
+      hardware = inputs.nixos-hardware.nixosModules;
     in
     {
       devShell.x86_64-linux = shell;
       nixosConfigurations = {
         anpan = mkSystem {
           system = "x86_64-linux";
-          sysModules = with inputs.nixos-hardware.nixosModules; [
-            common-pc-ssd
-            common-pc
+          sysModules = [
+            hardware.common-pc-ssd
+            hardware.common-pc
             ./machines/anpan.nix
-            { system.stateVersion = "21.11"; }
           ];
           homeModules = [ ./home ./desktop ];
         };
         paninix = mkSystem {
           system = "x86_64-linux";
-          sysModules = with inputs.nixos-hardware.nixosModules; [
-            lenovo-thinkpad-t480
-            common-pc-laptop
-            common-pc-laptop-ssd
-            # common-gpu-nvidia
+          sysModules = [
+            hardware.lenovo-thinkpad-t480
+            hardware.common-pc-laptop-ssd #  2022-06-29 Actually just links to common-pc-ssd
             ./machines/paninix.nix
-            { system.stateVersion = "21.11"; }
           ];
           homeModules = [ ./home ./desktop ];
         };
         onigiri = mkSystem {
           system = "aarch64-linux";
           sysModules = [
-            inputs.nixos-hardware.nixosModules.raspberry-pi-4
+            hardware.raspberry-pi-4
             ./machines/onigiri.nix
           ];
           homeModules = [ ./home ];
