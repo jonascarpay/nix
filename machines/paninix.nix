@@ -42,28 +42,6 @@ in
       enable = true;
       insertNameservers = [ "1.1.1.1" ];
     };
-    firewall = {
-      enable = true;
-      allowedTCPPorts = [
-        22
-        80 # ssh http
-        139
-        445
-        27036
-        27037 # steam
-        22000 # syncthing
-      ];
-      allowedUDPPorts = [
-        53
-        15515 # default
-        139
-        138 # samba
-        27031
-        27036 # steam
-        8081 # steam
-        21027 # syncthing
-      ];
-    };
   };
 
   hardware = {
@@ -89,26 +67,10 @@ in
 
   boot = {
     initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
-    initrd.kernelModules = [ ];
-    kernelModules = [ "kvm-intel" ];
-    extraModulePackages = [ ];
+    kernelModules = [ "kvm-intel" ]; # virtualization
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
-    blacklistedKernelModules = [ ];
-    kernelParams = [
-      "noibrs"
-      "noibpb"
-      "nopti"
-      "nospectre_v2"
-      "nospectre_v1"
-      "l1tf=off"
-      "nospec_store_bypass_disable"
-      "no_stf_barrier"
-      "mds=off"
-      "tsx=on"
-      "tsx_async_abort=off"
-      "mitigations=off"
-    ];
+    kernelParams = [ "mitigations=off" ];
   };
 
   fileSystems = {
@@ -131,9 +93,6 @@ in
     ];
   };
 
-  nix.maxJobs = lib.mkDefault 8;
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
-
   time.timeZone = "Europe/Amsterdam";
   services = {
     printing = {
@@ -141,20 +100,12 @@ in
       browsing = true;
       drivers = [ pkgs.brlaser pkgs.gutenprint pkgs.gutenprintBin ];
     };
-    tlp = {
-      enable = false;
-      extraConfig = ''
-        CPU_SCALING_GOVERNOR_ON_BAT=powersave
-        CPU_SCALING_GOVERNOR_ON_AC=performance
-      '';
-    };
     udev.extraRules = ''
       ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", RUN="${pkgs.coreutils}/bin/chmod a+w /sys/class/backlight/intel_backlight/brightness"
     '';
     # This rule should work for brightness, but doesn't for some reason:
     # ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", GROUP="video", MODE="0666"
 
-    fstrim.enable = true;
     xserver = {
       dpi = 140;
       libinput.enable = true;
@@ -162,14 +113,4 @@ in
     };
     logind.extraConfig = "RuntimeDirectorySize=2G";
   };
-
-  nix = {
-    extraOptions = ''
-      keep-outputs = true
-      keep-derivations = true
-    '';
-    requireSignedBinaryCaches = false;
-  };
-
-  programs.dconf.enable = true; # TODO ?
 }

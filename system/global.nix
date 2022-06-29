@@ -124,9 +124,14 @@ in
   boot.cleanTmpDir = true;
 
   nix = {
+    extraOptions = ''
+      keep-outputs = true
+      keep-derivations = true
+      experimental-features = nix-command flakes
+    '';
+    # requireSignedBinaryCaches = false;
     # trustedUsers = [ "root" "@wheel" ];
     package = pkgs.nixUnstable;
-    extraOptions = "experimental-features = nix-command flakes";
     # https://github.com/gytis-ivaskevicius/flake-utils-plus/blob/master/modules/saneFlakeDefaults.nix
     registry =
       builtins.mapAttrs
