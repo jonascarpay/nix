@@ -17,6 +17,11 @@ let
         }];
       };
     };
+
+  bluetooth = {
+    hardware.bluetooth.enable = true;
+    services.blueman.enable = true;
+  };
 in
 {
   # TODO use graphical.nix
@@ -27,6 +32,7 @@ in
     ../system/openvpn.nix
     ../system/graphical.nix
     wireguard
+    bluetooth
   ];
 
   networking = {
@@ -156,9 +162,6 @@ in
     };
     logind.extraConfig = "RuntimeDirectorySize=2G";
   };
-
-  hardware.bluetooth.enable = true;
-  services.blueman.enable = true;
 
   nix = {
     extraOptions = ''
