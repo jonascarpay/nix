@@ -78,6 +78,7 @@ in
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:1:0:0";
     };
+    trackpoint.sensitivity = 210;
   };
 
   boot = {
@@ -142,7 +143,6 @@ in
       '';
     };
     udev.extraRules = ''
-      ACTION=="add", SUBSYSTEM=="input", ATTR{name}=="TPPS/2 IBM TrackPoint", ATTR{device/sensitivity}="210"
       ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", RUN="${pkgs.coreutils}/bin/chmod a+w /sys/class/backlight/intel_backlight/brightness"
     '';
     # This rule should work for brightness, but doesn't for some reason:
