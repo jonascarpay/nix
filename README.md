@@ -1,42 +1,27 @@
 # nix dots
 
-These are my nix dotfiles. There are many like them, but these are mine.
+These are my nix dotfiles.
+There are many like them, but these are mine.
 
 If you came here looking for the declarative cachix thing, it's been moved to [a separate repo](https://github.com/jonascarpay/declarative-cachix).
 
-## potentially interesting things
+## Highlights
 
 ### flakes
 
 [I use flakes now](https://github.com/jonascarpay/nix/blob/master/flake.nix).
-I would recommend them.
-
-### st
-
-I use the st terminal.
-You configure it by applying [patches](https://st.suckless.org/patches/) to the source code.
-[Nix makes this very easy](https://github.com/jonascarpay/nix/blob/master/desktop/st/default.nix).
+Highly recommended.
 
 ### age
 
-I use [agenix](https://github.com/ryantm/agenix) to manage my secrets, and I like it a lot.
-It allows me to put my secrets in [git](https://github.com/jonascarpay/nix/tree/master/secrets) and in [my config](https://github.com/jonascarpay/nix/blob/master/system/xc-cache.nix), yet they'll never be in my store unencrypted.
+I use [agenix](https://github.com/ryantm/agenix) to manage my secrets, and [I like it a lot](https://jonascarpay.com/posts/2021-07-27-agenix.html).
 
 ### unbound
 
-Want to run pihole but don't want to sacrifice an entire pi?
+Want to run pihole but don't want to deal with pihole setup?
 Just set up an [`unbound` server with a custom blocklist](https://github.com/jonascarpay/nix/tree/master/system/unbound.nix).
 
-### editor configuration
+### wireguard
 
-I have a little module system that I use for both emacs and vim.
-It allows me to individually declare plugin/configuration combinations.
-The simplest use case is declaring a plugin and adding some configuration:
-```
-airline.config = ''
-	let g:airline_powerline_fonts = 1
-	let g:airline#extensions#branch#displayed_head_limit = 10
-'';
-```
-
-You can see it managing my [vim here](https://github.com/jonascarpay/nix/blob/master/home/vim/default.nix), my [emacs here](https://github.com/jonascarpay/nix/blob/master/desktop/emacs/default.nix), and the code itself [here](https://github.com/jonascarpay/nix/blob/master/lib/editor-config.nix).
+My pi is a [wireguard server](https://github.com/jonascarpay/nix/blob/master/system/wireguard.nix), my [laptops are wireguard clients](https://github.com/jonascarpay/nix/blob/master/machines/paninix.nix#L4=).
+Config-wise, there's nothing here that's not also on [the Nix wiki](https://nixos.wiki/wiki/WireGuard), but wireguard is great and you should consider it if you're setting up a VPN.
