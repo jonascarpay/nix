@@ -140,5 +140,6 @@ in
           (name: value: value ? outputs)
           inputs);
   };
+  programs.dconf.enable = true; # somehow necessary for home-manager to switch configurations?
 
 }
