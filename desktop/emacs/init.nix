@@ -1,7 +1,8 @@
 { pkgs, config, lib, ... }:
 with lib;
 let
-  ecfg = import ../../lib/editor-config.nix lib;
+  # TODO inline
+  ecfg = import ./editor-config.nix lib;
 in
 {
   options = {
