@@ -1,16 +1,20 @@
 { pkgs, ... }:
 let
-  delta = let fancyBin = "${pkgs.diff-so-fancy}/bin/diff-so-fancy"; in
-    {
-      programs.git.extraConfig = {
-        core.pager = "${fancyBin} | less --tabs=4 -RFX;";
-        interactive.diffFilter = "${fancyBin} --patch";
-      };
+  difft = {
+    programs.git.extraConfig = {
+      # https://difftastic.wilfred.me.uk/git.html
+      diff.tool = "difftastic";
+      difftool.prompt = false;
+      "difftool \"difftastic\"".cmd = "${pkgs.difftastic}/bin/difft \"$LOCAL\" \"$REMOTE\"";
     };
+    programs.fish.shellAbbrs.gdt = "git difftool";
+    programs.fish.shellAbbrs.gdd = "git difftool";
+  };
 in
 {
-  imports = [ delta ];
+  imports = [ difft ];
   programs.git = {
+    diff-so-fancy.enable = true;
     enable = true;
     userName = "Jonas Carpay";
     userEmail = "jonascarpay@gmail.com";
