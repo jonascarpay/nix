@@ -6,7 +6,7 @@
     ./ranger.nix
     ./scripts.nix
     ./tmux.nix
-    ./vim.nix
+    ./vim
     ./zsh.nix
     ./git.nix
   ];

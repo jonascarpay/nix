@@ -74,7 +74,7 @@ let
     programs.neovim.plugins = [
       np.vim-snippets
       {
-        plugin = np.Ultisnips;
+        plugin = np.UltiSnips;
         config = ''
           nn <leader>fs :Snippets<CR>
           set rtp+=${./.}
@@ -85,7 +85,7 @@ let
 
 in
 {
-  imports = [ coc neoformat ];
+  imports = [ coc neoformat snippets ];
   programs.git.ignores = [ "*~" "*.swp" "*.swo" "tags" "TAGS" ];
   programs.neovim = {
     enable = true;
