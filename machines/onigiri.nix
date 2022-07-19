@@ -15,6 +15,22 @@ let
     };
   };
 
+  noip = {
+    age.secrets.noip.file = ../secrets/noip.age;
+    systemd.services.noip = {
+      enable = true;
+      description = "noip2 DNS service";
+      wantedBy = [ "default.target" ];
+      script = ''
+        ${pkgs.noip}/bin/noip2 -c ${config.age.secrets.noip.path}
+      '';
+      serviceConfig = {
+        Type = "forking";
+        Restart = "always";
+      };
+    };
+  };
+
   jellyfin = {
     services.jellyfin.enable = true;
     networking.firewall.allowedTCPPorts = [ 8096 8920 ];
@@ -75,6 +91,7 @@ in
       # transmission
       syncthing
       git-sync
+      noip
     ];
 
   boot.zfs.requestEncryptionCredentials = false;
