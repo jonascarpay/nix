@@ -113,4 +113,6 @@ in
     };
     logind.extraConfig = "RuntimeDirectorySize=2G";
   };
+
+  system.stateVersion = "21.05";
 }

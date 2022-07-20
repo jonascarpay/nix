@@ -65,8 +65,6 @@
 
         modules = [
 
-          { system.stateVersion = "21.11"; }
-
           # TODO the old extraArgs has been deprecated, but this seems kinda hacky at best
           { config._module.args = namedInputs system; }
 
