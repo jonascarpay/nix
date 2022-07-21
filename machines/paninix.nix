@@ -70,7 +70,7 @@ in
     kernelModules = [ "kvm-intel" ]; # virtualization
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
-    kernelParams = [ "mitigations=off" ];
+    # kernelParams = [ "mitigations=off" ];
   };
 
   fileSystems = {

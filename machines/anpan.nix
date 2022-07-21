@@ -39,7 +39,6 @@ in
     ../system/global.nix
     ../system/jp.nix
     ../system/openvpn.nix
-    ../system/mlfa.nix
     ../system/graphical.nix
     transmission
     docker
@@ -60,6 +59,7 @@ in
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
     blacklistedKernelModules = [ ];
+    # kernelParams = [ "mitigations=off" ];
   };
 
   fileSystems = {
