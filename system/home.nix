@@ -17,10 +17,51 @@ let
   };
 
   z2m-port = 8091;
+  ha-port = 8123;
+  nginx-port = 80;
 
 in
 {
   environment.systemPackages = [ flash ];
+
+  services.nginx = {
+    enable = true;
+    virtualHosts = {
+      # adapted from https://www.zigbee2mqtt.io/guide/configuration/frontend.html#nginx-proxy-configuration
+      # TODO The guide has a separate location set up for /api, but this appears unnecessary?
+      "zigbee.onigiri.lan" = {
+        listen = [{ addr = "0.0.0.0"; port = nginx-port; }];
+        locations."/" = {
+          proxyPass = "http://localhost:${builtins.toString z2m-port}";
+          extraConfig = ''
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_http_version 1.1; # Necessary for keepalive
+            proxy_set_header Upgrade $http_upgrade; # with Connection, necessary for websocket http://nginx.org/en/docs/http/websocket.html
+            proxy_set_header Connection "upgrade";
+          '';
+        };
+      };
+      # This is currently the same as zigbee.onigiri.lan, but I don't want to
+      # abstract it because it might not always be true
+      # TODO The guide has a separate location set up for /api/websocket, but this appears unnecessary?
+      "home.onigiri.lan" = {
+        listen = [{ addr = "0.0.0.0"; port = nginx-port; }];
+        locations."/" = {
+          proxyPass = "http://localhost:${builtins.toString ha-port}";
+          extraConfig = ''
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+          '';
+        };
+      };
+    };
+  };
 
   services.mosquitto = {
     enable = true;
@@ -38,7 +79,7 @@ in
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ z2m-port ];
+  networking.firewall.allowedTCPPorts = [ z2m-port ha-port nginx-port ];
 
   services.home-assistant = {
     enable = true;
@@ -51,12 +92,14 @@ in
         time_zone = "Asia/Tokyo";
         unit_system = "metric";
       };
-      http = { };
+      http = {
+        server_port = ha-port;
+        use_x_forwarded_for = true;
+        trusted_proxies = [ "127.0.0.1" "::1" ];
+      };
       default_config = { };
-      # met = { };
       homekit = { };
-      # google_assistant = { };
-      # mqtt = { };
+      mqtt = { };
       netgear = { };
     };
     extraComponents = [ "default_config" "homekit" "mqtt" "netgear" ];
