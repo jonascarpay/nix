@@ -108,6 +108,7 @@ in
       };
       mqtt = { };
       netgear = { };
+      scene = "!include scenes.yaml";
     };
     extraComponents = [ "default_config" "homekit" "mqtt" "netgear" ];
     openFirewall = true;
