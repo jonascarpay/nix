@@ -19,6 +19,8 @@ let
   z2m-port = 8091;
   ha-port = 8123;
   nginx-port = 80;
+  homekit-tcp-port = 21063; # Freely choosable
+  homekit-udp-port = 5353; # Hardcoded by apple, I think
 
 in
 {
@@ -79,7 +81,10 @@ in
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ z2m-port ha-port nginx-port ];
+  networking.firewall = {
+    allowedTCPPorts = [ z2m-port ha-port nginx-port homekit-tcp-port ];
+    allowedUDPPorts = [ homekit-udp-port ];
+  };
 
   services.home-assistant = {
     enable = true;
@@ -98,7 +103,9 @@ in
         trusted_proxies = [ "127.0.0.1" "::1" ];
       };
       default_config = { };
-      homekit = { };
+      homekit = {
+        port = homekit-tcp-port;
+      };
       mqtt = { };
       netgear = { };
     };
