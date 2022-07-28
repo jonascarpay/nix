@@ -84,7 +84,7 @@ in
       ../system/openvpn.nix
       ../system/unbound.nix
       ../system/wireguard.nix
-      ../system/home.nix
+      ../system/domo.nix
       (import ../system/zfs.nix "3bf3504c")
       rclone
       jellyfin
