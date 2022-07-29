@@ -75,6 +75,7 @@
               users.jmc.imports =
                 [{
                   # this is necessary when not using useGlobalPkgs
+                  # TODO can this go?
                   _module.args.pkgsPath = builtins.toPath (inputs.nixpkgs);
                   nixpkgs.config.allowUnfree = true;
                 }]

@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, config, ... }:
 
 let
   cc2531-firmware = pkgs.fetchzip {
@@ -86,13 +86,20 @@ in
     allowedUDPPorts = [ homekit-udp-port ];
   };
 
+  age.secrets.ha-secrets = {
+    file = ../secrets/ha-secrets.age;
+    path = "${config.services.home-assistant.configDir}/secrets.yaml";
+    owner = "hass";
+    group = "hass";
+  };
+
   services.home-assistant = {
     enable = true;
     config = {
       homeassistant = {
         name = "Home";
-        latitude = 35.6762;
-        longitude = 139.6503;
+        latitude = "!secret latitude";
+        longitude = "!secret longitude";
         temperature_unit = "C";
         time_zone = "Asia/Tokyo";
         unit_system = "metric";

@@ -13,6 +13,7 @@ in
   "xc-nixconf.age".publicKeys = keys;
   "xc-netrc.age".publicKeys = keys;
   "noip.age".publicKeys = keys;
+  "ha-secrets.age".publicKeys = keys;
   # Wireguard
   "wg-onigiri.age".publicKeys = keys;
   "wg-paninix.age".publicKeys = keys;
