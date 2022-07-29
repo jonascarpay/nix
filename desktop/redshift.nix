@@ -10,9 +10,5 @@
         longitude = "139.6503";
       };
     in
-    {
-      enable = true;
-      tray = true;
-      inherit (tokyo) latitude longitude;
-    };
+    { enable = true; tray = true; } // tokyo;
 }
