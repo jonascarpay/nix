@@ -87,7 +87,7 @@ in
       ../system/domo.nix
       (import ../system/zfs.nix "3bf3504c")
       rclone
-      jellyfin
+      # jellyfin
       # transmission
       syncthing
       git-sync
