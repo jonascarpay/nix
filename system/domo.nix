@@ -22,8 +22,46 @@ let
   homekit-tcp-port = 21063; # Freely choosable
   homekit-udp-port = 5353; # Hardcoded by apple, I think
 
+
+  adaptive-lighting = {
+    home-manager.users.hass.imports = [{
+      # this is necessary when not using useGlobalPkgs
+      # TODO Remove as soon as useUserPackages is unset
+      _module.args.pkgsPath = builtins.toPath (inputs.nixpkgs);
+      home.file.adaptive-lighting = {
+        recursive = true;
+        source =
+          let src = pkgs.fetchFromGitHub {
+            owner = "basnijholt";
+            repo = "adaptive-lighting";
+            rev = "4cc38949ba632d1432d2f0a904e36d532b77510e";
+            sha256 = "sha256-HfSfA9MLzStvb8W0HtR69ec0gPgXaoEbt1QTsWcs99A=";
+          };
+          in "${src}/custom_components/";
+        target = "./custom_components/";
+      };
+    }];
+
+    services.home-assistant.config = {
+      homekit.filter.exclude_entity_globs = [
+        "switch.adaptive_lighting_adapt_brightness_*"
+        "switch.adaptive_lighting_adapt_color_*"
+      ];
+      adaptive_lighting = [{
+        name = "Main";
+        lights = "!secret all_lights";
+        prefer_rgb_color = false;
+        min_brightness = 40;
+        min_color_temp = 2500;
+        sunrise_time = "08:00:00";
+      }];
+
+    };
+  };
+
 in
 {
+  imports = [ adaptive-lighting ];
   environment.systemPackages = [ flash ];
 
   services.nginx = {
@@ -112,12 +150,25 @@ in
       default_config = { };
       homekit = {
         port = homekit-tcp-port;
+        filter = {
+          exclude_entity_globs = [ "automation.*" ];
+        };
       };
       mqtt = { };
       netgear = { };
       scene = "!include scenes.yaml";
+      automation = "!include automations.yaml";
+      light = "!secret light_groups";
+      group = {
+        somebody_home = {
+          name = "People";
+          entities = "!secret phones";
+          all = false;
+        };
+      };
     };
-    extraComponents = [ "default_config" "homekit" "mqtt" "netgear" ];
+    extraComponents = [ "default_config" "homekit" "mqtt" "netgear" "group" ];
+    extraPackages = p: [ p.aiohomekit p.pyatv p.getmac p.securetar ];
     openFirewall = true;
   };
 }
