@@ -44,8 +44,7 @@ let
 
     services.home-assistant.config = {
       homekit.filter.exclude_entity_globs = [
-        "switch.adaptive_lighting_adapt_brightness_*"
-        "switch.adaptive_lighting_adapt_color_*"
+        "switch.adaptive_lighting_*"
       ];
       adaptive_lighting = [{
         name = "Main";
