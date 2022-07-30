@@ -146,7 +146,6 @@ in
         use_x_forwarded_for = true;
         trusted_proxies = [ "127.0.0.1" "::1" ];
       };
-      default_config = { };
       homekit = {
         port = homekit-tcp-port;
         filter = {
@@ -165,9 +164,47 @@ in
           all = false;
         };
       };
+      # default_config customization
+      config = { };
+      frontend = { };
+      history = { };
+      image = { };
+      input_boolean = { };
+      input_button = { };
+      input_datetime = { };
+      input_number = { };
+      input_select = { };
+      input_text = { };
+      logbook = { };
+      person = { };
+      sun = { };
+      system_health = { };
     };
-    extraComponents = [ "default_config" "homekit" "mqtt" "netgear" "group" ];
-    extraPackages = p: [ p.aiohomekit p.pyatv p.getmac p.securetar ];
+    extraComponents = [
+      # extras
+      "homekit"
+      "mqtt"
+      "netgear"
+      "group"
+      # default_config customization
+      "automation"
+      "config"
+      "frontend"
+      "history"
+      "image"
+      "input_boolean"
+      "input_button"
+      "input_datetime"
+      "input_number"
+      "input_select"
+      "input_text"
+      "logbook"
+      "person"
+      "scene"
+      "sun"
+      "system_health"
+    ];
+    extraPackages = p: [ p.aiohomekit p.pyatv p.getmac p.async-upnp-client ];
     openFirewall = true;
   };
 }
