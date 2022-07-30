@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 let
   port = 51820;
-  ext = "wlan0";
+  ext = "eth0";
   iptables = "${pkgs.iptables}/bin/iptables";
 in
 {
