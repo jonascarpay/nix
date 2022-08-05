@@ -58,7 +58,7 @@ with lib;
           {
             services."${name}" = {
               inherit description;
-              path = with pkgs.gitAndTools; [ git git-sync ];
+              path = with pkgs.gitAndTools; [ git git-sync openssh ];
               script =
                 let
                   setMessage =
