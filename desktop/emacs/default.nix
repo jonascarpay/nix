@@ -31,7 +31,7 @@
     "/elpa/"
     "/eshell/*"
     "/network-security.data"
-    "/server/"
+    # "/server/"
     "auto-save-list"
     "dist/"
     "flycheck_*.el"
