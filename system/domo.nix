@@ -50,7 +50,7 @@ let
         name = "Main";
         lights = "!secret all_lights";
         prefer_rgb_color = false;
-        min_brightness = 40;
+        min_brightness = 45;
         min_color_temp = 2500;
         sunrise_time = "08:00:00";
       }];
