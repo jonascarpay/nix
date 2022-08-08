@@ -23,8 +23,10 @@ in
       config = ''
         config ${config.age.secrets.xc-openvpn-config.path}
         auth-user-pass ${config.age.secrets.xc-openvpn-auth.path}
+        route-nopull
+        route 192.168.2.0 255.255.255.0 vpn_gateway
+        route 192.168.100.0 255.255.255.0 vpn_gateway
       '';
     };
   };
-
 }
