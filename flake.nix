@@ -97,14 +97,6 @@
         in
         pkgs.mkShell {
           packages = [
-            (hspkgs.ghcWithPackages (p: [
-              p.dbus
-              p.xmonad
-              p.xmonad-contrib
-            ]))
-            hspkgs.ormolu
-            hspkgs.hlint
-            hspkgs.haskell-language-server
             pkgs.bashInteractive
             pkgs.python3
             pkgs.pyright
