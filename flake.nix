@@ -71,16 +71,13 @@
           inputs.home-manager.nixosModules.home-manager
           {
             home-manager = {
-              useUserPackages = true;
-              users.jmc.imports =
-                [{
-                  # this is necessary when not using useGlobalPkgs
-                  # TODO can this go?
-                  _module.args.pkgsPath = builtins.toPath (inputs.nixpkgs);
-                  nixpkgs.config.allowUnfree = true;
-                }]
-                ++ homeModules;
+              users.jmc.imports = homeModules;
               extraSpecialArgs = namedInputs system;
+              # Currently necessary when using HM as a flake
+              # https://nix-community.github.io/home-manager/index.html#sec-flakes-nixos-module
+              # https://github.com/divnix/digga/issues/30#issuecomment-748530996
+              useGlobalPkgs = true;
+              useUserPackages = true;
             };
           }
 

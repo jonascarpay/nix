@@ -25,9 +25,6 @@ let
 
   adaptive-lighting = {
     home-manager.users.hass.imports = [{
-      # this is necessary when not using useGlobalPkgs
-      # TODO Remove as soon as useUserPackages is unset
-      _module.args.pkgsPath = builtins.toPath (inputs.nixpkgs);
       home.file.adaptive-lighting = {
         recursive = true;
         source =

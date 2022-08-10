@@ -1,10 +1,21 @@
 { pkgs, config, lib, ... }:
 {
   # TODO this is a hack to get a proper PATH.
-  # This is necessary to get scripts like note-todos to properly spawn dmenu/st.
-  # it's probably more robust to just have i3 start polybar instead, so it's always using the same PATH
-  # Most is still written in a style that doesn't assume a PATH, which could then just be ported
-  systemd.user.services.polybar.Service.Environment = lib.mkForce "PATH=/home/jmc/bin:/run/wrappers/bin:/home/jmc/.nix-profile/bin:/etc/profiles/per-user/jmc/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin";
+  # This is so I can access things that aren't in pkgs, primarily my notes scripts.
+  # It's ugly, but an inherent issue of having polybar being a systemd service, I think.
+  # It's probably more robust to have i3 run polybar instead.
+  systemd.user.services.polybar.Service.Environment =
+    # Takes all of these string, appends "/bin", and concatenates using ":"
+    let path = lib.strings.makeBinPath [
+      "/home/jmc"
+      "/run/wrappers"
+      "/home/jmc/.nix-profile"
+      "/etc/profiles/per-user/jmc"
+      "/nix/var/nix/profiles/default"
+      "/run/current-system/sw"
+    ];
+    in
+    lib.mkForce "PATH=${path}";
   services.polybar = {
     enable = config.xsession.enable;
     package = pkgs.polybar.override {
@@ -151,7 +162,7 @@
           let
             script = pkgs.writeShellScript "todos" ''
               set -e
-              count=$(${pkgs.note-todos}/bin/note-todos count)
+              count=$(note-todos count)
               if [[ $count -gt 0 ]]; then
                 echo " $count"
               else
@@ -163,7 +174,7 @@
             type = "custom/script";
             exec = "${script}";
             interval = builtins.toString 60;
-            click-left = "${pkgs.note-todos}/bin/note-todos open -c floating";
+            click-left = "note-todos open -c floating";
           };
 
         "module/pulseaudio" = {
