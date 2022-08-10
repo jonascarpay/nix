@@ -13,7 +13,7 @@
       url = "github:srid/neuron";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
+    nix-doom-emacs.url = "github:nix-community/nix-doom-emacs";
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -80,11 +80,12 @@
               useUserPackages = true;
             };
           }
-
           inputs.agenix.nixosModules.age
           { environment.systemPackages = [ inputs.agenix.defaultPackage."${system}" ]; }
 
           inputs.declarative-cachix.nixosModules.declarative-cachix
+
+          { home-manager.users.jmc.imports = [ inputs.nix-doom-emacs.hmModule ]; }
 
         ] ++ sysModules;
       };
