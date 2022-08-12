@@ -10,10 +10,11 @@
   xdg.configFile."ranger/rifle.conf".source =
     let
       confPatch = pkgs.writeText "patch" ''
-        265c265
+        265c265,266
         < label open, has xdg-open = xdg-open -- "$@"
         ---
         > label open, has xdg-open = xdg-open "$@"
+        > ext org = emacs "$@"
       '';
     in
     pkgs.runCommand "rifle-conf" { } ''

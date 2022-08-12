@@ -13,6 +13,8 @@
       "/etc/profiles/per-user/jmc"
       "/nix/var/nix/profiles/default"
       "/run/current-system/sw"
+      "${pkgs.bash}"
+      "${pkgs.coreutils}"
     ];
     in
     lib.mkForce "PATH=${path}";
@@ -66,11 +68,11 @@
       in
       {
         "bar/xc-jonas" = common // hidpi // {
-          modules-right = "todos vpn wireless wired fs memory temp fan cpu battery backlight-t480 pulseaudio date-nl date";
+          modules-right = "vpn wireless wired fs memory temp fan cpu battery backlight-t480 pulseaudio date-nl date";
         };
 
         "bar/anpan" = common // hidpi // {
-          modules-right = "todos zfs onigiri vpn wireless fs memory temp fan cpu pulseaudio date-nl date";
+          modules-right = "zfs onigiri vpn wireless fs memory temp fan cpu pulseaudio date-nl date";
         };
 
         "bar/paninix" = common // {
@@ -151,30 +153,38 @@
             interval = builtins.toString 60;
           };
 
-        "module/temp" = {
-          type = "custom/script";
-          exec = "${sensors} | ${grep} Package | ${awk} '{print $4; exit}' | ${sed} 's/^.\\([0-9]\\+\\)../\\1/' ";
-          label = " %output%";
-          interval = "1";
-        };
+        "module/temp" =
+          let script = pkgs.writeShellScript "temp" ''
+            ${sensors} | ${grep} Package | ${awk} '{print $4; exit}' | ${sed} 's/^.\\([0-9]\\+\\)../\\1/' 
+          '';
+          in
+          {
+            type = "custom/script";
+            exec = "${script}";
+            label = " %output%";
+            interval = "1";
+          };
 
         "module/todos" =
           let
             script = pkgs.writeShellScript "todos" ''
-              set -e
-              count=$(note-todos count)
-              if [[ $count -gt 0 ]]; then
-                echo " $count"
-              else
-                echo ""
-              fi
+              count=$(todos-csv)
+              echo anything $count
+              # count=$(todos-csv | ${pkgs.coreutils}/bin/wc -l)
+              # if [[ $count -gt 0 ]]; then
+              #   echo " $count"
+              # else
+              #   echo "asdf"
+              # fi
             '';
           in
           {
             type = "custom/script";
             exec = "${script}";
+            # exec = "todos-csv";
+            # exec = "/etc/profiles/per-user/jmc/bin/todos-csv";
             interval = builtins.toString 60;
-            click-left = "note-todos open -c floating";
+            click-left = "emacs --eval '(org-todo-list)'";
           };
 
         "module/pulseaudio" = {

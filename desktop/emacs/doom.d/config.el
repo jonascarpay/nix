@@ -3,11 +3,18 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
+;; https://github.com/nix-community/nix-doom-emacs/issues/88
+(add-hook! 'emacs-startup-hook #'doom-init-ui-h)
+
+(setq confirm-kill-emacs nil) ;; https://github.com/doomemacs/doomemacs/issues/2688
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
-(setq user-full-name "John Doe"
-      user-mail-address "john@doe.com")
+(setq user-full-name "Jonas Carpay"
+      user-mail-address "jonascarpay@gmail.com")
+
+(setq evil-escape-key-sequence "hj")
+;; (setq projectile-project-search-path '("~/Org/" "~/Dev/"))
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
@@ -40,7 +47,7 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
+(setq org-directory "~/Org/") ;; Mirrored in desktop/emacs/dmenu.nix
 
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an

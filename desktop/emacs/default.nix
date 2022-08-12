@@ -1,5 +1,6 @@
 { pkgs, inputs, ... }:
 {
+  imports = [ ./dmenu.nix ];
   home.packages = [
     pkgs.ripgrep
     pkgs.emacs-all-the-icons-fonts

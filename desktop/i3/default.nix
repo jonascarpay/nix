@@ -42,10 +42,11 @@ in
         in
         {
           notes = mkMode {
-            b = execExit "note-bookmarks";
-            t = execExit "note-todos open -c floating";
-            n = execExit "note-open -today -c floating";
-            o = execExit "note-open -c floating";
+            b = execExit "org-bookmarks";
+            t = execExit "emacs --eval '(org-todo-list)'";
+            n = execExit "org-open -today";
+            o = execExit "org-open";
+            e = execExit "emacs";
           };
         };
 
@@ -54,6 +55,7 @@ in
         { class = "Qalculate-gtk"; }
         { class = "floating"; }
         { class = "io.github.celluloid_player.Celluloid"; }
+        { class = "Emacs"; }
       ];
 
       bars = [ ];

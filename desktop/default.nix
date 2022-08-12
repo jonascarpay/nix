@@ -28,7 +28,7 @@ in
     ./random-wallpaper.nix
     # ./xmonad
     ./i3
-    ./notes
+    # ./notes
     widgets
   ];
   home.packages = with pkgs; [
