@@ -65,11 +65,16 @@ with lib;
                     if isNull message
                     then "git config --local --unset branch.$branch_name.syncCommitMsg || true"
                     else "git config --local branch.$branch_name.syncCommitMsg \"${message}\"";
+                  preSyncScript = lib.optionalString (!(preSync == "")) ''
+                    (
+                    ${preSync}
+                    )
+                  '';
                 in
                 ''
                   cd ${directory}
 
-                  ${preSync}
+                  ${preSyncScript}
 
                   branch_name=$(git symbolic-ref -q HEAD)
                   branch_name=''${branch_name##refs/heads/}
