@@ -53,44 +53,42 @@ with lib;
 
   config.systemd =
     let
-      f = { enable, name, description, directory, time, syncNewFiles, requireFlag, message, preSync, user }:
-        optionalAttrs enable
-          {
-            services."${name}" = {
-              inherit description;
-              path = with pkgs.gitAndTools; [ git git-sync openssh ];
-              script =
-                let
-                  setMessage =
-                    if isNull message
-                    then "git config --local --unset branch.$branch_name.syncCommitMsg || true"
-                    else "git config --local branch.$branch_name.syncCommitMsg \"${message}\"";
-                  preSyncScript = lib.optionalString (!(preSync == "")) ''
-                    (
-                    ${preSync}
-                    )
-                  '';
-                in
-                ''
-                  cd ${directory}
+      f = { enable, name, description, directory, time, syncNewFiles, requireFlag, message, preSync, user }: optionalAttrs enable {
+        services."${name}" = {
+          inherit description;
+          path = with pkgs.gitAndTools; [ git git-sync openssh ];
+          script =
+            let
+              setMessage =
+                if isNull message
+                then "git config --local --unset branch.$branch_name.syncCommitMsg || true"
+                else "git config --local branch.$branch_name.syncCommitMsg \"${message}\"";
+              preSyncScript = lib.optionalString (!(preSync == "")) ''
+                (
+                ${preSync}
+                )
+              '';
+            in
+            ''
+              cd ${directory}
 
-                  ${preSyncScript}
+              ${preSyncScript}
 
-                  branch_name=$(git symbolic-ref -q HEAD)
-                  branch_name=''${branch_name##refs/heads/}
-                  ${setMessage}
+              branch_name=$(git symbolic-ref -q HEAD)
+              branch_name=''${branch_name##refs/heads/}
+              ${setMessage}
 
-                  git-sync ${optionalString syncNewFiles "-n"} ${optionalString (!requireFlag) "-s"} sync
-                '';
-              serviceConfig.Type = "oneshot";
-              serviceConfig.User = user;
-            };
-            timers."${name}" = {
-              description = "${description} timer";
-              timerConfig.OnCalendar = time;
-              wantedBy = [ "default.target" "timers.target" ];
-            };
-          };
+              git-sync ${optionalString syncNewFiles "-n"} ${optionalString (!requireFlag) "-s"} sync
+            '';
+          serviceConfig.Type = "oneshot";
+          serviceConfig.User = user;
+        };
+        timers."${name}" = {
+          description = "${description} timer";
+          timerConfig.OnCalendar = time;
+          wantedBy = [ "default.target" "timers.target" ];
+        };
+      };
     in
     with builtins;
     foldl' recursiveUpdate { }
