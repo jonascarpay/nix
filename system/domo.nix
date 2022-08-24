@@ -112,6 +112,7 @@ in
       serial.port = "/dev/ttyACM0";
       frontend.port = z2m-port;
       homeassistant = true;
+      advanced.log_level = "debug";
     };
   };
 
