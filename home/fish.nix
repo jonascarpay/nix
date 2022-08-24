@@ -41,6 +41,7 @@
       ge = "git ls-files | entr -dcs";
       gl = "git pull";
       gp = "git push";
+      gpf = "git push --force";
       gr = "git remote";
       gra = "git rebase --abort";
       grc = "git rebase --continue";
