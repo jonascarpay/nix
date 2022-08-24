@@ -18,6 +18,7 @@
     ];
     in
     lib.mkForce "PATH=${path}";
+
   services.polybar = {
     enable = config.xsession.enable;
     package = pkgs.polybar.override {
@@ -68,15 +69,15 @@
       in
       {
         "bar/xc-jonas" = common // hidpi // {
-          modules-right = "vpn wireless wired fs memory temp fan cpu battery backlight-t480 pulseaudio date-nl date";
+          modules-right = "notifications vpn wireless wired fs memory temp fan cpu battery backlight-t480 pulseaudio date-nl date";
         };
 
         "bar/anpan" = common // hidpi // {
-          modules-right = "zfs onigiri vpn wireless fs memory temp fan cpu pulseaudio date-nl date";
+          modules-right = "notifications zfs onigiri vpn wireless fs memory temp fan cpu pulseaudio date-nl date";
         };
 
         "bar/paninix" = common // {
-          modules-right = "vpn wireless wired fs memory temp fan cpu battery pulseaudio date-jpn date";
+          modules-right = "notifications vpn wireless wired fs memory temp fan cpu battery pulseaudio date-jpn date";
           height = "18";
           tray-maxsize = "15";
         };
@@ -133,6 +134,23 @@
             type = "custom/script";
             exec = "${singleping}";
             interval = "30";
+          };
+
+        "module/notifications" =
+          let script = pkgs.writeShellScript "notifications" ''
+            AUTH="jonascarpay:$(cat /run/agenix/notifications-token)"
+            notifications=$(${pkgs.curl}/bin/curl -sf --user "$AUTH" https://api.github.com/notifications | ${pkgs.jq}/bin/jq length)
+            if [ "$notifications" -gt 0 ]; then
+              echo " $notifications"
+            else
+              echo ""
+            fi
+          '';
+          in
+          {
+            type = "custom/script";
+            exec = "${script}";
+            interval = "60";
           };
 
         "module/vpn" = {

@@ -14,6 +14,7 @@ in
   "xc-netrc.age".publicKeys = keys;
   "noip.age".publicKeys = keys;
   "ha-secrets.age".publicKeys = keys;
+  "notifications-token.age".publicKeys = keys;
   # Wireguard
   "wg-onigiri.age".publicKeys = keys;
   "wg-paninix.age".publicKeys = keys;

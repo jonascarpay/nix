@@ -24,11 +24,19 @@ let
       ${nnn}/bin/nnn -e $@
     '';
 
+  # This is a hack to keep my notifications token secret.
+  # If agenix gets home-manager support it can be moved to the polybar module.
+  notifications-token = {
+    age.secrets.notifications-token.file = ../secrets/notifications-token.age;
+    age.secrets.notifications-token.owner = "jmc";
+  };
+
 in
 {
   imports = [
     caches
     ./xc-cache.nix
+    notifications-token
   ];
   environment = {
     systemPackages = with pkgs; [
