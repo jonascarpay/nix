@@ -15,6 +15,12 @@ let
       };
     };
   };
+
+  anki-wrapped = pkgs.writeShellScriptBin "anki" ''
+    export PATH="${pkgs.lib.makeBinPath [ pkgs.mpv ]}:$PATH"
+    export ANKI_WEBSCALE=2
+    ${pkgs.anki-bin}/bin/anki
+  '';
 in
 {
   imports = [
@@ -34,7 +40,7 @@ in
   home.packages = with pkgs; [
     inputs.st.defaultPackage.${pkgs.system}
     inputs.blender.packages.${pkgs.system}.default
-    anki-bin
+    anki-wrapped
     celluloid
     discord
     gnome3.nautilus
