@@ -59,30 +59,6 @@ let
       passwords.directory = "/tank/Vault/Passwords";
       slipbox.directory = "/tank/Vault/Slipbox";
       org.directory = "/tank/Vault/Org";
-      programs-sqlite = rec {
-        directory = "/home/jmc/programs.sqlite";
-        preSync = ''
-          cd ${directory}
-          PATH=${lib.makeBinPath [ pkgs.curl pkgs.gnutar pkgs.xz pkgs.coreutils pkgs.bash pkgs.findutils]}:$PATH
-          ./update.sh
-        '';
-        time = "daily";
-        message = "programs.sqlite at $(${pkgs.coreutils}/bin/date -u)";
-      };
-      nord-openvpn-configs = {
-        directory = "/home/jmc/nord-openvpn-configs";
-        preSync = let rm = "${pkgs.coreutils}/bin/rm"; in
-          ''
-            set -eux
-            ${rm} -rf ovpn_tcp
-            ${rm} -rf ovpn_udp
-            ${pkgs.curl}/bin/curl "https://downloads.nordcdn.com/configs/archives/servers/ovpn.zip" --output ovpn.zip
-            ${pkgs.unzip}/bin/unzip -q ovpn.zip
-            ${rm} ovpn.zip
-          '';
-        time = "daily";
-        message = "Nord configs at $(${pkgs.coreutils}/bin/date -u)";
-      };
     };
   };
 
