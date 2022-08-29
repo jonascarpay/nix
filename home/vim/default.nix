@@ -85,6 +85,7 @@ in
       set hlsearch
       set incsearch
       set inccommand=nosplit
+      set linebreak
       set mouse=a
       set copyindent
       set ignorecase
@@ -131,7 +132,6 @@ in
       np.vim-polyglot
       np.vim-repeat
       np.vim-unimpaired
-      np.vim-speeddating
       {
         plugin = np.airline;
         config = ''
@@ -279,7 +279,9 @@ in
         config = ''
           let g:vim_markdown_auto_insert_bullets = 1
           let g:vim_markdown_new_list_item_indent = 0
+          let g:vim_markdown_toc_autofit = 1
           autocmd FileType markdown nnoremap o A<CR>
+          autocmd FileType markdown nnoremap <leader>t :Toc<CR>
         '';
       }
 
