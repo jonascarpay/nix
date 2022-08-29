@@ -1,6 +1,7 @@
-{ pkgs, config, ... }:
+{ pkgs, lib, config, unstable, ... }:
 let
   np = pkgs.vimPlugins;
+  unp = unstable.vimPlugins;
 
   coc = {
     programs.neovim = {
@@ -48,28 +49,6 @@ let
     };
   };
 
-  # TODO switch to formatters-nvim
-  neoformat = {
-    home.packages = [
-      pkgs.nixpkgs-fmt
-      pkgs.haskellPackages.cabal-fmt
-      pkgs.shfmt
-      pkgs.uncrustify
-      pkgs.clang-tools
-    ];
-    programs.neovim.plugins = [{
-      plugin = np.neoformat;
-      config = ''
-        let g:neoformat_basic_format_trim = 1
-        augroup fmt
-          autocmd!
-          autocmd BufWritePre * silent Neoformat
-        augroup END
-        let g:neoformat_enabled_haskell = ['ormolu']
-      '';
-    }];
-  };
-
   snippets = {
     programs.neovim.plugins = [
       np.vim-snippets
@@ -85,7 +64,7 @@ let
 
 in
 {
-  imports = [ coc neoformat snippets ];
+  imports = [ coc snippets ];
   programs.git.ignores = [ "*~" "*.swp" "*.swo" "tags" "TAGS" ];
   programs.neovim = {
     enable = true;
@@ -160,6 +139,54 @@ in
           let g:airline#extensions#branch#displayed_head_limit = 10
         '';
       }
+
+      {
+        # TODO unstable for filetypes.any, remove later
+        plugin = unp.formatter-nvim;
+        # https://github.com/mhartington/formatter.nvim/tree/master/lua/formatter/filetypes
+        config =
+          let
+            formatters = {
+              python = { exe = "black"; args = [ "-q" "-" ]; };
+              haskell.exe = "ormolu";
+              markdown.exe = "md-headerfmt";
+              nix.exe = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt";
+              go.exe = "gofmt";
+            };
+            quote = str: "\"${str}\"";
+            mkFmt = ft: { exe, stdin ? true, args ? [ ] }: ''
+              ${ft} = {
+                function()
+                  return {
+                    exe = ${quote exe},
+                    args = { ${lib.concatMapStringsSep ", " quote args } },
+                    stdin = ${if stdin then "true" else "false"},
+                  }
+                end
+              },
+            '';
+          in
+          ''
+            lua << EOF
+            local util = require "formatter.util"
+            require("formatter").setup {
+              logging = true,
+              log_level = vim.log.levels.WARN,
+              filetype = {
+                ${lib.concatStringsSep "\n" (lib.mapAttrsToList mkFmt formatters)}
+                ["*"] = {
+                  require("formatter.filetypes.any").remove_trailing_whitespace
+                },
+              },
+            }
+            EOF
+            augroup FormatAutogroup
+              autocmd!
+              autocmd BufWritePost * FormatWrite
+            augroup END
+          '';
+      }
+
       {
         plugin = np.vim-localvimrc;
         config = ''
