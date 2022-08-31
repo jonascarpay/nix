@@ -152,6 +152,7 @@ in
               markdown.exe = "md-headerfmt";
               nix.exe = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt";
               go.exe = "gofmt";
+              sh.exe = "${pkgs.shfmt}/bin/shfmt";
             };
             quote = str: "\"${str}\"";
             mkFmt = ft: { exe, stdin ? true, args ? [ ] }: ''
