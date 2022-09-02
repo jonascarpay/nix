@@ -12,7 +12,7 @@ let
         peers = [{
           publicKey = "1DQu3fqcOew1Mxvpiq/0umajstSXEzdcfhY89dcHkHw=";
           allowedIPs = [ "192.168.1.0/24" ]; # Only route internal traffic through wg
-          endpoint = "126.51.120.49:${builtins.toString port}";
+          endpoint = "60.157.108.220:${builtins.toString port}";
           persistentKeepalive = 25;
         }];
       };
