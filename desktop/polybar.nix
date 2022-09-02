@@ -138,6 +138,7 @@
 
         "module/notifications" =
           let script = pkgs.writeShellScript "notifications" ''
+            set -euo pipefail
             AUTH="jonascarpay:$(cat /run/agenix/notifications-token)"
             notifications=$(${pkgs.curl}/bin/curl -sf --user "$AUTH" https://api.github.com/notifications | ${pkgs.jq}/bin/jq length)
             if [ "$notifications" -gt 0 ]; then
@@ -173,7 +174,7 @@
 
         "module/temp" =
           let script = pkgs.writeShellScript "temp" ''
-            ${sensors} | ${grep} Package | ${awk} '{print $4; exit}' | ${sed} 's/^.\\([0-9]\\+\\)../\\1/' 
+            ${sensors} | ${grep} Package | ${awk} '{print $4; exit}' | ${sed} 's/^.\\([0-9]\\+\\)../\\1/'
           '';
           in
           {
