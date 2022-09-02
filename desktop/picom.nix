@@ -5,7 +5,6 @@
     vSync = true;
     shadow = true;
     blur = true;
-    experimentalBackends = true;
     noDockShadow = false;
     fade = false;
     fadeDelta = 4;
