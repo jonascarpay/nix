@@ -133,6 +133,14 @@ in
       np.vim-polyglot
       np.vim-repeat
       np.vim-unimpaired
+
+      {
+        plugin = np.goyo-vim;
+        config = ''
+          nnoremap <leader>mg :Goyo<CR>
+        '';
+      }
+
       {
         plugin = np.airline;
         config = ''
