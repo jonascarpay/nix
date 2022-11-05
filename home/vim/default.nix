@@ -10,6 +10,7 @@ let
         np.coc-pyright
         np.coc-rust-analyzer
         np.coc-json
+        np.coc-go
       ];
       coc = {
         enable = true;
