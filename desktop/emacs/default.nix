@@ -4,6 +4,7 @@
   home.packages = [
     pkgs.ripgrep
     pkgs.emacs-all-the-icons-fonts
+    pkgs.sqlite
   ];
   programs.doom-emacs = {
     enable = true;

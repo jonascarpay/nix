@@ -48,7 +48,20 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Org/") ;; Mirrored in desktop/emacs/dmenu.nix
+(setq org-roam-directory (file-truename "~/Org/Roam"))
+(org-roam-db-autosync-mode)
 
+(defun delete-file-and-buffer ()
+  "Kill the current buffer and deletes the file it is visiting."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (if filename
+      (if (y-or-n-p (concat "Do you really want to delete file " filename " ?"))
+        (progn
+          (delete-file filename)
+          (message "Deleted file %s." filename)
+          (kill-buffer)))
+      (message "Not a file visiting buffer!"))))
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
