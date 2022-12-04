@@ -1,22 +1,19 @@
 { pkgs, inputs, ... }: {
   services.picom = {
     enable = true;
-    package = pkgs.picom.overrideAttrs (_: { src = inputs.picom; });
+    backend = "glx";
     vSync = true;
     shadow = true;
-    blur = true;
-    noDockShadow = false;
-    fade = false;
-    fadeDelta = 4;
-    extraOptions = ''
-      blur-method = "dual_kawase";
-      blur-strength = 12;
-    '';
-    blurExclude = [ "class_i != 'st-256color'" ];
-    shadowExclude = [ "class_g = 'i3-frame'" ];
-    inactiveOpacity = "0.85";
-    activeOpacity = "1";
-    inactiveDim = "0.20";
-    opacityRule = [ "100:class_i != 'st-256color'" ];
+    inactiveOpacity = 0.85;
+    settings = {
+      blur = {
+        method = "dual_kawase";
+        blur-strength = 12;
+      };
+      blur-background-exclude = [ "class_i != 'st-256color'" ];
+      inactive-dim = 0.20;
+    };
+    # shadowExclude = [ "class_g = 'i3-frame'" ];
+    opacityRules = [ "100:class_i != 'st-256color'" ];
   };
 }
