@@ -3,53 +3,6 @@ let
   np = pkgs.vimPlugins;
   unp = unstable.vimPlugins;
 
-  coc = {
-    programs.neovim = {
-      withNodeJs = true;
-      plugins = [
-        np.coc-pyright
-        np.coc-rust-analyzer
-        np.coc-json
-        np.coc-go
-      ];
-      coc = {
-        enable = true;
-        # https://github.com/nix-community/home-manager/issues/2966
-        package = np.coc-nvim.overrideAttrs (_: {
-          src = pkgs.fetchFromGitHub {
-            owner = "neoclide";
-            repo = "coc.nvim";
-            rev = "791c9f673b882768486450e73d8bda10e391401d";
-            sha256 = "sha256-MobgwhFQ1Ld7pFknsurSFAsN5v+vGbEFojTAYD/kI9c=";
-          };
-        });
-        settings = {
-          "codeLens.enable" = true;
-          languageserver.haskell = {
-            command = "haskell-language-server";
-            args = [ "--lsp" ];
-            rootPatterns = [ "*.cabal" "stack.yaml" "cabal.project" "package.yaml" "hie.yaml" ];
-            filetypes = [ "haskell" "lhaskell" ];
-          };
-          "rust-analyzer.server.path" = "rust-analyzer";
-        };
-        pluginConfig = ''
-          set hidden
-          set nobackup
-          set nowritebackup
-          set cmdheight=2
-          set updatetime=300
-          set shortmess+=c
-          nmap <silent> [l <Plug>(coc-diagnostic-prev)
-          nmap <silent> ]l <Plug>(coc-diagnostic-next)
-          nnoremap <silent> <leader>lh :call CocActionAsync('doHover')<cr>
-          nmap <leader>la <Plug>(coc-codeaction)
-          nmap <leader>ll <Plug>(coc-codelens-action)
-        '';
-      };
-    };
-  };
-
   snippets = {
     programs.neovim.plugins = [
       np.vim-snippets
@@ -65,7 +18,7 @@ let
 
 in
 {
-  imports = [ coc snippets ];
+  imports = [ snippets ];
   programs.git.ignores = [ "*~" "*.swp" "*.swo" "tags" "TAGS" ];
   programs.neovim = {
     enable = true;
@@ -295,6 +248,53 @@ in
           autocmd FileType markdown nnoremap <leader>t :Toc<CR>
         '';
       }
+
+      {
+        plugin = np.nvim-lspconfig;
+        # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+        # https://github.com/neovim/nvim-lspconfig#suggested-configuration
+        config = ''
+          autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()
+          lua << EOF
+          local opts = { noremap=true, silent=true }
+
+          vim.keymap.set('n', '<space>lh', vim.diagnostic.open_float, opts)
+          vim.keymap.set('n', '[l', vim.diagnostic.goto_prev, opts)
+          vim.keymap.set('n', ']l', vim.diagnostic.goto_next, opts)
+          vim.keymap.set('n', '<space>lq', vim.diagnostic.setloclist, opts)
+          vim.keymap.set('n', '<space>ll', vim.lsp.codelens.run, opts)
+
+          -- Use an on_attach function to only map the following keys
+          -- after the language server attaches to the current buffer
+          local on_attach = function(client, bufnr)
+            -- Enable completion triggered by <c-x><c-o>
+            vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+            -- Mappings.
+            -- See `:help vim.lsp.*` for documentation on any of the below functions
+            local bufopts = { noremap=true, silent=true, buffer=bufnr }
+            vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+            vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+            vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+            vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+            vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+            -- vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
+            -- vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+            -- vim.keymap.set('n', '<space>wl', function()
+            --   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+            -- end, bufopts)
+            vim.keymap.set('n', '<space>ld', vim.lsp.buf.type_definition, bufopts)
+            vim.keymap.set('n', '<space>lr', vim.lsp.buf.rename, bufopts)
+            vim.keymap.set('n', '<space>la', vim.lsp.buf.code_action, bufopts)
+            vim.keymap.set('n', '<space>lf', vim.lsp.buf.references, bufopts)
+            vim.keymap.set('n', '<space>lt', function() vim.lsp.buf.format { async = true } end, bufopts)
+          end
+
+          require'lspconfig'.hls.setup{on_attach = on_attach}
+          EOF
+        '';
+      }
+
 
     ];
 
