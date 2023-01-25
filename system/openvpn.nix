@@ -18,6 +18,7 @@ in
   services.openvpn.servers = {
     nord = mkNord "jp590";
     offshore = mkNord "hk248";
+    us = mkNord "us9041";
     cross-compass-vpn = {
       autoStart = false;
       config = ''
