@@ -100,6 +100,7 @@ in
       browsing = true;
       drivers = [ pkgs.brlaser pkgs.gutenprint pkgs.gutenprintBin ];
     };
+    thermald.enable = true;
     udev.extraRules = ''
       ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", RUN="${pkgs.coreutils}/bin/chmod a+w /sys/class/backlight/intel_backlight/brightness"
     '';
