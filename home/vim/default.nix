@@ -116,6 +116,7 @@ in
               nix.exe = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt";
               go.exe = "gofmt";
               sh.exe = "${pkgs.shfmt}/bin/shfmt";
+              proto.exe = "${pkgs.clang-tools}/bin/clang-format";
             };
             quote = str: "\"${str}\"";
             mkFmt = ft: { exe, stdin ? true, args ? [ ] }: ''
