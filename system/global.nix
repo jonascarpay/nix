@@ -54,6 +54,7 @@ in
       btop
       unzip
       viddy
+      nix-output-monitor
       vim
     ] ++ lib.optional (system == "x86_64-linux") lnav; # https://github.com/tstack/lnav/issues/882
     variables = {
