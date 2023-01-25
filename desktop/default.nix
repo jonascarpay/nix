@@ -39,7 +39,7 @@ in
   ];
   home.packages = with pkgs; [
     inputs.st.defaultPackage.${pkgs.system}
-    inputs.blender.packages.${pkgs.system}.default
+    blender
     anki-wrapped
     celluloid
     discord
