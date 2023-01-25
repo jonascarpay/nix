@@ -306,10 +306,12 @@ in
         '';
       }
 
+      np.cmp-buffer
       # https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion#nvim-cmp
       {
         plugin = np.nvim-cmp;
         config = ''
+          " set completeopt=menu,menuone,noselect
           lua << EOF
           local cmp = require('cmp')
           cmp.setup {
@@ -318,10 +320,10 @@ in
               ['<C-d>'] = cmp.mapping.scroll_docs(-4),
               ['<C-f>'] = cmp.mapping.scroll_docs(4),
               ['<C-Space>'] = cmp.mapping.complete(),
-              ['<CR>'] = cmp.mapping.confirm {
-                behavior = cmp.ConfirmBehavior.Replace,
-                select = true,
-              },
+              -- ['<CR>'] = cmp.mapping.confirm {
+              --   behavior = cmp.ConfirmBehavior.Replace,
+              --   select = true,
+              -- },
               ['<Tab>'] = cmp.mapping(function(fallback)
                 if cmp.visible() then
                   cmp.select_next_item()
@@ -343,7 +345,7 @@ in
             }),
             sources = {
               { name = 'nvim_lsp' },
-              -- { name = 'luasnip' },
+              { name = 'buffer' },
             },
           }
           EOF
