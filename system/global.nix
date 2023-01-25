@@ -3,10 +3,7 @@ let
 
   caches =
     let
-      cachix = [
-        { name = "jmc"; sha256 = "sha256:1821z8rz6kp71vr4qhfmflbgk4sj7i7lhw787bs8a9pmri5frc6c"; }
-        { name = "nix-community"; sha256 = "sha256:1955r436fs102ny80wfzy99d4253bh2i1vv1x4d4sh0zx2ssmhrk"; }
-      ];
+      cachix = [{ name = "nix-community"; sha256 = "sha256:1rgbl9hzmpi5x2xx9777sf6jamz5b9qg72hkdn1vnhyqcy008xwg"; }];
       # caches = [
       #   { url = "https://hydra.iohk.io"; key = "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="; }
       # ];
