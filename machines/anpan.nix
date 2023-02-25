@@ -27,6 +27,7 @@ let
         flags = [ "--all" ];
       };
     };
+    virtualisation.virtualbox.host.enable = true;
     users.users.jmc.extraGroups = [ "docker" ];
   };
 
@@ -56,22 +57,32 @@ in
     initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" "sr_mod" ];
     initrd.kernelModules = [ ];
     kernelModules = [ "kvm-intel" ];
-    loader.systemd-boot.enable = true;
-    loader.efi.canTouchEfiVariables = true;
+    extraModulePackages = [ ];
+    # loader.systemd-boot.enable = true;
+    # loader.efi.canTouchEfiVariables = true;
     blacklistedKernelModules = [ ];
+    loader.grub.enable = true;
+    loader.grub.device = "/dev/nvme0n1";
+    loader.grub.useOSProber = true;
     # kernelParams = [ "mitigations=off" ];
   };
 
-  fileSystems = {
-    "/" = {
-      device = "/dev/disk/by-uuid/cc552c2e-f0bd-482c-a67e-efe476dfae98";
+  fileSystems."/" =
+    {
+      device = "/dev/disk/by-uuid/82a81e01-e401-45b6-b5c6-e901cd225f18";
       fsType = "ext4";
     };
-    "/boot" = {
-      device = "/dev/disk/by-uuid/5673-7655";
-      fsType = "vfat";
-    };
-  };
+
+  # fileSystems = {
+  #   "/" = {
+  #     device = "/dev/disk/by-uuid/cc552c2e-f0bd-482c-a67e-efe476dfae98";
+  #     fsType = "ext4";
+  #   };
+  #   "/boot" = {
+  #     device = "/dev/disk/by-uuid/5673-7655";
+  #     fsType = "vfat";
+  #   };
+  # };
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
