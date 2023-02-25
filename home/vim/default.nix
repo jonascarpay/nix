@@ -110,7 +110,7 @@ in
           let
             formatters = {
               python = { exe = "black"; args = [ "-q" "-" ]; };
-              haskell.exe = "ormolu";
+              haskell = { exe = "ormolu"; stdin = false; args = [ "-i" ]; };
               cabal.exe = "${pkgs.haskellPackages.cabal-fmt}/bin/cabal-fmt";
               markdown.exe = "md-headerfmt";
               nix.exe = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt";
