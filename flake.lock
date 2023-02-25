@@ -641,6 +641,22 @@
         "type": "github"
       }
     },
+    "programs-db": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1675566911,
+        "narHash": "sha256-PSeEpQ5BWKzRxaz1y90/zBZTioTkZEwprtmHcXPs9IM=",
+        "owner": "binplz",
+        "repo": "programs.sqlite",
+        "rev": "0b543bf251bc51e1746e00339f279471c159e1e4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "binplz",
+        "repo": "programs.sqlite",
+        "type": "github"
+      }
+    },
     "revealjs": {
       "flake": false,
       "locked": {
@@ -671,6 +687,7 @@
         "nixpkgs": "nixpkgs_2",
         "nord-configs": "nord-configs",
         "picom": "picom",
+        "programs-db": "programs-db",
         "st": "st",
         "unstable": "unstable"
       }

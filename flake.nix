@@ -43,6 +43,10 @@
       url = "github:jonascarpay/st";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    programs-db = {
+      url = "github:binplz/programs.sqlite";
+      flake = false;
+    };
   };
 
   outputs = inputs:

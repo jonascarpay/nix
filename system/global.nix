@@ -103,6 +103,11 @@ in
   programs.bash.enableCompletion = true; # enable tab-completion for nix-* tools
   programs.mosh.enable = true;
 
+  programs.command-not-found = {
+    enable = true;
+    dbPath = "${inputs.programs-db}/nixos-unstable/programs.sqlite";
+  };
+
   hardware.enableRedistributableFirmware = true;
 
   users = {
