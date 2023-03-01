@@ -21,6 +21,18 @@ let
       ${nnn}/bin/nnn -e $@
     '';
 
+  boot-switch =
+    let
+      archive = pkgs.fetchzip {
+        url = "https://github.com/CTCaer/hekate/releases/download/v5.6.5/hekate_ctcaer_5.6.5_Nyx_1.1.1.zip";
+        sha256 = "sha256-ycXyddzcKzjFZFPhs3OrdMvPWZBOvuhLoSssQyQ9nss=";
+        stripRoot = false;
+      };
+    in
+    pkgs.writeShellScriptBin "boot-switch" ''
+      ${pkgs.fusee-launcher}/bin/fusee-launcher ${archive}/hekate_ctcaer_5.6.5.bin
+    '';
+
   # This is a hack to keep my notifications token secret.
   # If agenix gets home-manager support it can be moved to the polybar module.
   notifications-token = {
@@ -49,6 +61,7 @@ in
       ranger
       sshfs
       tmux
+      boot-switch
       tree
       nix-tree
       btop
