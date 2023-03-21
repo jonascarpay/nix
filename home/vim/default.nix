@@ -16,21 +16,21 @@ let
     ];
   };
 
-  # workspace-symbols = {
-  #   home.packages = [
-  #     pkgs.bat
-  #   ];
-  #   programs.neovim.plugins = [
-  #     np.plenary-nvim
-  #     {
-  #       plugin = np.fzf-lsp-nvim;
-  #       # NOTE can't use <leader>, not yet bound
-  #       config = ''
-  #         nn <space>fw :WorkspaceSymbols<CR>
-  #       '';
-  #     }
-  #   ];
-  # };
+  workspace-symbols = {
+    home.packages = [
+      pkgs.bat
+    ];
+    programs.neovim.plugins = [
+      np.plenary-nvim
+      {
+        plugin = np.fzf-lsp-nvim;
+        # NOTE can't use <leader>, not yet bound
+        config = ''
+          nn <space>fw :WorkspaceSymbols<CR>
+        '';
+      }
+    ];
+  };
 
   lsp = {
     programs.neovim.plugins = [
@@ -59,7 +59,7 @@ in
 {
   imports = [
     snippets
-    # workspace-symbols
+    workspace-symbols
     lsp
   ];
   programs.git.ignores = [ "*~" "*.swp" "*.swo" "tags" "TAGS" ];
