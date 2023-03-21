@@ -35,21 +35,15 @@ let
   lsp = {
     programs.neovim.plugins = [
       np.cmp-nvim-lsp
+      np.cmp-buffer
+      np.nvim-cmp
       # np.lsp-status-nvim
       {
         plugin = np.nvim-lspconfig;
         config = ''
           autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()
-          :luafile ${./lsp_config.lua}
-        '';
-      }
-
-      np.cmp-buffer
-      # https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion#nvim-cmp
-      {
-        plugin = np.nvim-cmp;
-        config = ''
           " set completeopt=menu,menuone,noselect
+          :luafile ${./lsp_config.lua}
         '';
       }
     ];
