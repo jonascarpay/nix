@@ -29,7 +29,8 @@ let
       };
     };
     virtualisation.virtualbox.host.enable = true;
-    users.users.jmc.extraGroups = [ "docker" ];
+    virtualisation.virtualbox.host.enableExtensionPack = true;
+    users.users.jmc.extraGroups = [ "docker" "vboxusers" ];
   };
 
 in
