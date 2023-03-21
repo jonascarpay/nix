@@ -17,6 +17,7 @@ let
         utp-enabled = true;
       };
     };
+    users.users.jmc.extraGroups = [ "transmission" ];
   };
 
   docker = {
