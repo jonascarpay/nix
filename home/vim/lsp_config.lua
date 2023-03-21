@@ -12,12 +12,23 @@ vim.keymap.set('n', '<space>ll', vim.lsp.codelens.run, opts)
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr) end
 
--- local lsp_status = require('lsp-status')
--- lsp_status.register_progress()
+-- https://github.com/nvim-lua/lsp-status.nvim#all-together-now
+local lsp_status = require('lsp-status')
+lsp_status.register_progress()
+
 local lspconfig = require('lspconfig')
 local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-lspconfig.hls.setup {on_attach = on_attach, capabilities = cmp_capabilities}
-lspconfig.pyright.setup {on_attach = on_attach, capabilities = cmp_capabilities}
+
+-- https://github.com/dlukes/dotfiles/commit/8feb47aec3a2c7ff78b8efc1e85d9580a99fd6a4
+-- capabilities can be extended with tbl_extend it seems
+lspconfig.hls.setup {
+    on_attach = lsp_status.on_attach,
+    capabilities = cmp_capabilities
+}
+lspconfig.pyright.setup {
+    on_attach = lsp_status.on_attach,
+    capabilities = cmp_capabilities
+}
 
 -- https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion#nvim-cmp
 local cmp = require('cmp')

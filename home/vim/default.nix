@@ -32,23 +32,6 @@ let
     ];
   };
 
-  lsp = {
-    programs.neovim.plugins = [
-      np.cmp-nvim-lsp
-      np.cmp-buffer
-      np.nvim-cmp
-      # np.lsp-status-nvim
-      {
-        plugin = np.nvim-lspconfig;
-        config = ''
-          autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()
-          " set completeopt=menu,menuone,noselect
-          :luafile ${./lsp_config.lua}
-        '';
-      }
-    ];
-  };
-
 in
 {
   imports = [
@@ -288,6 +271,27 @@ in
         '';
       }
 
+      np.cmp-nvim-lsp
+      np.cmp-buffer
+      np.nvim-cmp
+      np.lsp-status-nvim
+      {
+        plugin = np.nvim-lspconfig;
+        config = ''
+          autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()
+          " set completeopt=menu,menuone,noselect
+          :luafile ${./lsp_config.lua}
+
+          function! LspStatus() abort
+            let status = luaeval("require('lsp-status').status()")
+            return trim(status)
+          endfunction
+          call airline#parts#define_function('lsp_status', 'LspStatus')
+          call airline#parts#define_condition('lsp_status', 'luaeval("#vim.lsp.buf_get_clients() > 0")')
+          let g:airline#extensions#nvimlsp#enabled = 0
+          let g:airline_section_warning = airline#section#create_right(['lsp_status'])
+        '';
+      }
 
     ];
   };
