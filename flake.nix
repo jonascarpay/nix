@@ -81,7 +81,7 @@
             };
           }
           inputs.agenix.nixosModules.age
-          { environment.systemPackages = [ inputs.agenix.defaultPackage."${system}" ]; }
+          { environment.systemPackages = [ inputs.agenix.packages.${system}.agenix ]; }
 
           inputs.declarative-cachix.nixosModules.declarative-cachix
 
