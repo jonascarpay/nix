@@ -37,7 +37,6 @@ in
   imports = [
     snippets
     workspace-symbols
-    lsp
   ];
   programs.git.ignores = [ "*~" "*.swp" "*.swo" "tags" "TAGS" ];
   programs.neovim = {
