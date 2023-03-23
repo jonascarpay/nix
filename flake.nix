@@ -19,10 +19,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
-    nord-configs = {
-      url = "github:jonascarpay/nord-openvpn-configs";
-      flake = false;
-    };
     hosts = {
       url = "github:StevenBlack/hosts";
       flake = false;

@@ -4,8 +4,7 @@ let
   transmission = {
     # networking.firewall.allowedTCPPorts = [ 9091 ];
     systemd.services."transmission" = {
-      bindsTo = [ "openvpn-nord.service" ];
-      wantedBy = lib.mkForce [ ];
+      wantedBy = lib.mkForce [ ]; # TODO I don't remember why this is here
     };
     services.transmission = {
       enable = true;

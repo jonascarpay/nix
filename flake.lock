@@ -536,22 +536,6 @@
         "type": "github"
       }
     },
-    "nord-configs": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1678245879,
-        "narHash": "sha256-PtkGHFBC66vIgHRqoL4KVtG0baAYN88yEXub6y+/0jE=",
-        "owner": "jonascarpay",
-        "repo": "nord-openvpn-configs",
-        "rev": "5258838d6edfcc88d183f518939357fcbb8060e4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jonascarpay",
-        "repo": "nord-openvpn-configs",
-        "type": "github"
-      }
-    },
     "nose": {
       "flake": false,
       "locked": {
@@ -709,7 +693,6 @@
         "nix-doom-emacs": "nix-doom-emacs",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_2",
-        "nord-configs": "nord-configs",
         "picom": "picom",
         "programs-db": "programs-db",
         "st": "st",
