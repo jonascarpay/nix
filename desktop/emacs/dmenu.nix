@@ -24,7 +24,7 @@ let
       set -e
       frecently view ${history} | while read -r file; do
         if [ ! -e "${org-dir}/$file.org" ]; then
-          echo "Removing $file" 
+          echo "Removing $file"
           frecently delete ${history} "$file"
         fi
       done
@@ -32,7 +32,12 @@ let
         extraflags=(-it "$(date +"%Y-%m-%d")-")
         shift
       fi
-      FILE=$(find ${org-dir}/ -type f -name '*.org' | sed -E 's#${org-dir}/(.*)\.org#\1#' | frecently view ${history} -a | dmenu -i -p " " "''${extraflags[@]}")
+      FILE=$(\
+        find ${org-dir}/ -type f -name '*.org' -not -path '*/.*' |\
+        sed -E 's#${org-dir}/(.*)\.org#\1#' |\
+        frecently view ${history} -a |\
+        dmenu -i -p " " "''${extraflags[@]}" \
+      )
       frecently bump ${history} "$FILE"
       SUBDIR="${org-dir}/$(echo "$FILE" | sed -E 's#(.*/)*.*#\1#')"
       mkdir -p "$SUBDIR"
