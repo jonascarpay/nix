@@ -21,6 +21,12 @@ let
     export ANKI_WEBSCALE=2
     ${pkgs.anki-bin}/bin/anki
   '';
+
+  retroarch = pkgs.retroarch.override {
+    cores = [
+      pkgs.libretro.mupen64plus
+    ];
+  };
 in
 {
   imports = [
@@ -59,6 +65,7 @@ in
     ungoogled-chromium
     darktable
     xclip # Doesn't work?
+    retroarch
   ];
 
   programs.firefox.enable = true;
