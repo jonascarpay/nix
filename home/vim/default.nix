@@ -274,6 +274,8 @@ in
       np.cmp-buffer
       np.nvim-cmp
       np.lsp-status-nvim
+      np.luasnip
+      np.cmp_luasnip
       {
         plugin = np.nvim-lspconfig;
         config = ''

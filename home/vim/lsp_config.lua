@@ -10,6 +10,7 @@ vim.keymap.set('n', '<space>ll', vim.lsp.codelens.run, opts)
 
 -- https://github.com/nvim-lua/lsp-status.nvim#all-together-now
 local lsp_status = require('lsp-status')
+lsp_status.config {current_function = false, show_filename = false}
 
 local on_attach = function(client, bufnr)
     -- Enable completion triggered by <c-x><c-o>
@@ -49,8 +50,15 @@ lspconfig.pyright.setup {on_attach = on_attach, capabilities = cmp_capabilities}
 
 -- https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion#nvim-cmp
 local cmp = require('cmp')
+local luasnip = require('luasnip')
+require("luasnip.loaders.from_snipmate").lazy_load()
+
 cmp.setup {
-    -- snippet ...
+    snippet = {expand = function(args) luasnip.lsp_expand(args.body) end},
+    -- window = {
+    --     completion = cmp.config.window.bordered(),
+    --     documentation = cmp.config.window.bordered()
+    -- },
     mapping = cmp.mapping.preset.insert({
         ['<C-d>'] = cmp.mapping.scroll_docs(-4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
@@ -60,10 +68,10 @@ cmp.setup {
         --   select = true,
         -- },
         ['<Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-                cmp.select_next_item()
-            elseif luasnip.expand_or_jumpable() then
+            if luasnip.expand_or_jumpable() then
                 luasnip.expand_or_jump()
+            elseif cmp.visible() then
+                cmp.select_next_item()
             else
                 fallback()
             end
@@ -78,5 +86,5 @@ cmp.setup {
             end
         end, {'i', 's'})
     }),
-    sources = {{name = 'nvim_lsp'}, {name = 'buffer'}}
+    sources = {{name = 'nvim_lsp'}, {name = 'buffer'}, {name = 'luasnip'}}
 }
