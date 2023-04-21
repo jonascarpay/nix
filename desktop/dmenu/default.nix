@@ -14,7 +14,7 @@ let
               frecently delete ${history} "$dir"
             fi
           done
-          DIR=$(find $HOME/Dev $HOME/Documents -maxdepth 1 -type d | frecently view ${history} -a | sed "s#$HOME#~#" | dmenu -w -i -p " ")
+          DIR=$(find $HOME/Dev $HOME/Documents -maxdepth 1 -type d | frecently view ${history} -a | sed "s#$HOME#~#" | dmenu -w -sep '/' -i -p " ")
           DIR_REAL=$(realpath "''${DIR/#\~/$HOME}")
           if [ -d $DIR_REAL ]; then
             frecently bump ${history} "$DIR_REAL"
