@@ -38,6 +38,9 @@ in
     snippets
     workspace-symbols
   ];
+  home.packages = [
+    pkgs.nil
+  ];
   programs.git.ignores = [ "*~" "*.swp" "*.swo" "tags" "TAGS" ];
   programs.neovim = {
     enable = true;
