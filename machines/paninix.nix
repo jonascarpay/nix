@@ -1,7 +1,11 @@
 { config, lib, pkgs, ... }:
 let
   integrated = true;
-  wireguard = let port = 51820; in
+  wireguard =
+    let
+      port = 51820;
+      endpoint-ip = "60.67.36.244";
+    in
     {
       age.secrets.wg-paninix.file = ../secrets/wg-paninix.age;
       networking.wg-quick.interfaces.wg0 = {
@@ -12,7 +16,7 @@ let
         peers = [{
           publicKey = "1DQu3fqcOew1Mxvpiq/0umajstSXEzdcfhY89dcHkHw=";
           allowedIPs = [ "192.168.1.0/24" ]; # Only route internal traffic through wg
-          endpoint = "60.157.108.220:${builtins.toString port}";
+          endpoint = "${endpoint-ip}:${builtins.toString port}";
           persistentKeepalive = 25;
         }];
       };
