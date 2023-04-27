@@ -136,7 +136,7 @@ in
         latitude = "!secret latitude";
         longitude = "!secret longitude";
         temperature_unit = "C";
-        time_zone = "Asia/Tokyo";
+        time_zone = config.time.timeZone;
         unit_system = "metric";
       };
       http = {
