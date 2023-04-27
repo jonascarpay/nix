@@ -97,7 +97,8 @@ in
     ];
   };
 
-  time.timeZone = "Europe/Amsterdam";
+  services.mullvad-vpn.enable = true;
+  time.timeZone = "Asia/Tokyo";
   services = {
     printing = {
       enable = true;
