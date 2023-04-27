@@ -47,6 +47,10 @@ local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 -- capabilities can be extended with tbl_extend it seems
 lspconfig.hls.setup {on_attach = on_attach, capabilities = cmp_capabilities}
 lspconfig.pyright.setup {on_attach = on_attach, capabilities = cmp_capabilities}
+lspconfig.ruff_lsp.setup {
+    on_attach = on_attach,
+    capabilities = cmp_capabilities
+}
 lspconfig.nil_ls.setup {on_attach = on_attach, capabilities = cmp_capabilities}
 
 -- https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion#nvim-cmp

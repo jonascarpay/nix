@@ -280,7 +280,7 @@ in
       np.luasnip
       np.cmp_luasnip
       {
-        plugin = np.nvim-lspconfig;
+        plugin = unp.nvim-lspconfig;
         config = ''
           autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()
           " set completeopt=menu,menuone,noselect
