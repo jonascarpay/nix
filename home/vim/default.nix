@@ -3,23 +3,8 @@ let
   np = pkgs.vimPlugins;
   unp = unstable.vimPlugins;
 
-  snippets = {
-    programs.neovim.plugins = [
-      np.vim-snippets
-      {
-        plugin = np.UltiSnips;
-        config = ''
-          nn <space>fs :Snippets<CR>
-          set rtp+=${./.}
-        '';
-      }
-    ];
-  };
-
   workspace-symbols = {
-    home.packages = [
-      pkgs.bat
-    ];
+    home.packages = [ pkgs.bat ];
     programs.neovim.plugins = [
       np.plenary-nvim
       {
@@ -35,7 +20,6 @@ let
 in
 {
   imports = [
-    snippets
     workspace-symbols
   ];
   home.packages = [
@@ -294,6 +278,12 @@ in
           call airline#parts#define_condition('lsp_status', 'luaeval("#vim.lsp.buf_get_clients() > 0")')
           let g:airline#extensions#nvimlsp#enabled = 0
           let g:airline_section_warning = airline#section#create_right(['lsp_status'])
+        '';
+      }
+      {
+        plugin = np.vim-snippets;
+        config = ''
+          :lua require("luasnip.loaders.from_snipmate").load({paths = "${./snippets}"})
         '';
       }
 
