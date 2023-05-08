@@ -117,6 +117,7 @@ in
             formatters = {
               python = { exe = "black"; args = [ "-q" "-" ]; };
               haskell = { exe = "ormolu"; stdin = false; args = [ "-i" ]; };
+              rust = { exe = "rustfmt"; };
               cabal.exe = "${pkgs.haskellPackages.cabal-fmt}/bin/cabal-fmt";
               markdown.exe = "md-headerfmt";
               nix.exe = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt";

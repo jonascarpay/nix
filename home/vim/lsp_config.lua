@@ -46,6 +46,7 @@ local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 -- https://github.com/dlukes/dotfiles/commit/8feb47aec3a2c7ff78b8efc1e85d9580a99fd6a4
 -- capabilities can be extended with tbl_extend it seems
 lspconfig.hls.setup {on_attach = on_attach, capabilities = cmp_capabilities}
+lspconfig.rust_analyzer.setup {on_attach = on_attach, capabilities = cmp_capabilities}
 lspconfig.pyright.setup {on_attach = on_attach, capabilities = cmp_capabilities}
 lspconfig.ruff_lsp.setup {
     on_attach = on_attach,
