@@ -205,16 +205,28 @@ in
       }
       {
         plugin = np.fzf-vim;
-        config = ''
-          nn <leader>ff :Files<CR>
-          nn <leader>fg :Ag<CR>
-          nn <leader>ft :Tags<CR>
-          nn <leader>fh :Helptags<CR>
-          nn <leader>fb :Buffers<CR>
-          autocmd FileType haskell let g:fzf_tags_command = 'fast-tags -R --exclude=dist-newstye .'
-          au BufWritePost *.hs silent! !${pkgs.haskellPackages.fast-tags}/bin/fast-tags -R --exclude=dist-newstyle . &
-          let $FZF_DEFAULT_COMMAND = 'git ls-files --cached --others --exclude-standard'
-        '';
+        config =
+          let
+            # ag does not always parse .gitignore correctly it seems, and ignores hidden files
+            # git ls-files includes hidden files
+            ls-files = pkgs.writeShellScript "git-ls-files-extant" ''
+              for file in $(git ls-files --others --cached --exclude-standard); do
+                if [ -f $file ]; then
+                  echo $file
+                fi
+              done
+            '';
+          in
+          ''
+            nn <leader>ff :Files<CR>
+            nn <leader>fg :Ag<CR>
+            nn <leader>ft :Tags<CR>
+            nn <leader>fh :Helptags<CR>
+            nn <leader>fb :Buffers<CR>
+            autocmd FileType haskell let g:fzf_tags_command = 'fast-tags -R --exclude=dist-newstye .'
+            au BufWritePost *.hs silent! !${pkgs.haskellPackages.fast-tags}/bin/fast-tags -R --exclude=dist-newstyle . &
+            let $FZF_DEFAULT_COMMAND = '${ls-files}'
+          '';
       }
       {
         plugin = np.vim-highlightedyank;
