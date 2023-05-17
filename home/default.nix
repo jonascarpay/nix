@@ -22,8 +22,6 @@
       jq
       killall
       man-pages # TODO does this do anything manual.manpages.enable doesn't do?
-      neofetch
-      s-tui
       tldr
       youtube-dl
       weechat
