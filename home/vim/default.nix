@@ -23,7 +23,7 @@ in
     workspace-symbols
   ];
   home.packages = [
-    pkgs.nil
+    unstable.nil
   ];
   programs.git.ignores = [ "*~" "*.swp" "*.swo" "tags" "TAGS" ];
   programs.neovim = {
