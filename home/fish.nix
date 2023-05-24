@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 {
   programs.fish = {
     enable = true;
@@ -13,6 +13,8 @@
           and cd $dir
         end
       end
+
+      set fish_greeting
 
       function fish_prompt
         ${pkgs.powerline-go}/bin/powerline-go \
@@ -42,7 +44,7 @@
       gl = "git pull";
       gp = "git push";
       gpf = "git push --force";
-      gr = "git remote";
+      gpu = "git push --set-upstream origin (git rev-parse --abbrev-ref HEAD)";
       gra = "git rebase --abort";
       grc = "git rebase --continue";
       grh = "git reset HEAD --hard";
