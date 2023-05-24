@@ -40,6 +40,10 @@ let
     age.secrets.notifications-token.owner = "jmc";
   };
 
+  scrubnix = pkgs.writeShellScriptBin "scrubnix" ''
+    sed -E 's#/nix/store/([a-z0-9]{5})[a-z0-9]{27}-([a-zA-Z0-9+?=._-]+)#<\2_\1>#g' -
+  '';
+
 in
 {
   imports = [
@@ -60,6 +64,7 @@ in
       p7zip
       ranger
       sshfs
+      scrubnix
       tmux
       boot-switch
       tree
