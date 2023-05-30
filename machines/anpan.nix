@@ -52,8 +52,6 @@ in
     networkmanager.insertNameservers = [ "192.168.1.6" ];
   };
 
-  hardware.video.hidpi.enable = true;
-
   boot = {
     initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" "sr_mod" ];
     initrd.kernelModules = [ ];

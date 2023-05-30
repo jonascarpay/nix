@@ -1,10 +1,12 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 {
   i18n = {
-    # defaultLocale = "ja_JP.UTF-8";
     inputMethod = {
-      enabled = "fcitx";
-      fcitx.engines = with pkgs.fcitx-engines; [ mozc table-other ];
+      enabled = "fcitx5";
+      fcitx5.addons = [
+        pkgs.fcitx5-mozc
+        pkgs.fcitx5-table-other
+      ];
     };
   };
 
@@ -15,8 +17,17 @@
       kochi-substitute
     ];
   };
-  environment = {
-    systemPackages = [ pkgs.libsForQt5.fcitx-qt5 ];
-    variables.XMODIFIER = "@im=fcitx"; # Probably don't need this
+  # TODO
+  # According to nixpkgs@3855e83c49fa2be185c88e56d6c56b40c165b103, there is an XDG autostart file for fcitx, but I don't see it.
+  # services.xserver.desktopManager.runXdgAutostartIfNone = true;
+  # This just copies back the old launcher.
+  systemd.user.services.fcitx5-daemon = {
+    enable = true;
+    script =
+      let
+        pkg = config.i18n.inputMethod.package;
+      in
+      "${pkg}/bin/fcitx5";
+    wantedBy = [ "graphical-session.target" ];
   };
 }

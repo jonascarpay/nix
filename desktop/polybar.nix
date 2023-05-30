@@ -23,7 +23,7 @@
     enable = config.xsession.enable;
     package = pkgs.polybar.override {
       alsaSupport = true;
-      i3GapsSupport = true;
+      i3Support = true;
       pulseSupport = true;
     };
     script = "polybar $(${pkgs.nettools}/bin/hostname) &";

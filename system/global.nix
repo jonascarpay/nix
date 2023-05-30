@@ -114,8 +114,8 @@ in
   security.sudo.wheelNeedsPassword = false;
   services.openssh = {
     enable = true;
-    passwordAuthentication = false;
-    useDns = true;
+    settings.PasswordAuthentication = false;
+    settings.UseDns = true;
   };
   services.tuptime.enable = true;
   services.mullvad-vpn.enable = true;
@@ -152,7 +152,7 @@ in
     dev.enable = true;
   };
 
-  boot.cleanTmpDir = true;
+  boot.tmp.cleanOnBoot = true;
 
   nix = {
     extraOptions = ''
