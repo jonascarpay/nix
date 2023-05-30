@@ -1,4 +1,4 @@
-{ pkgs, inputs, config, ... }:
+{ pkgs, inputs, ... }:
 let
   widgets = {
     home.packages = [ pkgs.breeze-icons ];
@@ -27,6 +27,15 @@ let
       pkgs.libretro.mupen64plus
     ];
   };
+
+  ocr = pkgs.writeShellScriptBin "ocr-capture" ''
+    set -euo pipefail
+    TMP=$(mktemp -d)
+    trap 'rm -rf $TMP' EXIT
+    ${pkgs.xfce.xfce4-screenshooter}/bin/xfce4-screenshooter --region --save $TMP/cap.png
+    ${pkgs.imagemagick}/bin/convert $TMP/cap.png -resize 300% $TMP/cap_upscale.png
+    ${pkgs.tesseract}/bin/tesseract $TMP/cap_upscale.png stdout -l eng+jpn | sed -z 's/[[:space:]]*$//g' | xclip -selection clipboard
+  '';
 in
 {
   imports = [
@@ -51,6 +60,7 @@ in
     qalculate-gtk
     google-chrome
     gparted
+    ocr
     okular
     dolphin
     pavucontrol
