@@ -57,7 +57,6 @@ let
     imports = [ ../system/git-sync-service.nix ];
     services.git-sync = {
       passwords.directory = "/tank/Vault/Passwords";
-      slipbox.directory = "/tank/Vault/Slipbox";
       org.directory = "/tank/Vault/Org";
     };
   };
