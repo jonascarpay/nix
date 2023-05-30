@@ -6,16 +6,17 @@
   # It's probably more robust to have i3 run polybar instead.
   systemd.user.services.polybar.Service.Environment =
     # Takes all of these string, appends "/bin", and concatenates using ":"
-    let path = lib.strings.makeBinPath [
-      "/home/jmc"
-      "/run/wrappers"
-      "/home/jmc/.nix-profile"
-      "/etc/profiles/per-user/jmc"
-      "/nix/var/nix/profiles/default"
-      "/run/current-system/sw"
-      "${pkgs.bash}"
-      "${pkgs.coreutils}"
-    ];
+    let
+      path = lib.strings.makeBinPath [
+        "/home/jmc"
+        "/run/wrappers"
+        "/home/jmc/.nix-profile"
+        "/etc/profiles/per-user/jmc"
+        "/nix/var/nix/profiles/default"
+        "/run/current-system/sw"
+        "${pkgs.bash}"
+        "${pkgs.coreutils}"
+      ];
     in
     lib.mkForce "PATH=${path}";
 
@@ -137,16 +138,17 @@
           };
 
         "module/notifications" =
-          let script = pkgs.writeShellScript "notifications" ''
-            set -euo pipefail
-            AUTH="jonascarpay:$(cat /run/agenix/notifications-token)"
-            notifications=$(${pkgs.curl}/bin/curl -sf --user "$AUTH" https://api.github.com/notifications | ${pkgs.jq}/bin/jq length)
-            if [ "$notifications" -gt 0 ]; then
-              echo " $notifications"
-            else
-              echo ""
-            fi
-          '';
+          let
+            script = pkgs.writeShellScript "notifications" ''
+              set -euo pipefail
+              AUTH="jonascarpay:$(cat /run/agenix/notifications-token)"
+              notifications=$(${pkgs.curl}/bin/curl -sf --user "$AUTH" https://api.github.com/notifications | ${pkgs.jq}/bin/jq length)
+              if [ "$notifications" -gt 0 ]; then
+                echo " $notifications"
+              else
+                echo ""
+              fi
+            '';
           in
           {
             type = "custom/script";
@@ -173,9 +175,10 @@
           };
 
         "module/temp" =
-          let script = pkgs.writeShellScript "temp" ''
-            ${sensors} | ${grep} Package | ${awk} '{print $4; exit}' | ${sed} 's/^.\\([0-9]\\+\\)../\\1/'
-          '';
+          let
+            script = pkgs.writeShellScript "temp" ''
+              ${sensors} | ${grep} Package | ${awk} '{print $4; exit}' | ${sed} 's/^.\\([0-9]\\+\\)../\\1/'
+            '';
           in
           {
             type = "custom/script";
