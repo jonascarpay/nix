@@ -14,6 +14,8 @@
       inactive-dim = 0.20;
     };
     # shadowExclude = [ "class_g = 'i3-frame'" ];
+    shadowExclude = [ "class_g = 'fcitx'" ];
+
     opacityRules = [ "100:class_i != 'st-256color'" ];
   };
 }
