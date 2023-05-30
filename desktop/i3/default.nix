@@ -31,7 +31,8 @@ in
       defaultWorkspace = "workspace number 1";
 
       gaps.inner = 20;
-      gaps.outer = 0;
+      gaps.outer = 10;
+      gaps.smartBorders = "on";
 
       startup = [{ command = "systemctl --user restart polybar"; always = true; notification = false; }];
 
