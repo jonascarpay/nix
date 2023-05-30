@@ -1,4 +1,4 @@
-{ pkgs, lib, config, unstable, ... }:
+{ pkgs, lib, unstable, ... }:
 let
   np = pkgs.vimPlugins;
   unp = unstable.vimPlugins;
@@ -37,6 +37,8 @@ in
       filetype indent plugin on
       syntax on
       set hidden
+      set scrolloff=5
+      set cursorline
       set confirm
       set wildmenu
       set showcmd
