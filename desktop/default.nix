@@ -32,7 +32,6 @@ in
   imports = [
     ./dunst.nix
     ./emacs
-    # ./neuron.nix
     ./picom.nix
     ./polybar.nix
     ./dmenu

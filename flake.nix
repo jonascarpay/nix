@@ -9,10 +9,6 @@
       url = "github:nix-community/home-manager/release-23.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    neuron = {
-      url = "github:srid/neuron";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nix-doom-emacs = {
       url = "github:nix-community/nix-doom-emacs";
       inputs.nixpkgs.follows = "nixpkgs";
