@@ -22,42 +22,8 @@ let
   homekit-tcp-port = 21063; # Freely choosable
   homekit-udp-port = 5353; # Hardcoded by apple, I think
 
-
-  adaptive-lighting = {
-    home-manager.users.hass.imports = [{
-      home.file.adaptive-lighting = {
-        recursive = true;
-        source =
-          let src = pkgs.fetchFromGitHub {
-            owner = "basnijholt";
-            repo = "adaptive-lighting";
-            rev = "4cc38949ba632d1432d2f0a904e36d532b77510e";
-            sha256 = "sha256-HfSfA9MLzStvb8W0HtR69ec0gPgXaoEbt1QTsWcs99A=";
-          };
-          in "${src}/custom_components/";
-        target = "./custom_components/";
-      };
-    }];
-
-    services.home-assistant.config = {
-      homekit.filter.exclude_entity_globs = [
-        "switch.adaptive_lighting_*"
-      ];
-      adaptive_lighting = [{
-        name = "Main";
-        lights = "!secret all_lights";
-        prefer_rgb_color = false;
-        min_brightness = 45;
-        min_color_temp = 2500;
-        sunrise_time = "08:00:00";
-      }];
-
-    };
-  };
-
 in
 {
-  imports = [ adaptive-lighting ];
   environment.systemPackages = [ flash ];
 
   services.nginx = {
@@ -109,9 +75,9 @@ in
     enable = true;
     settings = {
       permit_join = true;
-      serial.port = "/dev/ttyACM0";
+      serial.port = "/dev/ttyUSB0";
       frontend.port = z2m-port;
-      homeassistant = true;
+      homeassistant = config.services.home-assistant.enable;
       advanced.log_level = "debug";
     };
   };
@@ -162,6 +128,11 @@ in
           all = false;
         };
       };
+      switch = [{
+        platform = "flux";
+        lights = "!secret flux_lights";
+        disable_brightness_adjust = true;
+      }];
       # default_config customization
       config = { };
       frontend = { };
@@ -184,6 +155,7 @@ in
       "mqtt"
       "netgear"
       "group"
+      "flux"
       # default_config customization
       "automation"
       "config"

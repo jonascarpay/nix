@@ -38,6 +38,10 @@
       url = "github:binplz/programs.sqlite";
       flake = false;
     };
+    # adaptive-lighting = {
+    #   url = "github:basnijholt/adaptive-lighting";
+    #   flake = false;
+    # };
   };
 
   outputs = inputs:
