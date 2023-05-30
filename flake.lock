@@ -620,23 +620,6 @@
         "type": "github"
       }
     },
-    "picom": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1680345150,
-        "narHash": "sha256-AvtN1aE9zCsaf2UR4vzPExnJTibYACGDuQcTpOEUkpM=",
-        "owner": "yshui",
-        "repo": "picom",
-        "rev": "05ef18d78f96a0a970742f1dff40fcf505a0daa6",
-        "type": "github"
-      },
-      "original": {
-        "owner": "yshui",
-        "ref": "next",
-        "repo": "picom",
-        "type": "github"
-      }
-    },
     "programs-db": {
       "flake": false,
       "locked": {
@@ -681,7 +664,6 @@
         "nix-doom-emacs": "nix-doom-emacs",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
-        "picom": "picom",
         "programs-db": "programs-db",
         "st": "st",
         "unstable": "unstable"

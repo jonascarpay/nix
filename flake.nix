@@ -26,10 +26,6 @@
       url = "github:StevenBlack/hosts";
       flake = false;
     };
-    picom = {
-      url = "github:yshui/picom/next";
-      flake = false;
-    };
     frecently = {
       url = "github:jonascarpay/frecently/preserve-index";
       inputs.nixpkgs.follows = "nixpkgs";
