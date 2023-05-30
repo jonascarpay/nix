@@ -35,7 +35,6 @@ in
     ./picom.nix
     ./polybar.nix
     ./dmenu
-    ./redshift.nix
     ./random-wallpaper.nix
     # ./xmonad
     ./i3
@@ -80,6 +79,13 @@ in
     enable = true;
     tray.enable = true;
     tray.command = "syncthingtray --wait";
+  };
+
+  services.redshift = {
+    enable = true;
+    tray = true;
+    latitude = "35.6762";
+    longitude = "139.6503";
   };
 
   xsession.enable = true;
