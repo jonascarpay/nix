@@ -4,7 +4,7 @@ let
   wireguard =
     let
       port = 51820;
-      endpoint-ip = "60.67.36.244";
+      endpoint-ip = "60.67.51.10";
     in
     {
       age.secrets.wg-paninix.file = ../secrets/wg-paninix.age;
