@@ -27,8 +27,8 @@
     '';
     shellAbbrs = {
       c = "cd";
-      cn = "cd ~/nix/";
       dv = "cd ~/Dev/";
+      dr = "direnv reload";
       g = "git";
       ga = "git add";
       gaa = "git add --all";
@@ -53,14 +53,11 @@
       l = "ls";
       ll = "ls -lah";
       n = "vim";
-      nb = "nix build";
-      nbl = "nix build -L";
-      nbo = ''nix build -L --option substituters ""'';
       ng = "nix-collect-garbage";
       nsp = "nix shell nixpkgs#";
       ns = "nix shell";
       nd = "nix develop";
-      rn = "nnn";
+      rn = "ranger";
       nn = "nnn";
       s = "sudo";
       sc = "systemctl --user";
@@ -68,19 +65,12 @@
       sco = "systemctl --user stop";
       scr = "systemctl --user restart";
       scu = "systemctl --user status";
-      sng = "sudo nix-collect-garbage";
-      snr = "sudo nixos-rebuild";
-      snrb = "sudo nixos-rebuild boot";
-      snrbu = "sudo nixos-rebuild boot --upgrade";
-      snrs = "sudo nixos-rebuild switch";
       ssc = "sudo systemctl";
       ssca = "sudo systemctl start";
       ssco = "sudo systemctl stop";
       sscr = "sudo systemctl restart";
       sscu = "sudo systemctl status";
       tmp = "cd (mktemp -d)";
-      tm = "tmux";
-      tk = "take";
       v = "vim";
       vd = "vimdir";
       vn = "vimdir ~/nix";
