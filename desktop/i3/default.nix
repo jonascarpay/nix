@@ -18,6 +18,12 @@ let
     export PATH="${lib.makeBinPath [pkgs.python3 pkgs.graphviz pkgs.feh]}:$PATH"
     i3-save-tree | python ${./i3-render-tree.py} | dot -T png | feh --class floating -
   '';
+  screensnip = pkgs.writeShellScript "screensnip" ''
+    TMP=$(mktemp -d)
+    trap 'rm -rf $TMP' exit
+    ${pkgs.xfce.xfce4-screenshooter}/bin/xfce4-screenshooter --region --save $TMP/cap.png
+    ${pkgs.feh}/bin/feh $TMP/cap.png --class floating
+  '';
   clipboard-firefox = pkgs.writeShellScript "clipboard-firefox" "xclip -o | xargs firefox";
 in
 {
@@ -87,6 +93,7 @@ in
             "t" = "focus mode_toggle";
             "q" = "kill";
             "slash" = exec "${showTree}";
+            "period" = exec "${screensnip}";
             "space" = "fullscreen toggle";
             "a" = "focus parent";
             "Shift+a" = "focus child";
