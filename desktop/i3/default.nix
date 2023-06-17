@@ -18,12 +18,21 @@ let
     export PATH="${lib.makeBinPath [pkgs.python3 pkgs.graphviz pkgs.feh]}:$PATH"
     i3-save-tree | python ${./i3-render-tree.py} | dot -T png | feh --class floating -
   '';
-  screensnip = pkgs.writeShellScript "screensnip" ''
-    TMP=$(mktemp -d)
-    trap 'rm -rf $TMP' exit
-    ${pkgs.xfce.xfce4-screenshooter}/bin/xfce4-screenshooter --region --save $TMP/cap.png
-    ${pkgs.feh}/bin/feh $TMP/cap.png --class floating
+
+
+  screensnip-tmp-dir = "/tmp/screensnip_$(head -c 5 /proc/sys/kernel/random/boot_id)";
+  screensnip-snap = pkgs.writeShellScript "screensnip-snap" ''
+    TMP="${screensnip-tmp-dir}"
+    mkdir -p $TMP
+    IMG="$TMP/$(date '+%Y%m%d%H%M%S').png"
+    ${pkgs.xfce.xfce4-screenshooter}/bin/xfce4-screenshooter --region --save $IMG
+    ${pkgs.feh}/bin/feh --reverse --start-at $IMG --class floating
   '';
+
+  screensnip-restore = pkgs.writeShellScript "screensnip-restore" ''
+    ${pkgs.feh}/bin/feh --reverse "${screensnip-tmp-dir}" --class floating
+  '';
+
   clipboard-firefox = pkgs.writeShellScript "clipboard-firefox" "xclip -o | xargs firefox";
 in
 {
