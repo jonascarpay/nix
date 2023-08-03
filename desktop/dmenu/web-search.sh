@@ -14,6 +14,7 @@ URLS=(
   ["Hackage"]="https://hackage.haskell.org/package/"
   ["Hackage-search"]="https://hackage.haskell.org/packages/search?terms="
   ["Wolfram-alpha"]="https://www.wolframalpha.com/input?i="
+  ["Wikipedia"]="https://en.wikipedia.org/w/index.php?title=Special:Search&search="
   ["URL"]="https://"
 )
 
