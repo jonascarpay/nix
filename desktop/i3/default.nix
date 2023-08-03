@@ -102,7 +102,8 @@ in
             "t" = "focus mode_toggle";
             "q" = "kill";
             "slash" = exec "${showTree}";
-            "period" = exec "${screensnip}";
+            "period" = exec "${screensnip-snap}";
+            "comma" = exec "${screensnip-restore}";
             "space" = "fullscreen toggle";
             "a" = "focus parent";
             "Shift+a" = "focus child";
