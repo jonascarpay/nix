@@ -91,12 +91,16 @@ in
     tray.command = "syncthingtray --wait";
   };
 
-  services.redshift = {
-    enable = true;
-    tray = true;
-    latitude = "35.6762";
-    longitude = "139.6503";
-  };
+  services.redshift =
+    let
+      tokyo = { latitude = "35.6762"; longitude = "139.6503"; };
+      amsterdam = { latitude = "52.372778"; longitude = "4.893611"; };
+    in
+    {
+      inherit (tokyo) latitude longitude;
+      enable = true;
+      tray = true;
+    };
 
   xsession.enable = true;
 }
