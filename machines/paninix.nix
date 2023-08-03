@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, pkgs, ... }:
 let
   integrated = true;
   wireguard =
@@ -36,7 +36,7 @@ in
     ../system/openvpn.nix
     ../system/graphical.nix
     wireguard
-    bluetooth
+    # bluetooth
   ];
 
   networking = {
@@ -49,14 +49,7 @@ in
   };
 
   hardware = {
-    pulseaudio = {
-      enable = true;
-      package = pkgs.pulseaudioFull;
-      # Prevents weird fade-ins in Anki -- hopefully
-      extraConfig = if integrated then "" else ''
-        unload-module module-suspend-on-idle
-      '';
-    };
+    pulseaudio.enable = true;
     nvidiaOptimus.disable = integrated;
     opengl.driSupport32Bit = true;
     opengl.extraPackages = [ pkgs.linuxPackages.nvidia_x11.out ];
@@ -96,6 +89,14 @@ in
       linuxPackages.nvidia_x11
     ];
   };
+
+  services.tlp.enable = true;
+  services.tlp.settings = {
+    CPU_SCALING_GOVERNOR_ON_AC = "powersave";
+    CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+  };
+  powerManagement.enable = true;
+  powerManagement.powertop.enable = true;
 
   services.mullvad-vpn.enable = true;
   time.timeZone = "Asia/Tokyo";
