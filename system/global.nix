@@ -1,4 +1,4 @@
-{ pkgs, inputs, lib, ... }:
+{ pkgs, unstable, inputs, lib, ... }:
 let
 
   caches =
@@ -21,7 +21,7 @@ let
       ${nnn}/bin/nnn -e $@
     '';
 
-  boot-switch =
+  boot-switch565 =
     let
       archive = pkgs.fetchzip {
         url = "https://github.com/CTCaer/hekate/releases/download/v5.6.5/hekate_ctcaer_5.6.5_Nyx_1.1.1.zip";
@@ -29,8 +29,20 @@ let
         stripRoot = false;
       };
     in
-    pkgs.writeShellScriptBin "boot-switch" ''
+    pkgs.writeShellScriptBin "boot-switch565" ''
       ${pkgs.fusee-launcher}/bin/fusee-launcher ${archive}/hekate_ctcaer_5.6.5.bin
+    '';
+
+  boot-switch602 =
+    let
+      archive = pkgs.fetchzip {
+        url = "https://github.com/CTCaer/hekate/releases/download/v6.0.2/hekate_ctcaer_6.0.2_Nyx_1.5.2.zip";
+        sha256 = "sha256-I7WYxBIgBQjqwNlwIv6RRJ0LXTk5E3PsOC6c8/nJNxA=";
+        stripRoot = false;
+      };
+    in
+    pkgs.writeShellScriptBin "boot-switch602" ''
+      ${pkgs.fusee-launcher}/bin/fusee-launcher ${archive}/hekate_ctcaer_6.0.2.bin
     '';
 
   # This is a hack to keep my notifications token secret.
@@ -65,8 +77,10 @@ in
       ranger
       sshfs
       scrubnix
+      unstable.tagref
       tmux
-      boot-switch
+      boot-switch565
+      boot-switch602
       tree
       nix-tree
       btop
