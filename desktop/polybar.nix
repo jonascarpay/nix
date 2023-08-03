@@ -70,7 +70,7 @@
       in
       {
         "bar/xc-jonas" = common // hidpi // {
-          modules-right = "notifications vpn wireless wired fs memory temp fan cpu battery backlight-t480 pulseaudio date-nl date";
+          modules-right = "notifications vpn wireless wired fs memory temp fan cpu battery backlight-t480 pulseaudio date-jp date";
         };
 
         "bar/anpan" = common // hidpi // {
@@ -78,7 +78,7 @@
         };
 
         "bar/paninix" = common // {
-          modules-right = "notifications vpn wireless wired fs memory temp fan cpu battery pulseaudio date-jpn date";
+          modules-right = "notifications vpn wireless wired fs memory temp fan cpu battery pulseaudio date-jp date";
           height = "18";
           tray-maxsize = "15";
         };
@@ -91,7 +91,7 @@
           label-font = "2";
         };
 
-        "module/date-jpn" = {
+        "module/date-jp" = {
           type = "custom/script";
           exec = ''TZ=Asia/Tokyo ${pkgs.coreutils}/bin/date +" %H:%M"'';
           interval = "30";
