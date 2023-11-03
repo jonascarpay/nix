@@ -1,6 +1,9 @@
 { pkgs, inputs, ... }:
 {
-  imports = [ ./dmenu.nix ];
+  imports = [
+    ./dmenu.nix
+    inputs.nix-doom-emacs.hmModule
+  ];
   home.packages = [
     pkgs.ripgrep
     pkgs.emacs-all-the-icons-fonts
