@@ -45,6 +45,10 @@ in
       workspaceAutoBackAndForth = true;
       defaultWorkspace = "workspace number 1";
 
+      window.titlebar = false;
+      window.border = 1;
+      floating.border = 1;
+
       gaps.inner = 20;
       gaps.outer = 10;
       gaps.smartBorders = "on";
