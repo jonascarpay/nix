@@ -31,12 +31,6 @@ let
     };
   };
 
-  jellyfin = {
-    services.jellyfin.enable = true;
-    networking.firewall.allowedTCPPorts = [ 8096 8920 ];
-    networking.firewall.allowedUDPPorts = [ 1900 7359 ];
-  };
-
   syncthing = {
     # might no longer be necessary after kernel version > 5.10
     boot.kernel.sysctl."fs.inotify.max_user_watches" = 32784;
