@@ -7,10 +7,6 @@ let
   ];
 in
 {
-  "xc-openvpn-config.age".publicKeys = keys;
-  "xc-openvpn-auth.age".publicKeys = keys;
-  "xc-nixconf.age".publicKeys = keys;
-  "xc-netrc.age".publicKeys = keys;
   "noip.age".publicKeys = keys;
   "ha-secrets.age".publicKeys = keys;
   "notifications-token.age".publicKeys = keys;
