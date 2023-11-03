@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "adaptive-lighting": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1698094963,
+        "narHash": "sha256-B6BJFEKvH49ewOxz9EfY40jeiz1+9bMX3lBS5P6wCwA=",
+        "owner": "basnijholt",
+        "repo": "adaptive-lighting",
+        "rev": "98a48ec0711784defb3f4953b86612babe563389",
+        "type": "github"
+      },
+      "original": {
+        "owner": "basnijholt",
+        "repo": "adaptive-lighting",
+        "type": "github"
+      }
+    },
     "agenix": {
       "inputs": {
         "darwin": "darwin",
@@ -627,6 +643,7 @@
     },
     "root": {
       "inputs": {
+        "adaptive-lighting": "adaptive-lighting",
         "agenix": "agenix",
         "declarative-cachix": "declarative-cachix",
         "dmenu": "dmenu",
