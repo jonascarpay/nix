@@ -46,6 +46,12 @@ let
     ${pkgs.rehex}/bin/rehex "$@"
   '');
 
+  pass = {
+    imports = [ ../../home/pass.nix ];
+    programs.password-store.settings.PASSWORD_STORE_DIR = "~/Passwords";
+    home.packages = [ pkgs.qtpass ];
+  };
+
 in
 
 {
@@ -59,6 +65,7 @@ in
     ../../desktop/emacs
     polybar
     redshift
+    pass
   ];
   home-manager.users.jmc.home.packages = [
     myretroarch

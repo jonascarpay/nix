@@ -1,6 +1,6 @@
 { pkgs, config, ... }: {
   imports = [
-    # ./crypt.nix
+    ./pass.nix
     ./direnv.nix
     ./fish.nix
     # ./ranger.nix
