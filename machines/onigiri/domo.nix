@@ -1,4 +1,4 @@
-{ pkgs, inputs, config, ... }:
+{ pkgs, unstable, inputs, config, lib, ... }:
 
 let
   cc2531-firmware = pkgs.fetchzip {
@@ -22,9 +22,30 @@ let
   homekit-tcp-port = 21063; # Freely choosable
   homekit-udp-port = 5353; # Hardcoded by apple, I think
 
+  adaptive-lighting = {
+    # adapted from custom components at https://nixos.wiki/wiki/Home_Assistant
+    systemd.tmpfiles.rules = [
+      "C /var/lib/hass/custom_components/adaptive_lighting - - - - ${inputs.adaptive-lighting}/custom_components/adaptive_lighting"
+      "Z /var/lib/hass/custom_components/adaptive_lighting 770 hass hass - -"
+      "Z /var/lib/hass/custom_components 770 hass hass - -"
+    ];
+    services.home-assistant.config.adaptive_lighting = {
+      lights = [
+        "light.ceiling_lights"
+        "light.standing_lights"
+        "light.bedside_lights"
+      ];
+      min_color_temp = 2500;
+      max_color_temp = 4000;
+      min_brightness = 50;
+    };
+  };
+
 in
 {
   environment.systemPackages = [ flash ];
+
+  imports = [ adaptive-lighting ];
 
   services.nginx = {
     enable = true;
@@ -71,13 +92,23 @@ in
   };
 
   services.zigbee2mqtt = {
+    # TODO disable https://github.com/home-assistant/core/issues/99501
     package = pkgs.callPackage "${inputs.unstable}/pkgs/servers/zigbee2mqtt" { };
     enable = true;
     settings = {
       permit_join = true;
       serial.port = "/dev/ttyUSB0";
-      frontend.port = z2m-port;
-      homeassistant = config.services.home-assistant.enable;
+      frontend = {
+        port = z2m-port;
+        url = "http://zigbee.onigiri.lan";
+      };
+      availability = true;
+      homeassistant = lib.optionalAttrs config.services.home-assistant.enable {
+        discovery_topic = "homeassistant";
+        status_topic = "hass/status";
+        legacy_entity_attributes = true;
+        legacy_triggers = true;
+      };
       advanced.log_level = "debug";
     };
   };
@@ -96,11 +127,16 @@ in
 
   services.home-assistant = {
     enable = true;
+    # TODO disable https://github.com/home-assistant/core/issues/99501
+    package = unstable.home-assistant.overrideAttrs (oldAttrs: {
+      doInstallCheck = false;
+    });
     config = {
       homeassistant = {
         name = "Home";
         latitude = "!secret latitude";
         longitude = "!secret longitude";
+        country = "JP";
         temperature_unit = "C";
         time_zone = config.time.timeZone;
         unit_system = "metric";
@@ -117,7 +153,7 @@ in
         };
       };
       mqtt = { };
-      netgear = { };
+      # netgear = { };
       scene = "!include scenes.yaml";
       automation = "!include automations.yaml";
       light = "!secret light_groups";
@@ -128,16 +164,16 @@ in
           all = false;
         };
       };
-      switch = [{
-        platform = "flux";
-        lights = "!secret flux_lights";
-        disable_brightness_adjust = true;
-      }];
+      # switch = [{
+      #   platform = "flux";
+      #   lights = "!secret all_lights";
+      #   # disable_brightness_adjust = true;
+      # }];
       # default_config customization
       config = { };
       frontend = { };
       history = { };
-      image = { };
+      # image = { };
       input_boolean = { };
       input_button = { };
       input_datetime = { };
@@ -155,13 +191,13 @@ in
       "mqtt"
       "netgear"
       "group"
-      "flux"
+      # "flux"
       # default_config customization
       "automation"
       "config"
       "frontend"
       "history"
-      "image"
+      # "image"
       "input_boolean"
       "input_button"
       "input_datetime"
@@ -174,7 +210,7 @@ in
       "sun"
       "system_health"
     ];
-    extraPackages = p: [ p.aiohomekit p.pyatv p.getmac p.async-upnp-client ];
+    extraPackages = p: [ p.dateutil p.aiohomekit p.pyatv p.getmac p.async-upnp-client ];
     openFirewall = true;
   };
 }

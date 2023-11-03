@@ -39,10 +39,10 @@
     #   url = "github:binplz/programs.sqlite";
     #   flake = false;
     # };
-    # adaptive-lighting = {
-    #   url = "github:basnijholt/adaptive-lighting";
-    #   flake = false;
-    # };
+    adaptive-lighting = {
+      url = "github:basnijholt/adaptive-lighting";
+      flake = false;
+    };
     nix-darwin = {
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
