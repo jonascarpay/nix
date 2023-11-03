@@ -2,6 +2,7 @@
 let
   dm-mono-nerd-font = pkgs.stdenv.mkDerivation rec {
     name = "dm-mono-nerd-font";
+    # TODO flakify
     src = pkgs.fetchFromGitHub {
       repo = name;
       owner = "ylieder";

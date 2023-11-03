@@ -127,8 +127,8 @@ in
       ndh
       ./hardware-configuration.nix
       gnome-support
-      ../../system/global.nix
-      ../../system/fonts.nix
+      ../../nixos/global.nix
+      ../../nixos/fonts.nix
     ];
 
   boot.loader.systemd-boot.enable = true; # default from configuration.nix

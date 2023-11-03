@@ -1,12 +1,12 @@
 {
-  hardware = {
-    pulseaudio.enable = true;
-    opengl = {
-      enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
-    };
-  };
+  # hardware = {
+  #   pulseaudio.enable = true;
+  #   opengl = {
+  #     enable = true;
+  #     driSupport = true;
+  #     driSupport32Bit = true;
+  #   };
+  # };
   services.xserver = {
     enable = true;
     displayManager = {
@@ -23,15 +23,15 @@
       defaultSession = "mysession";
     };
   };
-  networking.firewall = {
-    allowedTCPPorts = [
-      27037 # steam
-      27036 # steam
-    ];
-    allowedUDPPorts = [
-      8081 # steam, hoogle
-      27036 # steam
-      27031 # steam
-    ];
-  };
-}
+  # networking.firewall = {
+  #   allowedTCPPorts = [
+  #     27037 # steam
+  #     27036 # steam
+  #   ];
+  #   allowedUDPPorts = [
+  #     8081 # steam, hoogle
+  #     27036 # steam
+  #     27031 # steam
+  #   ];
+  # };
+}# Did you read the comment?

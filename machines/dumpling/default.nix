@@ -39,9 +39,9 @@ let
 in
 {
   imports = [
-    ../../system/graphical.nix
-    ../../system/global.nix
-    ../../system/fonts.nix
+    ../../nixos/graphical.nix
+    ../../nixos/global.nix
+    ../../nixos/fonts.nix
     ndhHosts
     githubHosts
   ];
