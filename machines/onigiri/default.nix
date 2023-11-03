@@ -74,13 +74,15 @@ in
       inputs.nixos-hardware.nixosModules.raspberry-pi-3
     ];
 
+  services.xserver.enable = false;
+  hardware.raspberry-pi."4".fkms-3d.enable = true;
+
   boot.zfs.requestEncryptionCredentials = false;
   networking.hostName = "onigiri";
   networking.networkmanager.enable = true;
   time.timeZone = "Asia/Tokyo";
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
   users.users.jmc.shell = pkgs.fish;
-  hardware.raspberry-pi."4".fkms-3d.enable = true;
 
   users.groups = { tank.members = [ "jmc" ]; };
 
