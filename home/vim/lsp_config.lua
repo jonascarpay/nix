@@ -46,7 +46,11 @@ local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 -- https://github.com/dlukes/dotfiles/commit/8feb47aec3a2c7ff78b8efc1e85d9580a99fd6a4
 -- capabilities can be extended with tbl_extend it seems
 lspconfig.hls.setup {on_attach = on_attach, capabilities = cmp_capabilities}
-lspconfig.rust_analyzer.setup {on_attach = on_attach, capabilities = cmp_capabilities}
+lspconfig.rust_analyzer.setup {
+    on_attach = on_attach,
+    capabilities = cmp_capabilities,
+    settings = {["rust-analyzer"] = {checkOnSave = {command = "clippy"}}}
+}
 lspconfig.pyright.setup {on_attach = on_attach, capabilities = cmp_capabilities}
 lspconfig.ruff_lsp.setup {
     on_attach = on_attach,
@@ -69,10 +73,10 @@ cmp.setup {
         ['<C-d>'] = cmp.mapping.scroll_docs(-4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space>'] = cmp.mapping.complete(),
-        -- ['<CR>'] = cmp.mapping.confirm {
-        --   behavior = cmp.ConfirmBehavior.Replace,
-        --   select = true,
-        -- },
+        ['<CR>'] = cmp.mapping.confirm {
+            -- behavior = cmp.ConfirmBehavior.Replace,
+            select = true
+        },
         ['<Tab>'] = cmp.mapping(function(fallback)
             if luasnip.expand_or_jumpable() then
                 luasnip.expand_or_jump()

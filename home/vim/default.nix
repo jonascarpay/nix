@@ -31,7 +31,6 @@ in
     vimAlias = true;
     vimdiffAlias = true;
     viAlias = true;
-    # extraPackages = [ ];
     extraConfig = ''
       set nocompatible
       filetype indent plugin on
@@ -88,7 +87,6 @@ in
         '';
       }
       np.surround
-      np.vim-easymotion
       np.vim-eunuch
       np.vim-indent-object
       np.vim-polyglot
@@ -111,6 +109,59 @@ in
       }
 
       {
+        plugin = unp.hop-nvim;
+        type = "lua";
+        config = ''
+          local hop = require("hop")
+          hop.setup {
+            keys = 'hfjdks',
+          }
+          local directions = require("hop.hint").HintDirection
+
+          -- vim.keymap.set("", 'f', function()
+          --   hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true })
+          -- end, {remap=true})
+          -- vim.keymap.set("", 'F', function()
+          --   hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true })
+          -- end, {remap=true})
+          -- vim.keymap.set("", 't', function()
+          --   hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true, hint_offset = -1 ; })
+          -- end, {remap=true})
+          -- vim.keymap.set("", 'T', function()
+          --   hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 ; })
+          -- end, {remap=true})
+
+          vim.keymap.set("", '<space><space>f', function()
+            hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = false })
+          end, {remap=true})
+          vim.keymap.set("", '<space><space>F', function()
+            hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = false })
+          end, {remap=true})
+          vim.keymap.set("", '<space><space>t', function()
+            hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = false, hint_offset = -1 })
+          end, {remap=true})
+          vim.keymap.set("", '<space><space>T', function()
+            hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = false, hint_offset = 1 })
+          end, {remap=true})
+          vim.keymap.set("", '<space><space>w', function()
+            hop.hint_words({ direction = directions.AFTER_CURSOR, current_line_only = false })
+          end, {remap=true})
+          vim.keymap.set("", '<space><space>W', function()
+            hop.hint_words({ direction = directions.BEFORE_CURSOR, current_line_only = false })
+          end, {remap=true})
+          vim.keymap.set("", '<space><space>b', function()
+            hop.hint_words({ direction = directions.BEFORE_CURSOR, current_line_only = false })
+          end, {remap=true})
+          vim.keymap.set("", '<space><space>k', function()
+            hop.hint_lines_skip_whitespace({ direction = directions.BEFORE_CURSOR })
+          end, {remap=true})
+          vim.keymap.set("", '<space><space>j', function()
+            hop.hint_lines_skip_whitespace({ direction = directions.AFTER_CURSOR })
+          end, {remap=true})
+        '';
+      }
+
+      {
         # TODO unstable for filetypes.any, remove later
         plugin = unp.formatter-nvim;
         # https://github.com/mhartington/formatter.nvim/tree/master/lua/formatter/filetypes
@@ -118,7 +169,7 @@ in
           let
             formatters = {
               python = { exe = "black"; args = [ "-q" "-" ]; };
-              haskell = { exe = "ormolu"; stdin = false; args = [ "-i" ]; };
+              haskell = { exe = "ormolu"; args = [ "--no-cabal" ]; };
               rust = { exe = "rustfmt"; };
               cabal.exe = "${pkgs.haskellPackages.cabal-fmt}/bin/cabal-fmt";
               markdown.exe = "md-headerfmt";
