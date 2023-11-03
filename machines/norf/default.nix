@@ -1,9 +1,8 @@
-{ config, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 let
 
   wireless = {
-    # networking.wireless.enable = true;
     networking.networkmanager.enable = true;
     networking.networkmanager.insertNameservers = [ "192.168.1.6" ];
   };
@@ -21,9 +20,6 @@ let
 
   xserver = {
     services.xserver = {
-      layout = "us"; # default from nixos-generate-config
-      xkbVariant = ""; # default from nixos-generate-config
-
       enable = true;
       videoDrivers = [ "nvidia" ];
     };
@@ -93,12 +89,13 @@ in
       ../../nixos/ndh.nix
     ];
 
+  services.xserver.layout = "us"; # default from configuration.nix
+  services.xserver.xkbVariant = ""; # default from configuration.nix
   boot.loader.systemd-boot.enable = true; # default from configuration.nix
   boot.loader.efi.canTouchEfiVariables = true; # default from configuration.nix
 
   networking.hostName = "norf";
 
-  networking.nameservers = [ "192.168.1.6" ];
   networking.resolvconf.dnsSingleRequest = true; # supposedly fixes slow DNS, see https://github.com/hashicorp/vagrant/issues/1172
 
   time.timeZone = "Asia/Tokyo";
