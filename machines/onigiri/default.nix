@@ -48,7 +48,7 @@ let
   };
 
   git-sync = {
-    imports = [ ../system/git-sync-service.nix ];
+    imports = [ ./git-sync-service.nix ];
     services.git-sync = {
       passwords.directory = "/tank/Vault/Passwords";
       org.directory = "/tank/Vault/Org";

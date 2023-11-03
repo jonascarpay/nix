@@ -1,6 +1,5 @@
 { pkgs, lib, config, ... }:
 
-let cfg = config.services.git-sync; in
 with lib;
 {
   options.services.git-sync = with types; mkOption {
