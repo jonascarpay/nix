@@ -14,6 +14,7 @@
   manual.manpages.enable = true;
 
   home = {
+    stateVersion = "23.05";
     packages = with pkgs; [
       silver-searcher # TODO do I use this? yes for fzf fg
       cloc
