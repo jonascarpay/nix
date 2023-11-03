@@ -45,32 +45,32 @@ let
   desktop = {
     imports = [
       ../../nixos/home-manager-xsession.nix
-      polybar
     ];
-    home-manager.users.jmc = import ../../desktop;
+    home-manager.users.jmc.imports = [
+      ../../desktop
+      home-polybar
+    ];
   };
+
+  home-polybar = {
+    imports = [ ../../desktop/polybar.nix ];
+    services.polybar.settings = {
+      "bar/mybar" = {
+        "inherit" = "bar/common bar/hidpi";
+        modules-right = "notifications onigiri wireless vpn fs memory cpu-temp gpu-temp cpu pulseaudio date-nl date";
+      };
+      "module/wireless".interface = "wlp9s0";
+      "module/cpu-temp".hwmon-path = "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon2/temp1_input";
+      "module/gpu-temp".hwmon-path = "/sys/devices/pci0000:00/0000:00:08.1/0000:0d:00.0/hwmon/hwmon5/temp1_input";
+    };
+  };
+
 
   gnome-support = {
     # Applications like font-manager complain about missing services without this, see https://nixos.wiki/wiki/GNOME#Running_GNOME_programs_outside_of_GNOME
     programs.dconf.enable = true;
     environment.systemPackages = [ pkgs.gnome.adwaita-icon-theme ];
   };
-
-  polybar = {
-    home-manager.users.jmc = {
-      imports = [ ../../desktop/polybar.nix ];
-      services.polybar.settings = {
-        "bar/mybar" = {
-          "inherit" = "bar/common bar/hidpi";
-          modules-right = "notifications onigiri wireless vpn fs memory cpu-temp gpu-temp cpu pulseaudio date-nl date";
-        };
-        "module/wireless".interface = "wlp9s0";
-        "module/cpu-temp".hwmon-path = "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon2/temp1_input";
-        "module/gpu-temp".hwmon-path = "/sys/devices/pci0000:00/0000:00:08.1/0000:0d:00.0/hwmon/hwmon5/temp1_input";
-      };
-    };
-  };
-
 
 in
 
