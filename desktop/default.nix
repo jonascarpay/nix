@@ -17,6 +17,9 @@ let
     xsession.windowManager.i3.config.floating.criteria = [{ class = "Qalculate-gtk"; }];
   };
 
+  zap = pkgs.writeShellScriptBin "zap" ''
+    xprop | grep -oP "PID\(CARDINAL\) = \K\d+" | xargs kill -9
+  '';
 in
 {
   imports = [
@@ -35,6 +38,7 @@ in
     pkgs.okular
     pkgs.sxiv
     pkgs.xclip # Doesn't work?
+    zap
   ];
 
   programs.firefox.enable = true;
