@@ -39,7 +39,7 @@ let
 in
 {
   imports = [
-    ../../nixos/graphical.nix
+    ../../nixos/home-manager-xsession.nix
     ../../nixos/global.nix
     ../../nixos/fonts.nix
     ndhHosts

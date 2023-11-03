@@ -68,28 +68,12 @@ let
     environment.systemPackages = [ pkgs.pavucontrol ];
   };
 
-  hm-session = {
-    home-manager.users.jmc.xsession.scriptPath = ".hm-xsession";
-    services.xserver.displayManager = {
-      session = [{
-        manage = "desktop";
-        name = "home-manager";
-        start = ''
-          ${pkgs.runtimeShell} $HOME/.hm-xsession &
-          waitPID=$!
-        '';
-      }];
-      # https://discourse.nixos.org/t/opening-i3-from-home-manager-automatically/4849/8
-      defaultSession = "home-manager";
-    };
-  };
-
   desktop = {
-    imports = [ xserver hm-session polybar ];
-    services.xserver.displayManager.autoLogin = {
-      enable = true;
-      user = "jmc";
-    };
+    imports = [
+      xserver
+      ../../nixos/home-manager-xsession.nix
+      polybar
+    ];
     home-manager.users.jmc = import ../../desktop;
   };
 
