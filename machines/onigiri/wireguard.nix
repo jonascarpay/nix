@@ -1,7 +1,8 @@
 { config, pkgs, ... }:
 let
   port = 51820;
-  ext = "eth0";
+  # ext = "eth0";
+  ext = "end0";
   iptables = "${pkgs.iptables}/bin/iptables";
 in
 {
@@ -29,14 +30,19 @@ in
         allowedIPs = [ "10.100.0.2/32" ];
       }
       {
-        # paninix
-        publicKey = "blQ/jJ3tKciOyuS/1TJSrRF9kU8gbtMrF8uhlwFWOCY=";
-        allowedIPs = [ "10.100.0.3/32" ];
-      }
-      {
         # iPad
         publicKey = "tuMonMT00UkTneRrbn+0o4+jKvRYfWDSkVgqK7rOFUw=";
         allowedIPs = [ "10.100.0.4/32" ];
+      }
+      {
+        # Rene
+        publicKey = "cuYxrSWrBnj9uVn/jhOuKHlBMfIwvPn+SO35+McZD2k=";
+        allowedIPs = [ "10.100.0.5/32" ];
+      }
+      {
+        # MacBook
+        publicKey = "znX3tXqGUaB2gezqdtsBqFQ72dG2Yonavngc8MCWL3s=";
+        allowedIPs = [ "10.100.0.6/32" ];
       }
     ];
   };
