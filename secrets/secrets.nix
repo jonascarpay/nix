@@ -7,16 +7,13 @@ let
   ];
 in
 {
-  "noip.age".publicKeys = keys;
   "ha-secrets.age".publicKeys = keys;
   "notifications-token.age".publicKeys = keys;
-  "wpa.age".publicKeys = keys;
   # ndh
   "ndh-openvpn-laptop.age".publicKeys = keys;
   "ndh-openvpn-desktop.age".publicKeys = keys;
   # Wireguard
   "wg-onigiri.age".publicKeys = keys;
-  "wg-paninix.age".publicKeys = keys;
 }
 
 # vim: nowrap
