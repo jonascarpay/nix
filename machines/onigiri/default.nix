@@ -55,6 +55,17 @@ let
     };
   };
 
+  zfs =
+    let hostId = "3bf3504c";
+    in {
+
+      boot.supportedFilesystems = [ "zfs" ];
+      networking.hostId = hostId;
+      boot.zfs.extraPools = [ "tank" ];
+      services.zfs.autoScrub.enable = true;
+      services.zfs.autoSnapshot.enable = true;
+    };
+
 in
 {
   imports =
@@ -64,7 +75,6 @@ in
       ../system/unbound.nix
       ../system/wireguard.nix
       ../system/domo.nix
-      (import ../system/zfs.nix "3bf3504c")
       rclone
       # jellyfin
       # transmission
