@@ -119,7 +119,7 @@ in
   };
 
   age.secrets.ha-secrets = {
-    file = ../secrets/ha-secrets.age;
+    file = ../../secrets/ha-secrets.age;
     path = "${config.services.home-assistant.configDir}/secrets.yaml";
     owner = "hass";
     group = "hass";

@@ -15,22 +15,6 @@ let
     };
   };
 
-  noip = {
-    age.secrets.noip.file = ../secrets/noip.age;
-    systemd.services.noip = {
-      enable = true;
-      description = "noip2 DNS service";
-      wantedBy = [ "default.target" ];
-      script = ''
-        ${pkgs.noip}/bin/noip2 -c ${config.age.secrets.noip.path}
-      '';
-      serviceConfig = {
-        Type = "forking";
-        Restart = "always";
-      };
-    };
-  };
-
   syncthing = {
     # might no longer be necessary after kernel version > 5.10
     boot.kernel.sysctl."fs.inotify.max_user_watches" = 32784;
@@ -66,22 +50,27 @@ let
       services.zfs.autoSnapshot.enable = true;
     };
 
+  fish = {
+    users.users.jmc.shell = pkgs.fish;
+    programs.fish.enable = true;
+  };
+
 in
 {
   imports =
     [
-      ../system/global.nix
-      ../system/openvpn.nix
-      ../system/unbound.nix
-      ../system/wireguard.nix
-      ../system/domo.nix
+      ../../nixos/global.nix
+      ./unbound.nix
+      ./wireguard.nix
+      ./domo.nix
+      zfs
       rclone
       # jellyfin
       # transmission
       syncthing
       git-sync
-      noip
-      inputs.nixos-hardware.nixosModules.raspberry-pi-3
+      fish
+      inputs.nixos-hardware.nixosModules.raspberry-pi-4
     ];
 
   services.xserver.enable = false;
@@ -92,7 +81,6 @@ in
   networking.networkmanager.enable = true;
   time.timeZone = "Asia/Tokyo";
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
-  users.users.jmc.shell = pkgs.fish;
 
   users.groups = { tank.members = [ "jmc" ]; };
 

@@ -6,7 +6,7 @@ let
   iptables = "${pkgs.iptables}/bin/iptables";
 in
 {
-  age.secrets.wg-onigiri.file = ../secrets/wg-onigiri.age;
+  age.secrets.wg-onigiri.file = ../../secrets/wg-onigiri.age;
   networking = {
     nat.enable = true;
     nat.externalInterface = ext;

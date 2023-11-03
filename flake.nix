@@ -82,7 +82,7 @@
 
       nixosConfigurations.onigiri = mkNixosSystem {
         system = "aarch64-linux";
-        module = ./machines/onigiri.nix;
+        module = ./machines/onigiri;
       };
     };
 }
