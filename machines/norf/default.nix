@@ -18,7 +18,7 @@ let
     networking.firewall.allowedUDPPorts = [ 22000 21027 ];
   };
 
-  xserver = {
+  graphics = {
     services.xserver = {
       enable = true;
       videoDrivers = [ "nvidia" ];
@@ -44,7 +44,6 @@ let
 
   desktop = {
     imports = [
-      xserver
       ../../nixos/home-manager-xsession.nix
       polybar
     ];
@@ -79,6 +78,7 @@ in
   imports =
     [
       sound
+      graphics
       desktop
       syncthing
       wireless
