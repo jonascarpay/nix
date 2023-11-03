@@ -1,6 +1,6 @@
 { config, ... }:
 {
-  age.secrets.ndh-openvpn.file = ../../secrets/ndh-openvpn-desktop.age;
+  age.secrets.ndh-openvpn.file = ../secrets/ndh-openvpn-desktop.age;
   services.openvpn.servers.ndh-vpn = {
     autoStart = false;
     config = "config ${config.age.secrets.ndh-openvpn.path}";
