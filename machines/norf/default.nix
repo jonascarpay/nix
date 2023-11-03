@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ pkgs, config, ... }:
 
 let
 
@@ -25,6 +25,21 @@ let
     };
   };
 
+  transmission = {
+    networking.firewall.allowedTCPPorts = [ config.services.transmission.settings.rpc-port ]; # Web UI port
+    services.transmission = {
+      enable = true;
+      settings = {
+        download-dir = "/home/jmc/Downloads/Transmission";
+        rpc-bind-address = "0.0.0.0";
+        utp-enabled = true;
+      };
+      openFirewall = true;
+      openRPCPort = true;
+    };
+    users.users.jmc.extraGroups = [ "transmission" ];
+  };
+
   sound = {
     sound.enable = true;
     hardware.pulseaudio.enable = true;
@@ -42,12 +57,13 @@ in
 {
   imports =
     [
+      ./hardware-configuration.nix
       sound
       graphics
-      ./desktop.nix
       wireless
-      ./hardware-configuration.nix
+      ./desktop.nix
       gnome-support
+      transmission
       ../../nixos/global.nix
       ../../nixos/ndh.nix
     ];
