@@ -1,13 +1,12 @@
 { pkgs, config, ... }: {
   imports = [
-    ./crypt.nix
+    # ./crypt.nix
     ./direnv.nix
     ./fish.nix
-    ./ranger.nix
-    ./scripts.nix
-    ./tmux.nix
+    # ./ranger.nix
+    # ./scripts.nix
+    # ./tmux.nix
     ./vim
-    ./zsh.nix
     ./git.nix
   ];
 
@@ -15,16 +14,15 @@
 
   home = {
     packages = with pkgs; [
-      (writeShellScriptBin "glow" "${glow}/bin/glow --local $@")
-      silver-searcher # TODO do I use this?
+      silver-searcher # TODO do I use this? yes for fzf fg
       cloc
       entr
       jq
-      killall
-      man-pages # TODO does this do anything manual.manpages.enable doesn't do?
+      # killall
+      # man-pages # TODO does this do anything manual.manpages.enable doesn't do?
       tldr
-      youtube-dl
-      weechat
+      # youtube-dl
+      # weechat
     ];
 
     sessionVariables = {
@@ -53,7 +51,6 @@
         '';
       };
     };
-    stateVersion = "22.05";
   };
 
   programs = {
@@ -84,8 +81,6 @@
     };
     ssh = {
       enable = true;
-      matchBlocks."pichanaki.xc".user = "jonas";
-      matchBlocks."anakin.xc".user = "jonas";
     };
   };
 }

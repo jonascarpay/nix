@@ -20,8 +20,8 @@
         ${pkgs.powerline-go}/bin/powerline-go \
           -error $status \
           -shell bare \
-          -modules venv,ssh,cwd,perms,git,exit,nix-shell,jobs \
-          -jobs (jobs -p | wc -l)
+          # -jobs (jobs -p | wc -l) \
+          -modules venv,ssh,cwd,perms,git,exit,nix-shell,jobs
       end
 
     '';

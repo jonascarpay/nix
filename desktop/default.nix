@@ -40,11 +40,11 @@ in
 {
   imports = [
     ./dunst.nix
-    ./emacs
-    ./picom.nix
-    ./polybar.nix
+    # ./emacs
+    # ./picom.nix
+    # ./polybar.nix
     ./dmenu
-    ./random-wallpaper.nix
+    # ./random-wallpaper.nix
     # ./xmonad
     ./i3
     # ./notes
@@ -52,55 +52,55 @@ in
   ];
   home.packages = with pkgs; [
     inputs.st.defaultPackage.${pkgs.system}
-    blender
-    anki-wrapped
-    celluloid
-    discord
-    gnome3.nautilus
-    qalculate-gtk
-    google-chrome
+    # blender
+    # anki-wrapped
+    # celluloid
+    # discord
+    # gnome3.nautilus
+    # qalculate-gtk
+    # google-chrome
     gparted
-    ocr
-    okular
-    dolphin
-    pavucontrol
-    signal-desktop
-    slack
-    spotify
-    steam
+    # ocr
+    # okular
+    # dolphin
+    # pavucontrol
+    # signal-desktop
+    # slack
+    # spotify
+    # steam
     sxiv
-    tdesktop
-    ungoogled-chromium
-    darktable
-    xclip # Doesn't work?
-    retroarch
+    # tdesktop
+    # ungoogled-chromium
+    # darktable
+    # xclip # Doesn't work?
+    # retroarch
   ];
 
-  programs.firefox.enable = true;
-  home.keyboard.options = [ "ctrl:nocaps" ];
+  # programs.firefox.enable = true;
+  # home.keyboard.options = [ "ctrl:nocaps" ];
   fonts.fontconfig.enable = true;
   services = {
-    flameshot.enable = true;
+    # flameshot.enable = true;
     # dropbox.enable = true;
     unclutter.enable = true;
     caffeine.enable = true;
   };
-  services.syncthing = {
-    enable = true;
-    tray.enable = true;
-    tray.command = "syncthingtray --wait";
-  };
+  # services.syncthing = {
+  #   enable = true;
+  #   tray.enable = true;
+  #   tray.command = "syncthingtray --wait";
+  # };
 
-  services.redshift =
-    let
-      tokyo = { latitude = "35.6762"; longitude = "139.6503"; };
-      amsterdam = { latitude = "52.372778"; longitude = "4.893611"; };
-    in
-    {
-      inherit (tokyo) latitude longitude;
-      enable = true;
-      tray = true;
-    };
+  #services.redshift =
+  #  let
+  #    tokyo = { latitude = "35.6762"; longitude = "139.6503"; };
+  #    amsterdam = { latitude = "52.372778"; longitude = "4.893611"; };
+  #  in
+  #  {
+  #    inherit (tokyo) latitude longitude;
+  #    enable = true;
+  #    tray = true;
+  #  };
 
   xsession.enable = true;
 }

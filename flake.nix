@@ -42,6 +42,10 @@
     #   url = "github:basnijholt/adaptive-lighting";
     #   flake = false;
     # };
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs:
@@ -104,7 +108,25 @@
     in
     {
       devShell.x86_64-linux = shell;
+
+      darwinConfigurations.bagel = inputs.nix-darwin.lib.darwinSystem {
+        modules = [
+          ./machines/bagel
+          inputs.home-manager.darwinModules.home-manager
+          { config._module.args = namedInputs "aarch64-darwin"; }
+          { home-manager.extraSpecialArgs = namedInputs "aarch64-darwin"; }
+        ];
+      };
+      darwinPackages = inputs.self.darwinConfigurations.bagel.pkgs; # TODO remove?
+
       nixosConfigurations = {
+        stupidvm = mkSystem {
+          system = "aarch64-linux";
+          sysModules = [
+            ./machines/stupidvm
+          ];
+          homeModules = [ ./home ./desktop ];
+        };
         anpan = mkSystem {
           system = "x86_64-linux";
           sysModules = [
