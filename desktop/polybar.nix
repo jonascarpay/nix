@@ -201,14 +201,12 @@
           type = "internal/temperature";
           label = " %temperature-c%";
           label-warn = "%{F${colors.orange}} %temperature-c%%{F-}";
-          warn-temperature = "60";
         };
 
         "module/gpu-temp" = {
           type = "internal/temperature";
           label = " %temperature-c%";
           label-warn = "%{F${colors.orange}} %temperature-c%%{F-}";
-          warn-temperature = "60";
         };
 
         "module/i3" = {
