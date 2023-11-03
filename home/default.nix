@@ -1,4 +1,4 @@
-{ pkgs, config, ... }: {
+{ pkgs, inputs, config, ... }: {
   imports = [
     ./pass.nix
     ./direnv.nix
@@ -8,6 +8,7 @@
     # ./tmux.nix
     ./vim
     ./git.nix
+    inputs.agenix.homeManagerModules.age
   ];
 
   manual.manpages.enable = true;
