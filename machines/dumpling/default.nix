@@ -1,4 +1,5 @@
 { config, lib, pkgs, ... }:
+
 let
   ndhHosts = {
     networking.extraHosts = ''
@@ -24,6 +25,17 @@ let
     };
   };
 
+  polybar = {
+    imports = [ ../../desktop/polybar.nix ];
+    services.polybar = {
+      enable = true;
+      settings."bar/mybar" = {
+        "inherit" = "bar/common bar/hidpi";
+        modules-right = "notifications vpn wireless wired fs memory cpu date-nl date";
+      };
+    };
+  };
+
 in
 {
   imports = [
@@ -33,6 +45,11 @@ in
     ndhHosts
     githubHosts
   ];
+
+  home-manager.users.jmc.imports = [
+    polybar
+  ];
+
   boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "sr_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
@@ -52,6 +69,9 @@ in
 
   swapDevices = [ ];
   programs.fish.enable = true;
+
+  sound.enable = true;
+  hardware.pulseaudio.enable = true;
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
@@ -104,9 +124,12 @@ in
   #   #media-session.enable = true;
   # };
 
-  home-manager.users.jmc.home = {
-    stateVersion = "23.05";
-    sessionVariables.ST_FONT = "DM Mono Nerd Font:pixelsize=24:antialias=true:autohint=true";
+  home-manager.users.jmc = {
+    home = {
+      stateVersion = "23.05";
+      sessionVariables.ST_FONT = "DM Mono Nerd Font:pixelsize=24:antialias=true:autohint=true";
+    };
+    programs.password-store.settings.PASSWORD_STORE_DIR = "/media/psf/Home/Passwords";
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -118,6 +141,6 @@ in
 
   services.openssh.enable = true;
 
-  system.stateVersion = "23.05"; # Did you read the comment?
+  system.stateVersion = "23.05";
 
 }

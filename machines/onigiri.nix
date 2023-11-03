@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ pkgs, lib, config, inputs, ... }:
 let
 
   rclone = {
@@ -77,6 +77,7 @@ in
       syncthing
       git-sync
       noip
+      inputs.nixos-hardware.nixosModules.raspberry-pi-3
     ];
 
   boot.zfs.requestEncryptionCredentials = false;

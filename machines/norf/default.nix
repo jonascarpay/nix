@@ -20,7 +20,7 @@ let
   };
 
   ndh = {
-    age.secrets.ndh-openvpn.file = ./secrets/ndh-openvpn-desktop.age;
+    age.secrets.ndh-openvpn.file = ../../secrets/ndh-openvpn-desktop.age;
     services.openvpn.servers.ndh-vpn = {
       autoStart = false;
       config = "config ${config.age.secrets.ndh-openvpn.path}";
@@ -90,7 +90,7 @@ let
       enable = true;
       user = "jmc";
     };
-    home-manager.users.jmc = import ./desktop;
+    home-manager.users.jmc = import ../../desktop;
   };
 
   gnome-support = {
@@ -101,7 +101,7 @@ let
 
   polybar = {
     home-manager.users.jmc = {
-      imports = [ ./desktop/polybar.nix ];
+      imports = [ ../../desktop/polybar.nix ];
       services.polybar.settings = {
         "bar/mybar" = {
           "inherit" = "bar/common bar/hidpi";
@@ -127,8 +127,8 @@ in
       ndh
       ./hardware-configuration.nix
       gnome-support
-      system/global.nix
-      system/fonts.nix
+      ../../system/global.nix
+      ../../system/fonts.nix
     ];
 
   boot.loader.systemd-boot.enable = true; # default from configuration.nix
