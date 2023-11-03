@@ -1,3 +1,4 @@
+# copied from https://github.com/nix-community/home-manager/blob/master/modules/services/random-background.nix
 { pkgs, ... }: {
   systemd.user = {
     services.random-wallpaper = {
