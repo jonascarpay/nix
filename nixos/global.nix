@@ -1,43 +1,6 @@
 { pkgs, unstable, inputs, lib, ... }:
 let
 
-  # caches =
-  #   let
-  #     cachix = [{ name = "nix-community"; sha256 = "sha256:0m6kb0a0m3pr6bbzqz54x37h5ri121sraj1idfmsrr6prknc7q3x"; }];
-  #     # caches = [
-  #     #   { url = "https://hydra.iohk.io"; key = "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="; }
-  #     # ];
-  #   in
-  #   {
-  #     inherit cachix;
-  #     # nix.binaryCaches = builtins.map (a: a.url) caches;
-  #     # nix.binaryCachePublicKeys = builtins.map (a: a.key) caches;
-  #   };
-
-  # boot-switch565 =
-  #   let
-  #     archive = pkgs.fetchzip {
-  #       url = "https://github.com/CTCaer/hekate/releases/download/v5.6.5/hekate_ctcaer_5.6.5_Nyx_1.1.1.zip";
-  #       sha256 = "sha256-ycXyddzcKzjFZFPhs3OrdMvPWZBOvuhLoSssQyQ9nss=";
-  #       stripRoot = false;
-  #     };
-  #   in
-  #   pkgs.writeShellScriptBin "boot-switch565" ''
-  #     ${pkgs.fusee-launcher}/bin/fusee-launcher ${archive}/hekate_ctcaer_5.6.5.bin
-  #   '';
-
-  # boot-switch602 =
-  #   let
-  #     archive = pkgs.fetchzip {
-  #       url = "https://github.com/CTCaer/hekate/releases/download/v6.0.2/hekate_ctcaer_6.0.2_Nyx_1.5.2.zip";
-  #       sha256 = "sha256-I7WYxBIgBQjqwNlwIv6RRJ0LXTk5E3PsOC6c8/nJNxA=";
-  #       stripRoot = false;
-  #     };
-  #   in
-  #   pkgs.writeShellScriptBin "boot-switch602" ''
-  #     ${pkgs.fusee-launcher}/bin/fusee-launcher ${archive}/hekate_ctcaer_6.0.2.bin
-  #   '';
-
   scrubnix = pkgs.writeShellScriptBin "scrubnix" ''
     sed -E 's#/nix/store/([a-z0-9]{5})[a-z0-9]{27}-([a-zA-Z0-9+?=._-]+)#<\2_\1>#g' -
   '';
@@ -94,8 +57,7 @@ in
       p7zip
       ranger
       sshfs
-      # scrubnix
-      # tagref
+      scrubnix
       tmux
       # boot-switch565
       # boot-switch602
@@ -174,7 +136,6 @@ in
           (name: value: value ? outputs)
           inputs);
   };
-  # programs.dconf.enable = true; # somehow necessary for home-manager to switch configurations?
 }
 
 # vim: nowrap

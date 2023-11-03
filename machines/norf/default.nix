@@ -30,7 +30,6 @@ let
     services.transmission = {
       enable = true;
       settings = {
-        download-dir = "/home/jmc/Downloads/Transmission";
         rpc-bind-address = "0.0.0.0";
         utp-enabled = true;
       };
@@ -51,6 +50,19 @@ let
     programs.dconf.enable = true;
     environment.systemPackages = [ pkgs.gnome.adwaita-icon-theme ];
   };
+
+  boot-switch =
+    let
+      archive = pkgs.fetchzip {
+        url = "https://github.com/CTCaer/hekate/releases/download/v6.0.2/hekate_ctcaer_6.0.2_Nyx_1.5.2.zip";
+        sha256 = "sha256-I7WYxBIgBQjqwNlwIv6RRJ0LXTk5E3PsOC6c8/nJNxA=";
+        stripRoot = false;
+      };
+      script = pkgs.writeShellScriptBin "boot-switch" ''
+        ${pkgs.fusee-launcher}/bin/fusee-launcher ${archive}/hekate_ctcaer_6.0.2.bin
+      '';
+    in
+    { environment.systemPackages = [ script ]; };
 
 in
 
