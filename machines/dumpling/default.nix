@@ -1,22 +1,6 @@
 { config, lib, pkgs, ... }:
 
 let
-  ndhHosts = {
-    networking.extraHosts = ''
-      192.168.11.107	gitlab.ndh
-      192.168.11.106	ndh106
-    '';
-    home-manager.users.jmc.programs.ssh.matchBlocks = {
-      "gitlab.ndh" = {
-        user = "jcarpay";
-        identityFile = "~/Keys/ssh/id_ndh";
-      };
-      "ndh106" = {
-        user = "jcarpay";
-        identityFile = "~/Keys/ssh/id_ndh";
-      };
-    };
-  };
 
   githubHosts = {
     home-manager.users.jmc.programs.ssh.matchBlocks."github.com" = {
@@ -42,7 +26,7 @@ in
     ../../nixos/home-manager-xsession.nix
     ../../nixos/global.nix
     ../../nixos/fonts.nix
-    ndhHosts
+    ../../nixos/ndh.nix
     githubHosts
   ];
 
