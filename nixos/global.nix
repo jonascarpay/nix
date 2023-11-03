@@ -38,13 +38,6 @@ let
   #     ${pkgs.fusee-launcher}/bin/fusee-launcher ${archive}/hekate_ctcaer_6.0.2.bin
   #   '';
 
-  # This is a hack to keep my notifications token secret.
-  # If agenix gets home-manager support it can be moved to the polybar module.
-  # notifications-token = {
-  #   age.secrets.notifications-token.file = ../secrets/notifications-token.age;
-  #   age.secrets.notifications-token.owner = "jmc";
-  # };
-
   scrubnix = pkgs.writeShellScriptBin "scrubnix" ''
     sed -E 's#/nix/store/([a-z0-9]{5})[a-z0-9]{27}-([a-zA-Z0-9+?=._-]+)#<\2_\1>#g' -
   '';
