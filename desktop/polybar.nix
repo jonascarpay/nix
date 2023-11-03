@@ -1,5 +1,8 @@
 { pkgs, config, lib, ... }:
 {
+
+  age.secrets.notifications-token.file = ../secrets/notifications-token.age;
+
   # TODO this is a hack to get a proper PATH.
   # This is so I can access things that aren't in pkgs, primarily my notes scripts.
   # It's ugly, but an inherent issue of having polybar being a systemd service, I think.
@@ -27,32 +30,30 @@
       i3Support = true;
       pulseSupport = true;
     };
-    script = "polybar $(${pkgs.nettools}/bin/hostname) &";
+    script = ''
+      polybar mybar &
+    '';
     settings =
       let
-        # TODO the PATH hack above should make these redundant
-        sensors = "${pkgs.lm_sensors}/bin/sensors";
-        grep = "${pkgs.gnugrep}/bin/grep";
-        awk = "${pkgs.gawk}/bin/awk";
-        sed = "${pkgs.gnused}/bin/sed";
 
         colors = {
           foreground = "#d8dee9";
           background = "#232831"; # darker than normal nord, slightly more muted
           snow0 = "#d8dee9";
           red = "#BF616A";
+          green = "#A3BE8C";
+          orange = "#D08770";
         };
 
-        # Polybar has a inherit mechanism, but it only works if the thing you're depending on has already been loaded.
-        # Since the config file is generated in alphabetical order, this is very annoying, so instead I just emulate the inherit mechanism.
-        # At least, that's what I think is going on.
-        common = {
+      in
+      {
+        "bar/common" = {
           inherit (colors) foreground background;
           width = "100%";
           locale = "ja_JP.UTF-8";
           font-0 = "SauceCodePro Nerd Font:style=Regular:size=8;2";
           font-1 = "SauceCodePro Nerd Font:style=Bold:size=8;2";
-          font-2 = "IPAPGothic:style=Bold:size=8;3";
+          font-2 = "Noto Sans JP:style=Bold:size=8;3";
           tray-position = "right";
           module-margin = "1";
           modules-left = "i3 xwindow";
@@ -60,62 +61,31 @@
           line-size = "3";
         };
 
-        hidpi = {
+        "bar/hidpi" = {
           line-size = "6";
           dpi = "140";
           height = "30";
           tray-maxsize = "26";
         };
 
-      in
-      {
-        "bar/xc-jonas" = common // hidpi // {
-          modules-right = "notifications vpn wireless wired fs memory temp fan cpu battery backlight-t480 pulseaudio date-jp date";
-        };
-
-        "bar/anpan" = common // hidpi // {
-          modules-right = "notifications zfs onigiri vpn wireless fs memory temp fan cpu pulseaudio date-nl date";
-        };
-
-        "bar/paninix" = common // {
-          modules-right = "notifications vpn wireless wired fs memory temp fan cpu battery pulseaudio date-jp date";
-          height = "18";
-          tray-maxsize = "15";
-        };
-
         "module/date" = {
           type = "internal/date";
           date = "%y/%m/%d %a";
           time = "%H:%M";
-          label = " %date%  %time% ";
+          label = "%date% %time% ";
           label-font = "2";
         };
 
         "module/date-jp" = {
           type = "custom/script";
-          exec = ''TZ=Asia/Tokyo ${pkgs.coreutils}/bin/date +" %H:%M"'';
+          exec = ''TZ=Asia/Tokyo ${pkgs.coreutils}/bin/date +"󱉊 %H:%M"'';
           interval = "30";
         };
 
         "module/date-nl" = {
           type = "custom/script";
-          exec = ''TZ=Europe/Amsterdam ${pkgs.coreutils}/bin/date +" %H:%M"'';
+          exec = ''TZ=Europe/Amsterdam ${pkgs.coreutils}/bin/date +"󱉊 %H:%M"'';
           interval = "30";
-        };
-
-        "module/fan" = {
-          type = "custom/script";
-          exec = "${sensors} | ${grep} fan1 | ${awk} '{print $2; exit}'";
-          label = " %output% RPM";
-          interval = "1";
-        };
-
-        "module/backlight-t480" = {
-          type = "internal/backlight";
-          card = "intel_backlight";
-          format = "<ramp>";
-          ramp = [ " " " " " " " " " " " " " " " " " " " " " " " " " " " " ];
-          enable-scroll = true;
         };
 
         "module/onigiri" =
@@ -123,11 +93,11 @@
             singleping = pkgs.writeShellScript "singleping" ''
               #!/usr/bin/env bash
 
-              # if output=$(ping -c 1 -W 1 192.168.1.6 | ${grep} -oP ".*time=\K\d+"); then
-              if output=$(ping -W 1 -q -c 5 192.168.1.6 | ${grep} -oP " = \K\d"); then
-                  echo "歷  $output ms"
+              # if output=$(ping -c 1 -W 1 192.168.1.6 | grep -oP ".*time=\K\d+"); then
+              if output=$(ping -W 1 -q -c 5 192.168.1.6 | grep -oP " = \K\d"); then
+                  echo "󰒍 %{F${colors.green}}$output ms%{F-}"
               else
-                  echo "轢 "
+                  echo "%{F${colors.red}}󰒎 %{F-}"
               fi
             '';
           in
@@ -141,7 +111,7 @@
           let
             script = pkgs.writeShellScript "notifications" ''
               set -euo pipefail
-              AUTH="jonascarpay:$(cat /run/agenix/notifications-token)"
+              AUTH="jonascarpay:$(cat ${config.age.secrets.notifications-token.path})"
               notifications=$(${pkgs.curl}/bin/curl -sf --user "$AUTH" https://api.github.com/notifications | ${pkgs.jq}/bin/jq length)
               if [ "$notifications" -gt 0 ]; then
                 echo " $notifications"
@@ -158,7 +128,7 @@
 
         "module/vpn" = {
           type = "custom/script";
-          exec = ''[[ $(/run/current-system/sw/bin/nmcli con show --active) =~ "tun" ]] && echo "%{F${colors.red}} %{F-}" || echo ""'';
+          exec = ''[[ $(/run/current-system/sw/bin/nmcli con show --active) =~ "tun" ]] && echo "%{F${colors.green}} %{F-}" || echo ""'';
           interval = "5";
         };
 
@@ -172,19 +142,6 @@
             type = "custom/script";
             exec = ''echo " $(${check zfs}) $(${check (ssh zfs)})"'';
             interval = builtins.toString 60;
-          };
-
-        "module/temp" =
-          let
-            script = pkgs.writeShellScript "temp" ''
-              ${sensors} | ${grep} Package | ${awk} '{print $4; exit}' | ${sed} 's/^.\\([0-9]\\+\\)../\\1/'
-            '';
-          in
-          {
-            type = "custom/script";
-            exec = "${script}";
-            label = " %output%";
-            interval = "1";
           };
 
         "module/todos" =
@@ -213,24 +170,9 @@
           type = "internal/pulseaudio";
           use-ui-max = false;
           format-volume = "<ramp-volume>";
-          label-muted = "婢  ";
-          ramp-volume = [ "奄  " "奄 ▁" "奄 ▂" "奔 ▃" "奔 ▄" "奔 ▅" "墳 ▆" "墳 ▇" "墳 █" ];
+          label-muted = "󰖁  ";
+          ramp-volume = [ "󰕿  " "󰕿 ▁" "󰕿 ▂" "󰖀 ▃" "󰖀 ▄" "󰖀 ▅" "󰕾 ▆" "󰕾 ▇" "󰕾 █" ];
           click-right = "${pkgs.pavucontrol}/bin/pavucontrol &";
-        };
-
-        "module/battery" = {
-          type = "internal/battery";
-          full-at = "95";
-          battery = "BAT1";
-          adapter = "AC";
-          time-format = "%H:%M";
-          format-full = "";
-          format-charging = "<ramp-capacity> <label-charging>";
-          label-charging = "%time%";
-          format-discharging = "<ramp-capacity> <label-discharging>";
-          label-discharging = "%time%";
-          ramp-capacity = [ "" "" "" "" "" "" "" "" "" "" "" ];
-          click-left = "st -c floating sudo powertop";
         };
 
         "module/fs" = {
@@ -241,19 +183,32 @@
 
         "module/memory" = {
           type = "internal/memory";
-          label = " %percentage_used:4%%";
+          label = "󰘚%percentage_used:3%%";
+          label-warn = "%{F${colors.orange}}%percentage_used:3%%{F-}";
+          warn-percentage = "50";
         };
 
         "module/cpu" = {
           type = "internal/cpu";
-          # format = "<label> <ramp-coreload> ";
           format = "<label><ramp-coreload>";
-          # format = "<ramp-coreload> ";
-          label = "  ";
-          # click-left = "firefox";
+          label = " ";
 
           ramp-coreload-spacing = 0;
           ramp-coreload = [ "▁" "▂" "▃" "▄" "▅" "▆" "▇" "█" ];
+        };
+
+        "module/cpu-temp" = {
+          type = "internal/temperature";
+          label = " %temperature-c%";
+          label-warn = "%{F${colors.orange}} %temperature-c%%{F-}";
+          warn-temperature = "60";
+        };
+
+        "module/gpu-temp" = {
+          type = "internal/temperature";
+          label = " %temperature-c%";
+          label-warn = "%{F${colors.orange}} %temperature-c%%{F-}";
+          warn-temperature = "60";
         };
 
         "module/i3" = {
@@ -300,9 +255,8 @@
 
         "module/wireless" = {
           type = "internal/network";
-          interface = "wlp3s0";
-          label-connected = "直 %downspeed:9%  %upspeed:9%  ";
-          label-disconnected = "睊";
+          label-connected = "󰖩 %downspeed:9%  %upspeed:9%  ";
+          label-disconnected = "󰖪";
         };
       };
   };
