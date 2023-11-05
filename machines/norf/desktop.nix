@@ -48,7 +48,7 @@ let
 
   pass = {
     imports = [ ../../home/pass.nix ];
-    programs.password-store.settings.PASSWORD_STORE_DIR = "~/Passwords";
+    programs.password-store.settings.PASSWORD_STORE_DIR = "/home/jmc/Passwords";
     home.packages = [ pkgs.qtpass ];
   };
 
