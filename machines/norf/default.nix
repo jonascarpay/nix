@@ -93,6 +93,8 @@ in
   boot.loader.systemd-boot.enable = true; # default from configuration.nix
   boot.loader.efi.canTouchEfiVariables = true; # default from configuration.nix
 
+  boot.loader.systemd-boot.memtest86.enable = true;
+
   networking.hostName = "norf";
 
   networking.resolvconf.dnsSingleRequest = true; # supposedly fixes slow DNS, see https://github.com/hashicorp/vagrant/issues/1172
