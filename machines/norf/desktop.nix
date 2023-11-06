@@ -59,6 +59,7 @@ in
     ../../nixos/home-manager-xsession.nix
     ../../nixos/syncthing-desktop.nix
     ../../nixos/fonts.nix
+    ../../desktop/jp.nix
   ];
   home-manager.users.jmc.imports = [
     ../../desktop

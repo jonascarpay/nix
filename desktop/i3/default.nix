@@ -19,7 +19,6 @@ let
     i3-save-tree | python ${./i3-render-tree.py} | dot -T png | feh --class floating -
   '';
 
-
   screensnip-tmp-dir = "/tmp/screensnip_$(head -c 5 /proc/sys/kernel/random/boot_id)";
   screensnip-snap = pkgs.writeShellScript "screensnip-snap" ''
     TMP="${screensnip-tmp-dir}"
