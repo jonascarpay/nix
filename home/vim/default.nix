@@ -37,7 +37,6 @@ in
       syntax on
       set hidden
       set scrolloff=5
-      set cursorline
       set confirm
       set wildmenu
       set showcmd
@@ -75,6 +74,13 @@ in
       set foldcolumn=0
       set foldlevel=999
       set diffopt+=vertical
+      augroup CursorLine
+        au!
+        au VimEnter * setlocal cursorline
+        au WinEnter * setlocal cursorline
+        au BufWinEnter * setlocal cursorline
+        au WinLeave * setlocal nocursorline
+      augroup END
     '';
     plugins = [
       # workaround for https://github.com/nix-community/home-manager/pull/2391
