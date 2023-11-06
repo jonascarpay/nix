@@ -45,6 +45,13 @@ let
     environment.systemPackages = [ pkgs.pavucontrol ];
   };
 
+  udisks = {
+    programs.gnome-disks.enable = true;
+    services.udisks2.enable = true;
+    services.udisks2.mountOnMedia = true;
+    home-manager.users.jmc.services.udiskie.enable = true;
+  };
+
   gnome-support = {
     # Applications like font-manager complain about missing services without this, see https://nixos.wiki/wiki/GNOME#Running_GNOME_programs_outside_of_GNOME
     programs.dconf.enable = true;
@@ -76,6 +83,7 @@ in
       ./desktop.nix
       gnome-support
       transmission
+      udisks
       ../../nixos/global.nix
       ../../nixos/ndh.nix
     ];
