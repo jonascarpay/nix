@@ -113,6 +113,8 @@ in
 
   networking.resolvconf.dnsSingleRequest = true; # supposedly fixes slow DNS, see https://github.com/hashicorp/vagrant/issues/1172
 
+  networking.interfaces.eno1.wakeOnLan.enable = true;
+
   time.timeZone = "Asia/Tokyo";
   i18n.defaultLocale = "en_US.UTF-8";
 
