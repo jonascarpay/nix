@@ -58,6 +58,17 @@ let
     environment.systemPackages = [ pkgs.gnome.adwaita-icon-theme ];
   };
 
+  zfs = {
+    boot.supportedFilesystems = [ "zfs" ];
+    boot.zfs.forceImportRoot = false; # man configuration.nix recommends setting to false
+    boot.zfs.passwordTimeout = 15;
+    boot.zfs.extraPools = [ "tank" ];
+    networking.hostId = "02e716d7";
+    services.zfs.autoScrub.enable = true;
+    services.zfs.autoSnapshot.enable = true;
+    services.zfs.trim.enable = true;
+  };
+
   boot-switch =
     let
       archive = pkgs.fetchzip {
@@ -84,6 +95,7 @@ in
       gnome-support
       transmission
       udisks
+      zfs
       ../../nixos/global.nix
       ../../nixos/ndh.nix
     ];
