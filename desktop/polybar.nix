@@ -128,7 +128,7 @@
 
         "module/vpn" = {
           type = "custom/script";
-          exec = ''[[ $(/run/current-system/sw/bin/nmcli con show --active) =~ "tun" ]] && echo "%{F${colors.green}} %{F-}" || echo ""'';
+          exec = ''[[ $(ifconfig) =~ "tun" ]] && echo "%{F${colors.green}} %{F-}" || echo ""'';
           interval = "5";
         };
 
@@ -246,9 +246,8 @@
 
         "module/wired" = {
           type = "internal/network";
-          interface = "enp0s31f6";
-          label-connected = " %local_ip% %downspeed:9%  %upspeed:9%  ";
-          label-disconnected = "";
+          label-connected = "󰈀 %local_ip% %downspeed:9%  %upspeed:9%  ";
+          label-disconnected = "󰈂 ";
         };
 
         "module/wireless" = {

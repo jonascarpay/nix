@@ -2,10 +2,10 @@
 
 let
 
-  wireless = {
-    networking.networkmanager.enable = true;
-    networking.networkmanager.insertNameservers = [ "192.168.1.6" ];
-  };
+  # wireless = {
+  #   networking.networkmanager.enable = true;
+  #   networking.networkmanager.insertNameservers = [ "192.168.1.6" ];
+  # };
 
   graphics = {
     services.xserver = {
@@ -79,7 +79,7 @@ in
       ./hardware-configuration.nix
       sound
       graphics
-      wireless
+      # wireless
       ./desktop.nix
       gnome-support
       transmission

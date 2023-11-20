@@ -5,9 +5,10 @@ let
     services.polybar.settings = {
       "bar/mybar" = {
         "inherit" = "bar/common bar/hidpi";
-        modules-right = "notifications onigiri wireless vpn fs memory cpu-temp gpu-temp cpu pulseaudio date-nl date";
+        modules-right = "notifications onigiri wired vpn fs memory cpu-temp gpu-temp cpu pulseaudio date-nl date";
       };
       "module/wireless".interface = "wlp9s0";
+      "module/wired".interface = "eno1";
       "module/cpu-temp".hwmon-path = "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon2/temp1_input";
       "module/gpu-temp".hwmon-path = "/sys/devices/pci0000:00/0000:00:08.1/0000:0d:00.0/hwmon/hwmon5/temp1_input";
     };
