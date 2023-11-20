@@ -53,6 +53,15 @@ let
     home.packages = [ pkgs.qtpass ];
   };
 
+  thunar = {
+    services.tumbler.enable = true;
+    programs.thunar.enable = true;
+    programs.thunar.plugins = [
+      pkgs.xfce.thunar-archive-plugin
+      pkgs.xfce.thunar-volman
+    ];
+  };
+
 in
 
 {
@@ -61,6 +70,7 @@ in
     ../../nixos/syncthing-desktop.nix
     ../../nixos/fonts.nix
     ../../desktop/jp.nix
+    thunar
   ];
   home-manager.users.jmc.imports = [
     ../../desktop
