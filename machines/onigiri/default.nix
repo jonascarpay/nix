@@ -39,16 +39,13 @@ let
     };
   };
 
-  zfs =
-    let hostId = "3bf3504c";
-    in {
-
-      boot.supportedFilesystems = [ "zfs" ];
-      networking.hostId = hostId;
-      boot.zfs.extraPools = [ "tank" ];
-      services.zfs.autoScrub.enable = true;
-      services.zfs.autoSnapshot.enable = true;
-    };
+  zfs = {
+    boot.supportedFilesystems = [ "zfs" ];
+    networking.hostId = "3bf3504c";
+    boot.zfs.extraPools = [ "tank" ];
+    services.zfs.autoScrub.enable = true;
+    services.zfs.autoSnapshot.enable = true;
+  };
 
   fish = {
     users.users.jmc.shell = pkgs.fish;
