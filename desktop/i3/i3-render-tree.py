@@ -43,6 +43,7 @@ def write_node(node: Node):
     if node.layout:
         style += ", shape=box"
     text = node.text if len(node.text) < 30 else f"{node.text[:30].strip()}..."
+    text = text.replace('"', '\\"')
     print(f'  node_{node.id} [label="{text}"{style}];')
     for child in node.children:
         write_node(child)
