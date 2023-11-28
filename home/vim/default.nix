@@ -184,6 +184,11 @@ in
               sh.exe = "${pkgs.shfmt}/bin/shfmt";
               proto.exe = "${pkgs.clang-tools}/bin/clang-format";
               lua = { exe = "${pkgs.luaformatter}/bin/lua-format"; stdin = false; args = [ "-i" ]; };
+              javascript = {
+                exe = "${pkgs.nodePackages.prettier}/bin/prettier";
+                stdin = false;
+                args = [ "--write" ];
+              };
             };
             quote = str: "\"${str}\"";
             mkFmt = ft: { exe, stdin ? true, args ? [ ] }: ''
