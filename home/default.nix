@@ -5,7 +5,7 @@
     ./fish.nix
     # ./ranger.nix
     # ./scripts.nix
-    # ./tmux.nix
+    ./tmux.nix
     ./vim
     ./git.nix
     inputs.agenix.homeManagerModules.age
