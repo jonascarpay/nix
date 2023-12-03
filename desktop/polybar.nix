@@ -190,7 +190,7 @@
 
         "module/cpu" = {
           type = "internal/cpu";
-          format = "<label><ramp-coreload>";
+          format = "<label> <ramp-coreload>";
           label = " ";
 
           ramp-coreload-spacing = 0;
