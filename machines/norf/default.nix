@@ -118,7 +118,7 @@ in
   time.timeZone = "Asia/Tokyo";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  environment.variables.ST_FONT = "DM Mono Nerd Font:pixelsize=24:antialias=true:autohint=true";
+  environment.variables.ST_FONT = "SauceCodePro Nerd Font:pixelsize=24:antialias=true:autohint=true";
 
   services.mullvad-vpn.enable = true;
   services.mullvad-vpn.enableExcludeWrapper = true;

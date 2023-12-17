@@ -31,7 +31,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     dmmono = {
-      url = "/home/jmc/Dev/dm-mono-patched";
+      url = "github:jonascarpay/dm-mono-patched";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     st = {

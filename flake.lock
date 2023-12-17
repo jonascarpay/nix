@@ -121,16 +121,17 @@
         ]
       },
       "locked": {
-        "dirtyRev": "50b5841c0bca8999957729ff90952a61ddc2639d-dirty",
-        "dirtyShortRev": "50b5841-dirty",
         "lastModified": 1701618784,
-        "narHash": "sha256-SjFwgxT71dcatttG4nWizf+uonFT56JgXtiyrhAJXZo=",
-        "type": "git",
-        "url": "file:///home/jmc/Dev/dm-mono-patched"
+        "narHash": "sha256-XvLuLZMH5QflNJA0JyIK0umD1p5Nl1dX/IihKRf338s=",
+        "owner": "jonascarpay",
+        "repo": "dm-mono-patched",
+        "rev": "50b5841c0bca8999957729ff90952a61ddc2639d",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///home/jmc/Dev/dm-mono-patched"
+        "owner": "jonascarpay",
+        "repo": "dm-mono-patched",
+        "type": "github"
       }
     },
     "doom-emacs": {
