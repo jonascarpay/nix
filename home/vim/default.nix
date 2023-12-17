@@ -17,10 +17,19 @@ let
     ];
   };
 
+  treesitter = {
+    programs.neovim.plugins = [
+      np.nvim-treesitter
+      np.nvim-treesitter-parsers.nix
+      np.nvim-treesitter-parsers.rust
+    ];
+  };
+
 in
 {
   imports = [
     workspace-symbols
+    treesitter
   ];
   home.packages = [
     unstable.nil
@@ -118,6 +127,7 @@ in
         plugin = unp.hop-nvim;
         type = "lua";
         config = ''
+
           local hop = require("hop")
           hop.setup {
             keys = 'hfjdks',
@@ -184,6 +194,11 @@ in
               sh.exe = "${pkgs.shfmt}/bin/shfmt";
               proto.exe = "${pkgs.clang-tools}/bin/clang-format";
               lua = { exe = "${pkgs.luaformatter}/bin/lua-format"; stdin = false; args = [ "-i" ]; };
+              js =
+                let
+                  prettierd-wrapped = pkgs.writeShellScript "prettierd" "cat $1 | ${pkgs.prettierd}/bin/prettierd $1";
+                in
+                { exe = "${prettierd-wrapped}"; stdin = false; };
               javascript = {
                 exe = "${pkgs.nodePackages.prettier}/bin/prettier";
                 stdin = false;
