@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 let
   dm-mono-nerd-font = pkgs.stdenv.mkDerivation rec {
     name = "dm-mono-nerd-font";

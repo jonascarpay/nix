@@ -177,7 +177,7 @@ in
               python = { exe = "black"; args = [ "-q" "-" ]; };
               haskell = { exe = "ormolu"; args = [ "--no-cabal" ]; };
               rust = { exe = "rustfmt"; };
-              cabal.exe = "${pkgs.haskellPackages.cabal-fmt}/bin/cabal-fmt";
+              cabal.exe = "${pkgs.haskellPackages.cabal-fmt.bin}/bin/cabal-fmt";
               markdown.exe = "md-headerfmt";
               nix.exe = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt";
               go.exe = "gofmt";
@@ -300,9 +300,13 @@ in
       }
       {
         plugin = np.indent-blankline-nvim;
+        type = "lua";
         config = ''
-          let g:indent_blankline_char = '▏'
-          nn <leader>ii :IndentBlanklineToggle<CR>
+          require("ibl").setup({
+            indent = {
+              char = '▏'
+            }
+          })
         '';
       }
       {

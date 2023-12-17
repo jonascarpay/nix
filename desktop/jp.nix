@@ -8,7 +8,7 @@
     ];
   };
   fonts = {
-    fonts = with pkgs; [
+    packages = with pkgs; [
       kanji-stroke-order-font
       ipafont
       kochi-substitute
