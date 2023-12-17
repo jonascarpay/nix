@@ -2,19 +2,24 @@
 let
   ndhHosts = {
     environment.etc.hosts.text = ''
-      192.168.11.107	gitlab.ndh
+      192.168.11.101	ndh101
       192.168.11.106	ndh106
+      192.168.11.107	gitlab.ndh
+      192.168.11.108	ndh108
     '';
-    home-manager.users.jmc.programs.ssh.matchBlocks = {
-      "gitlab.ndh" = {
-        user = "jcarpay";
-        identityFile = "/Users/jmc/Keys/ssh/id_ndh";
+    home-manager.users.jmc.programs.ssh.matchBlocks =
+      let
+        cfg = {
+          user = "jcarpay";
+          identityFile = "/Users/jmc/Keys/ssh/id_ndh";
+        };
+      in
+      {
+        "gitlab.ndh" = cfg;
+        "ndh101" = cfg;
+        "ndh106" = cfg;
+        "ndh108" = cfg;
       };
-      "ndh106" = {
-        user = "jcarpay";
-        identityFile = "/Users/jmc/Keys/ssh/id_ndh";
-      };
-    };
   };
 
   githubHosts = {
@@ -25,9 +30,12 @@ let
   };
 
   pass = {
-    home-manager.users.jmc.programs.password-store = {
-      enable = true;
-      settings.PASSWORD_STORE_DIR = "/Users/jmc/Passwords";
+    home-manager.users.jmc = {
+      programs.gpg.enable = true;
+      programs.password-store = {
+        enable = true;
+        settings.PASSWORD_STORE_DIR = "/Users/jmc/Passwords";
+      };
     };
   };
 in
@@ -37,13 +45,9 @@ in
     githubHosts
     pass
   ];
-  # List packages installed in system profile. To search by name, run:
-  # $ nix-env -qaP | grep wget
   environment.systemPackages =
     [
-      # pkgs.pass
-      # pkgs.pinentry_mac
-      # pkgs.qtpass
+      pkgs.ranger
     ];
 
   # Default /etc/hosts content
@@ -56,13 +60,11 @@ in
     '';
   };
 
-  # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
-  # nix.package = pkgs.nix;
 
   nix.settings.experimental-features = "nix-command flakes";
 
-  programs.zsh.enable = true; # default shell on catalina
+  programs.zsh.enable = true;
 
   # This is needed to make fish correctly source the nix environment variables.
   # Without this, making ~/.nix-profile/bin/fish the default shell in iTerm will
@@ -82,6 +84,7 @@ in
   home-manager.users.jmc = {
     home.stateVersion = "23.05";
     imports = [ ../../home ];
+    home.packages = [ pkgs.mosh ];
   };
 
   users.users.jmc = {
