@@ -64,15 +64,20 @@
         specialArgs.inputs = inputs;
       };
 
+      mkDarwinSystem = { system, module }: inputs.nix-darwin.lib.darwinSystem {
+        modules = [
+          module
+        ];
+        specialArgs.unstable = import inputs.unstable { inherit system; };
+        specialArgs.inputs = inputs;
+      };
+
     in
     {
 
-      darwinConfigurations.bagel = inputs.nix-darwin.lib.darwinSystem {
-        modules = [
-          ./machines/bagel
-          inputs.home-manager.darwinModules.home-manager
-          { home-manager.extraSpecialArgs.inputs = inputs; }
-        ];
+      darwinConfigurations.bagel = mkDarwinSystem {
+        system = "aarch64-darwin";
+        module = ./machines/bagel;
       };
 
       nixosConfigurations.norf = mkNixosSystem {

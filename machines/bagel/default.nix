@@ -1,5 +1,19 @@
-{ pkgs, ... }:
+{ pkgs, inputs, unstable, ... }:
 let
+
+  home-manager = {
+    imports = [ inputs.home-manager.darwinModules.home-manager ];
+    home-manager = {
+      # Currently necessary when using HM as a flake
+      # https://nix-community.github.io/home-manager/index.html#sec-flakes-nixos-module
+      # https://github.com/divnix/digga/issues/30#issuecomment-748530996
+      # useGlobalPkgs = true;
+      # useUserPackages = true;
+      extraSpecialArgs = { inherit unstable inputs; };
+      users.jmc = import ../../home;
+    };
+  };
+
   ndhHosts = {
     environment.etc.hosts.text = ''
       192.168.11.101	ndh101
@@ -31,7 +45,6 @@ let
 
   pass = {
     home-manager.users.jmc = {
-      programs.gpg.enable = true;
       programs.password-store = {
         enable = true;
         settings.PASSWORD_STORE_DIR = "/Users/jmc/Passwords";
@@ -44,6 +57,7 @@ in
     ndhHosts
     githubHosts
     pass
+    home-manager
   ];
   environment.systemPackages =
     [
@@ -83,7 +97,7 @@ in
 
   home-manager.users.jmc = {
     home.stateVersion = "23.05";
-    imports = [ ../../home ];
+    # imports = [ ../../home ];
     home.packages = [ pkgs.mosh ];
   };
 

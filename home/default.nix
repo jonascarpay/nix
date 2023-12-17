@@ -1,6 +1,5 @@
-{ pkgs, inputs, config, ... }: {
+{ pkgs, inputs, ... }: {
   imports = [
-    ./pass.nix
     ./direnv.nix
     ./fish.nix
     # ./ranger.nix
