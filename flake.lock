@@ -75,6 +75,22 @@
         "type": "github"
       }
     },
+    "dm-mono": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1636197487,
+        "narHash": "sha256-CzaQMqJuMU1OmOjjVfAeb1nzhxy7zmQozjGSk510o5Q=",
+        "owner": "ylieder",
+        "repo": "dm-mono-nerd-font",
+        "rev": "474a1f45cac18791dd6fd8a9f81732b0e8779717",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ylieder",
+        "repo": "dm-mono-nerd-font",
+        "type": "github"
+      }
+    },
     "dmenu": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -94,6 +110,27 @@
         "owner": "jonascarpay",
         "repo": "dmenu",
         "type": "github"
+      }
+    },
+    "dmmono": {
+      "inputs": {
+        "dm-mono": "dm-mono",
+        "mkflake": "mkflake",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "dirtyRev": "50b5841c0bca8999957729ff90952a61ddc2639d-dirty",
+        "dirtyShortRev": "50b5841-dirty",
+        "lastModified": 1701618784,
+        "narHash": "sha256-SjFwgxT71dcatttG4nWizf+uonFT56JgXtiyrhAJXZo=",
+        "type": "git",
+        "url": "file:///home/jmc/Dev/dm-mono-patched"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///home/jmc/Dev/dm-mono-patched"
       }
     },
     "doom-emacs": {
@@ -662,6 +699,7 @@
         "agenix": "agenix",
         "declarative-cachix": "declarative-cachix",
         "dmenu": "dmenu",
+        "dmmono": "dmmono",
         "frecently": "frecently",
         "home-manager": "home-manager_2",
         "hosts": "hosts",

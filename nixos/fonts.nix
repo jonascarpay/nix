@@ -14,32 +14,57 @@ let
       cp DMMonoNerdFont/* $out/share/fonts/truetype
     '';
   };
+  # dm-mono-nerd-font = pkgs.stdenv.mkDerivation rec {
+  #   name = "dm-mono-nerd-font";
+  #   # TODO flakify
+  #   src = pkgs.fetchFromGitHub {
+  #     repo = name;
+  #     owner = "minhuw";
+  #     rev = "e11d1c3152df52045aaf9fa06da7a03958c4139a";
+  #     sha256 = "sha256-NgxDw7IwOOkHG545S+0biX2cBkP0EPdwLHzP0QYSrTk=";
+  #   };
+  #   installPhase = ''
+  #     mkdir -p $out/share/fonts/truetype
+  #     cp dm-mono-nerd-font/* $out/share/fonts/truetype
+  #   '';
+  # };
 in
 {
   fonts = {
-    enableDefaultFonts = true;
-    fonts = with pkgs; [
-      corefonts
-      google-fonts
+    # fontDir.enable = true; # creates /run/current-system/sw/share/X11/fonts. Not sure why needed
+    enableDefaultPackages = true;
+    packages = with pkgs; [
+      pkgs.noto-fonts
+      pkgs.noto-fonts-cjk
+      pkgs.noto-fonts-cjk-sans
+      pkgs.noto-fonts-cjk-serif
+      pkgs.noto-fonts-emoji
       liberation_ttf
-      # TODO prune using nerdfonts.override, see https://nixos.wiki/wiki/Fonts
-      nerdfonts
-      powerline-fonts
-      dm-mono-nerd-font
-      tewi-font
+      # See https://github.com/NixOS/nixpkgs/blob/6998cf86e9a6ef83b32956337f65aba8656671fe/pkgs/data/fonts/nerdfonts/shas.nix
+      (pkgs.nerdfonts.override { fonts = [ "SourceCodePro" ]; })
+      # powerline-fonts
+      (inputs.dmmono.packages.${pkgs.system}.dm-mono-patched)
+      # dm-mono-nerd-font
+      # tewi-font
     ];
     fontconfig = {
       enable = true;
-      allowBitmaps = false;
       defaultFonts = {
+        emoji = [ "Noto Color Emoji" ];
         monospace = [
-          # "SauceCodePro Nerd Font Complete"
-          "SauceCodePro Nerd Font"
+          "SauceCodePro Nerd Font Mono"
+          "Noto Sans Mono"
           # TODO move to jp.nix?
-          "IPAGothic"
+          "Noto Sans Mono CJK JP"
         ];
-        sansSerif = [ "DejaVu Sans" "IPAPGothic" ];
-        serif = [ "DejaVu Serif" "IPAPMincho" ];
+        sansSerif = [
+          "Noto Sans"
+          "Noto Sans CJK JP"
+        ];
+        serif = [
+          "Noto Serif"
+          "Noto Serif CJK JP"
+        ];
       };
     };
   };

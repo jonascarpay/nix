@@ -30,8 +30,13 @@
       url = "github:jonascarpay/dmenu";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    dmmono = {
+      url = "/home/jmc/Dev/dm-mono-patched";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     st = {
       url = "github:jonascarpay/st";
+      # url = "/home/jmc/Dev/st";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # replaced by nix-index?
