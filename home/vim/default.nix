@@ -127,14 +127,6 @@ in
       }
 
       {
-        plugin = np.airline;
-        config = ''
-          let g:airline_powerline_fonts = 1
-          let g:airline#extensions#branch#displayed_head_limit = 10
-        '';
-      }
-
-      {
         plugin = unp.hop-nvim;
         type = "lua";
         config = ''
@@ -350,7 +342,7 @@ in
           '';
       }
       {
-        plugin = np.nord-vim;
+        plugin = np.nord-nvim;
         config = "colorscheme nord";
       }
       {
@@ -364,6 +356,23 @@ in
         '';
       }
 
+      {
+        plugin = np.lualine-nvim;
+        type = "lua";
+        config = ''
+          require('lualine').setup({
+            options = { theme = 'nord' },
+            sections = {
+              lualine_c = {
+                {
+                  'filename',
+                  path = 1,
+                }
+              }
+            },
+          })
+        '';
+      }
       np.cmp-nvim-lsp
       np.cmp-buffer
       np.nvim-cmp
@@ -381,10 +390,6 @@ in
             let status = luaeval("require('lsp-status').status()")
             return trim(status)
           endfunction
-          call airline#parts#define_function('lsp_status', 'LspStatus')
-          call airline#parts#define_condition('lsp_status', 'luaeval("#vim.lsp.buf_get_clients() > 0")')
-          let g:airline#extensions#nvimlsp#enabled = 0
-          let g:airline_section_warning = airline#section#create_right(['lsp_status'])
         '';
       }
       {
