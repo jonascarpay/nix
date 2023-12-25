@@ -19,9 +19,20 @@ let
 
   treesitter = {
     programs.neovim.plugins = [
-      np.nvim-treesitter
       np.nvim-treesitter-parsers.nix
       np.nvim-treesitter-parsers.rust
+      np.nvim-treesitter-parsers.svelte
+      np.nvim-treesitter-parsers.haskell
+      {
+        plugin = np.nvim-treesitter;
+        type = "lua";
+        config = ''
+          require'nvim-treesitter.configs'.setup {
+            highlight = { enable = true },
+            -- indent = { enable = true },
+          }
+        '';
+      }
     ];
   };
 
