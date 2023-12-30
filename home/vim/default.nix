@@ -1,7 +1,71 @@
-{ pkgs, lib, unstable, ... }:
+{ pkgs, lib, unstable, config, ... }:
 let
   np = pkgs.vimPlugins;
   unp = unstable.vimPlugins;
+
+  lsp = {
+    programs.neovim.plugins = [
+      np.lsp-zero-nvim
+      np.nvim-lspconfig
+      np.nvim-cmp
+      np.cmp-nvim-lsp
+      np.cmp-buffer
+      np.luasnip
+      np.cmp_luasnip
+      np.vim-snippets
+    ];
+    programs.neovim.extraLuaConfig = ''
+      local lsp_zero = require('lsp-zero')
+
+      lsp_zero.on_attach(function(client, bufnr)
+        lsp_zero.default_keymaps({buffer = bufnr})
+      end)
+      local lspconfig = require('lspconfig')
+
+      local cmp = require('cmp')
+      local cmp_action = lsp_zero.cmp_action()
+      cmp.setup({
+        sources = {
+          {name = 'path'},
+          {name = 'nvim_lsp'},
+          {name = 'luasnip', keyword_length = 2},
+          {name = 'buffer', keyword_length = 3},
+        },
+        mapping = cmp.mapping.preset.insert({
+          -- Navigate between snippet placeholder
+          ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+          ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+          -- Scroll up and down in the completion documentation
+          ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-d>'] = cmp.mapping.scroll_docs(4),
+        })
+      })
+
+      local luasnip = require('luasnip')
+      local from_snipmate = require("luasnip.loaders.from_snipmate")
+      from_snipmate.lazy_load()
+      from_snipmate.load({paths = "${./snippets}"})
+
+      ${config.programs.neovim.lspConfig}
+    '';
+  };
+
+  tree = {
+    programs.neovim = {
+      plugins = [
+        np.nvim-tree-lua
+        np.nvim-web-devicons
+      ];
+      # https://github.com/nvim-tree/nvim-tree.lua#quick-start
+      extraLuaConfig = ''
+        vim.g.loaded_netrw = 1
+        vim.g.loaded_netrwPlugin = 1
+        vim.opt.termguicolors = true
+        require("nvim-tree").setup()
+        vim.api.nvim_set_keymap('n', '<C-n>', ':NvimTreeToggle<CR>', { noremap = true, })
+      '';
+    };
+  };
 
   workspace-symbols = {
     home.packages = [ pkgs.bat ];
@@ -19,35 +83,114 @@ let
 
   treesitter = {
     programs.neovim.plugins = [
-      np.nvim-treesitter-parsers.nix
+      np.nvim-treesitter-parsers.c
       np.nvim-treesitter-parsers.rust
-      np.nvim-treesitter-parsers.svelte
-      np.nvim-treesitter-parsers.haskell
+      unp.nvim-treesitter-parsers.svelte
+      np.nvim-treesitter-parsers.html
+      np.nvim-treesitter-parsers.lua
+      np.nvim-treesitter-refactor
       {
         plugin = np.nvim-treesitter;
         type = "lua";
         config = ''
-          require'nvim-treesitter.configs'.setup {
+          require('nvim-treesitter.configs').setup {
             highlight = { enable = true },
             -- indent = { enable = true },
+            refactor = {
+              highlight_definitions = {
+                enable = true,
+                clear_on_cursor_move = true,
+              },
+            },
           }
         '';
       }
     ];
   };
 
+  lang-haskell = {
+    programs.neovim = {
+      plugins = [ np.nvim-treesitter-parsers.haskell ];
+      formatters = {
+        haskell = { exe = "ormolu"; args = [ "--no-cabal" ]; };
+        cabal.exe = "${pkgs.haskellPackages.cabal-fmt.bin}/bin/cabal-fmt";
+      };
+      lspConfig = ''
+        lspconfig.hls.setup({})
+      '';
+    };
+  };
+
+  lang-nix = {
+    home.packages = [ pkgs.nil ];
+    programs.neovim = {
+      plugins = [ np.nvim-treesitter-parsers.nix ];
+      formatters.nix.exe = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt";
+      lspConfig = ''
+        lspconfig.nil_ls.setup({})
+      '';
+    };
+  };
+
+  lang-bash = {
+    # TODO program.neovim.extraPackages?
+    home.packages = [
+      pkgs.shellcheck
+      pkgs.nodePackages.bash-language-server
+    ];
+    programs.neovim = {
+      plugins = [ np.nvim-treesitter-parsers.bash ];
+      formatters.sh.exe = "${pkgs.shfmt}/bin/shfmt";
+      lspConfig = ''
+        lspconfig.bashls.setup({})
+      '';
+    };
+  };
+
+  lang-python = {
+    programs.neovim = {
+      plugins = [ np.nvim-treesitter-parsers.python ];
+      formatters.python = { exe = "${pkgs.black}/bin/black"; args = [ "-q" "-" ]; };
+      lspConfig = ''
+        lspconfig.pyright.setup({})
+        lspconfig.ruff_lsp.setup({})
+      '';
+    };
+  };
+
 in
 {
   imports = [
+    ./options.nix
+    lsp
+    tree
     workspace-symbols
     treesitter
-  ];
-  home.packages = [
-    unstable.nil
+    lang-haskell
+    lang-nix
+    lang-bash
+    lang-python
   ];
   programs.git.ignores = [ "*~" "*.swp" "*.swo" "tags" "TAGS" ];
   programs.neovim = {
+    formatters = {
+      rust = { exe = "rustfmt"; };
+      go.exe = "gofmt";
+      proto.exe = "${pkgs.clang-tools}/bin/clang-format";
+      lua = { exe = "${pkgs.luaformatter}/bin/lua-format"; stdin = false; args = [ "-i" ]; };
+      js =
+        let
+          prettierd-wrapped = pkgs.writeShellScript "prettierd" "cat $1 | ${pkgs.prettierd}/bin/prettierd $1";
+        in
+        { exe = "${prettierd-wrapped}"; stdin = false; };
+      javascript = {
+        exe = "${pkgs.nodePackages.prettier}/bin/prettier";
+        stdin = false;
+        args = [ "--write" ];
+      };
+    };
     enable = true;
+    defaultEditor = true;
     vimAlias = true;
     vimdiffAlias = true;
     viAlias = true;
@@ -67,6 +210,7 @@ in
       set inccommand=nosplit
       set linebreak
       set mouse=a
+      set autoindent
       set copyindent
       set ignorecase
       set smartcase
@@ -103,31 +247,25 @@ in
       augroup END
     '';
     plugins = [
-      # workaround for https://github.com/nix-community/home-manager/pull/2391
-      # np.commentary
       {
-        plugin = np.commentary;
+        # workaround for https://github.com/nix-community/home-manager/pull/2391
+        plugin = pkgs.hello;
         config = ''
           let mapleader = "\<space>"
           let maplocalleader = "\<space>\<space>"
         '';
       }
+
+      np.vim-polyglot # only used for proper indent on cc
+      np.commentary # TODO switch to Comment.nvim
       np.surround
       np.vim-eunuch
       np.vim-indent-object
-      np.vim-polyglot
       np.vim-repeat
       np.vim-unimpaired
 
       {
-        plugin = np.goyo-vim;
-        config = ''
-          nnoremap <leader>mg :Goyo<CR>
-        '';
-      }
-
-      {
-        plugin = unp.hop-nvim;
+        plugin = np.hop-nvim;
         type = "lua";
         config = ''
 
@@ -136,19 +274,6 @@ in
             keys = 'hfjdks',
           }
           local directions = require("hop.hint").HintDirection
-
-          -- vim.keymap.set("", 'f', function()
-          --   hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true })
-          -- end, {remap=true})
-          -- vim.keymap.set("", 'F', function()
-          --   hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true })
-          -- end, {remap=true})
-          -- vim.keymap.set("", 't', function()
-          --   hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true, hint_offset = -1 ; })
-          -- end, {remap=true})
-          -- vim.keymap.set("", 'T', function()
-          --   hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 ; })
-          -- end, {remap=true})
 
           vim.keymap.set("", '<space><space>f', function()
             hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = false })
@@ -181,33 +306,10 @@ in
       }
 
       {
-        # TODO unstable for filetypes.any, remove later
-        plugin = unp.formatter-nvim;
+        plugin = np.formatter-nvim;
         # https://github.com/mhartington/formatter.nvim/tree/master/lua/formatter/filetypes
         config =
           let
-            formatters = {
-              python = { exe = "black"; args = [ "-q" "-" ]; };
-              haskell = { exe = "ormolu"; args = [ "--no-cabal" ]; };
-              rust = { exe = "rustfmt"; };
-              cabal.exe = "${pkgs.haskellPackages.cabal-fmt.bin}/bin/cabal-fmt";
-              markdown.exe = "md-headerfmt";
-              nix.exe = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt";
-              go.exe = "gofmt";
-              sh.exe = "${pkgs.shfmt}/bin/shfmt";
-              proto.exe = "${pkgs.clang-tools}/bin/clang-format";
-              lua = { exe = "${pkgs.luaformatter}/bin/lua-format"; stdin = false; args = [ "-i" ]; };
-              js =
-                let
-                  prettierd-wrapped = pkgs.writeShellScript "prettierd" "cat $1 | ${pkgs.prettierd}/bin/prettierd $1";
-                in
-                { exe = "${prettierd-wrapped}"; stdin = false; };
-              javascript = {
-                exe = "${pkgs.nodePackages.prettier}/bin/prettier";
-                stdin = false;
-                args = [ "--write" ];
-              };
-            };
             quote = str: "\"${str}\"";
             mkFmt = ft: { exe, stdin ? true, args ? [ ] }: ''
               ${ft} = {
@@ -228,7 +330,7 @@ in
               logging = true,
               log_level = vim.log.levels.WARN,
               filetype = {
-                ${lib.concatStringsSep "\n" (lib.mapAttrsToList mkFmt formatters)}
+                ${lib.concatStringsSep "\n" (lib.mapAttrsToList mkFmt config.programs.neovim.formatters)}
                 ["*"] = {
                   require("formatter.filetypes.any").remove_trailing_whitespace
                 },
@@ -244,23 +346,14 @@ in
 
       {
         plugin = np.vim-localvimrc;
-        config = ''
-          let g:localvimrc_persistent = 1
-        '';
+        config = "let g:localvimrc_persistent = 1";
       }
+
       {
         plugin = np.vim-easy-align;
-        config = ''
-          xmap <Enter> <Plug>(LiveEasyAlign)
-        '';
+        config = "xmap <Enter> <Plug>(LiveEasyAlign)";
       }
-      {
-        plugin = np.emmet-vim;
-        config = ''
-          let g:user_emmet_install_global = 0
-          autocmd FileType html,css EmmetInstall
-        '';
-      }
+
       {
         plugin = np.vim-mundo;
         config = ''
@@ -275,6 +368,7 @@ in
           nn <leader>gg :Git<CR>
         '';
       }
+
       {
         plugin = np.vim-gitgutter;
         config = ''
@@ -285,6 +379,7 @@ in
           nn <leader>gp :GitGutterPrevHunk<CR>
         '';
       }
+
       {
         plugin = np.fzf-vim;
         config =
@@ -305,17 +400,19 @@ in
             nn <leader>ft :Tags<CR>
             nn <leader>fh :Helptags<CR>
             nn <leader>fb :Buffers<CR>
-            autocmd FileType haskell let g:fzf_tags_command = 'fast-tags -R --exclude=dist-newstye .'
-            au BufWritePost *.hs silent! !${pkgs.haskellPackages.fast-tags}/bin/fast-tags -R --exclude=dist-newstyle . &
+            " autocmd FileType haskell let g:fzf_tags_command = 'fast-tags -R --exclude=dist-newstye .'
+            " au BufWritePost *.hs silent! !${pkgs.haskellPackages.fast-tags}/bin/fast-tags -R --exclude=dist-newstyle . &
             let $FZF_DEFAULT_COMMAND = '${ls-files}'
           '';
       }
+
       {
         plugin = np.vim-highlightedyank;
         config = ''
           let g:highlightedyank_highlight_duration = 200
         '';
       }
+
       {
         plugin = np.indent-blankline-nvim;
         type = "lua";
@@ -327,33 +424,20 @@ in
           })
         '';
       }
+
       {
-        plugin = np.nerdtree;
+        plugin = np.nvim-autopairs;
+        type = "lua";
         config = ''
-          nn <C-n> :NERDTreeToggle<CR>
+          require("nvim-autopairs").setup({
+            check_ts = true,
+          })
         '';
       }
-      {
-        plugin = np.auto-pairs;
-        config =
-          let doubleSingle = "''"; in
-          ''
-            autocmd FileType nix let b:AutoPairs = AutoPairsDefine({"${doubleSingle}" : "${doubleSingle}", '=':';'}, ["'"])
-          '';
-      }
+
       {
         plugin = np.nord-nvim;
         config = "colorscheme nord";
-      }
-      {
-        plugin = np.vim-markdown;
-        config = ''
-          let g:vim_markdown_auto_insert_bullets = 1
-          let g:vim_markdown_new_list_item_indent = 0
-          let g:vim_markdown_toc_autofit = 1
-          autocmd FileType markdown nnoremap o A<CR>
-          autocmd FileType markdown nnoremap <leader>t :Toc<CR>
-        '';
       }
 
       {
@@ -371,31 +455,6 @@ in
               }
             },
           })
-        '';
-      }
-      np.cmp-nvim-lsp
-      np.cmp-buffer
-      np.nvim-cmp
-      np.lsp-status-nvim
-      np.luasnip
-      np.cmp_luasnip
-      {
-        plugin = unp.nvim-lspconfig;
-        config = ''
-          autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()
-          " set completeopt=menu,menuone,noselect
-          :luafile ${./lsp_config.lua}
-
-          function! LspStatus() abort
-            let status = luaeval("require('lsp-status').status()")
-            return trim(status)
-          endfunction
-        '';
-      }
-      {
-        plugin = np.vim-snippets;
-        config = ''
-          :lua require("luasnip.loaders.from_snipmate").load({paths = "${./snippets}"})
         '';
       }
 
