@@ -19,6 +19,8 @@ let
 
       lsp_zero.on_attach(function(client, bufnr)
         lsp_zero.default_keymaps({buffer = bufnr})
+        -- 2023-12-31: Disable LSP syntax highlighting, treesitter seems better
+        client.server_capabilities.semanticTokensProvider = nil 
       end)
       local lspconfig = require('lspconfig')
 
