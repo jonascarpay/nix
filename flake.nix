@@ -74,6 +74,11 @@
 
     in
     {
+      homeManagerModules = {
+        home = import ./home;
+        desktop = import ./desktop;
+        vim = import ./home/vim;
+      };
 
       darwinConfigurations.bagel = mkDarwinSystem {
         system = "aarch64-darwin";
