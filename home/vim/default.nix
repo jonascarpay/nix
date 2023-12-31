@@ -69,6 +69,16 @@ let
     };
   };
 
+  cursorline.programs.neovim.extraConfig = ''
+    augroup CursorLine
+      au!
+      au VimEnter * setlocal cursorline
+      au WinEnter * setlocal cursorline
+      au BufWinEnter * setlocal cursorline
+      au WinLeave * setlocal nocursorline
+    augroup END
+  '';
+
   workspace-symbols.programs.neovim = {
     extraPackages = [ pkgs.bat ];
     plugins = [
@@ -86,9 +96,6 @@ let
   treesitter = {
     programs.neovim.plugins = [
       np.nvim-treesitter-parsers.c
-      np.nvim-treesitter-parsers.rust
-      unp.nvim-treesitter-parsers.svelte
-      np.nvim-treesitter-parsers.html
       np.nvim-treesitter-parsers.lua
       np.nvim-treesitter-refactor
       {
@@ -151,15 +158,28 @@ let
     '';
   };
 
-  cursorline.programs.neovim.extraConfig = ''
-    augroup CursorLine
-      au!
-      au VimEnter * setlocal cursorline
-      au WinEnter * setlocal cursorline
-      au BufWinEnter * setlocal cursorline
-      au WinLeave * setlocal nocursorline
-    augroup END
-  '';
+  lang-rust.programs.neovim = {
+    plugins = [ np.nvim-treesitter-parsers.rust ];
+    formatters.rust = { exe = "rustfmt"; };
+    extraLspConfig = ''
+      lspconfig.rust_analyzer.setup({
+        settings = {["rust-analyzer"] = { checkOnSave = {command="clippy"}}}
+      })
+    '';
+  };
+
+  lang-javascript.programs.neovim = {
+    plugins = [
+      np.nvim-treesitter-parsers.javascript
+      np.nvim-treesitter-parsers.svelte
+      np.nvim-treesitter-parsers.html
+    ];
+    formatters.javascript = {
+      exe = "${pkgs.nodePackages.prettier}/bin/prettier";
+      stdin = false;
+      args = [ "--write" ];
+    };
+  };
 
 in
 {
@@ -174,25 +194,11 @@ in
     lang-nix
     lang-bash
     lang-python
+    lang-rust
+    lang-javascript
   ];
   programs.git.ignores = [ "*~" "*.swp" "*.swo" "tags" "TAGS" ];
   programs.neovim = {
-    formatters = {
-      rust = { exe = "rustfmt"; };
-      go.exe = "gofmt";
-      proto.exe = "${pkgs.clang-tools}/bin/clang-format";
-      lua = { exe = "${pkgs.luaformatter}/bin/lua-format"; stdin = false; args = [ "-i" ]; };
-      js =
-        let
-          prettierd-wrapped = pkgs.writeShellScript "prettierd" "cat $1 | ${pkgs.prettierd}/bin/prettierd $1";
-        in
-        { exe = "${prettierd-wrapped}"; stdin = false; };
-      javascript = {
-        exe = "${pkgs.nodePackages.prettier}/bin/prettier";
-        stdin = false;
-        args = [ "--write" ];
-      };
-    };
     enable = true;
     defaultEditor = true;
     vimAlias = true;
