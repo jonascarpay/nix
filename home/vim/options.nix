@@ -22,7 +22,7 @@ in
     formatters = lib.mkOption {
       type = types.attrsOf formatterType;
     };
-    lspConfig = lib.mkOption {
+    extraLspConfig = lib.mkOption {
       type = types.lines;
       default = "";
     };

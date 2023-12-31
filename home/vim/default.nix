@@ -20,7 +20,7 @@ let
       lsp_zero.on_attach(function(client, bufnr)
         lsp_zero.default_keymaps({buffer = bufnr})
         -- 2023-12-31: Disable LSP syntax highlighting, treesitter seems better
-        client.server_capabilities.semanticTokensProvider = nil 
+        client.server_capabilities.semanticTokensProvider = nil
       end)
       local lspconfig = require('lspconfig')
 
@@ -48,7 +48,7 @@ let
       from_snipmate.lazy_load()
       from_snipmate.load({paths = "${./snippets}"})
 
-      ${config.programs.neovim.lspConfig}
+      ${config.programs.neovim.extraLspConfig}
     '';
   };
 
@@ -69,9 +69,9 @@ let
     };
   };
 
-  workspace-symbols = {
-    home.packages = [ pkgs.bat ];
-    programs.neovim.plugins = [
+  workspace-symbols.programs.neovim = {
+    extraPackages = [ pkgs.bat ];
+    plugins = [
       np.plenary-nvim
       {
         plugin = np.fzf-lsp-nvim;
@@ -110,55 +110,56 @@ let
     ];
   };
 
-  lang-haskell = {
-    programs.neovim = {
-      plugins = [ np.nvim-treesitter-parsers.haskell ];
-      formatters = {
-        haskell = { exe = "ormolu"; args = [ "--no-cabal" ]; };
-        cabal.exe = "${pkgs.haskellPackages.cabal-fmt.bin}/bin/cabal-fmt";
-      };
-      lspConfig = ''
-        lspconfig.hls.setup({})
-      '';
+  lang-haskell.programs.neovim = {
+    plugins = [ np.nvim-treesitter-parsers.haskell ];
+    formatters = {
+      haskell = { exe = "ormolu"; args = [ "--no-cabal" ]; };
+      cabal.exe = "${pkgs.haskellPackages.cabal-fmt.bin}/bin/cabal-fmt";
     };
+    extraLspConfig = ''
+      lspconfig.hls.setup({})
+    '';
   };
 
-  lang-nix = {
-    home.packages = [ pkgs.nil ];
-    programs.neovim = {
-      plugins = [ np.nvim-treesitter-parsers.nix ];
-      formatters.nix.exe = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt";
-      lspConfig = ''
-        lspconfig.nil_ls.setup({})
-      '';
-    };
+  lang-nix.programs.neovim = {
+    extraPackages = [ pkgs.nil ];
+    plugins = [ np.nvim-treesitter-parsers.nix ];
+    formatters.nix.exe = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt";
+    extraLspConfig = ''
+      lspconfig.nil_ls.setup({})
+    '';
   };
 
-  lang-bash = {
-    # TODO program.neovim.extraPackages?
-    home.packages = [
+  lang-bash.programs.neovim = {
+    extraPackages = [
       pkgs.shellcheck
       pkgs.nodePackages.bash-language-server
     ];
-    programs.neovim = {
-      plugins = [ np.nvim-treesitter-parsers.bash ];
-      formatters.sh.exe = "${pkgs.shfmt}/bin/shfmt";
-      lspConfig = ''
-        lspconfig.bashls.setup({})
-      '';
-    };
+    plugins = [ np.nvim-treesitter-parsers.bash ];
+    formatters.sh.exe = "${pkgs.shfmt}/bin/shfmt";
+    extraLspConfig = ''
+      lspconfig.bashls.setup({})
+    '';
   };
 
-  lang-python = {
-    programs.neovim = {
-      plugins = [ np.nvim-treesitter-parsers.python ];
-      formatters.python = { exe = "${pkgs.black}/bin/black"; args = [ "-q" "-" ]; };
-      lspConfig = ''
-        lspconfig.pyright.setup({})
-        lspconfig.ruff_lsp.setup({})
-      '';
-    };
+  lang-python.programs.neovim = {
+    plugins = [ np.nvim-treesitter-parsers.python ];
+    formatters.python = { exe = "${pkgs.black}/bin/black"; args = [ "-q" "-" ]; };
+    extraLspConfig = ''
+      lspconfig.pyright.setup({})
+      lspconfig.ruff_lsp.setup({})
+    '';
   };
+
+  cursorline.programs.neovim.extraConfig = ''
+    augroup CursorLine
+      au!
+      au VimEnter * setlocal cursorline
+      au WinEnter * setlocal cursorline
+      au BufWinEnter * setlocal cursorline
+      au WinLeave * setlocal nocursorline
+    augroup END
+  '';
 
 in
 {
@@ -168,6 +169,7 @@ in
     tree
     workspace-symbols
     treesitter
+    cursorline
     lang-haskell
     lang-nix
     lang-bash
@@ -200,24 +202,23 @@ in
       set nocompatible
       filetype indent plugin on
       syntax on
-      set hidden
-      set scrolloff=5
-      set confirm
-      set wildmenu
-      set showcmd
-      set nostartofline
-      set backspace=2
+      set hidden                  " hide buffers instead of closing
+      set scrolloff=5             " screen padding
+      set confirm                 " ask for confirmation instead of closing
+      set wildmenu                " CLI buffs
+      set showcmd                 " extra info in bottom bar
+      set nostartofline           " make certain motions like gg preserve column
+      set backspace=2             " allow backspace insert start, line break, indent, i.e. work normally
       set hlsearch
       set incsearch
       set inccommand=nosplit
-      set linebreak
-      set mouse=a
-      set autoindent
-      set copyindent
       set ignorecase
       set smartcase
+      set linebreak               " break at word boundaries
+      set mouse=a                 " mouse in all modes
+      set autoindent
+      set copyindent
       set number
-      let g:tex_flavor = "latex"
       nn j gj
       nn k gk
       vn j gj
@@ -229,24 +230,12 @@ in
       " set tabstop=4
       " set softtabstop=4
       " set shiftwidth=4
-      au BufNewFile,BufRead *.md  set spell
       nn <leader>w :w<CR>
-      nn <leader>lo :lopen<CR>
       nn <leader>hl :nohl<CR>
       inoremap hj <esc>
       vmap <leader>y :w! /tmp/vitmp<CR>
       nmap <leader>p :r! cat /tmp/vitmp<CR>
-      set foldmethod=indent
-      set foldcolumn=0
-      set foldlevel=999
       set diffopt+=vertical
-      augroup CursorLine
-        au!
-        au VimEnter * setlocal cursorline
-        au WinEnter * setlocal cursorline
-        au BufWinEnter * setlocal cursorline
-        au WinLeave * setlocal nocursorline
-      augroup END
     '';
     plugins = [
       {
