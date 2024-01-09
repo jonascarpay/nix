@@ -120,7 +120,14 @@ let
   lang-haskell.programs.neovim = {
     plugins = [ np.nvim-treesitter-parsers.haskell ];
     formatters = {
-      haskell = { exe = "ormolu"; args = [ "--no-cabal" ]; };
+      haskell =
+        {
+          exe = "ormolu";
+          raw_args = [
+            "\"--stdin-input-file\""
+            "util.escape_path(util.get_current_buffer_file_path())"
+          ];
+        };
       cabal.exe = "${pkgs.haskellPackages.cabal-fmt.bin}/bin/cabal-fmt";
     };
     extraLspConfig = ''
@@ -308,12 +315,12 @@ in
         config =
           let
             quote = str: "\"${str}\"";
-            mkFmt = ft: { exe, stdin ? true, args ? [ ] }: ''
+            mkFmt = ft: { exe, stdin ? true, args ? [ ], raw_args ? [ ] }: ''
               ${ft} = {
                 function()
                   return {
                     exe = ${quote exe},
-                    args = { ${lib.concatMapStringsSep ", " quote args } },
+                    args = { ${lib.concatStringsSep ", " (builtins.map quote args ++ raw_args) } },
                     stdin = ${if stdin then "true" else "false"},
                   }
                 end
@@ -397,8 +404,8 @@ in
             nn <leader>ft :Tags<CR>
             nn <leader>fh :Helptags<CR>
             nn <leader>fb :Buffers<CR>
-            " autocmd FileType haskell let g:fzf_tags_command = 'fast-tags -R --exclude=dist-newstye .'
-            " au BufWritePost *.hs silent! !${pkgs.haskellPackages.fast-tags}/bin/fast-tags -R --exclude=dist-newstyle . &
+            autocmd FileType haskell let g:fzf_tags_command = 'fast-tags -R --exclude=dist-newstye .'
+            au BufWritePost *.hs silent! !${pkgs.haskellPackages.fast-tags}/bin/fast-tags -R --exclude=dist-newstyle . &
             let $FZF_DEFAULT_COMMAND = '${ls-files}'
           '';
       }

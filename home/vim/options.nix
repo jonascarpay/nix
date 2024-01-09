@@ -10,6 +10,10 @@ let
         default = [ ];
         type = types.listOf types.str;
       };
+      raw_args = lib.mkOption {
+        default = [ ];
+        type = types.listOf types.str;
+      };
       stdin = lib.mkOption {
         default = true;
         type = types.bool;
