@@ -169,9 +169,7 @@ let
     plugins = [ np.nvim-treesitter-parsers.rust ];
     formatters.rust = { exe = "rustfmt"; };
     extraLspConfig = ''
-      lspconfig.rust_analyzer.setup({
-        settings = {["rust-analyzer"] = { checkOnSave = {command="clippy"}}}
-      })
+      lspconfig.rust_analyzer.setup({ })
     '';
   };
 
