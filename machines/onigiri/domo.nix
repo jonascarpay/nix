@@ -49,17 +49,18 @@ in
 
   services.nginx = {
     enable = true;
+    defaultListen = [
+      [{ addr = "0.0.0.0"; port = nginx-port; }]
+    ];
+    # Adds headers Host, X-Real-IP, X-Forwarded-For (and others)
+    recommendedProxySettings = true;
     virtualHosts = {
       # adapted from https://www.zigbee2mqtt.io/guide/configuration/frontend.html#nginx-proxy-configuration
       # TODO The guide has a separate location set up for /api, but this appears unnecessary?
       "zigbee.onigiri.lan" = {
-        listen = [{ addr = "0.0.0.0"; port = nginx-port; }];
         locations."/" = {
           proxyPass = "http://localhost:${builtins.toString z2m-port}";
           extraConfig = ''
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_http_version 1.1; # Necessary for keepalive
             proxy_set_header Upgrade $http_upgrade; # with Connection, necessary for websocket http://nginx.org/en/docs/http/websocket.html
             proxy_set_header Connection "upgrade";
@@ -70,13 +71,9 @@ in
       # abstract it because it might not always be true
       # TODO The guide has a separate location set up for /api/websocket, but this appears unnecessary?
       "home.onigiri.lan" = {
-        listen = [{ addr = "0.0.0.0"; port = nginx-port; }];
         locations."/" = {
           proxyPass = "http://localhost:${builtins.toString ha-port}";
           extraConfig = ''
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection "upgrade";
