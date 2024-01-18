@@ -104,7 +104,8 @@ in
             "shift+t" = "sticky toggle";
             "t" = "focus mode_toggle";
             "q" = "kill";
-            "slash" = exec "${showTree}";
+            "slash" = exec "qalculate-gtk";
+            "shift+slash" = exec "${showTree}";
             "period" = exec "${screensnip-snap}";
             "comma" = exec "${screensnip-restore}";
             "space" = "fullscreen toggle";
