@@ -101,6 +101,8 @@ in
       ../../nixos/ndh.nix
     ];
 
+  networking.useNetworkd = true;
+
   services.xserver.layout = "us"; # default from configuration.nix
   services.xserver.xkbVariant = ""; # default from configuration.nix
   boot.loader.systemd-boot.enable = true; # default from configuration.nix
