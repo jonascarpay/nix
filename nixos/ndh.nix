@@ -6,8 +6,9 @@
     config = "config ${config.age.secrets.ndh-openvpn.path}";
   };
   networking.extraHosts = ''
-    192.168.11.107	gitlab.ndh
+    192.168.11.101	tx101.ndh
     192.168.11.106	tx106.ndh
+    192.168.11.107	gitlab.ndh
     192.168.11.108	tx108.ndh
   '';
   home-manager.users.jmc.programs.ssh.matchBlocks =
@@ -19,6 +20,7 @@
     in
     {
       "gitlab.ndh" = config;
+      "tx101.ndh" = config;
       "tx106.ndh" = config;
       "tx108.ndh" = config;
     };
