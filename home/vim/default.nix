@@ -96,6 +96,7 @@ let
   treesitter = {
     programs.neovim.plugins = [
       np.nvim-treesitter-parsers.c
+      np.nvim-treesitter-parsers.sql
       np.nvim-treesitter-parsers.lua
       np.nvim-treesitter-refactor
       {
