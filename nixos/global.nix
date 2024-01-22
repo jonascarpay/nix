@@ -58,6 +58,7 @@ in
       ranger
       sshfs
       scrubnix
+      libqalculate
       tmux
       # boot-switch565
       # boot-switch602
