@@ -77,5 +77,5 @@
     };
   };
   home.file.".tmux.conf".text =
-    "set-option -g default-command /etc/profiles/per-user/jmc/bin/fish";
+    "set-option -g default-command fish";
 }
