@@ -13,6 +13,7 @@ let
       np.luasnip
       np.cmp_luasnip
       np.vim-snippets
+      np.trouble-nvim
     ];
     programs.neovim.extraLuaConfig = ''
       local lsp_zero = require('lsp-zero')
