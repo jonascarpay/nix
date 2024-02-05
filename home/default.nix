@@ -7,6 +7,7 @@
     ./tmux.nix
     ./vim
     ./git.nix
+    ./postgres.nix
     inputs.agenix.homeManagerModules.age
   ];
 
