@@ -2,7 +2,11 @@
 let
 
   scrubnix = pkgs.writeShellScriptBin "scrubnix" ''
-    sed -E 's#/nix/store/([a-z0-9]{5})[a-z0-9]{27}-([a-zA-Z0-9+?=._-]+)#<\2_\1>#g' -
+    if [[ $* == *-v* ]]; then
+      sed -E 's#/nix/store/([a-z0-9]{5})[a-z0-9]{27}-([a-zA-Z0-9+?=._-]+)#<\2@\1>#g' -
+    else
+      sed -E 's#/nix/store/[a-z0-9]{32}-([a-zA-Z0-9+?=._-]+)#<\1>#g' -
+    fi
   '';
 
   home-manager = {
