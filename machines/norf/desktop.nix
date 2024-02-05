@@ -74,6 +74,7 @@ in
     myanki
     myocr
     myrehex
+    pkgs.qbittorrent
     pkgs.slack
     pkgs.signal-desktop
     pkgs.tdesktop
