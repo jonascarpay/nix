@@ -146,6 +146,15 @@ let
     '';
   };
 
+  lang-cpp.programs.neovim = {
+    extraPackages = [ pkgs.ccls ];
+    plugins = [ np.nvim-treesitter-parsers.cpp ];
+    formatters.cpp.exe = "${pkgs.clang-tools}/bin/clang-format";
+    extraLspConfig = ''
+      lspconfig.ccls.setup({})
+    '';
+  };
+
   lang-bash.programs.neovim = {
     extraPackages = [
       pkgs.shellcheck
@@ -197,12 +206,13 @@ in
     workspace-symbols
     treesitter
     cursorline
-    lang-haskell
-    lang-nix
     lang-bash
+    lang-cpp
+    lang-haskell
+    lang-javascript
+    lang-nix
     lang-python
     lang-rust
-    lang-javascript
   ];
   programs.git.ignores = [ "*~" "*.swp" "*.swo" "tags" "TAGS" ];
   programs.neovim = {
