@@ -18,4 +18,10 @@
 
     keyring = False
   '';
+  home.file.".psqlrc".text = ''
+    \set QUIET 1
+    \pset linestyle unicode
+    \pset border 2
+    \unset QUIET
+  '';
 }
