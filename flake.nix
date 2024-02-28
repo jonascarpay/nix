@@ -99,5 +99,10 @@
         system = "aarch64-linux";
         module = ./machines/onigiri;
       };
+
+      nixosConfigurations.mochi = mkNixosSystem {
+        system = "x86_64-linux";
+        module = ./machines/mochi;
+      };
     };
 }
