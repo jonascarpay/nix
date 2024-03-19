@@ -214,7 +214,7 @@ in
     lang-python
     lang-rust
   ];
-  programs.git.ignores = [ "*~" "*.swp" "*.swo" "tags" "TAGS" ];
+  programs.git.ignores = [ "*~" "*.swp" "*.swo" "tags" "!tags/" ];
   programs.neovim = {
     enable = true;
     defaultEditor = true;
