@@ -28,6 +28,7 @@
     shellAbbrs = {
       c = "cd";
       dv = "cd ~/Dev/";
+      ndh = "cd ~/Dev/NDH/";
       dr = "direnv reload";
       g = "git";
       ga = "git add";
