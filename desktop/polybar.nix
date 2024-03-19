@@ -50,7 +50,6 @@
         "bar/common" = {
           inherit (colors) foreground background;
           width = "100%";
-          locale = "ja_JP.UTF-8";
           font-0 = "SauceCodePro Nerd Font:style=Regular:size=8;2";
           font-1 = "SauceCodePro Nerd Font:style=Bold:size=8;2";
           font-2 = "Noto Sans JP:style=Bold:size=8;3";
@@ -178,7 +177,7 @@
         "module/fs" = {
           type = "internal/fs";
           mount-0 = "/";
-          label-mounted = " %percentage_used%%";
+          label-mounted = " %percentage_used%%";
         };
 
         "module/memory" = {
