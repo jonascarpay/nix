@@ -102,8 +102,10 @@ in
   networking.resolvconf.dnsSingleRequest = true; # supposedly fixes slow DNS, see https://github.com/hashicorp/vagrant/issues/1172
 
   networking.interfaces.eno1.wakeOnLan.enable = true;
+  networking.interfaces.eno1.useDHCP = true;
 
   time.timeZone = "Asia/Tokyo";
+  time.hardwareClockInLocalTime = true;
   i18n.defaultLocale = "en_US.UTF-8";
 
   environment.variables.ST_FONT = "SauceCodePro Nerd Font:pixelsize=24:antialias=true:autohint=true";
