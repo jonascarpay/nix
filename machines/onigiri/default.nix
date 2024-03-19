@@ -47,11 +47,6 @@ let
     services.zfs.autoSnapshot.enable = true;
   };
 
-  fish = {
-    users.users.jmc.shell = pkgs.fish;
-    programs.fish.enable = true;
-  };
-
 in
 {
   imports =
@@ -66,7 +61,6 @@ in
       # transmission
       syncthing
       git-sync
-      fish
       inputs.nixos-hardware.nixosModules.raspberry-pi-4
     ];
 

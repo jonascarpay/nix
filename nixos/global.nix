@@ -22,6 +22,11 @@ let
     };
   };
 
+  fish = {
+    users.users.jmc.shell = pkgs.fish;
+    programs.fish.enable = true;
+  };
+
   agenix = {
     imports = [ inputs.agenix.nixosModules.age ];
     environment.systemPackages = [ inputs.agenix.packages.${pkgs.system}.agenix ];
@@ -46,6 +51,7 @@ in
     home-manager
     agenix
     words-txt
+    fish
     # caches
     # notifications-token
   ];
