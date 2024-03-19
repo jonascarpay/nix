@@ -93,7 +93,7 @@ in
   boot.loader.systemd-boot.enable = true; # default from configuration.nix
   boot.loader.efi.canTouchEfiVariables = true; # default from configuration.nix
 
-  networking.firewall.allowedTCPPorts = [ 8888 ];
+  networking.firewall.allowedTCPPorts = [ 8888 8889 ];
 
   boot.loader.systemd-boot.memtest86.enable = true;
 
