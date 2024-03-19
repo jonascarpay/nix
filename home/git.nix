@@ -2,13 +2,8 @@
 let
   difft = {
     programs.git.extraConfig = {
-      # https://difftastic.wilfred.me.uk/git.html
-      diff.tool = "difftastic";
-      difftool.prompt = false;
-      "difftool \"difftastic\"".cmd = "${pkgs.difftastic}/bin/difft \"$LOCAL\" \"$REMOTE\"";
+      diff.external = "${pkgs.difftastic}/bin/difft";
     };
-    programs.fish.shellAbbrs.gdt = "git difftool";
-    programs.fish.shellAbbrs.gdd = "git difftool";
   };
 in
 {
