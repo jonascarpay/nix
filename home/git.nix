@@ -11,6 +11,7 @@ in
   programs.git = {
     diff-so-fancy.enable = true;
     enable = true;
+    lfs.enable = true;
     userName = "Jonas Carpay";
     userEmail = "jonascarpay@gmail.com";
     ignores = [ ".stfolder" ".stversions" ".stignore" "result" "result-*" ];
