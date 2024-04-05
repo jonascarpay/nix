@@ -278,6 +278,8 @@ in
       vmap <leader>y :w! /tmp/vitmp<CR>
       nmap <leader>p :r! cat /tmp/vitmp<CR>
       set diffopt+=vertical
+      set fdm=indent
+      set foldlevel=99
     '';
     plugins = [
       {
