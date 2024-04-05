@@ -24,6 +24,16 @@
           -modules venv,ssh,cwd,perms,git,exit,nix-shell,jobs
       end
 
+
+      function fzcd
+          set -l dir (frecently view ~/.local/share/frecently/directory-history | fzf --no-sort --preview 'tree -C {} --gitignore -L 1')
+          if test -n "$dir"
+              cd $dir
+              and commandline -f repaint
+          end
+      end
+      bind \cs 'fzcd'
+
     '';
     shellAbbrs = {
       c = "cd";
