@@ -8,7 +8,7 @@ let
     phases = [ "installPhase" ];
     # The `grep` is a crude way to add whitelisting. It can safely be extended with a |, since it has lower precedence than *
     installPhase = ''
-      ${pkgs.gawk}/bin/awk '{sub(/\r$/,"")} {sub(/^127\.0\.0\.1/,"0.0.0.0")} BEGIN { OFS = "" } NF == 2 && $1 == "0.0.0.0" { print "local-zone: \"", $2, "\" static"}' $src | grep -vE '*appsflyer*|*ads.tiktok.com*|*ads.google.com*' | tr '[:upper:]' '[:lower:]' | sort -u >  $out
+      ${pkgs.gawk}/bin/awk '{sub(/\r$/,"")} {sub(/^127\.0\.0\.1/,"0.0.0.0")} BEGIN { OFS = "" } NF == 2 && $1 == "0.0.0.0" { print "local-zone: \"", $2, "\" static"}' $src | grep -vE 'analytics.google.com|hotjar.com|appsflyer|ads.tiktok.com|ads.google.com' | tr '[:upper:]' '[:lower:]' | sort -u >  $out
     '';
   };
 
