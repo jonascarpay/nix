@@ -47,6 +47,13 @@ let
     services.zfs.autoSnapshot.enable = true;
   };
 
+  githubHosts = {
+    home-manager.users.jmc.programs.ssh.matchBlocks."github.com" = {
+      user = "git";
+      identityFile = "/home/jmc/Keys/ssh/id_ed25519";
+    };
+  };
+
   fish = {
     users.users.jmc.shell = pkgs.fish;
     programs.fish.enable = true;
@@ -68,6 +75,7 @@ in
       # git-sync
       fish
       ./hardware-configuration.nix
+      githubHosts
       # inputs.nixos-hardware.nixosModules.raspberry-pi-4
     ];
 

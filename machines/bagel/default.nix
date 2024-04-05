@@ -36,6 +36,7 @@ let
       };
   };
 
+  # TODO move to module, repeated a lot
   githubHosts = {
     home-manager.users.jmc.programs.ssh.matchBlocks."github.com" = {
       user = "git";
