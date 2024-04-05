@@ -167,6 +167,12 @@ let
     '';
   };
 
+  # Some potential config https://users.rust-lang.org/t/any-auto-formatter-for-toml/97292/2
+  lang-toml.programs.neovim.formatters.toml = {
+    exe = "${pkgs.taplo}/bin/taplo format";
+    args = [ "-" ];
+  };
+
   lang-python.programs.neovim = {
     plugins = [ np.nvim-treesitter-parsers.python ];
     formatters.python = { exe = "${pkgs.black}/bin/black"; args = [ "-q" "-" ]; };
@@ -213,6 +219,7 @@ in
     lang-nix
     lang-python
     lang-rust
+    lang-toml
   ];
   programs.git.ignores = [ "*~" "*.swp" "*.swo" "tags" "!tags/" ];
   programs.neovim = {
