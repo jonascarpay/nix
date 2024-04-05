@@ -2,7 +2,7 @@
   home.sessionVariables = {
     PSQL_PAGER = "${pkgs.pspg}/bin/pspg --reprint-on-exit";
   };
-  home.packages = [ pkgs.pgcli ];
+  home.packages = [ pkgs.pgcli pkgs.pspg ];
   xdg.configFile."pgcli/config".text = ''
     [main]
 
