@@ -31,6 +31,24 @@ let
     };
   };
 
+  jellyfin = {
+    users.users.jmc.homeMode = "701"; # Media is currently stored in my home dir
+    services.jellyfin = {
+      enable = true;
+      openFirewall = true;
+    };
+  };
+
+  paperless = {
+    services.paperless = {
+      enable = true;
+      address = "0.0.0.0";
+      consumptionDirIsPublic = true;
+      extraConfig.PAPERLESS_OCR_LANGUAGE = "eng+jpn+nld";
+    };
+    networking.firewall.allowedTCPPorts = [ config.services.paperless.port ];
+  };
+
   git-sync = {
     imports = [ ./git-sync-service.nix ];
     services.git-sync = {
@@ -76,6 +94,8 @@ in
       fish
       ./hardware-configuration.nix
       githubHosts
+      jellyfin
+      paperless
       # inputs.nixos-hardware.nixosModules.raspberry-pi-4
     ];
 
