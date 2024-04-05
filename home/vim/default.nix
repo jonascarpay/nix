@@ -203,6 +203,17 @@ let
     };
   };
 
+  lang-cmake.programs.neovim =
+    {
+      plugins = [
+        np.nvim-treesitter-parsers.cmake
+      ];
+      formatters.cmake = { exe = "${pkgs.cmake-format}/bin/cmake-format"; stdin = false; args = [ "--in-place" ]; };
+      extraLspConfig = ''
+        lspconfig.cmake.setup({ cmd = { "${pkgs.cmake-language-server}/bin/cmake-language-server" } })
+      '';
+    };
+
 in
 {
   imports = [
@@ -213,6 +224,7 @@ in
     treesitter
     cursorline
     lang-bash
+    lang-cmake
     lang-cpp
     lang-haskell
     lang-javascript
