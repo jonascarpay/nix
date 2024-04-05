@@ -35,9 +35,9 @@ let
         "light.standing_lights"
         "light.bedside_lights"
       ];
-      min_color_temp = 2500;
-      max_color_temp = 4000;
-      min_brightness = 50;
+      min_color_temp = 2400;
+      min_brightness = 70;
+      sunset_offset = 30 * 60;
     };
   };
 
@@ -50,7 +50,7 @@ in
   services.nginx = {
     enable = true;
     defaultListen = [
-      [{ addr = "0.0.0.0"; port = nginx-port; }]
+      { addr = "0.0.0.0"; port = nginx-port; }
     ];
     # Adds headers Host, X-Real-IP, X-Forwarded-For (and others)
     recommendedProxySettings = true;
