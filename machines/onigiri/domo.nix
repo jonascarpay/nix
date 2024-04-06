@@ -22,6 +22,7 @@ let
   homekit-tcp-port = 21063; # Freely choosable
   homekit-udp-port = 5353; # Hardcoded by apple, I think
 
+  # TODO unstable nixos has support for custom hass modules, and adaptive-lighting is in nixpkgs
   adaptive-lighting = {
     # adapted from custom components at https://nixos.wiki/wiki/Home_Assistant
     systemd.tmpfiles.rules = [
@@ -67,8 +68,6 @@ in
           '';
         };
       };
-      # This is currently the same as zigbee.onigiri.lan, but I don't want to
-      # abstract it because it might not always be true
       # TODO The guide has a separate location set up for /api/websocket, but this appears unnecessary?
       "home.onigiri.lan" = {
         locations."/" = {
