@@ -20,6 +20,30 @@ let
   zap = pkgs.writeShellScriptBin "zap" ''
     xprop | grep -oP "PID\(CARDINAL\) = \K\d+" | xargs kill -9
   '';
+
+  cursor = {
+    home.pointerCursor = {
+      package = pkgs.vanilla-dmz;
+      name = "Vanilla-DMZ";
+      gtk.enable = true;
+      x11.enable = true;
+    };
+  };
+
+  # TODO why doesn't firefox pick up light in the same way
+  # TODO set up darkman
+  dark-mode = {
+    dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
+    gtk.iconTheme = {
+      package = pkgs.gnome.adwaita-icon-theme;
+      name = "Adwaita";
+    };
+    gtk.theme = {
+      package = pkgs.gnome.gnome-themes-extra;
+      name = "Adwaita-dark";
+    };
+  };
+
 in
 {
   imports = [
@@ -30,6 +54,8 @@ in
     ./i3
     widgets
     qalculate
+    dark-mode
+    cursor
   ];
   home.packages = [
     inputs.st.defaultPackage.${pkgs.system}
