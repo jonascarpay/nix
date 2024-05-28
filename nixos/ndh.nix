@@ -13,19 +13,26 @@
     192.168.11.107	gitlab.ndh
     192.168.11.108	tx108.ndh
   '';
-  home-manager.users.jmc.programs.ssh.matchBlocks =
+  home-manager.users.jmc =
     let
       config = {
         user = "jcarpay";
         identityFile = "~/Keys/ssh/id_ndh";
       };
     in
-    {
-      "gitlab.ndh" = config;
-      "tx101.ndh" = config;
-      "tx102.ndh" = config;
-      "tx105.ndh" = config;
-      "tx106.ndh" = config;
-      "tx108.ndh" = config;
+    { lib, ... }: {
+      programs.ssh.matchBlocks = {
+        "gitlab.ndh" = config;
+        "tx101.ndh" = config;
+        "tx102.ndh" = config;
+        "tx105.ndh" = config;
+        "tx106.ndh" = config;
+        "tx108.ndh" = config;
+        "jp109.ndh" = lib.hm.dag.entryAfter [ "tx108.ndh" ] {
+          inherit (config) user identityFile;
+          hostname = "192.168.183.109";
+          proxyJump = "tx108.ndh";
+        };
+      };
     };
 }
