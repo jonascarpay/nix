@@ -64,7 +64,7 @@ in
   ];
   home-manager.users.jmc.imports = [
     ../../desktop
-    ../../desktop/emacs
+    # ../../desktop/emacs
     polybar
     redshift
     pass

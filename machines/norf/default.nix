@@ -88,8 +88,12 @@ in
 
   networking.useNetworkd = true;
 
-  services.xserver.layout = "us"; # default from configuration.nix
-  services.xserver.xkbVariant = ""; # default from configuration.nix
+  # default from configuration.nix
+  services.xserver.xkb = {
+    layout = "us";
+    variant = "";
+  };
+
   boot.loader.systemd-boot.enable = true; # default from configuration.nix
   boot.loader.efi.canTouchEfiVariables = true; # default from configuration.nix
 

@@ -4,11 +4,14 @@
     enable = true;
     scriptPath = ".hm-xsession";
   };
-  services.xserver.displayManager = {
+  services.displayManager = {
     autoLogin = {
       enable = true;
       user = "jmc";
     };
+    defaultSession = "home-manager";
+  };
+  services.xserver.displayManager = {
     # https://discourse.nixos.org/t/opening-i3-from-home-manager-automatically/4849/8
     session = [{
       manage = "desktop";
@@ -18,6 +21,5 @@
         waitPID=$!
       '';
     }];
-    defaultSession = "home-manager";
   };
 }

@@ -114,9 +114,9 @@ in
       monolog
     ];
 
-  services.xserver = {
+  services.xserver.xkb = {
     layout = "us";
-    xkbVariant = "";
+    variant = "";
   };
 
   security.rtkit.enable = true;

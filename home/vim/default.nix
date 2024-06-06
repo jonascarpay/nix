@@ -1,7 +1,6 @@
-{ pkgs, lib, unstable, config, ... }:
+{ pkgs, lib, config, ... }:
 let
   np = pkgs.vimPlugins;
-  unp = unstable.vimPlugins;
 
   lsp = {
     programs.neovim.plugins = [
@@ -203,16 +202,15 @@ let
     };
   };
 
-  lang-cmake.programs.neovim =
-    {
-      plugins = [
-        np.nvim-treesitter-parsers.cmake
-      ];
-      formatters.cmake = { exe = "${pkgs.cmake-format}/bin/cmake-format"; stdin = false; args = [ "--in-place" ]; };
-      extraLspConfig = ''
-        lspconfig.cmake.setup({ cmd = { "${pkgs.cmake-language-server}/bin/cmake-language-server" } })
-      '';
-    };
+  lang-cmake.programs.neovim = {
+    plugins = [
+      np.nvim-treesitter-parsers.cmake
+    ];
+    formatters.cmake = { exe = "${pkgs.cmake-format}/bin/cmake-format"; stdin = false; args = [ "--in-place" ]; };
+    extraLspConfig = ''
+      lspconfig.cmake.setup({ cmd = { "${pkgs.cmake-language-server}/bin/cmake-language-server" } })
+    '';
+  };
 
 in
 {
