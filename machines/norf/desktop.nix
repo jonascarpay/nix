@@ -28,7 +28,7 @@ let
   myanki = pkgs.writeShellScriptBin "anki" ''
     export PATH="${pkgs.lib.makeBinPath [ pkgs.mpv ]}:$PATH"
     export ANKI_WEBSCALE=2
-    ${pkgs.anki}/bin/anki
+    ${pkgs.anki-bin}/bin/anki $@
   '';
 
   myocr = pkgs.writeShellScriptBin "ocr-capture" ''
