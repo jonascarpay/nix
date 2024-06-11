@@ -121,14 +121,13 @@ let
   lang-haskell.programs.neovim = {
     plugins = [ np.nvim-treesitter-parsers.haskell ];
     formatters = {
-      haskell =
-        {
-          exe = "ormolu";
-          raw_args = [
-            "\"--stdin-input-file\""
-            "util.escape_path(util.get_current_buffer_file_path())"
-          ];
-        };
+      haskell = {
+        exe = "ormolu";
+        raw_args = [
+          "\"--stdin-input-file\""
+          "util.escape_path(util.get_current_buffer_file_path())"
+        ];
+      };
       cabal.exe = "${pkgs.haskellPackages.cabal-fmt.bin}/bin/cabal-fmt";
     };
     extraLspConfig = ''
