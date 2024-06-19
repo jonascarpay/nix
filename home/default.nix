@@ -15,14 +15,15 @@
 
   home = {
     stateVersion = "23.05";
-    packages = with pkgs; [
-      silver-searcher # TODO do I use this? yes for fzf fg
-      cloc
-      entr
-      jq
+    packages = [
+      pkgs.silver-searcher # TODO do I use this? yes for fzf fg
+      pkgs.cloc
+      pkgs.entr
+      pkgs.jq
       # killall
       # man-pages # TODO does this do anything manual.manpages.enable doesn't do?
-      tldr
+      pkgs.tldr
+      pkgs.ripgrep
       # youtube-dl
       # weechat
     ];
