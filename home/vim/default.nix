@@ -287,6 +287,7 @@ in
       set diffopt+=vertical
       set fdm=indent
       set foldlevel=99
+      set nowrap
     '';
     plugins = [
       {
