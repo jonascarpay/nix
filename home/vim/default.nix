@@ -211,6 +211,15 @@ let
     '';
   };
 
+  lang-glsl.programs.neovim = {
+    plugins = [
+      np.nvim-treesitter-parsers.glsl
+    ];
+    extraLspConfig = ''
+      lspconfig.glsl_analyzer.setup({ cmd = { "${pkgs.glslls}/bin/glslls" } })
+    '';
+  };
+
 in
 {
   imports = [
@@ -223,6 +232,7 @@ in
     lang-bash
     lang-cmake
     lang-cpp
+    lang-glsl
     lang-haskell
     lang-javascript
     lang-nix
