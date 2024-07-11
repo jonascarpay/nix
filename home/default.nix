@@ -26,6 +26,7 @@
       pkgs.ripgrep
       # youtube-dl
       # weechat
+      pkgs.zip
     ];
 
     sessionVariables = {
