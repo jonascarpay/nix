@@ -3,9 +3,9 @@ let
 
   scrubnix = pkgs.writeShellScriptBin "scrubnix" ''
     if [[ $* == *-v* ]]; then
-      sed -E 's#/nix/store/([a-z0-9]{5})[a-z0-9]{27}-([a-zA-Z0-9+?=._-]+)#<\2@\1>#g' -
+      sed --unbuffered -E 's#/nix/store/([a-z0-9]{5})[a-z0-9]{27}-([a-zA-Z0-9+?=._-]+)#<\2@\1>#g' -
     else
-      sed -E 's#/nix/store/[a-z0-9]{32}-([a-zA-Z0-9+?=._-]+)#<\1>#g' -
+      sed --unbuffered -E 's#/nix/store/[a-z0-9]{32}-([a-zA-Z0-9+?=._-]+)#<\1>#g' -
     fi
   '';
 
