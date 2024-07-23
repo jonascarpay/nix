@@ -86,7 +86,8 @@ in
       ../../nixos/ndh.nix
     ];
 
-  networking.useNetworkd = true;
+  # networking.useNetworkd = true;
+  # networking.interfaces.eno1.useDHCP = true; # from hardware-config
 
   # default from configuration.nix
   services.xserver.xkb = {
@@ -104,9 +105,9 @@ in
   environment.systemPackages = [ pkgs.linuxPackages.perf ];
 
   networking.hostName = "norf";
-  networking.resolvconf.dnsSingleRequest = true; # supposedly fixes slow DNS, see https://github.com/hashicorp/vagrant/issues/1172
-  networking.interfaces.eno1.wakeOnLan.enable = true;
-  networking.interfaces.eno1.useDHCP = true;
+  # networking.resolvconf.dnsSingleRequest = true; # supposedly fixes slow DNS, see https://github.com/hashicorp/vagrant/issues/1172
+  networking.networkmanager.enable = true;
+  # networking.useDHCP = true;
 
   time.timeZone = "Asia/Tokyo";
   time.hardwareClockInLocalTime = true;
@@ -114,8 +115,8 @@ in
 
   environment.variables.ST_FONT = "SauceCodePro Nerd Font:pixelsize=24:antialias=true:autohint=true";
 
-  services.mullvad-vpn.enable = true;
-  services.mullvad-vpn.enableExcludeWrapper = true;
+  # services.mullvad-vpn.enable = true;
+  # services.mullvad-vpn.enableExcludeWrapper = true;
 
   system.stateVersion = "23.05";
 }

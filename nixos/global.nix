@@ -101,7 +101,6 @@ in
   };
   services.tuptime.enable = true;
   # services.mullvad-vpn.enable = true;
-  # services.mullvad-vpn.enableExcludeWrapper = true;
 
   programs.bash.enableCompletion = true; # enable tab-completion for nix-* tools
   programs.mosh.enable = true;
