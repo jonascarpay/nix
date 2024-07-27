@@ -53,7 +53,6 @@ in
     [
       ../../nixos/global.nix
       ./unbound.nix
-      ./wireguard.nix
       ./domo.nix
       zfs
       rclone

@@ -98,7 +98,7 @@ in
     [
       ../../nixos/global.nix
       # ./unbound.nix
-      # ./wireguard.nix
+      ./wireguard.nix
       # ./domo.nix
       # zfs
       # rclone
