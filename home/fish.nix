@@ -83,8 +83,6 @@
       sscu = "sudo systemctl status";
       tmp = "cd (mktemp -d)";
       v = "vim";
-      vd = "vimdir";
-      vn = "vimdir ~/nix";
     };
   };
   home.file.".tmux.conf".text =
