@@ -17,6 +17,7 @@
     stateVersion = "23.05";
     packages = [
       pkgs.silver-searcher # TODO do I use this? yes for fzf fg
+      pkgs.visidata
       pkgs.cloc
       pkgs.entr
       pkgs.jq
