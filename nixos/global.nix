@@ -57,6 +57,7 @@ in
   ];
   environment = {
     systemPackages = with pkgs; [
+      ascii
       dnsutils
       exfat
       file
