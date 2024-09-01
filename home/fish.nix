@@ -21,7 +21,8 @@
           -error $status \
           -shell bare \
           -jobs (jobs -p | wc -l | xargs) \
-          -modules venv,ssh,cwd,perms,git,exit,nix-shell,jobs
+          -hostname-only-if-ssh \
+          -modules venv,host,ssh,cwd,perms,git,exit,nix-shell,jobs
       end
 
 
