@@ -305,7 +305,7 @@ in
         '';
       }
 
-      np.vim-signature
+      # np.vim-signature
       np.vim-polyglot # only used for proper indent on cc
       np.commentary # TODO switch to Comment.nvim
       np.surround
