@@ -226,6 +226,9 @@ let
     '';
   };
 
+  lang-vimdoc.programs.neovim = {
+    plugins = [ np.nvim-treesitter-parsers.vimdoc ];
+  };
 in
 {
   imports = [
@@ -245,8 +248,15 @@ in
     lang-python
     lang-rust
     lang-toml
+    lang-vimdoc
   ];
-  programs.git.ignores = [ "*~" "*.swp" "*.swo" "tags" "!tags/" ];
+  programs.git.ignores = [
+    "*~"
+    "*.swp"
+    "*.swo"
+    "tags"
+    "!tags/"
+  ];
   programs.neovim = {
     enable = true;
     defaultEditor = true;
@@ -507,7 +517,6 @@ in
           })
         '';
       }
-
     ];
   };
 }
