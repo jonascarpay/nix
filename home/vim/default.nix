@@ -138,7 +138,7 @@ let
   lang-nix.programs.neovim = {
     extraPackages = [ pkgs.nil ];
     plugins = [ np.nvim-treesitter-parsers.nix ];
-    formatters.nix.exe = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt";
+    formatters.nix.exe = "${pkgs.nixfmt-rfc-style}/bin/nixfmt";
     extraLspConfig = ''
       lspconfig.nil_ls.setup({})
     '';
