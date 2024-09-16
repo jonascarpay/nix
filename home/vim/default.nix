@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
   np = pkgs.vimPlugins;
 
@@ -173,7 +178,13 @@ let
 
   lang-python.programs.neovim = {
     plugins = [ np.nvim-treesitter-parsers.python ];
-    formatters.python = { exe = "${pkgs.black}/bin/black"; args = [ "-q" "-" ]; };
+    formatters.python = {
+      exe = "${pkgs.black}/bin/black";
+      args = [
+        "-q"
+        "-"
+      ];
+    };
     extraLspConfig = ''
       lspconfig.pyright.setup({})
       lspconfig.ruff_lsp.setup({})
@@ -182,7 +193,9 @@ let
 
   lang-rust.programs.neovim = {
     plugins = [ np.nvim-treesitter-parsers.rust ];
-    formatters.rust = { exe = "rustfmt"; };
+    formatters.rust = {
+      exe = "rustfmt";
+    };
     extraLspConfig = ''
       lspconfig.rust_analyzer.setup({
         settings = {
@@ -208,19 +221,19 @@ let
   };
 
   lang-cmake.programs.neovim = {
-    plugins = [
-      np.nvim-treesitter-parsers.cmake
-    ];
-    formatters.cmake = { exe = "${pkgs.cmake-format}/bin/cmake-format"; stdin = false; args = [ "--in-place" ]; };
+    plugins = [ np.nvim-treesitter-parsers.cmake ];
+    formatters.cmake = {
+      exe = "${pkgs.cmake-format}/bin/cmake-format";
+      stdin = false;
+      args = [ "--in-place" ];
+    };
     extraLspConfig = ''
       lspconfig.cmake.setup({ cmd = { "${pkgs.cmake-language-server}/bin/cmake-language-server" } })
     '';
   };
 
   lang-glsl.programs.neovim = {
-    plugins = [
-      np.nvim-treesitter-parsers.glsl
-    ];
+    plugins = [ np.nvim-treesitter-parsers.glsl ];
     extraLspConfig = ''
       lspconfig.glsl_analyzer.setup({ cmd = { "${pkgs.glslls}/bin/glslls" } })
     '';
@@ -305,6 +318,16 @@ in
       set foldlevel=99
       set nowrap
       noremap <2-LeftMouse> za
+      nnoremap z0 :set foldlevel=0<cr>
+      nnoremap z1 :set foldlevel=1<cr>
+      nnoremap z2 :set foldlevel=2<cr>
+      nnoremap z3 :set foldlevel=3<cr>
+      nnoremap z4 :set foldlevel=4<cr>
+      nnoremap z5 :set foldlevel=5<cr>
+      nnoremap z6 :set foldlevel=6<cr>
+      nnoremap z7 :set foldlevel=7<cr>
+      nnoremap z8 :set foldlevel=8<cr>
+      nnoremap z9 :set foldlevel=9<cr>
     '';
     plugins = [
       {
@@ -372,17 +395,25 @@ in
         config =
           let
             quote = str: "\"${str}\"";
-            mkFmt = ft: { exe, stdin ? true, args ? [ ], raw_args ? [ ] }: ''
-              ${ft} = {
-                function()
-                  return {
-                    exe = ${quote exe},
-                    args = { ${lib.concatStringsSep ", " (builtins.map quote args ++ raw_args) } },
-                    stdin = ${if stdin then "true" else "false"},
-                  }
-                end
-              },
-            '';
+            mkFmt =
+              ft:
+              {
+                exe,
+                stdin ? true,
+                args ? [ ],
+                raw_args ? [ ],
+              }:
+              ''
+                ${ft} = {
+                  function()
+                    return {
+                      exe = ${quote exe},
+                      args = { ${lib.concatStringsSep ", " (builtins.map quote args ++ raw_args)} },
+                      stdin = ${if stdin then "true" else "false"},
+                    }
+                  end
+                },
+              '';
           in
           ''
             lua << EOF
