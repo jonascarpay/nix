@@ -304,6 +304,7 @@ in
       set fdm=indent
       set foldlevel=99
       set nowrap
+      noremap <2-LeftMouse> za
     '';
     plugins = [
       {
