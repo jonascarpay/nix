@@ -8,6 +8,7 @@
     ./vim
     ./git.nix
     ./postgres.nix
+    ./daily.nix
     inputs.agenix.homeManagerModules.age
   ];
 
