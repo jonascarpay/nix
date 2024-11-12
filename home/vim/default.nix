@@ -1,8 +1,7 @@
-{
-  pkgs,
-  lib,
-  config,
-  ...
+{ pkgs
+, lib
+, config
+, ...
 }:
 let
   np = pkgs.vimPlugins;
@@ -143,7 +142,8 @@ let
   lang-nix.programs.neovim = {
     extraPackages = [ pkgs.nil ];
     plugins = [ np.nvim-treesitter-parsers.nix ];
-    formatters.nix.exe = "${pkgs.nixfmt-rfc-style}/bin/nixfmt";
+    # formatters.nix.exe = "${pkgs.nixfmt-rfc-style}/bin/nixfmt";
+    formatters.nix.exe = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt";
     extraLspConfig = ''
       lspconfig.nil_ls.setup({})
     '';
@@ -397,11 +397,11 @@ in
             quote = str: "\"${str}\"";
             mkFmt =
               ft:
-              {
-                exe,
-                stdin ? true,
-                args ? [ ],
-                raw_args ? [ ],
+              { exe
+              , stdin ? true
+              , args ? [ ]
+              , raw_args ? [ ]
+              ,
               }:
               ''
                 ${ft} = {
