@@ -82,7 +82,7 @@
       ssco = "sudo systemctl stop";
       sscr = "sudo systemctl restart";
       sscu = "sudo systemctl status";
-      tmp = "cd (mktemp -d)";
+      tmp = "take /tmp/scratch";
       v = "vim";
     };
   };
