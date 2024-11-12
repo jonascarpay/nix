@@ -25,7 +25,6 @@
           -modules venv,host,ssh,cwd,perms,git,exit,nix-shell,jobs
       end
 
-
       function fzcd
           set -l dir (frecently view ~/.local/share/frecently/directory-history | fzf --no-sort --preview 'tree -C {} --gitignore -L 1')
           if test -n "$dir"
