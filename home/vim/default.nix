@@ -137,6 +137,10 @@ let
     extraLspConfig = ''
       lspconfig.hls.setup({})
     '';
+    extraConfig = ''
+      autocmd FileType haskell let g:fzf_tags_command = 'fast-tags -R --exclude=dist-newstye .'
+      au BufWritePost *.hs silent! !${pkgs.haskellPackages.fast-tags}/bin/fast-tags -R --exclude=dist-newstyle . &
+    '';
   };
 
   lang-nix.programs.neovim = {
@@ -480,8 +484,6 @@ in
           nn <leader>ft :Tags<CR>
           nn <leader>fh :Helptags<CR>
           nn <leader>fb :Buffers<CR>
-          autocmd FileType haskell let g:fzf_tags_command = 'fast-tags -R --exclude=dist-newstye .'
-          au BufWritePost *.hs silent! !${pkgs.haskellPackages.fast-tags}/bin/fast-tags -R --exclude=dist-newstyle . &
           let $FZF_DEFAULT_COMMAND = '${pkgs.ripgrep}/bin/rg --files'
         '';
       }
