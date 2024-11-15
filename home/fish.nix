@@ -2,11 +2,10 @@
 {
   programs.fish = {
     enable = true;
+    functions = {
+      gi = "curl -sL https://www.gitignore.io/api/$argv";
+    };
     shellInit = ''
-      function gi
-        curl -sL https://www.gitignore.io/api/$argv
-      end
-
       function take -a dir
         if test -n "$dir"
           mkdir -p $dir
