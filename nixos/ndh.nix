@@ -33,6 +33,26 @@
           hostname = "192.168.183.109";
           proxyJump = "tx108.ndh";
         };
+        "jp108.ndh" = lib.hm.dag.entryAfter [ "tx108.ndh" ] {
+          inherit (config) user identityFile;
+          hostname = "192.168.183.108";
+          proxyJump = "tx108.ndh";
+        };
+        "jp107.ndh" = lib.hm.dag.entryAfter [ "tx108.ndh" ] {
+          inherit (config) user identityFile;
+          hostname = "192.168.183.107";
+          proxyJump = "tx108.ndh";
+        };
+        "jp110.ndh" = lib.hm.dag.entryAfter [ "tx108.ndh" ] {
+          inherit (config) user identityFile;
+          hostname = "192.168.183.110";
+          proxyJump = "tx108.ndh";
+        };
+        "jp113.ndh" = lib.hm.dag.entryAfter [ "tx108.ndh" ] {
+          inherit (config) user identityFile;
+          hostname = "192.168.183.113";
+          proxyJump = "tx108.ndh";
+        };
       };
     };
 }
