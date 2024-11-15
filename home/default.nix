@@ -64,6 +64,12 @@
     man.generateCaches = true;
     fzf.enable = true;
 
+    eza = {
+      enable = true;
+      git = true;
+      icons = true;
+    };
+
     git = {
       enable = true;
       userName = "Jonas Carpay";
