@@ -331,7 +331,9 @@ in
       nnoremap z6 :set foldlevel=6<cr>
       nnoremap z7 :set foldlevel=7<cr>
       nnoremap z8 :set foldlevel=8<cr>
-      nnoremap z9 :set foldlevel=9<cr>
+      nnoremap z9 :set foldlevel=99<cr>
+      nnoremap z] :set foldlevel+=1<cr>
+      nnoremap z[ :set foldlevel-=1<cr>
     '';
     plugins = [
       {
