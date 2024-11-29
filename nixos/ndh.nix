@@ -28,6 +28,11 @@
         "tx105.ndh" = config;
         "tx106.ndh" = config;
         "tx108.ndh" = config;
+        "jp104.ndh" = lib.hm.dag.entryAfter [ "tx108.ndh" ] {
+          inherit (config) user identityFile;
+          hostname = "192.168.183.104";
+          proxyJump = "tx108.ndh";
+        };
         "jp109.ndh" = lib.hm.dag.entryAfter [ "tx108.ndh" ] {
           inherit (config) user identityFile;
           hostname = "192.168.183.109";
