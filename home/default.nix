@@ -1,4 +1,23 @@
-{ pkgs, inputs, ... }: {
+{ pkgs, inputs, ... }:
+let
+  yazi = {
+    programs.yazi = {
+      enable = true;
+      enableBashIntegration = true;
+      enableFishIntegration = true;
+    };
+    programs.fish.shellAbbrs.y = "ya";
+  };
+
+  bat = {
+    programs.bat = {
+      enable = true;
+    };
+    programs.fish.shellAliases.cat = "bat";
+  };
+
+in
+{
   imports = [
     ./direnv.nix
     ./fish.nix
@@ -10,6 +29,8 @@
     ./postgres.nix
     ./daily.nix
     inputs.agenix.homeManagerModules.age
+    yazi
+    bat
   ];
 
   manual.manpages.enable = true;
