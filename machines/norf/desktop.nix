@@ -79,6 +79,7 @@ in
     unstable.signal-desktop
     pkgs.tdesktop
     pkgs.ungoogled-chromium
+    pkgs.google-chrome
     pkgs.blender
     pkgs.darktable
     pkgs.steam
