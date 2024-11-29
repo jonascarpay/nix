@@ -40,19 +40,11 @@ let
     ${pkgs.tesseract}/bin/tesseract $TMP/cap_upscale.png stdout -l eng+jpn | sed -z 's/[[:space:]]*$//g' | xclip -selection clipboard
   '';
 
-  myrehex = (pkgs.writeShellScriptBin "rehex" ''
-    export GIO_EXTRA_MODULES='${pkgs.dconf}/lib/gio/modules'
-    export GDK_PIXBUF_MODULE_FILE='${pkgs.librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache'
-    export XDG_DATA_DIRS='${pkgs.gtk3}/share/gsettings-schemas/gtk+3-${pkgs.gtk3.version}:${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/gsettings-desktop-schemas-${pkgs.gsettings-desktop-schemas.version}'
-    ${pkgs.rehex}/bin/rehex "$@"
-  '');
-
   pass = {
     imports = [ ../../home/pass.nix ];
     programs.password-store.settings.PASSWORD_STORE_DIR = "/home/jmc/Passwords";
     home.packages = [ pkgs.qtpass ];
   };
-
 in
 
 {
@@ -73,7 +65,6 @@ in
     myretroarch
     myanki
     myocr
-    myrehex
     pkgs.qbittorrent
     pkgs.slack
     unstable.signal-desktop
