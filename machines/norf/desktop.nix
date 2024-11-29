@@ -76,7 +76,7 @@ in
     myrehex
     pkgs.qbittorrent
     pkgs.slack
-    pkgs.signal-desktop
+    unstable.signal-desktop
     pkgs.tdesktop
     pkgs.ungoogled-chromium
     pkgs.blender
