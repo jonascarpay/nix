@@ -2,6 +2,7 @@
 let
   history-root = "/home/jmc/.local/share/frecently";
 
+  # TODO this does not properly handle directories with spaces in their names
   dmenu-directory =
     let
       history = "${history-root}/directory-history";
@@ -90,6 +91,14 @@ let
     done
   '';
 
+  dmenu-ssh = pkgs.writeShellScriptBin "dmenu-ssh" ''
+    set -eo pipefail
+    HISTORY=/home/jmc/.local/share/frecently/ssh-history
+    HOST=$(cut -d' ' -f1 ~/.ssh/known_hosts | sed 's/,.*//' | sort -u | frecently view -ar $HISTORY | dmenu -sr -i -p " " -i)
+    frecently bump $HISTORY $HOST
+    st $@ ssh $HOST
+  '';
+
 in
 {
   imports = [
@@ -103,5 +112,6 @@ in
     dmenu-pass
     dmenu-web-search
     dmenu-delete
+    dmenu-ssh
   ];
 }

@@ -95,6 +95,8 @@ in
             "d" = exec "dmenu-directory";
             "r" = exec "dmenu-command -c floating";
             "g" = exec "dmenu-web-search";
+            "v" = exec "dmenu-ssh";
+            "shift+v" = exec "dmenu-ssh -c floating";
             "shift+d" = exec "dmenu-directory -c floating";
             "n" = "mode notes";
             "s" = "split toggle";
