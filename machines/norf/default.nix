@@ -12,10 +12,9 @@ let
       enable = true;
       videoDrivers = [ "nvidia" ];
     };
-    hardware.opengl = {
+    hardware.graphics = {
       enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
+      enable32Bit = true;
     };
     hardware.nvidia = {
       modesetting.enable = true;
@@ -26,8 +25,13 @@ let
   };
 
   sound = {
-    sound.enable = true;
-    hardware.pulseaudio.enable = true;
+    security.rtkit.enable = true; # TODO wiki recommends but why
+    services.pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+    };
     environment.systemPackages = [ pkgs.pavucontrol ];
   };
 
@@ -41,7 +45,7 @@ let
   gnome-support = {
     # Applications like font-manager complain about missing services without this, see https://nixos.wiki/wiki/GNOME#Running_GNOME_programs_outside_of_GNOME
     programs.dconf.enable = true;
-    environment.systemPackages = [ pkgs.gnome.adwaita-icon-theme ];
+    environment.systemPackages = [ pkgs.adwaita-icon-theme ]; # TODO dar-mode already includes this?
   };
 
   zfs = {
@@ -117,6 +121,9 @@ in
 
   # services.mullvad-vpn.enable = true;
   # services.mullvad-vpn.enableExcludeWrapper = true;
+
+  # in man but broken?
+  # services.ddcontrol.enable = true;
 
   system.stateVersion = "23.05";
 }

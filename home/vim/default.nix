@@ -18,26 +18,70 @@ let
       np.vim-snippets
       np.trouble-nvim
     ];
+    # Adapted from https://github.com/VonHeikemen/lsp-zero.nvim?tab=readme-ov-file#quickstart-for-the-impatient
     programs.neovim.extraLuaConfig = ''
-      local lsp_zero = require('lsp-zero')
+      -- Reserve a space in the gutter
+      vim.opt.signcolumn = 'yes'
 
-      lsp_zero.on_attach(function(client, bufnr)
-        lsp_zero.default_keymaps({buffer = bufnr})
-        -- 2023-12-31: Disable LSP syntax highlighting, treesitter seems better
-        client.server_capabilities.semanticTokensProvider = nil
-      end)
-      local lspconfig = require('lspconfig')
+      -- Add cmp_nvim_lsp capabilities settings to lspconfig
+      -- This should be executed before you configure any language server
+      local lspconfig_defaults = require('lspconfig').util.default_config
+      lspconfig_defaults.capabilities = vim.tbl_deep_extend(
+        'force',
+        lspconfig_defaults.capabilities,
+        require('cmp_nvim_lsp').default_capabilities()
+      )
+
+      -- This is where you enable features that only work
+      -- if there is a language server active in the file
+      vim.api.nvim_create_autocmd('LspAttach', {
+        desc = 'LSP actions',
+        callback = function(event)
+          local opts = {buffer = event.buf}
+
+          vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
+          vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
+          vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
+          vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
+          vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
+          vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
+          vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
+          vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+          vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+          vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+          vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>', opts)
+          vim.keymap.set('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>', opts)
+        end,
+      })
 
       local cmp = require('cmp')
+      local luasnip = require('luasnip')
+      local lsp_zero = require('lsp-zero')
       local cmp_action = lsp_zero.cmp_action()
+
       cmp.setup({
+        preselect = 'item',
+        completion = {
+          completeopt = 'menu,menuone,noinsert'
+        },
         sources = {
           {name = 'path'},
           {name = 'nvim_lsp'},
           {name = 'luasnip', keyword_length = 2},
           {name = 'buffer', keyword_length = 3},
         },
+        -- window = {
+        --   completion = cmp.config.window.bordered(),
+        --   documentation = cmp.config.window.bordered(),
+        -- },
+        snippet = {
+          expand = function(args)
+            luasnip.lsp_expand(args.body)
+          end,
+        },
         mapping = cmp.mapping.preset.insert({
+          ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+          ['<C-space>'] = cmp_action.toggle_completion(),
           -- Navigate between snippet placeholder
           ['<C-f>'] = cmp_action.luasnip_jump_forward(),
           ['<C-b>'] = cmp_action.luasnip_jump_backward(),
@@ -47,11 +91,13 @@ let
         })
       })
 
-      local luasnip = require('luasnip')
       local from_snipmate = require("luasnip.loaders.from_snipmate")
       from_snipmate.lazy_load()
       from_snipmate.load({paths = "${./snippets}"})
 
+      require('trouble').setup {}
+
+      local lspconfig = require('lspconfig')
       ${config.programs.neovim.extraLspConfig}
     '';
   };
@@ -191,7 +237,7 @@ let
     };
     extraLspConfig = ''
       lspconfig.pyright.setup({})
-      lspconfig.ruff_lsp.setup({})
+      lspconfig.ruff.setup({})
     '';
   };
 
@@ -201,13 +247,7 @@ let
       exe = "rustfmt";
     };
     extraLspConfig = ''
-      lspconfig.rust_analyzer.setup({
-        settings = {
-          ['rust-analyzer'] = {
-            features = "all"
-          }
-        }
-      })
+      lspconfig.rust_analyzer.setup({})
     '';
   };
 

@@ -35,11 +35,11 @@ let
   dark-mode = {
     dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
     gtk.iconTheme = {
-      package = pkgs.gnome.adwaita-icon-theme;
+      package = pkgs.adwaita-icon-theme;
       name = "Adwaita";
     };
     gtk.theme = {
-      package = pkgs.gnome.gnome-themes-extra;
+      package = pkgs.gnome-themes-extra;
       name = "Adwaita-dark";
     };
   };
@@ -60,7 +60,7 @@ in
   home.packages = [
     inputs.st.defaultPackage.${pkgs.system}
     pkgs.vlc
-    pkgs.gnome3.nautilus
+    pkgs.nautilus
     pkgs.okular
     pkgs.sxiv
     pkgs.xclip # Doesn't work?

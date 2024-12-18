@@ -35,7 +35,6 @@ in
     enableDefaultPackages = true;
     packages = with pkgs; [
       pkgs.noto-fonts
-      pkgs.noto-fonts-cjk
       pkgs.noto-fonts-cjk-sans
       pkgs.noto-fonts-cjk-serif
       pkgs.noto-fonts-emoji
