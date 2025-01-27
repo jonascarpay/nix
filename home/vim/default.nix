@@ -119,6 +119,29 @@ let
     };
   };
 
+  oil.programs.neovim = {
+    plugins = [
+      np.oil-nvim
+      np.mini-icons
+      np.nvim-web-devicons
+    ];
+    extraConfig = ''
+      :set splitright
+      :set splitbelow
+    '';
+    extraLuaConfig = ''
+      require("oil").setup({
+        default_file_explorer = true,
+        columns = { "icon" },
+        view_options = {
+          show_hidden = true,
+          natural_order = "fast",
+        }
+      })
+        vim.api.nvim_set_keymap('n', '<C-n>', ':Oil<CR>', { noremap = true, })
+    '';
+  };
+
   cursorline.programs.neovim.extraConfig = ''
     augroup CursorLine
       au!
@@ -569,7 +592,7 @@ in
         type = "lua";
         config = ''
           require('lualine').setup({
-            options = { theme = 'nord' },
+            options = { theme = 'everforest' },
             sections = {
               lualine_c = {
                 {
