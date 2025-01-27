@@ -34,11 +34,6 @@
       url = "github:jonascarpay/dm-mono-patched";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    st = {
-      url = "github:jonascarpay/st";
-      # url = "/home/jmc/Dev/st";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     # replaced by nix-index?
     # programs-db = {
     #   url = "github:binplz/programs.sqlite";

@@ -360,21 +360,6 @@
         "type": "github"
       }
     },
-    "flake-utils_5": {
-      "locked": {
-        "lastModified": 1648297722,
-        "narHash": "sha256-W+qlPsiZd8F3XkzXOzAoR+mpFqzm3ekQkJNa+PIh1BQ=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "0f8662f1319ad6abf89b3380dd2722369fc51ade",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
     "format-all": {
       "flake": false,
       "locked": {
@@ -746,7 +731,6 @@
         "nix-doom-emacs": "nix-doom-emacs",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
-        "st": "st",
         "unstable": "unstable"
       }
     },
@@ -779,27 +763,6 @@
       "original": {
         "owner": "sensorflo",
         "repo": "sln-mode",
-        "type": "github"
-      }
-    },
-    "st": {
-      "inputs": {
-        "flake-utils": "flake-utils_5",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1737873167,
-        "narHash": "sha256-Xsuld/9S3meYRUSYvxh6POTz56Twnh7CalTFxLA0nzE=",
-        "owner": "jonascarpay",
-        "repo": "st",
-        "rev": "113854c54ca82e5ecc5f23ce1519773c88150a2c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jonascarpay",
-        "repo": "st",
         "type": "github"
       }
     },

@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 let
   widgets = {
     qt.enable = true;
@@ -58,7 +58,7 @@ in
     cursor
   ];
   home.packages = [
-    inputs.st.defaultPackage.${pkgs.system}
+    (pkgs.callPackage ./st { })
     pkgs.vlc
     pkgs.nautilus
     pkgs.okular
