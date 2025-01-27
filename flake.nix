@@ -26,10 +26,6 @@
       url = "github:jonascarpay/frecently/preserve-index";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    dmenu = {
-      url = "github:jonascarpay/dmenu";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     dmmono = {
       url = "github:jonascarpay/dm-mono-patched";
       inputs.nixpkgs.follows = "nixpkgs";

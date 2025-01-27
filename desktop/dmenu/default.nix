@@ -106,7 +106,7 @@ in
     dmenu-command
   ];
   home.packages = [
-    inputs.dmenu.defaultPackage.${pkgs.system}
+    (pkgs.callPackage ./dmenu { })
     inputs.frecently.defaultPackage.${pkgs.system}
     dmenu-run
     dmenu-pass
