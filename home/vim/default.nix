@@ -291,7 +291,7 @@ in
   imports = [
     ./options.nix
     lsp
-    tree
+    oil
     workspace-symbols
     treesitter
     cursorline
@@ -560,8 +560,8 @@ in
       }
 
       {
-        plugin = np.nord-nvim;
-        config = "colorscheme nord";
+        plugin = np.everforest;
+        config = "colorscheme everforest";
       }
 
       {

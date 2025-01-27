@@ -1,8 +1,11 @@
+let
+  everforest = (import ../home/everforest.nix).default;
+in
 {
   services.dunst = {
     enable = true;
     settings = {
-      colors.foreground = "#d8dee9";
+      colors.foreground = everforest.fg;
       global = {
         follow = "keyboard";
         geometry = "900-15+45"; # tweaked for bar size 30
@@ -16,9 +19,9 @@
         max_icon_size = 160;
         word_wrap = true;
       };
-      urgency_low.background = "#232831";
-      urgency_normal.background = "#232831";
-      urgency_critical.background = "#4c566a";
+      urgency_low.background = everforest.bg0;
+      urgency_normal.background = everforest.bg2;
+      urgency_critical.background = everforest.bg_red;
     };
   };
 }

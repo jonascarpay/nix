@@ -100,11 +100,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1682058463,
-        "narHash": "sha256-B2DXu2CJAT3FCKGmuJRbI5X1cEdDCgXaTjGVke1qVyQ=",
+        "lastModified": 1737909503,
+        "narHash": "sha256-F3I74QN9xd616QZYTN8ylP5WdL0/HgXwV0JVnoTVpwI=",
         "owner": "jonascarpay",
         "repo": "dmenu",
-        "rev": "e26220811589255117d485a16ad0db04c63913d3",
+        "rev": "451edc1dcc89d1385f2da063a564a0eb4d52d631",
         "type": "github"
       },
       "original": {
@@ -790,11 +790,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1692417925,
-        "narHash": "sha256-5KO15sScOyhMiQ+dej8ofSVKBpP5Zk8UvhScTnd6IRA=",
+        "lastModified": 1737873167,
+        "narHash": "sha256-Xsuld/9S3meYRUSYvxh6POTz56Twnh7CalTFxLA0nzE=",
         "owner": "jonascarpay",
         "repo": "st",
-        "rev": "faf43572d16ba933df11865b928a9d39049987cf",
+        "rev": "113854c54ca82e5ecc5f23ce1519773c88150a2c",
         "type": "github"
       },
       "original": {

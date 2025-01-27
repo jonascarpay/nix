@@ -36,19 +36,16 @@
     settings =
       let
 
-        colors = {
-          foreground = "#d8dee9";
-          background = "#232831"; # darker than normal nord, slightly more muted
-          snow0 = "#d8dee9";
-          red = "#BF616A";
-          green = "#A3BE8C";
-          orange = "#D08770";
-        };
+        colors = let everforest = (import ../home/everforest.nix); in
+          everforest.dark.background.medium //
+          everforest.dark.foreground
+        ;
 
       in
       {
         "bar/common" = {
-          inherit (colors) foreground background;
+          foreground = colors.fg;
+          background = colors.bg_dim;
           width = "100%";
           font-0 = "SauceCodePro Nerd Font:style=Regular:size=8;2";
           font-1 = "SauceCodePro Nerd Font:style=Bold:size=8;2";
@@ -56,7 +53,7 @@
           tray-position = "right";
           module-margin = "1";
           modules-left = "i3 xwindow";
-          line-color = colors.snow0;
+          line-color = colors.bg5;
           line-size = "3";
         };
 
@@ -87,12 +84,25 @@
           interval = "30";
         };
 
+        "module/mochi" =
+          let
+            singleping = pkgs.writeShellScript "singleping" ''
+              if output=$(ping -W 1 -q -c 5 192.168.1.20 | grep -oP " = \K\d"); then
+                  echo "󰒍 %{F${colors.green}}$output ms%{F-}"
+              else
+                  echo "%{F${colors.red}}󰒎 %{F-}"
+              fi
+            '';
+          in
+          {
+            type = "custom/script";
+            exec = "${singleping}";
+            interval = "30";
+          };
+
         "module/onigiri" =
           let
             singleping = pkgs.writeShellScript "singleping" ''
-              #!/usr/bin/env bash
-
-              # if output=$(ping -c 1 -W 1 192.168.1.6 | grep -oP ".*time=\K\d+"); then
               if output=$(ping -W 1 -q -c 5 192.168.1.6 | grep -oP " = \K\d"); then
                   echo "󰒍 %{F${colors.green}}$output ms%{F-}"
               else
@@ -218,8 +228,8 @@
           format = "%{T1} <label-state> <label-mode>%{T-}";
 
           label-focused = "%index%";
-          label-focused-foreground = colors.background;
-          label-focused-background = colors.foreground;
+          label-focused-foreground = colors.bg0;
+          label-focused-background = colors.fg;
           label-focused-padding = 1;
 
           label-mode-foreground = colors.red;
@@ -232,7 +242,7 @@
           label-visible-padding = 1;
 
           label-urgent = "%index%";
-          label-urgent-foreground = colors.background;
+          label-urgent-foreground = colors.bg0;
           label-urgent-background = colors.red;
           label-urgent-padding = 1;
         };

@@ -54,6 +54,50 @@ in
 
       startup = [{ command = "systemctl --user restart polybar"; always = true; notification = false; }];
 
+      colors =
+        let
+          everforest = import ../../home/everforest.nix;
+          colors = everforest.dark.background.medium // everforest.dark.foreground;
+        in
+        {
+          background = "#ffffff";
+          focused = {
+            background = colors.bg0;
+            border = colors.blue;
+            childBorder = colors.bg_blue;
+            indicator = colors.aqua;
+            text = colors.fg;
+          };
+          focusedInactive = {
+            background = colors.bg0;
+            border = colors.bg_green;
+            childBorder = colors.bg_green;
+            indicator = colors.bg_blue;
+            text = colors.fg;
+          };
+          placeholder = {
+            background = colors.bg0;
+            border = "#000000";
+            childBorder = "#0c0c0c";
+            indicator = "#000000";
+            text = colors.fg;
+          };
+          unfocused = {
+            background = colors.bg0;
+            border = colors.bg0;
+            childBorder = colors.bg0;
+            indicator = colors.bg0;
+            text = colors.fg;
+          };
+          urgent = {
+            background = colors.bg0;
+            border = colors.red;
+            childBorder = colors.bg_red;
+            indicator = colors.bg_red;
+            text = colors.fg;
+          };
+        };
+
       modes =
         let
           mkMode = keys: { Escape = "mode default"; Return = "mode default"; q = "mode default"; "[--release] ${m}" = "mode default"; } // keys // withMod keys;
