@@ -62,17 +62,17 @@ in
         {
           background = "#ffffff";
           focused = {
-            background = colors.bg0;
-            border = colors.blue;
-            childBorder = colors.bg_blue;
+            background = colors.green;
+            border = colors.green;
+            childBorder = colors.bg_green;
             indicator = colors.aqua;
-            text = colors.fg;
+            text = colors.bg0;
           };
           focusedInactive = {
-            background = colors.bg0;
+            background = colors.bg_green;
             border = colors.bg_green;
             childBorder = colors.bg_green;
-            indicator = colors.bg_blue;
+            indicator = colors.aqua;
             text = colors.fg;
           };
           placeholder = {
