@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, unstable, ... }:
 let
   polybar = {
     imports = [ ../../desktop/polybar.nix ];
