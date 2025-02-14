@@ -102,23 +102,6 @@ let
     '';
   };
 
-  tree = {
-    programs.neovim = {
-      plugins = [
-        np.nvim-tree-lua
-        np.nvim-web-devicons
-      ];
-      # https://github.com/nvim-tree/nvim-tree.lua#quick-start
-      extraLuaConfig = ''
-        vim.g.loaded_netrw = 1
-        vim.g.loaded_netrwPlugin = 1
-        vim.opt.termguicolors = true
-        require("nvim-tree").setup()
-        vim.api.nvim_set_keymap('n', '<C-n>', ':NvimTreeToggle<CR>', { noremap = true, })
-      '';
-    };
-  };
-
   oil.programs.neovim = {
     plugins = [
       np.oil-nvim
