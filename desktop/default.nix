@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 let
   widgets = {
     qt.enable = true;
@@ -30,6 +30,19 @@ let
     };
   };
 
+  obsidian = {
+    home.packages = [
+      pkgs.obsidian
+    ];
+    services.git-sync = {
+      enable = true;
+      repositories.obsidian = {
+        path = "${config.home.homeDirectory}/Obsidian";
+        uri = "git+ssh://git@github.com:jonascarpay/Obsidian.git";
+      };
+    };
+  };
+
   # TODO why doesn't firefox pick up light in the same way
   # TODO set up darkman
   dark-mode = {
@@ -56,6 +69,7 @@ in
     qalculate
     dark-mode
     cursor
+    obsidian
   ];
   home.packages = [
     (pkgs.callPackage ./st { })
