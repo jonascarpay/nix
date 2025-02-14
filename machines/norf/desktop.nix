@@ -5,7 +5,7 @@ let
     services.polybar.settings = {
       "bar/mybar" = {
         "inherit" = "bar/common bar/hidpi";
-        modules-right = "notifications onigiri wired vpn fs memory cpu-temp gpu-temp cpu pulseaudio date-nl date";
+        modules-right = "notifications mochi onigiri wired vpn fs memory cpu-temp gpu-temp cpu pulseaudio date-nl date";
       };
       "module/wireless".interface = "wlp9s0";
       "module/wired".interface = "eno1";
