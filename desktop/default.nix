@@ -81,6 +81,8 @@ in
     zap
   ];
 
+  home.sessionVariables.ST_FONT = "DM Mono Nerd Font:pixelsize=24:antialias=true:autohint=true";
+
   programs.firefox.enable = true;
   home.keyboard.options = [ "ctrl:nocaps" ];
   fonts.fontconfig.enable = true;
