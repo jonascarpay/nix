@@ -117,11 +117,10 @@ let
         default_file_explorer = true,
         columns = { "icon" },
         view_options = {
-          show_hidden = true,
           natural_order = "fast",
         }
       })
-        vim.api.nvim_set_keymap('n', '<C-n>', ':Oil<CR>', { noremap = true, })
+      vim.api.nvim_set_keymap('n', '<C-n>', ':Oil<CR>', { noremap = true, })
     '';
   };
 
