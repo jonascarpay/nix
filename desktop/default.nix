@@ -78,6 +78,7 @@ in
     pkgs.okular
     pkgs.sxiv
     pkgs.xclip # Doesn't work?
+    pkgs.teams-for-linux
     zap
   ];
 
