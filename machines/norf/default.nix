@@ -72,6 +72,13 @@ let
     in
     { environment.systemPackages = [ script ]; };
 
+  docker = {
+    virtualisation.docker = {
+      enable = true;
+      autoPrune.enable = true;
+    };
+    users.users.jmc.extraGroups = [ "docker" ];
+  };
 
 in
 
@@ -88,6 +95,7 @@ in
       zfs
       ../../nixos/global.nix
       ../../nixos/ndh.nix
+      docker
     ];
 
   # networking.useNetworkd = true;
