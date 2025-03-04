@@ -121,14 +121,15 @@ let
         }
       })
       vim.api.nvim_set_keymap('n', '<C-n>', ':Oil<CR>', { noremap = true, })
-      -- https://github.com/stevearc/oil.nvim/issues/268#issuecomment-1880161152
-      vim.api.nvim_create_autocmd("VimEnter", {
-        callback = vim.schedule_wrap(function(data)
-          if vim.fn.argc() == 0 then
-            require("oil").open()
-          end
-        end),
-      })
+      -- Sadly, oil on startup causes more problems than it's worth
+      -- -- https://github.com/stevearc/oil.nvim/issues/268#issuecomment-1880161152
+      -- vim.api.nvim_create_autocmd("VimEnter", {
+      --   callback = vim.schedule_wrap(function(data)
+      --     if vim.fn.argc() == 0 then
+      --       require("oil").open()
+      --     end
+      --   end),
+      -- })
     '';
   };
 
