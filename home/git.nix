@@ -35,6 +35,7 @@ in
       commit.verbose = true;
       pull.rebase = true;
       init.defaultBranch = "master";
+      merge.conflictStyle = "zdiff3";
     };
   };
 }
