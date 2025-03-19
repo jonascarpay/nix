@@ -375,7 +375,7 @@ in
       set fdm=indent
       set foldlevel=99
       set nowrap
-      noremap <2-LeftMouse> za
+      noremap <2-LeftMouse> :lua vim.lsp.buf.definition()<CR>
       nnoremap z0 :set foldlevel=0<cr>
       nnoremap z1 :set foldlevel=1<cr>
       nnoremap z2 :set foldlevel=2<cr>
