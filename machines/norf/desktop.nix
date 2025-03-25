@@ -14,15 +14,6 @@ let
     };
   };
 
-  redshift = {
-    services.redshift = {
-      enable = true;
-      tray = true;
-      latitude = "35.6762";
-      longitude = "139.6503";
-    };
-  };
-
   myretroarch = pkgs.retroarch.override { cores = [ pkgs.libretro.mupen64plus ]; };
 
   myanki = pkgs.writeShellScriptBin "anki" ''
@@ -58,7 +49,6 @@ in
     ../../desktop
     # ../../desktop/emacs
     polybar
-    redshift
     pass
   ];
   home-manager.users.jmc.home.packages = [

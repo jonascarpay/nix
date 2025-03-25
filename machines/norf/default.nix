@@ -89,7 +89,7 @@ in
       sound
       graphics
       # wireless
-      ./desktop.nix
+      ./desktop-niri
       gnome-support
       udisks
       zfs

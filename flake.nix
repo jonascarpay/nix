@@ -41,10 +41,15 @@
     };
     nix-darwin = {
       url = "github:LnL7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "unstable";
     };
     monolog = {
       url = "github:jonascarpay/monolog";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    niri-flake = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs-stable.follows = "nixpkgs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

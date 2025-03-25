@@ -1,4 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
+let
+  frecently-pkg = inputs.frecently.defaultPackage.${pkgs.system};
+in
 {
   programs.fish = {
     enable = true;
@@ -25,7 +28,7 @@
       end
 
       function fzcd
-          set -l dir (frecently view ~/.local/share/frecently/directory-history | fzf --no-sort --preview 'tree -C {} --gitignore -L 1')
+          set -l dir (${frecently-pkg}/bin/frecently view ~/.local/share/frecently/directory-history | fzf --no-sort --preview 'tree -C {} --gitignore -L 1')
           if test -n "$dir"
               cd $dir
               and commandline -f repaint
