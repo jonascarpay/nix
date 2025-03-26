@@ -186,7 +186,11 @@ in
       };
     };
 
-    services.mako.enable = true;
+    services.mako = {
+      enable = true;
+      borderRadius = 4;
+      defaultTimeout = 10 * 1000;
+    };
     home.sessionVariables.NIXOS_OZONE_WL = 1;
     programs.niri.config = ''
       // https://github.com/YaLTeR/niri/wiki/Configuration:-Overview
