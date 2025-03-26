@@ -495,9 +495,9 @@ in
         // rather than stacked on top of each other.
         Mod+W { toggle-column-tabbed-display; }
 
-        Print { screenshot; }
-        Ctrl+Print { screenshot-screen; }
-        Alt+Print { screenshot-window; }
+        Mod+Apostrophe { screenshot; }
+        Mod+Ctrl+Apostrophe { screenshot-screen; }
+        Mod+Shift+Apostrophe { screenshot-window; }
 
         // Applications such as remote-desktop clients and software KVM switches may
         // request that niri stops processing the keyboard shortcuts defined here
