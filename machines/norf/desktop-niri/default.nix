@@ -80,10 +80,12 @@ in
   niri-flake.cache.enable = false;
 
   # This entire thing might not be necessary
-  services.xserver.displayManager.gdm = {
-    enable = true;
-    debug = true;
-    wayland = true; # TODO Remove, should be the default
+  services.xserver.displayManager = {
+    gdm.enable = true;
+    autoLogin = {
+      enable = true;
+      user = "jmc";
+    };
   };
 
   home-manager.users.jmc = {
