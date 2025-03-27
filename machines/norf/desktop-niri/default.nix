@@ -15,54 +15,73 @@ let
     };
   };
 
-  alacritty-focused =
+  focused-dir =
     let
       pwdx = "${pkgs.procps}/bin/pwdx";
       ps = "${pkgs.procps}/bin/ps";
     in
-    pkgs.writeShellScript "getFocusedPwd" ''
+    pkgs.writeShellScript "getFocusedDir" ''
+      set -e
       WINDOW_PID=$(niri msg focused-window | awk '/PID:/ {print $2}')
       SHELL_PID=$(${ps} --ppid $WINDOW_PID -o pid=)
-      PWD=$(${pwdx} $SHELL_PID | cut -d' ' -f 2)
-      if [ -d "$PWD" ]; then
-        alacritty --working-directory "$PWD"
-      else
-        alacritty
-      fi
+      DIR=$(${pwdx} $SHELL_PID | cut -d' ' -f 2)
+      echo "$DIR"
     '';
 
-  history-root = "/home/jmc/.local/share/frecently";
+  history-root = "/home/jmc/.local/share/frecently"; # TODO: proper config
   frecently-pkg = inputs.frecently.defaultPackage.${pkgs.system};
   frecently = "${frecently-pkg}/bin/frecently";
   # TODO this does not properly handle directories with spaces in their names
   fuzzel-directory =
     let
       history = "${history-root}/directory-history";
-      script =
-        pkgs.writeShellScriptBin "fuzzel-directory" ''
-          set -e
-          for dir in $(${frecently} view ${history}); do
-            if [ ! -d "$dir" ]; then
-              echo "Removing $dir"
-              ${frecently} delete ${history} "$dir"
-            fi
-          done
-          DIR=$(find $HOME/Dev $HOME/Documents -maxdepth 1 -type d | ${frecently} view ${history} -a | sed "s#$HOME#~#" | fuzzel -d -p " ")
-          DIR_REAL=$(realpath "''${DIR/#\~/$HOME}")
-          if [ -d $DIR_REAL ]; then
-            ${frecently} bump ${history} "$DIR_REAL"
-            alacritty --working-directory "$DIR_REAL"
-          fi
-        '';
     in
-    {
-      home.packages = [ script ];
-      programs.fish.shellInit = ''
-        function __frecently-directory-hook --on-variable PWD --description 'add current directory to directory history'
-          ${frecently} bump ${history} "$PWD"
-        end
-      '';
-    };
+    pkgs.writeShellScript "fuzzel-directory" ''
+      set -e
+      for dir in $(${frecently} view ${history}); do
+        if [ ! -d "$dir" ]; then
+          echo "Removing $dir"
+          ${frecently} delete ${history} "$dir"
+        fi
+      done
+      DIR=$(find $HOME/Dev $HOME/Documents -maxdepth 1 -type d | ${frecently} view ${history} -a | sed "s#$HOME#~#" | fuzzel -d -p " ")
+      DIR_REAL=$(realpath "''${DIR/#\~/$HOME}")
+      if [ -d $DIR_REAL ]; then
+        ${frecently} bump ${history} "$DIR_REAL"
+        echo "$DIR_REAL"
+      fi
+    '';
+
+  alacritty-fuzzel = pkgs.writeShellScript "alacritty-fuzzel" ''
+    DIR=$(${fuzzel-directory})
+    alacritty --working-directory "$DIR"
+  '';
+
+  alacritty-focused = pkgs.writeShellScript "alacritty-focused" ''
+    DIR=$(${focused-dir})
+    if [ -d "$DIR" ]; then
+      alacritty --working-directory "$DIR"
+    else
+      ${alacritty-fuzzel}
+    fi
+  '';
+
+  neovide-fuzzel = pkgs.writeShellScript "neovide-fuzzel" ''
+    DIR=$(${fuzzel-directory})
+    cd $DIR
+    neovide .
+  '';
+
+  neovide-focused = pkgs.writeShellScript "neovide-focused" ''
+    DIR=$(${focused-dir})
+    if [ -d "$DIR" ]; then
+      cd $DIR
+      neovide .
+    else
+      ${neovide-fuzzel}
+    fi
+  '';
+
 
 
 in
@@ -83,17 +102,34 @@ in
   services.xserver.displayManager = {
     gdm.enable = true;
     autoLogin = {
-      enable = true;
+      enable = false;
       user = "jmc";
     };
   };
 
   home-manager.users.jmc = {
 
+    programs.neovide = {
+      enable = true;
+      settings = {
+        font = {
+          size = 14.0;
+          normal = [ ];
+        };
+      };
+    };
+    programs.neovim.extraLuaConfig = let padding = "10"; in ''
+      vim.g.neovide_padding_top = ${padding}
+      vim.g.neovide_padding_bottom = ${padding}
+      vim.g.neovide_padding_right = ${padding}
+      vim.g.neovide_padding_left = ${padding}
+      vim.g.neovide_cursor_trail_size = 0.0
+      vim.g.neovide_cursor_animation_length = 0.04
+    '';
+
     imports = [
       ./wallpaper.nix
       obsidian
-      fuzzel-directory
     ];
 
     home.packages = [
@@ -352,10 +388,16 @@ in
 
         // Suggested binds for running programs: terminal, app launcher, screen locker.
         Mod+F { spawn "firefox"; }
+
         Mod+Return { spawn "${alacritty-focused}"; }
-        Mod+Shift+Return { spawn "alacritty"; }
+        Mod+Shift+Return { spawn "${alacritty-fuzzel}"; }
+        Mod+Ctrl+Return { spawn "alacritty"; }
+
+        Mod+N { spawn "${neovide-focused}"; }
+        Mod+Shift+N { spawn "${neovide-fuzzel}"; }
+        Mod+Ctrl+N { spawn "neovide"; }
+
         Mod+O { spawn "fuzzel"; }
-        Mod+D { spawn "fuzzel-directory"; }
 
         // You can also use a shell. Do this if you need pipes, multiple commands, etc.
         // Note: the entire command goes as a single argument in the end.
