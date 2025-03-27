@@ -53,6 +53,7 @@ let
     '';
 
   alacritty-fuzzel = pkgs.writeShellScript "alacritty-fuzzel" ''
+    set -e
     DIR=$(${fuzzel-directory})
     alacritty --working-directory "$DIR"
   '';
@@ -67,6 +68,7 @@ let
   '';
 
   neovide-fuzzel = pkgs.writeShellScript "neovide-fuzzel" ''
+    set -e
     DIR=$(${fuzzel-directory})
     cd $DIR
     neovide .
