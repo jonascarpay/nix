@@ -60,7 +60,7 @@
       mkNixosSystem = { system, module }: inputs.nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [ module ];
-        specialArgs.unstable = import inputs.unstable { inherit system; };
+        specialArgs.unstable = import inputs.unstable { inherit system; config.allowUnfree = true; };
         specialArgs.inputs = inputs;
       };
 

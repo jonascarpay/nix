@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, unstable, lib, ... }:
 
 let
 
@@ -9,37 +9,23 @@ let
     };
   };
 
-  polybar = {
-    imports = [ ../../desktop/polybar.nix ];
-    services.polybar = {
-      enable = true;
-      settings."bar/mybar" = {
-        "inherit" = "bar/common bar/hidpi";
-        modules-right = "notifications vpn wireless wired fs memory cpu date-nl date";
-      };
-    };
-  };
-
 in
 {
   imports = [
     ./hardware-configuration.nix
-    ../../nixos/home-manager-xsession.nix
     ../../nixos/global.nix
     ../../nixos/fonts.nix
     ../../nixos/ndh.nix
     githubHosts
+    ../../desktop/niri
   ];
 
-  home-manager.users.jmc.imports = [
-    polybar
-    ../../desktop
-  ];
+  # hardware.parallels.package = unstable.linuxPackages_latest.prl-tools;
 
   programs.fish.enable = true;
 
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  # sound.enable = true;
+  # hardware.pulseaudio.enable = true;
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -48,7 +34,8 @@ in
   networking.hostName = "dumpling"; # Define your hostname.
 
   networking.networkmanager.enable = true;
-  time.timeZone = "Asia/Tokyo";
+  services.timesyncd.enable = lib.mkForce true;
+  services.automatic-timezoned.enable = true;
 
   i18n.defaultLocale = "en_US.UTF-8";
 
@@ -58,12 +45,11 @@ in
 
   # Arch wiki says multiples of 96 work best
   # https://wiki.archlinux.org/title/HiDPI#X_Resources
-  services.xserver.dpi = 96 * 2;
+  # services.xserver.dpi = 96 * 2;
 
   home-manager.users.jmc = {
     home = {
       stateVersion = "23.05";
-      sessionVariables.ST_FONT = "DM Mono Nerd Font:pixelsize=24:antialias=true:autohint=true";
     };
     programs.password-store.settings.PASSWORD_STORE_DIR = "/media/psf/Home/Passwords";
   };

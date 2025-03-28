@@ -37,7 +37,7 @@ in
 {
   xsession.windowManager.i3 = {
     enable = true;
-    package = pkgs.i3-gaps;
+    # package = pkgs.i3-gaps;
     config = {
       terminal = "st";
       modifier = "Mod4";
@@ -48,8 +48,8 @@ in
       window.border = 1;
       floating.border = 1;
 
-      gaps.inner = 20;
-      gaps.outer = 10;
+      gaps.inner = 5;
+      gaps.outer = 0;
       gaps.smartBorders = "on";
 
       startup = [{ command = "systemctl --user restart polybar"; always = true; notification = false; }];

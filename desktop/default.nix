@@ -22,11 +22,15 @@ let
   '';
 
   cursor = {
-    home.pointerCursor = {
-      package = pkgs.vanilla-dmz;
-      name = "Vanilla-DMZ";
-      gtk.enable = true;
-      x11.enable = true;
+    home = {
+      # https://github.com/nix-community/home-manager/issues/3113
+      packages = [ pkgs.dconf ]; # TODO should be enabled through nixos with programs.dconf.enable
+      pointerCursor = {
+        package = pkgs.vanilla-dmz;
+        name = "Vanilla-DMZ";
+        gtk.enable = true;
+        x11.enable = true;
+      };
     };
   };
 

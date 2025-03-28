@@ -64,11 +64,19 @@
           tray-maxsize = "26";
         };
 
+        # "module/date" = {
+        #   type = "internal/date";
+        #   date = "%m/%d %a";
+        #   time = "%H:%M";
+        #   label = "%date% %time%";
+        #   interval = "1.0";
+        #   # label-font = "2";
+        # };
+
         "module/date" = {
-          type = "internal/date";
-          date = "%y/%m/%d %a";
-          time = "%H:%M";
-          label = "%date% %time% ";
+          type = "custom/script";
+          exec = ''${pkgs.coreutils}/bin/date +"%a %m/%d %H:%M"'';
+          interval = "5.0";
           label-font = "2";
         };
 
