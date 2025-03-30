@@ -18,6 +18,7 @@ in
   imports = [
     ../../../nixos/fonts.nix
     ../../../desktop/jp.nix
+    ../../../desktop/niri
   ];
 
   programs.firefox.enable = true;
