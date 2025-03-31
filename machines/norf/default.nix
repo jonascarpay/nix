@@ -114,6 +114,8 @@ in
 
   boot.loader.systemd-boot.memtest86.enable = true;
 
+  boot.plymouth.enable = true;
+
   environment.systemPackages = [ pkgs.linuxPackages.perf ];
 
   networking.hostName = "norf";
