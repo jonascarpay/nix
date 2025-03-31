@@ -296,15 +296,21 @@ in
         struts.bottom = 16;
       };
 
-      window-rules = [{
-        clip-to-geometry = true;
-        geometry-corner-radius = let radius = 4.0; in {
-          top-right = radius;
-          top-left = radius;
-          bottom-right = radius;
-          bottom-left = radius;
-        };
-      }];
+      window-rules = [
+        {
+          matches = [{ app-id = "Alacritty"; }];
+          default-column-width.proportion = 0.33;
+        }
+        {
+          clip-to-geometry = true;
+          geometry-corner-radius = let radius = 4.0; in {
+            top-right = radius;
+            top-left = radius;
+            bottom-right = radius;
+            bottom-left = radius;
+          };
+        }
+      ];
 
       cursor.hide-after-inactive-ms = 1000;
     };
