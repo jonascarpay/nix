@@ -42,6 +42,7 @@ in
       pkgs.tdesktop
       pkgs.okular
       unstable.signal-desktop
+      unstable.blender
     ];
 
     programs.waybar = {
