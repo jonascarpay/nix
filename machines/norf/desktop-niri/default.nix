@@ -1,4 +1,4 @@
-{ pkgs, unstable, inputs, ... }:
+{ pkgs, unstable, ... }:
 let
   obsidian = { pkgs, config, ... }: {
     home.packages = [

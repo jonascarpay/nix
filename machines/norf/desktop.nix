@@ -47,7 +47,6 @@ in
   ];
   home-manager.users.jmc.imports = [
     ../../desktop
-    # ../../desktop/emacs
     polybar
     pass
   ];
