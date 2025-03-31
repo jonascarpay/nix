@@ -366,7 +366,7 @@ in
       " set tabstop=4
       " set softtabstop=4
       " set shiftwidth=4
-      nn <leader>w :w<CR>
+      nn <leader>w :silent w<CR>
       nn <leader>hl :nohl<CR>
       inoremap hj <esc>
       vmap <leader>y :w! /tmp/vitmp<CR>

@@ -89,6 +89,8 @@ let
       vim.g.neovide_padding_left = ${padding}
       vim.g.neovide_cursor_trail_size = 0.0
       vim.g.neovide_cursor_animation_length = 0.04
+      vim.g.neovide_cursor_animate_command_line = false
+      vim.g.neovide_cursor_animate_in_insert_mode = false
     '';
 
   };
