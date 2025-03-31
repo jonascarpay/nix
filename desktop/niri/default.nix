@@ -146,12 +146,15 @@ in
   programs.niri.enable = true;
   niri-flake.cache.enable = false;
 
-  services.xserver.displayManager = {
-    gdm.enable = true;
-    autoLogin = {
-      enable = false;
-      user = "jmc";
-    };
+  # system.nixos.tags = [ "experimental" ];
+
+  services.displayManager.autoLogin = {
+    enable = false; # TODO sadly doesn't seem to work with Wayland atm?
+    user = "jmc";
+  };
+  services.xserver.displayManager.gdm = {
+    enable = true;
+    autoLogin.delay = 5;
   };
 
   home-manager.users.jmc = { config, ... }: {
