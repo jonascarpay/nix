@@ -297,6 +297,7 @@ in
       };
 
       window-rules = [{
+        clip-to-geometry = true;
         geometry-corner-radius = let radius = 4.0; in {
           top-right = radius;
           top-left = radius;
