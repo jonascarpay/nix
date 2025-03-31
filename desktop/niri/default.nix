@@ -287,13 +287,18 @@ in
       layout = {
         always-center-single-column = true;
         gaps = 32;
-        # default-column-display = "tabbed";
         default-column-width.proportion = 0.5;
         focus-ring.width = 2;
         shadow.enable = true;
         struts.left = 32;
         struts.right = 32;
         struts.bottom = 16;
+
+        default-column-display = "tabbed";
+        tab-indicator = {
+          hide-when-single-tab = true;
+          width = 6.0;
+        };
       };
 
       window-rules = [
