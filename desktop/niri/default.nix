@@ -76,7 +76,6 @@ let
       enable = true;
       settings = {
         font = {
-          size = 14.0;
           normal = "SauceCodePro Nerd Font";
         };
       };
@@ -104,7 +103,6 @@ let
           bold.style = "Medium";
           italic.style = "Italic";
           bold_italic.style = "Medium Italic";
-          size = 14;
         };
         window = {
           dynamic_padding = true;
@@ -256,7 +254,7 @@ in
 
           "Mod+Space".action = actions.maximize-column;
           "Mod+Shift+Space".action = actions.fullscreen-window;
-          "Mod+Ctrl+F".action = actions.expand-column-to-available-width;
+          "Mod+Shift+F".action = actions.expand-column-to-available-width;
           "Mod+C".action = actions.center-column;
 
           "Mod+Minus".action.set-column-width = "-10%";
@@ -286,13 +284,9 @@ in
       prefer-no-csd = true;
       layout = {
         always-center-single-column = true;
-        gaps = 32;
         default-column-width.proportion = 0.5;
         focus-ring.width = 2;
         shadow.enable = true;
-        struts.left = 32;
-        struts.right = 32;
-        struts.bottom = 16;
 
         default-column-display = "tabbed";
         tab-indicator = {
@@ -301,21 +295,15 @@ in
         };
       };
 
-      window-rules = [
-        {
-          matches = [{ app-id = "Alacritty"; }];
-          default-column-width.proportion = 0.33;
-        }
-        {
-          clip-to-geometry = true;
-          geometry-corner-radius = let radius = 4.0; in {
-            top-right = radius;
-            top-left = radius;
-            bottom-right = radius;
-            bottom-left = radius;
-          };
-        }
-      ];
+      window-rules = [{
+        clip-to-geometry = true;
+        geometry-corner-radius = let radius = 4.0; in {
+          top-right = radius;
+          top-left = radius;
+          bottom-right = radius;
+          bottom-left = radius;
+        };
+      }];
 
       cursor.hide-after-inactive-ms = 1000;
     };

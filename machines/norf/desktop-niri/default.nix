@@ -45,6 +45,21 @@ in
       unstable.blender
     ];
 
+    programs.neovide.settings.font.size = 14.0;
+    programs.alacritty.settings.font.size = 14;
+    programs.niri.settings = {
+      window-rules = [{
+        matches = [{ app-id = "Alacritty"; }];
+        default-column-width.proportion = 0.33;
+      }];
+      layout = {
+        gaps = 32;
+        struts.left = 32;
+        struts.right = 32;
+        struts.bottom = 16;
+      };
+    };
+
     programs.waybar = {
       enable = true;
       systemd.enable = true;

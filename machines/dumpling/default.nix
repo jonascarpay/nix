@@ -52,6 +52,16 @@ in
       stateVersion = "23.05";
     };
     programs.password-store.settings.PASSWORD_STORE_DIR = "/media/psf/Home/Passwords";
+
+    programs.neovide.settings.font.size = 10.0;
+    programs.alacritty.settings.font.size = 10;
+    programs.niri.settings.outputs."Virtual-1".scale = 2;
+    programs.niri.settings.layout = {
+      gaps = 16;
+      struts.left = 32;
+      struts.right = 32;
+    };
+
   };
 
   nixpkgs.config.allowUnfree = true;
