@@ -35,6 +35,8 @@ in
 
   manual.manpages.enable = true;
 
+  xdg.enable = true;
+
   home = {
     stateVersion = "23.05";
     packages = [

@@ -14,33 +14,41 @@ let
       echo "$DIR"
     '';
 
-  history-root = "/home/jmc/.local/share/frecently"; # TODO: proper config
-  frecently-pkg = inputs.frecently.defaultPackage.${pkgs.system};
-  frecently = "${frecently-pkg}/bin/frecently";
   # TODO this does not properly handle directories with spaces in their names
-  fuzzel-directory =
+  fuzzel-directory = { config, ... }:
     let
-      history = "${history-root}/directory-history";
+      history = "${config.xdg.dataHome}/frecently/directory-history";
+      frecently = "${inputs.frecently.defaultPackage.${pkgs.system}}/bin/frecently";
+      script = pkgs.writeShellApplication {
+        name = "fuzzel-directory";
+        text = ''
+          for dir in $(${frecently} view ${history}); do
+            if [ ! -d "$dir" ]; then
+              echo "Removing $dir"
+              ${frecently} delete ${history} "$dir"
+            fi
+          done
+          DIR=$(find "$HOME/Dev" "$HOME/Documents" -maxdepth 1 -type d | ${frecently} view ${history} -a | sed "s#$HOME#~#" | fuzzel -d -p " ")
+          DIR_REAL=$(realpath "''${DIR/#\~/$HOME}")
+          if [ -d "$DIR_REAL" ]; then
+            ${frecently} bump ${history} "$DIR_REAL"
+            echo "$DIR_REAL"
+          fi
+        '';
+      };
     in
-    pkgs.writeShellScript "fuzzel-directory" ''
-      set -e
-      for dir in $(${frecently} view ${history}); do
-        if [ ! -d "$dir" ]; then
-          echo "Removing $dir"
-          ${frecently} delete ${history} "$dir"
-        fi
-      done
-      DIR=$(find $HOME/Dev $HOME/Documents -maxdepth 1 -type d | ${frecently} view ${history} -a | sed "s#$HOME#~#" | fuzzel -d -p " ")
-      DIR_REAL=$(realpath "''${DIR/#\~/$HOME}")
-      if [ -d $DIR_REAL ]; then
-        ${frecently} bump ${history} "$DIR_REAL"
-        echo "$DIR_REAL"
-      fi
-    '';
+    {
+      home.packages = [ script ];
+      programs.fish.shellInit = ''
+        function __frecently-directory-hook --on-variable PWD --description 'add current directory to directory history'
+          ${frecently} bump ${history} "$PWD"
+        end
+      '';
+    };
 
   alacritty-fuzzel = pkgs.writeShellScript "alacritty-fuzzel" ''
     set -e
-    DIR=$(${fuzzel-directory})
+    DIR=$(fuzzel-directory)
     alacritty --working-directory "$DIR"
   '';
 
@@ -55,7 +63,7 @@ let
 
   neovide-fuzzel = pkgs.writeShellScript "neovide-fuzzel" ''
     set -e
-    DIR=$(${fuzzel-directory})
+    DIR=$(fuzzel-directory)
     cd $DIR
     neovide .
   '';
@@ -159,6 +167,7 @@ in
     imports = [
       neovide
       alacritty
+      fuzzel-directory
     ];
 
     programs.fuzzel.enable = true;

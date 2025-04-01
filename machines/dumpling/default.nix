@@ -1,4 +1,4 @@
-{ pkgs, unstable, lib, ... }:
+{ pkgs, lib, ... }:
 
 let
 
