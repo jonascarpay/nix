@@ -243,11 +243,9 @@ let
   lang-python.programs.neovim = {
     plugins = [ np.nvim-treesitter-parsers.python ];
     formatters.python = {
-      exe = "${pkgs.black}/bin/black";
-      args = [
-        "-q"
-        "-"
-      ];
+      exe = "ruff";
+      args = [ "format" ];
+      stdin = false;
     };
     extraLspConfig = ''
       lspconfig.pyright.setup({})
