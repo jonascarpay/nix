@@ -65,14 +65,14 @@ let
     set -e
     DIR=$(fuzzel-directory)
     cd $DIR
-    neovide .
+    direnv exec . neovide .
   '';
 
   neovide-focused = pkgs.writeShellScript "neovide-focused" ''
     DIR=$(${focused-dir})
     if [ -d "$DIR" ]; then
       cd $DIR
-      neovide .
+      direnv exec . neovide .
     else
       ${neovide-fuzzel}
     fi
