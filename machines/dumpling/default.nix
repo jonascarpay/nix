@@ -62,6 +62,8 @@ in
       struts.right = 32;
     };
 
+    programs.firefox.enable = true;
+
   };
 
   nixpkgs.config.allowUnfree = true;
