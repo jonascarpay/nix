@@ -172,6 +172,8 @@ in
 
     programs.fuzzel.enable = true;
 
+    home.packages = [ pkgs.wl-clipboard ];
+
     home.sessionVariables.NIXOS_OZONE_WL = 1;
     services.mako = {
       enable = true;

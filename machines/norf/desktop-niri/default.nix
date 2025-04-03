@@ -37,7 +37,6 @@ in
     ];
 
     home.packages = [
-      pkgs.wl-clipboard
       pkgs.spotify
       pkgs.tdesktop
       pkgs.okular
