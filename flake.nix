@@ -52,6 +52,10 @@
       inputs.nixpkgs-stable.follows = "nixpkgs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    wallpapers = {
+      url = "github:jonascarpay/Wallpapers";
+      flake = false;
+    };
   };
 
   outputs = inputs:

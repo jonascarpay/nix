@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, inputs, ... }:
 
 let
 
@@ -6,6 +6,14 @@ let
     home-manager.users.jmc.programs.ssh.matchBlocks."github.com" = {
       user = "git";
       identityFile = "~/Keys/ssh/id_ed25519";
+    };
+  };
+
+  wallpaper = {
+    imports = [ ../../desktop/niri/random-wallpaper.nix ];
+    services.randomWallpaper = {
+      enable = true;
+      wallpaperPath = "${inputs.wallpapers}/papes";
     };
   };
 
@@ -48,6 +56,10 @@ in
   # services.xserver.dpi = 96 * 2;
 
   home-manager.users.jmc = {
+    imports = [
+      wallpaper
+    ];
+
     home = {
       stateVersion = "23.05";
     };

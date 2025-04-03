@@ -755,7 +755,8 @@
         "nix-doom-emacs": "nix-doom-emacs",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
-        "unstable": "unstable"
+        "unstable": "unstable",
+        "wallpapers": "wallpapers"
       }
     },
     "rotate-text": {
@@ -849,6 +850,22 @@
         "owner": "NixOS",
         "ref": "nixpkgs-unstable",
         "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "wallpapers": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1738562780,
+        "narHash": "sha256-ma6oGV3jbirnVz6m1W7D9KrjGRgU/YUoREwo6l5qWcA=",
+        "owner": "jonascarpay",
+        "repo": "Wallpapers",
+        "rev": "12fb91d5de5c0f390dcf93a67b5b9c7ca5b8b0b0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jonascarpay",
+        "repo": "Wallpapers",
         "type": "github"
       }
     },
