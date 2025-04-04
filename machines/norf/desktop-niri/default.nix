@@ -51,6 +51,7 @@ in
       pkgs.okular
       unstable.signal-desktop
       unstable.blender
+      pkgs.teams-for-linux
     ];
 
     programs.neovide.settings.font.size = 14.0;
