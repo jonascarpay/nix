@@ -18,6 +18,15 @@ let
     programs.password-store.settings.PASSWORD_STORE_DIR = "/home/jmc/Passwords";
     home.packages = [ pkgs.qtpass ];
   };
+
+
+  wallpaper = {
+    imports = [ ../../../desktop/niri/random-wallpaper.nix ];
+    services.randomWallpaper = {
+      enable = true;
+      wallpaperPath = "/home/jmc/Wallpapers/papes";
+    };
+  };
 in
 {
   imports = [
@@ -31,7 +40,7 @@ in
   home-manager.users.jmc = {
 
     imports = [
-      ./wallpaper.nix
+      wallpaper
       obsidian
       pass
     ];

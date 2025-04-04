@@ -152,8 +152,6 @@ in
   programs.niri.enable = true;
   niri-flake.cache.enable = false;
 
-  # system.nixos.tags = [ "experimental" ];
-
   services.displayManager.autoLogin = {
     enable = false; # TODO sadly doesn't seem to work with Wayland atm?
     user = "jmc";
