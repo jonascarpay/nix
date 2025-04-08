@@ -253,6 +253,15 @@ let
     '';
   };
 
+  lang-typst.programs.neovim = {
+    plugins = [ np.nvim-treesitter-parsers.typst ];
+    formatters.typst.exe = "${pkgs.typstyle}/bin/typstyle";
+    extraConfig = ''
+      autocmd BufNewFile,BufRead *.typ setfiletype typst
+    '';
+    extraLspConfig = "lspconfig.tinymist.setup({})";
+  };
+
   lang-rust.programs.neovim = {
     plugins = [ np.nvim-treesitter-parsers.rust ];
     formatters.rust = {
@@ -317,6 +326,7 @@ in
     lang-python
     lang-rust
     lang-toml
+    lang-typst
     lang-vimdoc
   ];
   programs.git.ignores = [
