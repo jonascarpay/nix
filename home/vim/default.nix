@@ -214,13 +214,16 @@ let
     '';
   };
 
-  lang-cpp.programs.neovim = {
-    extraPackages = [ pkgs.ccls ];
-    plugins = [ np.nvim-treesitter-parsers.cpp ];
-    formatters.cpp.exe = "${pkgs.clang-tools}/bin/clang-format";
-    extraLspConfig = ''
-      lspconfig.ccls.setup({})
-    '';
+  lang-cpp.programs = {
+    git.ignores = [ ".ccls-cache/" ];
+    neovim = {
+      extraPackages = [ pkgs.ccls ];
+      plugins = [ np.nvim-treesitter-parsers.cpp ];
+      formatters.cpp.exe = "${pkgs.clang-tools}/bin/clang-format";
+      extraLspConfig = ''
+        lspconfig.ccls.setup({})
+      '';
+    };
   };
 
   lang-bash.programs.neovim = {
