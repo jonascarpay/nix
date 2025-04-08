@@ -1,4 +1,5 @@
 { pkgs
+, unstable
 , lib
 , config
 , ...
@@ -337,6 +338,7 @@ in
     "!tags/"
   ];
   programs.neovim = {
+    package = unstable.neovim-unwrapped;
     enable = true;
     defaultEditor = true;
     vimAlias = true;
