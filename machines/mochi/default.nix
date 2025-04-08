@@ -126,10 +126,8 @@ in
 
   nixpkgs.config.allowUnfree = true;
 
-
   # boot.zfs.requestEncryptionCredentials = false;
   networking.hostName = "mochi";
-  networking.networkmanager.enable = true;
   time.timeZone = "Asia/Tokyo";
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
   services.getty.autologinUser = "jmc";
