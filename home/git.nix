@@ -14,7 +14,20 @@ in
     lfs.enable = true;
     userName = "Jonas Carpay";
     userEmail = "jonascarpay@gmail.com";
-    ignores = [ ".stfolder" ".stversions" ".stignore" "result" "result-*" ];
+    ignores = [
+      # Don't know
+      ".lvimrc"
+
+      # Syncthing stuff
+      ".stfolder"
+      ".stversions"
+      ".stignore"
+      "*.sync-confict-*"
+
+      # Nix stuff
+      "result"
+      "result-*"
+    ];
     aliases = {
       graph = "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)' --all";
       # list and pretty-print branches by latest commit, from https://stackoverflow.com/questions/5188320/how-can-i-get-a-list-of-git-branches-ordered-by-most-recent-commit
