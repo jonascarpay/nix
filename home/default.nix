@@ -44,15 +44,13 @@ in
 
   };
 
-  programs = {
-    man.generateCaches = true;
-    fzf.enable = true;
+  programs.fzf.enable = true;
 
-    eza = {
-      enable = true;
-      git = true;
-      icons = "auto";
-    };
+  programs.eza = {
+    enable = true;
+    git = true;
+    icons = "auto";
+  };
 
     git = {
       enable = true;
@@ -79,5 +77,11 @@ in
     ssh = {
       enable = true;
     };
+  programs.ssh.enable = true;
+
+  programs.yazi = {
+    enable = true;
+    enableBashIntegration = true;
+    enableFishIntegration = true;
   };
 }
