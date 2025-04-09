@@ -42,27 +42,6 @@ in
       PAGER = "less";
     };
 
-    file = {
-      stackConfig = {
-        target = ".stack/config.yaml";
-        text = ''
-          templates:
-            params:
-              author-name: Jonas Carpay
-              author-email: jonascarpay@gmail.com
-              github-username: jonascarpay
-        '';
-      };
-      ghciConf = {
-        target = ".ghci";
-        text = ''
-          :set prompt "\ESC[1;34m%s\n\ESC[0;34mλ> \ESC[m"
-          :set prompt-cont "\ESC[0;34m | \ESC[m"
-          :set +m
-          :def remain \_args -> pure $ unlines [":reload", ":main"]
-        '';
-      };
-    };
   };
 
   programs = {
