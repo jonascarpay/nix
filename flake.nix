@@ -18,8 +18,6 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # TODO drop
-    declarative-cachix.url = "github:jonascarpay/declarative-cachix";
     hosts = {
       url = "github:StevenBlack/hosts";
       flake = false;
