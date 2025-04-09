@@ -83,7 +83,6 @@ in
   };
 
   programs = {
-    nix-index.enable = true;
     man.generateCaches = true;
     fzf.enable = true;
 

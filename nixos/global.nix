@@ -44,6 +44,11 @@ let
       in
       "${src}/words.txt";
   };
+
+  nix-index-database = {
+    imports = [ inputs.nix-index-database.nixosModules.nix-index ];
+    programs.nix-index-database.comma.enable = true;
+  };
 in
 {
   imports = [
@@ -53,6 +58,7 @@ in
     fish
     # caches
     # notifications-token
+    nix-index-database
   ];
   environment = {
     systemPackages = with pkgs; [
@@ -109,7 +115,6 @@ in
   programs.mosh.enable = true;
   programs.git.enable = true;
 
-  programs.command-not-found.enable = false;
   hardware.enableRedistributableFirmware = true;
 
   users = {

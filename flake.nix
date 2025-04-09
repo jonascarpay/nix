@@ -9,6 +9,7 @@
       url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # TODO drop
     nix-doom-emacs = {
       url = "github:nix-community/nix-doom-emacs";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -17,11 +18,13 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # TODO drop
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
     hosts = {
       url = "github:StevenBlack/hosts";
       flake = false;
     };
+    # TODO switch to frecle
     frecently = {
       url = "github:jonascarpay/frecently/preserve-index";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -30,11 +33,6 @@
       url = "github:jonascarpay/dm-mono-patched";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # replaced by nix-index?
-    # programs-db = {
-    #   url = "github:binplz/programs.sqlite";
-    #   flake = false;
-    # };
     adaptive-lighting = {
       url = "github:basnijholt/adaptive-lighting";
       flake = false;
@@ -43,6 +41,7 @@
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "unstable";
     };
+    # TODO drop
     monolog = {
       url = "github:jonascarpay/monolog";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -55,6 +54,10 @@
     wallpapers = {
       url = "github:jonascarpay/Wallpapers";
       flake = false;
+    };
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
