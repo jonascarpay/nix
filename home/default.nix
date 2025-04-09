@@ -1,18 +1,8 @@
 { pkgs, inputs, ... }:
 let
-  yazi = {
-    programs.yazi = {
-      enable = true;
-      enableBashIntegration = true;
-      enableFishIntegration = true;
-    };
-    programs.fish.shellAbbrs.y = "ya";
-  };
 
   bat = {
-    programs.bat = {
-      enable = true;
-    };
+    programs.bat.enable = true;
     programs.fish.shellAliases.cat = "bat";
   };
 
@@ -21,15 +11,12 @@ in
   imports = [
     ./direnv.nix
     ./fish.nix
-    # ./ranger.nix
-    # ./scripts.nix
     ./tmux.nix
     ./vim
     ./git.nix
     ./postgres.nix
     ./daily.nix
     inputs.agenix.homeManagerModules.age
-    yazi
     bat
   ];
 
@@ -45,12 +32,8 @@ in
       pkgs.cloc
       pkgs.entr
       pkgs.jq
-      # killall
-      # man-pages # TODO does this do anything manual.manpages.enable doesn't do?
       pkgs.tldr
       pkgs.ripgrep
-      # youtube-dl
-      # weechat
       pkgs.zip
     ];
 
