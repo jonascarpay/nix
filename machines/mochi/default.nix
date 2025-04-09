@@ -49,21 +49,6 @@ let
     networking.firewall.allowedTCPPorts = [ config.services.paperless.port ];
   };
 
-  monolog = {
-    networking.firewall.allowedTCPPorts = [ 8888 ];
-    systemd = {
-      services.monolog = {
-        description = "Monolog";
-        script = "${inputs.monolog.packages.${pkgs.system}.default}/bin/monolog-exe";
-        wantedBy = [ "default.target" ];
-        serviceConfig."WorkingDirectory" = "/home/jmc/monolog";
-        serviceConfig."User" = "jmc";
-      };
-      targets.monolog.after = [ "network.target" ];
-    };
-  };
-
-
   git-sync = {
     imports = [ ./git-sync-service.nix ];
     services.git-sync = {
@@ -111,7 +96,6 @@ in
       githubHosts
       jellyfin
       paperless
-      monolog
     ];
 
   services.xserver.xkb = {

@@ -114,21 +114,6 @@
         "type": "github"
       }
     },
-    "flake-utils_2": {
-      "locked": {
-        "lastModified": 1644229661,
-        "narHash": "sha256-1YdnJAsNy69bpcjuoKdOYQX0YxZBiCYZo4Twxerqv7k=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "3cecb5b042f7f209c56ffd8371b2711a290ec797",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
     "frecently": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -221,27 +206,6 @@
       "original": {
         "owner": "jonascarpay",
         "repo": "mkflake",
-        "type": "github"
-      }
-    },
-    "monolog": {
-      "inputs": {
-        "flake-utils": "flake-utils_2",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1709953946,
-        "narHash": "sha256-lbG7lzH2IrtKLQ7KiWRH7DSisWOzQaDyrbJXOZ1X0IY=",
-        "owner": "jonascarpay",
-        "repo": "monolog",
-        "rev": "92a31fa5659f116d6643fd42fd90e4ba9bd0a848",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jonascarpay",
-        "repo": "monolog",
         "type": "github"
       }
     },
@@ -384,7 +348,6 @@
         "frecently": "frecently",
         "home-manager": "home-manager_2",
         "hosts": "hosts",
-        "monolog": "monolog",
         "niri-flake": "niri-flake",
         "nix-darwin": "nix-darwin",
         "nix-index-database": "nix-index-database",

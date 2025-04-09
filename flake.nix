@@ -34,11 +34,6 @@
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "unstable";
     };
-    # TODO drop
-    monolog = {
-      url = "github:jonascarpay/monolog";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     niri-flake = {
       url = "github:sodiboo/niri-flake";
       inputs.nixpkgs-stable.follows = "nixpkgs";
