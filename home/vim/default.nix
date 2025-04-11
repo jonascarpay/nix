@@ -215,7 +215,7 @@ let
   };
 
   lang-cpp.programs = {
-    git.ignores = [ ".ccls-cache/" ];
+    git.ignores = [ ".ccls-cache" ];
     neovim = {
       extraPackages = [ pkgs.ccls ];
       plugins = [ np.nvim-treesitter-parsers.cpp ];
