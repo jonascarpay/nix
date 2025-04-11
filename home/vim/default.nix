@@ -311,6 +311,12 @@ let
   lang-vimdoc.programs.neovim = {
     plugins = [ np.nvim-treesitter-parsers.vimdoc ];
   };
+
+  spell.programs.neovim.extraConfig = ''
+    autocmd FileType markdown setlocal spell
+    autocmd FileType text setlocal spell
+    autocmd FileType gitcommit setlocal spell
+  '';
 in
 {
   imports = [
@@ -332,6 +338,7 @@ in
     lang-toml
     lang-typst
     lang-vimdoc
+    spell
   ];
   programs.git.ignores = [
     "*~"
