@@ -43,6 +43,7 @@ in
       wallpaper
       obsidian
       pass
+      ../../../desktop/niri/qalculate.nix
     ];
 
     home.packages = [
