@@ -183,6 +183,27 @@ let
     ];
   };
 
+  treehopper.programs.neovim = {
+    plugins = [
+      (
+        pkgs.vimUtils.buildVimPlugin {
+          name = "treehopper";
+          src = pkgs.fetchFromGitHub {
+            owner = "mfussenegger";
+            repo = "nvim-treehopper";
+            rev = "0b9f5c8980ab1427644ff70059f7ae0fd89b547e";
+            sha256 = "sha256-M2yA1wYowtA5Dqk4J9zjSUZz+ZrpqXp25k5N5adVDgE=";
+          };
+        }
+      )
+    ];
+    extraConfig = ''
+      omap     <silent> m :<C-U>lua require('tsht').nodes()<CR>
+      xnoremap <silent> m :lua require('tsht').nodes()<CR>
+    '';
+
+  };
+
   lang-haskell.programs.neovim = {
     plugins = [ np.nvim-treesitter-parsers.haskell ];
     formatters = {
@@ -325,6 +346,7 @@ in
     oil
     workspace-symbols
     treesitter
+    treehopper
     cursorline
     lang-bash
     lang-cmake
