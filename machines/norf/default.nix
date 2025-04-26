@@ -80,6 +80,11 @@ let
     users.users.jmc.extraGroups = [ "docker" ];
   };
 
+  brightness-control = {
+    boot.kernelModules = [ "i2c_dev" ];
+    environment.systemPackages = [ pkgs.ddcutil ];
+  };
+
 in
 
 {
@@ -96,6 +101,7 @@ in
       ../../nixos/global.nix
       ../../nixos/ndh.nix
       docker
+      brightness-control
     ];
 
   # networking.useNetworkd = true;
