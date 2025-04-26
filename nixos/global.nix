@@ -91,6 +91,8 @@ in
       PAGER = "less";
     };
 
+    localBinInPath = true; # necessary for uv tools
+
     # zsh needs this for autoCompletion according to home-configuration
     # for fish, direnv suddenly stopped working, home-configuration suggested adding this and that seemed to have fixed it.
     # TODO occasionally see if I can safely remove this
