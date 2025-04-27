@@ -115,7 +115,7 @@ in
 
   programs.bash.completion.enable = true; # enable tab-completion for nix-* tools
   programs.mosh.enable = true;
-  programs.git.enable = true;
+  programs.git.enable = true; # manage with HM instead?
 
   hardware.enableRedistributableFirmware = true;
 
