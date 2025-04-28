@@ -314,7 +314,7 @@ in
         };
       }];
 
-      cursor.hide-after-inactive-ms = 1000;
+      cursor.hide-after-inactive-ms = 10000;
     };
   };
 }
