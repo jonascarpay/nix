@@ -24,7 +24,7 @@ let
         text = ''
           for dir in $(${frecently} view ${history}); do
             if [ ! -d "$dir" ]; then
-              echo "Removing $dir"
+              echo "Removing $dir" 1>&2
               ${frecently} delete ${history} "$dir"
             fi
           done
