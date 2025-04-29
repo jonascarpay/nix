@@ -265,18 +265,26 @@ let
     args = [ "-" ];
   };
 
-  lang-python.programs.neovim = {
-    plugins = [ np.nvim-treesitter-parsers.python ];
-    formatters.python = {
-      exe = "ruff";
-      args = [ "format" ];
-      stdin = false;
+  lang-python.programs.neovim =
+    let
+      unified-formatter = pkgs.writeShellScript "ruff-format-and-sort" ''
+        set -e
+        ruff format $@
+        ruff check --select I --fix $@
+      '';
+    in
+    {
+      plugins = [ np.nvim-treesitter-parsers.python ];
+      formatters.python = {
+        exe = "${unified-formatter}";
+        args = [ ];
+        stdin = false;
+      };
+      extraLspConfig = ''
+        lspconfig.pyright.setup({})
+        lspconfig.ruff.setup({})
+      '';
     };
-    extraLspConfig = ''
-      lspconfig.pyright.setup({})
-      lspconfig.ruff.setup({})
-    '';
-  };
 
   lang-typst.programs.neovim = {
     plugins = [ np.nvim-treesitter-parsers.typst ];
