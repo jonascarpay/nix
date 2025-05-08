@@ -61,31 +61,21 @@ in
     nix-index-database
   ];
   environment = {
-    systemPackages = with pkgs; [
-      ascii
-      dnsutils
-      exfat
-      file
-      gotop
-      htop
-      ncdu
-      # myNnn
-      p7zip
-      ranger
-      sshfs
+    systemPackages = [
+      pkgs.ascii
+      pkgs.dnsutils
+      pkgs.file
+      pkgs.htop
+      pkgs.ncdu
+      pkgs.p7zip
+      pkgs.ranger
+      pkgs.sshfs
       scrubnix
-      libqalculate
-      tmux
-      # boot-switch565
-      # boot-switch602
-      tree
-      # nix-tree
-      # btop
-      unzip
-      # viddy
-      # nix-output-monitor
-      vim
-    ] ++ lib.optional (system == "x86_64-linux") lnav; # https://github.com/tstack/lnav/issues/882
+      pkgs.tmux
+      pkgs.tree
+      pkgs.unzip
+      pkgs.vim
+    ];
     variables = {
       EDITOR = "vim";
       PAGER = "less";

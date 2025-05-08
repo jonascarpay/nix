@@ -8,10 +8,10 @@
     ];
   };
   fonts = {
-    packages = with pkgs; [
-      kanji-stroke-order-font
-      ipafont
-      kochi-substitute
+    packages = [
+      pkgs.kanji-stroke-order-font
+      pkgs.ipafont
+      pkgs.kochi-substitute
     ];
   };
 }

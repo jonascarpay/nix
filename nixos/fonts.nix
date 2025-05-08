@@ -33,12 +33,12 @@ in
   fonts = {
     # fontDir.enable = true; # creates /run/current-system/sw/share/X11/fonts. Not sure why needed
     enableDefaultPackages = true;
-    packages = with pkgs; [
+    packages = [
       pkgs.noto-fonts
       pkgs.noto-fonts-cjk-sans
       pkgs.noto-fonts-cjk-serif
       pkgs.noto-fonts-emoji
-      liberation_ttf
+      pkgs.liberation_ttf
       # See https://github.com/NixOS/nixpkgs/blob/6998cf86e9a6ef83b32956337f65aba8656671fe/pkgs/data/fonts/nerdfonts/shas.nix
       (pkgs.nerdfonts.override { fonts = [ "SourceCodePro" ]; })
       # powerline-fonts
