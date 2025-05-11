@@ -58,10 +58,16 @@ in
     programs.neovide.settings.font.size = 14.0;
     programs.alacritty.settings.font.size = 14;
     programs.niri.settings = {
-      window-rules = [{
-        matches = [{ app-id = "Alacritty"; }];
-        default-column-width.proportion = 0.33;
-      }];
+      window-rules = [
+        {
+          matches = [{ app-id = "Alacritty"; }];
+          default-column-width.proportion = 0.333;
+        }
+        {
+          matches = [{ app-id = "neovide"; }];
+          default-column-width.proportion = 0.667;
+        }
+      ];
       layout = {
         gaps = 32;
         struts.left = 32;
