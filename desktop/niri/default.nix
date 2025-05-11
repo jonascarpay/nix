@@ -150,6 +150,7 @@ in
     inputs.niri-flake.nixosModules.niri
   ];
   programs.niri.enable = true;
+  programs.niri.package = inputs.niri-flake.packages.${pkgs.system}.niri-unstable;
   niri-flake.cache.enable = false;
 
   services.displayManager.autoLogin = {
@@ -257,6 +258,8 @@ in
           "Mod+Shift+9".action.move-column-to-workspace = 9;
 
           "Mod+Tab".action = actions.focus-workspace-previous;
+
+          "Mod+d".action = actions.toggle-overview;
 
           "Mod+BracketLeft".action = actions.consume-or-expel-window-left;
           "Mod+BracketRight".action = actions.consume-or-expel-window-right;
