@@ -146,6 +146,7 @@ in
 
   nix = {
     settings.experimental-features = [ "nix-command" "flakes" ];
+    channel.enable = false;
     # package = pkgs.nixUnstable;
     # https://github.com/gytis-ivaskevicius/flake-utils-plus/blob/master/modules/saneFlakeDefaults.nix
     registry =
