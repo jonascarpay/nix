@@ -75,6 +75,7 @@ in
       pkgs.tree
       pkgs.unzip
       pkgs.vim
+      pkgs.dysk
     ];
     variables = {
       EDITOR = "vim";
