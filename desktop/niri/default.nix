@@ -57,7 +57,7 @@ let
     if [ -d "$DIR" ]; then
       alacritty --working-directory "$DIR"
     else
-      ${alacritty-fuzzel}
+      alacritty
     fi
   '';
 
