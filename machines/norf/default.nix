@@ -126,7 +126,7 @@ in
 
   networking.hostName = "norf";
   # networking.resolvconf.dnsSingleRequest = true; # supposedly fixes slow DNS, see https://github.com/hashicorp/vagrant/issues/1172
-  networking.networkmanager.enable = true;
+  # networking.networkmanager.enable = true;
   # networking.useDHCP = true;
 
   time.timeZone = "Asia/Tokyo";
