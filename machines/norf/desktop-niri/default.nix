@@ -47,7 +47,6 @@ in
     ];
 
     home.packages = [
-      pkgs.spotify
       pkgs.tdesktop
       pkgs.okular
       unstable.signal-desktop
