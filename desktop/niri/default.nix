@@ -267,7 +267,9 @@ in
           "Mod+Space".action = actions.maximize-column;
           "Mod+Shift+Space".action = actions.fullscreen-window;
           "Mod+Shift+F".action = actions.expand-column-to-available-width;
-          "Mod+C".action = actions.center-column;
+          # "Mod+C".action = actions.center-column;
+          "Mod+C".action = actions.center-visible-columns;
+          "Mod+Shift+C".action = actions.center-column;
 
           "Mod+Minus".action.set-column-width = "-10%";
           "Mod+Equal".action.set-column-width = "+10%";
