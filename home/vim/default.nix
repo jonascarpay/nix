@@ -236,13 +236,12 @@ let
   };
 
   lang-cpp.programs = {
-    git.ignores = [ ".ccls-cache" ];
+    git.ignores = [ ".cache/clangd/" ];
     neovim = {
-      extraPackages = [ pkgs.ccls ];
       plugins = [ np.nvim-treesitter-parsers.cpp ];
       formatters.cpp.exe = "${pkgs.clang-tools}/bin/clang-format";
       extraLspConfig = ''
-        lspconfig.ccls.setup({})
+        lspconfig.clangd.setup({})
       '';
     };
   };
