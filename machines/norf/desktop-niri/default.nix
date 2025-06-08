@@ -72,12 +72,11 @@ in
         gaps = 32;
         struts.left = 32;
         struts.right = 32;
-        struts.bottom = 16;
       };
     };
 
     programs.waybar = {
-      enable = true;
+      enable = false;
       systemd.enable = true;
       settings.mainBar = {
         height = 30;
