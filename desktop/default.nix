@@ -79,7 +79,7 @@ in
     (pkgs.callPackage ./st { })
     pkgs.vlc
     pkgs.nautilus
-    pkgs.okular
+    # pkgs.okular
     pkgs.sxiv
     pkgs.xclip # Doesn't work?
     pkgs.teams-for-linux

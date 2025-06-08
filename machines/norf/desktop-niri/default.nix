@@ -49,7 +49,7 @@ in
     home.packages = [
       unstable.spotify
       pkgs.tdesktop
-      pkgs.okular
+      pkgs.kdePackages.okular
       unstable.signal-desktop
       unstable.blender
       pkgs.teams-for-linux

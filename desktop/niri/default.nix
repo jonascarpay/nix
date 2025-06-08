@@ -176,8 +176,8 @@ in
     home.sessionVariables.NIXOS_OZONE_WL = 1;
     services.mako = {
       enable = true;
-      borderRadius = 4;
-      defaultTimeout = 10 * 1000;
+      settings.border-radius = 4;
+      settings.default-timeout = 10 * 1000;
     };
 
     programs.niri.settings = {

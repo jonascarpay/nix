@@ -1,5 +1,6 @@
 { pkgs, inputs, ... }:
 let
+  # TODO remove this?
   dm-mono-nerd-font = pkgs.stdenv.mkDerivation rec {
     name = "dm-mono-nerd-font";
     # TODO flakify
@@ -14,6 +15,7 @@ let
       cp DMMonoNerdFont/* $out/share/fonts/truetype
     '';
   };
+
   # dm-mono-nerd-font = pkgs.stdenv.mkDerivation rec {
   #   name = "dm-mono-nerd-font";
   #   # TODO flakify
@@ -39,8 +41,7 @@ in
       pkgs.noto-fonts-cjk-serif
       pkgs.noto-fonts-emoji
       pkgs.liberation_ttf
-      # See https://github.com/NixOS/nixpkgs/blob/6998cf86e9a6ef83b32956337f65aba8656671fe/pkgs/data/fonts/nerdfonts/shas.nix
-      (pkgs.nerdfonts.override { fonts = [ "SourceCodePro" ]; })
+      pkgs.nerd-fonts.sauce-code-pro
       # powerline-fonts
       (inputs.dmmono.packages.${pkgs.system}.dm-mono-patched)
       # dm-mono-nerd-font
