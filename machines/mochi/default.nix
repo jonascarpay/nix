@@ -65,6 +65,17 @@ let
     networking.firewall.allowedTCPPorts = [ config.services.paperless.port ];
   };
 
+  makasete = {
+    systemd = {
+      services.makasete = {
+        description = "Makasete";
+        script = "${inputs.makasete.packages.${pkgs.system}.default}/bin/makasete";
+        wantedBy = [ "default.target" ];
+      };
+      targets.makasete.after = [ "network.target" ];
+    };
+  };
+
   git-sync = {
     imports = [ ./git-sync-service.nix ];
     services.git-sync = {
@@ -94,6 +105,7 @@ in
     ../../nixos/global.nix
     # ./unbound.nix
     ./wireguard.nix
+    ./otis.nix
     # ./domo.nix
     # zfs
     # rclone
