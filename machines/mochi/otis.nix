@@ -3,6 +3,7 @@
     enable = true;
     autoPrune.enable = true;
   };
+  users.users.jmc.extraGroups = [ "docker" ];
   users.users.otis = {
     isNormalUser = true;
     description = "Otis Carpay";
