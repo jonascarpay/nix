@@ -8,7 +8,9 @@ let
   ];
 in
 {
+  "noip.age".publicKeys = keys;
   "ha-secrets.age".publicKeys = keys;
+  # TODO remove
   "notifications-token.age".publicKeys = keys;
   # ndh
   "ndh-openvpn-laptop.age".publicKeys = keys;

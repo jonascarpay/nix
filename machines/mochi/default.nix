@@ -31,6 +31,22 @@ let
     };
   };
 
+  noip = {
+    age.secrets.noip.file = ../../secrets/noip.age;
+    systemd.services.noip = {
+      description = "No-IP Dynamic DNS Update Client";
+      after = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
+      requires = [ "network-online.target" ];
+      serviceConfig = {
+        Type = "forking";
+        ExecStart = "${pkgs.noip}/bin/noip2 -c ${config.age.secrets.noip.path}";
+        restart = "on-failure";
+        restartSec = 5;
+      };
+    };
+  };
+
   jellyfin = {
     users.users.jmc.homeMode = "701"; # Media is currently stored in my home dir
     services.jellyfin = {
@@ -72,31 +88,27 @@ let
     };
   };
 
-  fish = {
-    users.users.jmc.shell = pkgs.fish;
-    programs.fish.enable = true;
-  };
-
 in
 {
-  imports =
-    [
-      ../../nixos/global.nix
-      # ./unbound.nix
-      ./wireguard.nix
-      # ./domo.nix
-      # zfs
-      # rclone
-      # jellyfin
-      # transmission
-      # syncthing
-      # git-sync
-      fish
-      ./hardware-configuration.nix
-      githubHosts
-      jellyfin
-      paperless
-    ];
+  imports = [
+    ../../nixos/global.nix
+    # ./unbound.nix
+    ./wireguard.nix
+    # ./domo.nix
+    # zfs
+    # rclone
+    # jellyfin
+    # transmission
+    # syncthing
+    # git-sync
+    ./hardware-configuration.nix
+    ../onigiri/unbound.nix
+    githubHosts
+    jellyfin
+    paperless
+    makasete
+    noip
+  ];
 
   services.xserver.xkb = {
     layout = "us";
