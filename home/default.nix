@@ -52,6 +52,11 @@ in
     icons = "auto";
   };
 
+  programs.fd = {
+    enable = true;
+    ignores = [ ".git/*" ];
+  };
+
   programs.ssh.enable = true;
 
   programs.yazi = {
