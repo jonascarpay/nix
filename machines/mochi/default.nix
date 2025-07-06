@@ -31,22 +31,6 @@ let
     };
   };
 
-  noip = {
-    age.secrets.noip.file = ../../secrets/noip.age;
-    systemd.services.noip = {
-      description = "No-IP Dynamic DNS Update Client";
-      after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "network-online.target" ];
-      serviceConfig = {
-        Type = "forking";
-        ExecStart = "${pkgs.noip}/bin/noip2 -c ${config.age.secrets.noip.path}";
-        restart = "on-failure";
-        restartSec = 5;
-      };
-    };
-  };
-
   jellyfin = {
     users.users.jmc.homeMode = "701"; # Media is currently stored in my home dir
     services.jellyfin = {
@@ -63,17 +47,6 @@ let
       extraConfig.PAPERLESS_OCR_LANGUAGE = "eng+jpn+nld";
     };
     networking.firewall.allowedTCPPorts = [ config.services.paperless.port ];
-  };
-
-  makasete = {
-    systemd = {
-      services.makasete = {
-        description = "Makasete";
-        script = "${inputs.makasete.packages.${pkgs.system}.default}/bin/makasete";
-        wantedBy = [ "default.target" ];
-      };
-      targets.makasete.after = [ "network.target" ];
-    };
   };
 
   git-sync = {
@@ -99,27 +72,62 @@ let
     };
   };
 
+  adguard = {
+    services.adguardhome = {
+      enable = true;
+      openFirewall = true;
+      settings = {
+        dns.upstream_dns = [
+          "https://dns10.quad9.net/dns-query"
+          "https://dns.mullvad.net/dns-query"
+          "https://dns.nextdns.io"
+        ];
+        # During setup, the admin interface is indeed presented on the expected
+        # port, but then after setup the dashboard is hosted on port 80. Maybe
+        # this is intentional, but I find it confusing.
+        http.address = "0.0.0.0:${config.services.adguardhome.port}"; # TODO what is this dumb workaround
+        filtering.rewrites =
+          let
+            inherit (lib.attrsets) mapAttrsToList;
+            servers = {
+              "onigiri.lan" = "192.168.1.6";
+              "mochi.lan" = "192.168.1.20";
+              "norf.lan" = "192.168.1.208";
+            };
+          in
+          mapAttrsToList (host: ip: { domain = host; answer = ip; }) servers
+          ++ mapAttrsToList (host: ip: { domain = "*.${host}"; answer = ip; }) servers
+        ;
+      };
+    };
+    networking.firewall.allowedUDPPorts = [ 53 ];
+  };
+
+  tailscale = {
+    services.tailscale = {
+      enable = true;
+      extraSetFlags = [ "--advertise-exit-node" ];
+      # useRoutingFeatures = "both";
+    };
+    networking.firewall.checkReversePath = "loose"; # https://nixos.wiki/wiki/Tailscale#No_internet_when_using_an_exit_node
+  };
+
 in
 {
   imports = [
     ../../nixos/global.nix
-    # ./unbound.nix
-    ./wireguard.nix
     ./otis.nix
     # ./domo.nix
     # zfs
     # rclone
-    # jellyfin
-    # transmission
     # syncthing
     # git-sync
     ./hardware-configuration.nix
-    ../onigiri/unbound.nix
     githubHosts
-    jellyfin
+    # jellyfin
     paperless
-    makasete
-    noip
+    adguard
+    tailscale
   ];
 
   services.xserver.xkb = {
@@ -129,10 +137,7 @@ in
 
   security.rtkit.enable = true;
 
-  # systemd.services."getty@tty1".enable = false;
-  # systemd.services."autovt@tty1".enable = false;
-
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnfree = true; # TODO global?
 
   # boot.zfs.requestEncryptionCredentials = false;
   networking.hostName = "mochi";

@@ -13,10 +13,6 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hosts = {
-      url = "github:StevenBlack/hosts";
-      flake = false;
-    };
     # TODO switch to frecle
     frecently = {
       url = "github:jonascarpay/frecently/preserve-index";
@@ -39,10 +35,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs";
     };
-    # makasete = {
-    #   url = "git+file:///home/jmc/makasete";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
     wallpapers = {
       url = "github:jonascarpay/Wallpapers";
       flake = false;
