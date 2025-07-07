@@ -37,8 +37,8 @@ let
       openFirewall = true;
     };
     systemd.services.jellyfin = {
-      bindsTo = [ "tank-Vault.mount" ];
-      after = [ "tank-Vault.mount" ];
+      bindsTo = [ "tank.mount" ];
+      after = [ "tank.mount" ];
     };
   };
 
