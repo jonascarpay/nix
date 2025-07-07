@@ -46,10 +46,15 @@ let
     services.paperless = {
       enable = true;
       address = "0.0.0.0";
-      consumptionDirIsPublic = true;
-      extraConfig.PAPERLESS_OCR_LANGUAGE = "eng+jpn+nld";
+      settings.PAPERLESS_OCR_LANGUAGE = "eng+jpn+nld";
+      exporter.enable = true;
+      exporter.directory = "/tank/PaperlessExports/";
     };
     networking.firewall.allowedTCPPorts = [ config.services.paperless.port ];
+    systemd.services.paperless-exporter = {
+      after = [ "tank.mount" ];
+      bindsTo = [ "tank.mount" ];
+    };
   };
 
   git-sync = {
