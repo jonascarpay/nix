@@ -113,6 +113,12 @@ in
     variant = "";
   };
 
+  fileSystems."/mnt/mochi" = {
+    device = "192.168.1.20:/tank";
+    fsType = "nfs";
+    options = [ "resvport" "x-systemd.automount" "noauto" ];
+  };
+
   boot.loader.systemd-boot.enable = true; # default from configuration.nix
   boot.loader.efi.canTouchEfiVariables = true; # default from configuration.nix
 
