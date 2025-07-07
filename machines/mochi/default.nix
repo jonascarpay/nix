@@ -32,10 +32,13 @@ let
   };
 
   jellyfin = {
-    users.users.jmc.homeMode = "701"; # Media is currently stored in my home dir
     services.jellyfin = {
       enable = true;
       openFirewall = true;
+    };
+    systemd.services.jellyfin = {
+      bindsTo = [ "tank-Vault.mount" ];
+      after = [ "tank-Vault.mount" ];
     };
   };
 
@@ -153,7 +156,7 @@ in
     # git-sync
     ./hardware-configuration.nix
     githubHosts
-    # jellyfin
+    jellyfin
     paperless
     adguard
     tailscale
