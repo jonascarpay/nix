@@ -59,10 +59,38 @@ let
 
   zfs = {
     boot.supportedFilesystems = [ "zfs" ];
-    networking.hostId = "3bf3504c";
-    boot.zfs.extraPools = [ "tank" ];
+    networking.hostId = "8c2565a1";
+    # boot.zfs.extraPools = [ "tank" ];
+    boot.zfs.forceImportRoot = false; # man configuration.nix recommends setting to false
+    boot.zfs.requestEncryptionCredentials = false;
     services.zfs.autoScrub.enable = true;
     services.zfs.autoSnapshot.enable = true;
+  };
+
+  nfs = {
+    # https://nixos.wiki/wiki/ZFS#NFS_shares
+    services.nfs.server = {
+      enable = true;
+      lockdPort = 4001;
+      mountdPort = 4002;
+      statdPort = 4000;
+      exports = ''
+        /tank 192.168.1.208(rw,sync,insecure,all_squash,anongid=100,anonuid=1000)
+        /tank 100.117.239.92(rw,sync,insecure,all_squash,anongid=100,anonuid=1000)
+      '';
+    };
+    networking.firewall =
+      let
+        ports = [ 111 2049 4000 4001 4002 20048 ];
+      in
+      {
+        allowedTCPPorts = ports;
+        allowedUDPPorts = ports;
+      };
+    systemd.services.nfs-server = {
+      after = [ "tank.mount" ];
+      bindsTo = [ "tank.mount" ];
+    };
   };
 
   githubHosts = {
@@ -118,7 +146,8 @@ in
     ../../nixos/global.nix
     ./otis.nix
     # ./domo.nix
-    # zfs
+    zfs
+    nfs
     # rclone
     # syncthing
     # git-sync
@@ -139,7 +168,6 @@ in
 
   nixpkgs.config.allowUnfree = true; # TODO global?
 
-  # boot.zfs.requestEncryptionCredentials = false;
   networking.hostName = "mochi";
   time.timeZone = "Asia/Tokyo";
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
