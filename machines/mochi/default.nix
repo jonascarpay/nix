@@ -42,6 +42,19 @@ let
     };
   };
 
+  immich = {
+    services.immich = {
+      enable = true;
+      host = "0.0.0.0";
+      openFirewall = true;
+      mediaLocation = "/tank/Immich";
+    };
+    systemd.services.immich = {
+      after = [ "tank.mount" ];
+      bindsTo = [ "tank.mount" ];
+    };
+  };
+
   paperless = {
     services.paperless = {
       enable = true;
@@ -165,6 +178,7 @@ in
     paperless
     adguard
     tailscale
+    immich
   ];
 
   services.xserver.xkb = {
