@@ -153,13 +153,6 @@ in
       scene = "!include scenes.yaml";
       automation = "!include automations.yaml";
       light = "!secret light_groups";
-      group = {
-        somebody_home = {
-          name = "People";
-          entities = "!secret phones";
-          all = false;
-        };
-      };
       # switch = [{
       #   platform = "flux";
       #   lights = "!secret all_lights";

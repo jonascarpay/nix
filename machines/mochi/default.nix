@@ -166,6 +166,7 @@ in
   imports = [
     ../../nixos/global.nix
     ./otis.nix
+    ./hass.nix
     # ./domo.nix
     zfs
     nfs
