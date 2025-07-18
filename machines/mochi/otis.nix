@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   virtualisation.docker = {
     enable = true;
@@ -13,6 +14,7 @@
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKQ90WJQvcslYhHgaSZmqldOSE0uMMVTFdcvWJU0GK72 ocarpaca115@alumnes.ub.edu"
     ];
+    shell = pkgs.fish;
   };
   networking.firewall.allowedTCPPorts = [ 20007 ];
 }
