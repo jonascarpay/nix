@@ -13,6 +13,10 @@ let
       bindsTo = [ "tank.mount" ];
       after = [ "tank.mount" ];
     };
+    services.caddy.virtualHosts."jellyfin.mochi.lan".extraConfig = ''
+      tls internal
+      reverse_proxy localhost:8096
+    '';
   };
 
   immich = {
@@ -26,21 +30,30 @@ let
       after = [ "tank.mount" ];
       bindsTo = [ "tank.mount" ];
     };
+    services.caddy.virtualHosts."immich.mochi.lan".extraConfig = ''
+      tls internal
+      reverse_proxy localhost:${builtins.toString(config.services.immich.port)}
+    '';
   };
 
   paperless = {
     services.paperless = {
       enable = true;
-      address = "0.0.0.0";
+      address = "0.0.0.0"; # MARK
       settings.PAPERLESS_OCR_LANGUAGE = "eng+jpn+nld";
+      settings.PAPERLESS_URL = "https://paperless.mochi.lan"; # MARK
       exporter.enable = true;
       exporter.directory = "/tank/PaperlessExports/";
     };
-    networking.firewall.allowedTCPPorts = [ config.services.paperless.port ];
+    networking.firewall.allowedTCPPorts = [ config.services.paperless.port ]; # MARK
     systemd.services.paperless-exporter = {
       after = [ "tank.mount" ];
       bindsTo = [ "tank.mount" ];
     };
+    services.caddy.virtualHosts."paperless.mochi.lan".extraConfig = ''
+      tls internal
+      reverse_proxy localhost:${builtins.toString(config.services.paperless.port)}
+    '';
   };
 
   git-sync = {
@@ -110,19 +123,19 @@ let
         http.address = "0.0.0.0:${config.services.adguardhome.port}"; # TODO what is this dumb workaround
         filtering.rewrites =
           let
-            inherit (lib.attrsets) mapAttrsToList;
-            servers = {
-              "onigiri.lan" = "192.168.1.6";
-              "mochi.lan" = "192.168.1.20";
-              "norf.lan" = "192.168.1.208";
-            };
+            mochi-ts = "100.91.139.59";
           in
-          mapAttrsToList (host: ip: { domain = host; answer = ip; }) servers
-          ++ mapAttrsToList (host: ip: { domain = "*.${host}"; answer = ip; }) servers
-        ;
+          [
+            { domain = "mochi.lan"; answer = mochi-ts; }
+            { domain = "*.mochi.lan"; answer = mochi-ts; }
+          ];
       };
     };
     networking.firewall.allowedUDPPorts = [ 53 ];
+    services.caddy.virtualHosts."adguard.mochi.lan".extraConfig = ''
+      tls internal
+      reverse_proxy localhost:${builtins.toString(config.services.adguardhome.port)}
+    '';
   };
 
   tailscale = {
@@ -159,6 +172,8 @@ in
     layout = "us";
     variant = "";
   };
+
+  services.caddy.enable = true;
 
   security.rtkit.enable = true;
 
