@@ -1,35 +1,8 @@
 { pkgs, lib, config, inputs, ... }:
 let
 
-  rclone = {
-    networking.firewall.allowedTCPPorts = [ 8090 ];
-    systemd.services = {
-      rclone = {
-        enable = true;
-        script = ''
-          ${pkgs.rclone}/bin/rclone serve webdav /tank/Vault/ --addr :8090 --user dav --pass dav
-        '';
-        bindsTo = [ "tank-Vault.mount" ];
-        after = [ "tank-Vault.mount" ];
-      };
-    };
-  };
-
-  syncthing = {
-    # might no longer be necessary after kernel version > 5.10
-    boot.kernel.sysctl."fs.inotify.max_user_watches" = 32784;
-    networking.firewall.allowedTCPPorts = [ 8384 ]; # for GUI
-    systemd.services.syncthing = {
-      bindsTo = [ "tank-Vault.mount" ];
-      after = [ "tank-Vault.mount" ];
-    };
-    services.syncthing = {
-      enable = true;
-      user = "jmc";
-      group = "tank";
-      guiAddress = "0.0.0.0:8384";
-    };
-  };
+  # TODO: filebrowser, currently in 25.11
+  # TODO: vaultwarden
 
   jellyfin = {
     services.jellyfin = {

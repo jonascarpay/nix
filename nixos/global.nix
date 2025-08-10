@@ -118,10 +118,10 @@ in
       createHome = true;
       extraGroups = [
         "wheel"
-        "networkmanager"
-        "audio"
-        "tty"
-        "dialout"
+        "networkmanager" # TODO move to relevant machine, might not be necessary anymore
+        "audio" # TODO move to relevant machine, is this necessary
+        "tty" # TODO move to relevant machine, what is this even
+        "dialout" # TODO move to relevant machine, what is this even
       ];
       # TODO ed
       openssh.authorizedKeys.keys = [
