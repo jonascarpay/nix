@@ -82,8 +82,9 @@ let
       mountdPort = 4002;
       statdPort = 4000;
       exports = ''
-        /tank 192.168.1.208(rw,sync,insecure,all_squash,anongid=100,anonuid=1000)
-        /tank 100.117.239.92(rw,sync,insecure,all_squash,anongid=100,anonuid=1000)
+        /tank          192.168.1.0/24(rw,sync,insecure,all_squash,anongid=100,anonuid=1000)
+        /tank/NAS/jmc  100.117.239.92(rw,sync,insecure,all_squash,anongid=100,anonuid=1000) # jmbp
+        /tank/NAS/otis 100.127.99.65(rw,sync,insecure,all_squash,anongid=100,anonuid=1001)  # kimberley
       '';
     };
     networking.firewall =
