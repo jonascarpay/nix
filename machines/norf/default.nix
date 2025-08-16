@@ -50,9 +50,6 @@ let
 
   zfs = {
     boot.supportedFilesystems = [ "zfs" ];
-    boot.zfs.forceImportRoot = false; # man configuration.nix recommends setting to false
-    boot.zfs.passwordTimeout = 15;
-    boot.zfs.extraPools = [ "tank" ];
     networking.hostId = "02e716d7";
     services.zfs.autoScrub.enable = true;
     services.zfs.autoSnapshot.enable = true;
