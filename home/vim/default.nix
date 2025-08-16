@@ -456,6 +456,7 @@ in
       np.vim-indent-object
       np.vim-repeat
       np.vim-unimpaired
+      np.vim-sleuth
 
       {
         plugin = np.hop-nvim;
