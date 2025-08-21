@@ -449,10 +449,9 @@ in
       }
 
       # np.vim-signature
-      np.vim-polyglot # only used for proper indent on cc
+      # np.vim-polyglot # only used for proper indent on cc
       np.commentary # TODO switch to Comment.nvim
       np.surround
-      np.vim-eunuch
       np.vim-indent-object
       np.vim-repeat
       np.vim-unimpaired
@@ -506,14 +505,7 @@ in
           let
             quote = str: "\"${str}\"";
             mkFmt =
-              ft:
-              { exe
-              , stdin ? true
-              , args ? [ ]
-              , raw_args ? [ ]
-              ,
-              }:
-              ''
+              ft: { exe, stdin ? true, args ? [ ], raw_args ? [ ] }: ''
                 ${ft} = {
                   function()
                     return {
