@@ -42,6 +42,7 @@ let
       address = "0.0.0.0"; # MARK
       settings.PAPERLESS_OCR_LANGUAGE = "eng+jpn+nld";
       settings.PAPERLESS_URL = "https://paperless.mochi.lan"; # MARK
+      consumptionDirIsPublic = true;
       exporter.enable = true;
       exporter.directory = "/tank/PaperlessExports/";
     };
@@ -172,6 +173,19 @@ in
   services.xserver.xkb = {
     layout = "us";
     variant = "";
+  };
+
+  services.webdav = {
+    enable = true;
+    settings = {
+      address = "0.0.0.0";
+      port = 8823;
+      directory = config.services.paperless.consumptionDir;
+      permissions = "CR";
+      users = [
+        { username = "admin"; password = "admin"; }
+      ];
+    };
   };
 
   services.caddy.enable = true;
