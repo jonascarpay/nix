@@ -456,6 +456,7 @@ in
       np.vim-repeat
       np.vim-unimpaired
       np.vim-sleuth
+      np.nvim-treesitter-context
 
       {
         plugin = np.hop-nvim;
