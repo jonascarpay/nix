@@ -86,6 +86,11 @@
         module = ./machines/dumpling;
       };
 
+      nixosConfigurations.dumple = mkNixosSystem {
+        system = "aarch64-linux";
+        module = ./machines/dumple;
+      };
+
       nixosConfigurations.onigiri = mkNixosSystem {
         system = "aarch64-linux";
         module = ./machines/onigiri;

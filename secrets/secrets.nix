@@ -18,5 +18,3 @@ in
   # Wireguard
   "wg-onigiri.age".publicKeys = keys;
 }
-
-# vim: nowrap

@@ -186,7 +186,21 @@ in
       binds =
         let
           actions = config.lib.niri.actions;
+          directional = { up, down, left, right }: {
+            "Mod+${left}".action = actions.focus-column-left;
+            "Mod+${down}".action = actions.focus-window-or-workspace-down;
+            "Mod+${up}".action = actions.focus-window-or-workspace-up;
+            "Mod+${right}".action = actions.focus-column-right;
+            "Mod+Shift+${left}".action = actions.move-column-left;
+            "Mod+Shift+${down}".action = actions.move-window-down-or-to-workspace-down;
+            "Mod+Shift+${up}".action = actions.move-window-up-or-to-workspace-up;
+            "Mod+Shift+${right}".action = actions.move-column-right;
+            "Mod+Ctrl+${down}".action = actions.move-workspace-down;
+            "Mod+Ctrl+${up}".action = actions.move-workspace-up;
+          };
         in
+        directional { left = "H"; down = "J"; up = "K"; right = "L"; } //
+        directional { left = "Left"; down = "Down"; up = "Up"; right = "Right"; } //
         {
           "Mod+F".action.spawn = "firefox";
           "Mod+Shift+Slash".action = actions.show-hotkey-overlay;
@@ -202,16 +216,6 @@ in
 
           "Mod+Q".action = actions.close-window;
 
-          "Mod+H".action = actions.focus-column-left;
-          "Mod+J".action = actions.focus-window-or-workspace-down;
-          "Mod+K".action = actions.focus-window-or-workspace-up;
-          "Mod+L".action = actions.focus-column-right;
-          "Mod+Shift+H".action = actions.move-column-left;
-          "Mod+Shift+J".action = actions.move-window-down-or-to-workspace-down;
-          "Mod+Shift+K".action = actions.move-window-up-or-to-workspace-up;
-          "Mod+Shift+L".action = actions.move-column-right;
-          "Mod+Ctrl+J".action = actions.move-workspace-down;
-          "Mod+Ctrl+K".action = actions.move-workspace-up;
           "Mod+Comma".action = actions.focus-column-first;
           "Mod+Period".action = actions.focus-column-last;
           "Mod+Shift+Comma".action = actions.move-column-to-first;
@@ -311,7 +315,7 @@ in
 
       window-rules = [{
         clip-to-geometry = true;
-        geometry-corner-radius = let radius = 4.0; in {
+        geometry-corner-radius = let radius = 8.0; in {
           top-right = radius;
           top-left = radius;
           bottom-right = radius;
