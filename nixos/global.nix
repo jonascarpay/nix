@@ -32,6 +32,7 @@ let
     environment.systemPackages = [ inputs.agenix.packages.${pkgs.system}.agenix ];
   };
 
+  # TODO remove
   words-txt = {
     environment.etc."words.txt".source =
       let

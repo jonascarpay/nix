@@ -3,7 +3,7 @@
 let
 
   wallpaper = {
-    imports = [ ../../desktop/niri/random-wallpaper.nix ];
+    imports = [ ../../desktop/random-wallpaper.nix ];
     services.randomWallpaper = {
       enable = true;
       wallpaperPath = "${inputs.wallpapers}/papes";
@@ -33,7 +33,7 @@ in
     ./hardware-configuration.nix
     ../../nixos/global.nix
     ../../nixos/fonts.nix
-    ../../desktop/niri
+    ../../desktop
     netrc
     personal-github
   ];
@@ -56,7 +56,7 @@ in
   home-manager.users.jmc = {
     imports = [
       wallpaper
-      ../../desktop/niri/qalculate.nix
+      ../../desktop/qalculate.nix
     ];
 
     home.stateVersion = "23.05";

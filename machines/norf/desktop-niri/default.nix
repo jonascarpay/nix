@@ -21,7 +21,7 @@ let
 
 
   wallpaper = {
-    imports = [ ../../../desktop/niri/random-wallpaper.nix ];
+    imports = [ ../../../desktop/random-wallpaper.nix ];
     services.randomWallpaper = {
       enable = true;
       wallpaperPath = "/home/jmc/Wallpapers/papes";
@@ -31,8 +31,8 @@ in
 {
   imports = [
     ../../../nixos/fonts.nix
-    ../../../desktop/jp.nix
-    ../../../desktop/niri
+    ../../../desktop/jp.nix # TODO probably inline
+    ../../../desktop
   ];
 
   programs.firefox.enable = true;
@@ -43,7 +43,7 @@ in
       wallpaper
       obsidian
       pass
-      ../../../desktop/niri/qalculate.nix
+      ../../../desktop/qalculate.nix
     ];
 
     home.packages = [
@@ -72,36 +72,6 @@ in
         gaps = 32;
         struts.left = 32;
         struts.right = 32;
-      };
-    };
-
-    programs.waybar = {
-      enable = false;
-      systemd.enable = true;
-      settings.mainBar = {
-        height = 30;
-        layer = "top";
-        modules-left = [ "niri/workspaces" "niri/window" ];
-        modules-center = [ ];
-        modules-right = [ "memory" "cpu" "clock" "tray" ];
-        spacing = 4;
-        "niri/workspaces" = {
-          format = "{value}";
-        };
-        "niri/window" = {
-          icon = true;
-          separate-outputs = true;
-        };
-        clock = {
-          format = "{:%a %b %d %H:%M}";
-          timezones = [ "Asia/Tokyo" "Europe/Amsterdam" ];
-          tooltip-format = "{tz_list}";
-        };
-        cpu = {
-          interval = 1;
-          format = "{icon0}{icon1}{icon2}{icon3}{icon4}{icon5}{icon6}{icon7}{icon8}{icon9}{icon10}{icon11}";
-          format-icons = [ "▁" "▂" "▃" "▄" "▅" "▆" "▇" "█" ];
-        };
       };
     };
 
