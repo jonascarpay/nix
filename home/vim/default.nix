@@ -341,10 +341,13 @@ let
   };
 
   spell.programs.neovim.extraConfig = ''
-    autocmd FileType markdown setlocal spell
-    autocmd FileType text setlocal spell
-    autocmd FileType gitcommit setlocal spell
+    set nowrap
+    augroup filetype_text
+      autocmd!
+      autocmd FileType markdown,text,gitcommit setlocal wrap spell
+    augroup END
   '';
+
 in
 {
   imports = [
@@ -423,7 +426,6 @@ in
       set diffopt+=vertical
       set fdm=indent
       set foldlevel=99
-      set nowrap
       noremap <2-LeftMouse> :lua vim.lsp.buf.definition()<CR>
       nnoremap z0 :set foldlevel=0<cr>
       nnoremap z1 :set foldlevel=1<cr>
