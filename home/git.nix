@@ -43,6 +43,8 @@ in
           done | column -ts'|';
         }; r
       '';
+      root = "rev-parse --show-toplevel";
+      exec = "!exec ";
     };
     extraConfig = {
       commit.verbose = true;

@@ -8,7 +8,8 @@ in
     functions = {
       gi = "curl -sL https://www.gitignore.io/api/$argv";
     };
-    shellInit = ''
+    # TODO: use programs.fish.functions
+    shellInit = /* fish */ ''
       function take -a dir
         if test -n "$dir"
           mkdir -p $dir
@@ -17,6 +18,16 @@ in
       end
 
       set fish_greeting
+
+      function __update_git_root --on-variable PWD --description "set git root"
+        if git root &>/dev/null
+          set -g gr (git root)
+        else
+          set -ge gr
+        end
+      end
+
+      __update_git_root
 
       function fish_prompt
         ${pkgs.powerline-go}/bin/powerline-go \
@@ -58,6 +69,7 @@ in
       gp = "git push";
       gpf = "git push --force";
       gpu = "git push --set-upstream origin (git rev-parse --abbrev-ref HEAD)";
+      gr = "git root";
       gra = "git rebase --abort";
       grc = "git rebase --continue";
       grh = "git reset HEAD --hard";
