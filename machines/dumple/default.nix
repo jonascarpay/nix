@@ -48,6 +48,11 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  swapDevices = [{
+    device = "/var/lib/swapfile";
+    size = 32 * 1024;
+  }];
+
   networking.hostName = "woven";
 
   networking.networkmanager.enable = true;
