@@ -1,15 +1,10 @@
-{ pkgs, ... }:
-let
-  difft = {
-    programs.git.extraConfig = {
-      diff.external = "${pkgs.difftastic}/bin/difft";
-    };
-  };
-in
 {
-  imports = [ difft ];
   programs.git = {
-    diff-so-fancy.enable = true;
+    # diff-so-fancy.enable = true;
+    difftastic = {
+      enable = true;
+      enableAsDifftool = true;
+    };
     enable = true;
     lfs.enable = true;
     userName = "Jonas Carpay";
@@ -51,6 +46,7 @@ in
       pull.rebase = true;
       init.defaultBranch = "master";
       merge.conflictStyle = "zdiff3";
+      status.relativePaths = false;
     };
   };
 }
