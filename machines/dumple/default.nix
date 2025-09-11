@@ -20,10 +20,17 @@ let
       file = ../../secrets/woven/id_personal_github.age;
       owner = "jmc";
     };
-    home-manager.users.jmc.programs.ssh.matchBlocks.github_personal = {
-      hostname = "github.com";
-      user = "git";
-      identityFile = config.age.secrets.id_personal_github.path;
+    home-manager.users.jmc.programs.ssh.matchBlocks = {
+      floorbox = {
+        hostname = "IN-197182981927-L.pc.internal.woven.tech";
+        user = "jonas-carpay";
+        identityFile = "~/.ssh/id_ed25519";
+      };
+      github_personal = {
+        hostname = "github.com";
+        user = "git";
+        identityFile = config.age.secrets.id_personal_github.path;
+      };
     };
   };
 
