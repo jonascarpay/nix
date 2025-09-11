@@ -20,7 +20,7 @@ let
       np.trouble-nvim
     ];
     # Adapted from https://github.com/VonHeikemen/lsp-zero.nvim?tab=readme-ov-file#quickstart-for-the-impatient
-    programs.neovim.extraLuaConfig = ''
+    programs.neovim.extraLuaConfig = /* lua */ ''
       -- Reserve a space in the gutter
       vim.opt.signcolumn = 'yes'
 
@@ -386,7 +386,7 @@ in
     vimAlias = true;
     vimdiffAlias = true;
     viAlias = true;
-    extraConfig = ''
+    extraConfig = /* vim */ ''
       set nocompatible
       filetype indent plugin on
       syntax on
