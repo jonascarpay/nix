@@ -7,16 +7,17 @@ in
     enable = true;
     functions = {
       gi = "curl -sL https://www.gitignore.io/api/$argv";
+      take = ''
+        function take -a dir
+          if test -n "$dir"
+            mkdir -p $dir
+            and cd $dir
+          end
+        end
+      '';
     };
     # TODO: use programs.fish.functions
     shellInit = /* fish */ ''
-      function take -a dir
-        if test -n "$dir"
-          mkdir -p $dir
-          and cd $dir
-        end
-      end
-
       set fish_greeting
 
       function __update_git_root --on-variable PWD --description "set git root"
