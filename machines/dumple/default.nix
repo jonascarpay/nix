@@ -53,7 +53,7 @@ in
     size = 32 * 1024;
   }];
 
-  networking.hostName = "woven";
+  networking.hostName = "dumple";
 
   networking.networkmanager.enable = true;
   services.timesyncd.enable = lib.mkForce true;
