@@ -51,6 +51,7 @@ in
     '';
     shellAbbrs = {
       c = "cd";
+      cgr = "cd $gr";
       dv = "cd ~/Dev/";
       ndh = "cd ~/Dev/NDH/";
       dr = "direnv reload";
