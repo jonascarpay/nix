@@ -1,9 +1,26 @@
 { pkgs, inputs, ... }:
 let
 
-  bat = {
-    programs.bat.enable = true;
-    programs.fish.shellAliases.cat = "bat";
+  python = {
+    home.packages = [
+      pkgs.pyright
+      (pkgs.python3.withPackages (p: [
+        p.polars
+      ]))
+    ];
+    programs.ruff = {
+      enable = true;
+      settings = {
+        line-length = 120;
+        per-file-ignores = {
+          "__init__.py" = [ "F401" ];
+        };
+        lint = {
+          select = [ "ALL" ];
+          ignore = [ ];
+        };
+      };
+    };
   };
 
 in
@@ -17,8 +34,10 @@ in
     ./postgres.nix
     ./daily.nix
     inputs.agenix.homeManagerModules.age
-    bat
+    python
   ];
+
+  programs.bat.enable = true;
 
   manual.manpages.enable = true;
 
