@@ -77,6 +77,9 @@ in
       grh = "git reset HEAD --hard";
       gri = "git rebase -i";
       gs = "git status";
+      gw = "git worktree";
+      gwa = "git worktree add";
+      gwl = "git worktree list";
       l = "ls";
       ll = "ls -lah";
       n = "vim";
