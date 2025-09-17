@@ -8,6 +8,7 @@ let
   ];
 in
 {
+  "gemini-api-key.age".publicKeys = keys;
   "noip.age".publicKeys = keys;
   "ha-secrets.age".publicKeys = keys;
   # TODO remove
