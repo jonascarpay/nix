@@ -386,6 +386,10 @@ in
     vimAlias = true;
     vimdiffAlias = true;
     viAlias = true;
+    extraLuaConfig = /* lua */ ''
+      vim.keymap.set('n', '<leader>yf', ':let @@ = expand("%:.")<CR>', { desc = 'Yank file path' })
+      vim.keymap.set('n', '<leader>yF', ':let @@ = expand("%:.") . ":" . line(".")<CR>', { desc = 'Yank file path with position' })
+    '';
     extraConfig = /* vim */ ''
       set nocompatible
       filetype indent plugin on
@@ -463,7 +467,7 @@ in
       {
         plugin = np.hop-nvim;
         type = "lua";
-        config = ''
+        config = /* lua */ ''
 
           local hop = require("hop")
           hop.setup {
