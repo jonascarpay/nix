@@ -1,6 +1,7 @@
 { pkgs, inputs, ... }:
 let
 
+  colors = (import ../home/everforest.nix).default;
   focused-dir =
     let
       pwdx = "${pkgs.procps}/bin/pwdx";
@@ -105,25 +106,21 @@ let
           padding.y = 4;
         };
         colors =
-          let
-            everforest = import ../home/everforest.nix;
-            col = everforest.dark.foreground // everforest.dark.background.medium;
-          in
           rec {
             primary = {
-              background = col.bg0;
-              foreground = col.fg;
+              background = colors.bg0;
+              foreground = colors.fg;
             };
             normal = bright;
             bright = {
-              black = col.bg3;
-              red = col.red;
-              green = col.green;
-              yellow = col.yellow;
-              blue = col.blue;
-              magenta = col.purple;
-              cyan = col.aqua;
-              white = col.fg;
+              black = colors.bg3;
+              red = colors.red;
+              green = colors.green;
+              yellow = colors.yellow;
+              blue = colors.blue;
+              magenta = colors.purple;
+              cyan = colors.aqua;
+              white = colors.fg;
             };
           };
       };
@@ -156,7 +153,19 @@ in
       fuzzel-directory
     ];
 
-    programs.fuzzel.enable = true;
+    programs.fuzzel = {
+      enable = true;
+      settings = {
+        colors = {
+          background = colors.bg3 + "FF";
+          text = colors.yellow + "FF";
+          prompt = colors.grey2 + "FF";
+          input = colors.fg + "FF";
+          match = colors.purple + "FF";
+        };
+        main.use-bold = true;
+      };
+    };
 
     home.packages = [ pkgs.wl-clipboard ];
 
