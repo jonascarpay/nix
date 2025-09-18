@@ -17,7 +17,13 @@ let
         };
         lint = {
           select = [ "ALL" ];
-          ignore = [ ];
+          ignore = [
+            "T" # https://docs.astral.sh/ruff/rules/#flake8-print-t20
+            "S603" # https://docs.astral.sh/ruff/rules/subprocess-without-shell-equals-true/
+            "S607" # https://docs.astral.sh/ruff/rules/start-process-with-partial-path/
+            "INP001" # https://docs.astral.sh/ruff/rules/implicit-namespace-package/
+            "D" # https://docs.astral.sh/ruff/rules/#pydocstyle-d
+          ];
         };
       };
     };

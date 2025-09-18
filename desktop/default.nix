@@ -14,28 +14,15 @@ let
       echo "$DIR"
     '';
 
+
   # TODO this does not properly handle directories with spaces in their names
   fuzzel-directory = { config, ... }:
     let
       history = "${config.xdg.dataHome}/frecently/directory-history";
       frecently = "${inputs.frecently.defaultPackage.${pkgs.system}}/bin/frecently";
-      script = pkgs.writeShellApplication {
-        name = "fuzzel-directory";
-        text = ''
-          for dir in $(${frecently} view ${history}); do
-            if [ ! -d "$dir" ]; then
-              echo "Removing $dir" 1>&2
-              ${frecently} delete ${history} "$dir"
-            fi
-          done
-          DIR=$(find "$HOME/Dev" "$HOME/Documents" -maxdepth 1 -type d | ${frecently} view ${history} -a | sed "s#$HOME#~#" | fuzzel -w 100 -d -p " ")
-          DIR_REAL=$(realpath "''${DIR/#\~/$HOME}")
-          if [ -d "$DIR_REAL" ]; then
-            ${frecently} bump ${history} "$DIR_REAL"
-            echo "$DIR_REAL"
-          fi
-        '';
-      };
+      script = pkgs.writeShellScriptBin "fuzzel-directory" ''
+        ${pkgs.python3}/bin/python3 ${./fuzzel-directory.py} ${frecently} ${history} /home/jmc/Dev
+      '';
     in
     {
       home.packages = [ script ];
