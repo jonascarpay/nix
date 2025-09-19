@@ -75,6 +75,8 @@ in
 
     home.sessionPath = [ "$HOME/.cargo/bin" ];
 
+    programs.powerline-go."\\~/Dev/thirteenth-floor" = "13f";
+
     programs.neovide.settings.font.size = 10.0;
     programs.alacritty.settings.font.size = 10;
     programs.niri.settings = {

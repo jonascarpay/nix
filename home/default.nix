@@ -49,6 +49,19 @@ in
 
   xdg.enable = true;
 
+  programs.powerline-go = {
+    enable = true;
+    modules = [ "venv" "host" "ssh" "cwd" "perms" "git" "exit" "nix-shell" "jobs" ];
+    settings = {
+      hostname-only-if-ssh = true;
+      cwd-max-dir-depth = 4;
+    };
+    pathAliases = {
+      "\\~/Dev" = "Dev";
+      "/nix/store" = "nst";
+    };
+  };
+
   home = {
     stateVersion = "23.05";
     packages = [

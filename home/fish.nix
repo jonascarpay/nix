@@ -16,7 +16,6 @@ in
         end
       '';
     };
-    # TODO: use programs.fish.functions
     shellInit = /* fish */ ''
       set fish_greeting
 
@@ -27,17 +26,7 @@ in
           set -ge gr
         end
       end
-
       __update_git_root
-
-      function fish_prompt
-        ${pkgs.powerline-go}/bin/powerline-go \
-          -error $status \
-          -shell bare \
-          -jobs (jobs -p | wc -l | xargs) \
-          -hostname-only-if-ssh \
-          -modules venv,host,ssh,cwd,perms,git,exit,nix-shell,jobs
-      end
 
       function fzcd
           set -l dir (${frecently-pkg}/bin/frecently view ~/.local/share/frecently/directory-history | fzf --no-sort --preview 'tree -C {} --gitignore -L 1')
