@@ -15,6 +15,14 @@ let
     age.secrets.netrc.file = ../../secrets/woven/netrc.age;
   };
 
+  github-pat = {
+    age.secrets.github-pat-nix-conf.file = ../../secrets/woven/github_pat_nix_conf.age;
+    # TODO there might be some way to do this using nix.settings
+    nix.extraOptions = ''
+      include ${config.age.secrets.github-pat-nix-conf.path}
+    '';
+  };
+
   personal-github = {
     age.secrets.id_personal_github = {
       file = ../../secrets/woven/id_personal_github.age;
@@ -42,6 +50,7 @@ in
     ../../nixos/fonts.nix
     ../../desktop
     netrc
+    github-pat
     personal-github
   ];
 

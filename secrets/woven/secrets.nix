@@ -11,4 +11,5 @@ in
 {
   "id_personal_github.age".publicKeys = keys;
   "netrc.age".publicKeys = keys;
+  "github_pat_nix_conf.age".publicKeys = keys;
 }
