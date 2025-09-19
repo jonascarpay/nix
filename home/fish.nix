@@ -58,7 +58,7 @@ in
       ge = "git ls-files | entr -dcs";
       gl = "git pull";
       gp = "git push";
-      gpf = "git push --force";
+      gpf = "git push --force-with-lease";
       gpu = "git push --set-upstream origin (git rev-parse --abbrev-ref HEAD)";
       gr = "git root";
       gra = "git rebase --abort";
