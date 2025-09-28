@@ -1,4 +1,10 @@
+{ pkgs, ... }:
+let
+  grove-clone = pkgs.writeShellScriptBin "grove-clone" (builtins.readFile ./grove-clone.sh);
+in
 {
+  home.packages = [ grove-clone ];
+  programs.git-worktree-switcher.enable = true;
   programs.git = {
     # diff-so-fancy.enable = true;
     difftastic = {
@@ -25,28 +31,48 @@
     ];
     aliases = {
       graph = "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)' --all";
-      # list and pretty-print branches by latest commit, from https://stackoverflow.com/questions/5188320/how-can-i-get-a-list-of-git-branches-ordered-by-most-recent-commit
-      recentb = ''
-        !r() {
-          refbranch=$1 count=$2;
-          git for-each-ref --sort=-committerdate refs/heads --format='%(refname:short)|%(HEAD)%(color:yellow)%(refname:short)|%(color:bold green)%(committerdate:relative)|%(color:blue)%(subject)|%(color:magenta)%(authorname)%(color:reset)' --color=always --count=''${count:-20} | while read line; do
-            branch=$(echo "$line" | awk 'BEGIN { FS = "|" }; { print $1 }' | tr -d '*');
-            ahead=$(git rev-list --count "''${refbranch:-origin/master}..''${branch}");
-            behind=$(git rev-list --count "''${branch}..''${refbranch:-origin/master}");
-            colorline=$(echo "$line" | sed 's/^[^|]*|//');
-            echo "+$ahead|-$behind|$colorline" | awk -F'|' -vOFS='|' '{$5=substr($5,1,70)}1';
-          done | column -ts'|';
-        }; r
-      '';
       root = "rev-parse --show-toplevel";
       exec = "!exec ";
     };
+    # https://blog.gitbutler.com/how-git-core-devs-configure-git
     extraConfig = {
-      commit.verbose = true;
+      commit.verbose = true; # include diff in commit screen
       pull.rebase = true;
       init.defaultBranch = "master";
       merge.conflictStyle = "zdiff3";
       status.relativePaths = false;
+      column.ui = "auto"; # list things (branches) in columns
+      branch.sort = "-committerdate"; # sort branches reverse chronologically
+      tag.sort = "version:refname"; # sensible version sorting
+      diff = {
+        algorithm = "histogram"; # just better diff algorithm
+        renames = true; # detect renames
+        mnemonicPrefix = true; # replace a/ and b/ in diffs with i/ (index) w/ (working dir) and c/ (commit)
+      };
+      push = {
+        autoSetupRemote = true; # no more --set-upstream
+        followTags = true; # automatically push tags
+      };
+      fetch = {
+        # Gollow remote as closely as possible, including deletes.
+        prune = true;
+        pruneTags = true;
+        all = true;
+      };
+      rerere = {
+        # rerere means reuse recorded resolution
+        # Reapply resolutions in rebases with conflicts
+        enabled = true;
+        autoupdate = true;
+      };
+      rebase = {
+        # https://www.youtube.com/watch?v=Md44rcw13k4
+        autoSquash = true;
+        autoStash = true;
+        updateRefs = true;
+      };
+      gc.worktreePruneExpire = "now";
+      worktree.useRelativePaths = true;
     };
   };
 }
