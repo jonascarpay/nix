@@ -12,14 +12,20 @@ let
 
   netrc = {
     nix.settings.netrc-file = config.age.secrets.netrc.path;
-    age.secrets.netrc.file = ../../secrets/woven/netrc.age;
+    age.secrets.netrc = {
+      file = ../../secrets/woven/netrc.age;
+      mode = "444";
+    };
   };
 
   github-pat = {
-    age.secrets.github-pat-nix-conf.file = ../../secrets/woven/github_pat_nix_conf.age;
+    age.secrets.github-pat-nix-conf = {
+      file = ../../secrets/woven/github_pat_nix_conf.age;
+      mode = "444";
+    };
     # TODO there might be some way to do this using nix.settings
     nix.extraOptions = ''
-      include ${config.age.secrets.github-pat-nix-conf.path}
+      !include ${config.age.secrets.github-pat-nix-conf.path}
     '';
   };
 
@@ -72,7 +78,13 @@ in
 
   networking.firewall.enable = false;
 
+  hardware.opengl.enable = true;
+
+  nix.settings.extra-experimental-features = [ "fetch-closure" ];
+
   services.xserver.enable = true;
+  services.libinput.mouse.accelProfile = if config.services.libinput.enable then "flat" else builtins.abort "No libinput";
+  services.libinput.touchpad.accelProfile = if config.services.libinput.enable then "flat" else builtins.abort "No libinput";
 
   home-manager.users.jmc = {
     imports = [
@@ -95,16 +107,6 @@ in
         struts.left = 32;
         struts.right = 32;
       };
-      # window-rules = [
-      #   {
-      #     matches = [{ app-id = "Alacritty"; }];
-      #     default-column-width.proportion = 0.25;
-      #   }
-      #   {
-      #     matches = [{ app-id = "neovide"; }];
-      #     default-column-width.proportion = 0.5;
-      #   }
-      # ];
       window-rules = [
         {
           matches = [{ app-id = "Alacritty"; }];
