@@ -29,6 +29,17 @@ let
     };
   };
 
+  rust = {
+    home.packages = [
+      pkgs.cargo
+      pkgs.rustc
+      pkgs.rust-analyzer
+      pkgs.rustfmt
+      pkgs.clippy
+      pkgs.clang
+    ];
+  };
+
 in
 {
   imports = [
@@ -41,6 +52,7 @@ in
     ./daily.nix
     inputs.agenix.homeManagerModules.age
     python
+    rust
   ];
 
   programs.bat.enable = true;
