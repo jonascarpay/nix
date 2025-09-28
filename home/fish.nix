@@ -36,7 +36,6 @@ in
           end
       end
       bind \cs 'fzcd'
-
     '';
     shellAbbrs = {
       c = "cd";
