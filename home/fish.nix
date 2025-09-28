@@ -7,14 +7,13 @@ in
     enable = true;
     functions = {
       gi = "curl -sL https://www.gitignore.io/api/$argv";
-      take = ''
-        function take -a dir
-          if test -n "$dir"
-            mkdir -p $dir
-            and cd $dir
-          end
-        end
-      '';
+      take = {
+        argumentNames = "dir";
+        body = ''
+          mkdir -p $dir
+          and cd $dir
+        '';
+      };
     };
     shellInit = /* fish */ ''
       set fish_greeting
