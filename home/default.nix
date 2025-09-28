@@ -6,6 +6,7 @@ let
       pkgs.pyright
       (pkgs.python3.withPackages (p: [
         p.polars
+        p.ipython
       ]))
     ];
     programs.ruff = {
@@ -23,6 +24,8 @@ let
             "S607" # https://docs.astral.sh/ruff/rules/start-process-with-partial-path/
             "INP001" # https://docs.astral.sh/ruff/rules/implicit-namespace-package/
             "D" # https://docs.astral.sh/ruff/rules/#pydocstyle-d
+            "EM102"
+            "TRY003"
           ];
         };
       };
