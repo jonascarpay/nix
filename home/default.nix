@@ -66,7 +66,8 @@ in
     modules = [ "venv" "host" "ssh" "cwd" "perms" "git" "exit" "nix-shell" "jobs" ];
     settings = {
       hostname-only-if-ssh = true;
-      cwd-max-dir-depth = 4;
+      cwd-max-depth = 4;
+      max-width = 80;
     };
     pathAliases = {
       "\\~/Dev" = "Dev";
