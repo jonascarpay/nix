@@ -7,16 +7,13 @@ from subprocess import run
 
 known_dirs = run([frecently, "view", history_file], check=True, capture_output=True).stdout.decode().splitlines()
 
-for dir in known_dirs:
-    if not Path(dir).exists():
-        run([frecently, "delete", history_file, dir], check=True)
+for d in known_dirs:
+    if not Path(d).exists():
+        run([frecently, "delete", history_file, d], check=True)
 
 git_dirs = run(["fd", "--glob", "--hidden", ".git", project_root_str], capture_output=True, check=True).stdout
-rust_dirs = run(["fd", "Cargo.toml", project_root_str], capture_output=True, check=True).stdout
-nix_dirs = run(["fd", "flake.nix", project_root_str], capture_output=True, check=True).stdout
-python_dirs = run(["fd", "pyproject.toml", project_root_str], capture_output=True, check=True).stdout
 
-project_dirs = re.compile(b"/[^/]+/?\n").sub(b"\n", git_dirs + rust_dirs + nix_dirs + python_dirs)
+project_dirs = re.compile(b"/[^/]+/?\n").sub(b"\n", git_dirs)
 
 
 frecently_out = run(
