@@ -72,7 +72,7 @@ in
         updateRefs = true;
       };
       gc.worktreePruneExpire = "now";
-      worktree.useRelativePaths = true;
+      # worktree.useRelativePaths = true; # doesn't work :( https://github.com/libgit2/libgit2/issues/7099
     };
   };
 }
