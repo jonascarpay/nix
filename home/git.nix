@@ -16,16 +16,6 @@ in
     userName = "Jonas Carpay";
     userEmail = "jonascarpay@gmail.com";
     ignores = [
-      # Don't know
-      ".lvimrc"
-
-      # Syncthing stuff
-      ".stfolder"
-      ".stversions"
-      ".stignore"
-      "*.sync-confict-*"
-
-      # Nix stuff
       "result"
       "result-*"
     ];
@@ -54,7 +44,7 @@ in
         followTags = true; # automatically push tags
       };
       fetch = {
-        # Gollow remote as closely as possible, including deletes.
+        # Follow remote as closely as possible, including deletes.
         prune = true;
         pruneTags = true;
         all = true;
