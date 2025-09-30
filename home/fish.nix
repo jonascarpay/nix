@@ -38,10 +38,10 @@ in
     '';
     shellAbbrs = {
       c = "cd";
-      cgr = "cd $gr";
+      cgr = "cd (git rev-parse --show-toplevel)";
+      cwr = "cd (dirname (git rev-parse --git-common-dir))";
       dv = "cd ~/Dev/";
       ndh = "cd ~/Dev/NDH/";
-      dr = "direnv reload";
       g = "git";
       ga = "git add";
       gaa = "git add --all";
@@ -70,7 +70,6 @@ in
       l = "ls";
       ll = "ls -lah";
       n = "vim";
-      ng = "nix-collect-garbage";
       nsp = "nix shell nixpkgs#";
       ns = "nix shell";
       nd = "nix develop";
@@ -89,6 +88,7 @@ in
       sscu = "sudo systemctl status";
       tmp = "take /tmp/scratch";
       v = "vim";
+      ym = "date +%Y%m";
     };
   };
   home.file.".tmux.conf".text =
