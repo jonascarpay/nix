@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, config, ... }:
+{ pkgs, unstable, lib, inputs, config, ... }:
 
 let
 
@@ -130,6 +130,8 @@ in
   services.openssh.enable = true;
 
   system.stateVersion = "23.05";
+
+  hardware.parallels.package = unstable.linuxPackages.prl-tools;
 
   users.users.jmc.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICfujv3vIl7EeRvjUyJyBZpFTSU6DguSYlJpSXzD7H7X Woven_key"
