@@ -673,7 +673,7 @@ in
       {
         plugin = np.fzf-vim;
         config = ''
-          nn <leader>ff :Files<CR>
+          nn <leader>ff :GFiles<CR>
           nn <leader>fg :Ag<CR>
           nn <leader>ft :Tags<CR>
           nn <leader>fh :Helptags<CR>
