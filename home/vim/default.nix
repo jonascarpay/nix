@@ -673,12 +673,12 @@ in
       {
         plugin = np.fzf-vim;
         config = ''
-          nn <leader>ff :GFiles<CR>
+          nn <leader>ff :Files<CR>
           nn <leader>fg :Ag<CR>
           nn <leader>ft :Tags<CR>
           nn <leader>fh :Helptags<CR>
           nn <leader>fb :Buffers<CR>
-          let $FZF_DEFAULT_COMMAND = '${pkgs.ripgrep}/bin/rg --files'
+          let $FZF_DEFAULT_COMMAND = '${pkgs.ripgrep}/bin/rg --files --hidden --follow --glob "!.git/*"'
         '';
       }
 
