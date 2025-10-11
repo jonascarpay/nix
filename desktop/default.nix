@@ -167,7 +167,10 @@ in
       };
     };
 
-    home.packages = [ pkgs.wl-clipboard ];
+    home.packages = [
+      pkgs.wl-clipboard
+      pkgs.claude-code
+    ];
 
     home.sessionVariables.NIXOS_OZONE_WL = 1;
     services.mako = {
