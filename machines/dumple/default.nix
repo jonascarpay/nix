@@ -48,6 +48,13 @@ let
     };
   };
 
+  claude = {
+    home.packages = [
+      unstable.claude-code
+    ];
+    programs.git.ignores = [ ".claude" ];
+  };
+
 in
 {
   imports = [
@@ -89,6 +96,7 @@ in
   home-manager.users.jmc = {
     imports = [
       wallpaper
+      claude
       ../../desktop/qalculate.nix
     ];
 
