@@ -134,7 +134,7 @@ in
     inputs.niri-flake.nixosModules.niri
   ];
   programs.niri.enable = true;
-  programs.niri.package = inputs.niri-flake.packages.${pkgs.system}.niri-unstable;
+  # programs.niri.package = inputs.niri-flake.packages.${pkgs.system}.niri-unstable;
   niri-flake.cache.enable = false;
 
   services.displayManager.autoLogin = {
@@ -288,7 +288,7 @@ in
           "Mod+Shift+V".action = actions.switch-focus-between-floating-and-tiling;
           "Mod+W".action = actions.toggle-column-tabbed-display;
 
-          "Mod+Apostrophe".action = actions.screenshot;
+          # "Mod+Apostrophe".action = actions.screenshot;
           # "Mod+Ctrl+Apostrophe".action = actions.screenshot-screen;
           # "Mod+Shift+Apostrophe".action = actions.screenshot-window;
 

@@ -294,7 +294,7 @@ let
   };
 
   lang-haskell.programs.neovim = {
-    plugins = [ np.nvim-treesitter-parsers.haskell ];
+    # plugins = [ np.nvim-treesitter-parsers.haskell ];
     formatters = {
       haskell = {
         exe = "ormolu";
@@ -306,12 +306,14 @@ let
       cabal.exe = "${pkgs.haskellPackages.cabal-fmt.bin}/bin/cabal-fmt";
     };
     extraLspConfig = ''
-      lspconfig.hls.setup({})
+      lspconfig.hls.setup({
+        filetypes = { 'haskell', 'lhaskell', 'cabal' },
+      })
     '';
-    extraConfig = ''
-      autocmd FileType haskell let g:fzf_tags_command = 'fast-tags -R --exclude=dist-newstye .'
-      au BufWritePost *.hs silent! !${pkgs.haskellPackages.fast-tags}/bin/fast-tags -R --exclude=dist-newstyle . &
-    '';
+    # extraConfig = ''
+    #   autocmd FileType haskell let g:fzf_tags_command = 'fast-tags -R --exclude=dist-newstye .'
+    #   au BufWritePost *.hs silent! !${pkgs.haskellPackages.fast-tags}/bin/fast-tags -R --exclude=dist-newstyle . &
+    # '';
   };
 
   lang-nix.programs.neovim = {
@@ -382,6 +384,12 @@ let
     '';
     extraLspConfig = "lspconfig.tinymist.setup({})";
   };
+
+  # lang-openscad.programs.neovim = {
+  #   extraLspConfig = ''
+  #     vim.lsp.enable('openscad_lsp')
+  #   '';
+  # };
 
   lang-rust.programs.neovim = {
     plugins = [ np.nvim-treesitter-parsers.rust ];
@@ -454,6 +462,7 @@ in
     lang-haskell
     lang-javascript
     lang-nix
+    # lang-openscad
     lang-python
     lang-rust
     lang-toml

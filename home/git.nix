@@ -5,27 +5,24 @@ in
 {
   home.packages = [ grove-clone ];
   programs.git-worktree-switcher.enable = true;
+  programs.difftastic = {
+    enable = true;
+    git.enable = true;
+    # enableAsDifftool = true;
+  };
   programs.git = {
     # diff-so-fancy.enable = true;
-    difftastic = {
-      enable = true;
-      enableAsDifftool = true;
-    };
     enable = true;
     lfs.enable = true;
-    userName = "Jonas Carpay";
-    userEmail = "jonascarpay@gmail.com";
-    ignores = [
-      "result"
-      "result-*"
-    ];
-    aliases = {
-      graph = "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)' --all";
-      root = "rev-parse --show-toplevel";
-      exec = "!exec ";
-    };
-    # https://blog.gitbutler.com/how-git-core-devs-configure-git
-    extraConfig = {
+    settings = {
+      user.name = "Jonas Carpay";
+      user.email = "jonascarpay@gmail.com";
+      alias = {
+        graph = "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)' --all";
+        root = "rev-parse --show-toplevel";
+        exec = "!exec ";
+      };
+      # https://blog.gitbutler.com/how-git-core-devs-configure-git
       commit.verbose = true; # include diff in commit screen
       pull.rebase = true;
       init.defaultBranch = "master";
@@ -64,5 +61,9 @@ in
       gc.worktreePruneExpire = "now";
       # worktree.useRelativePaths = true; # doesn't work :( https://github.com/libgit2/libgit2/issues/7099
     };
+    ignores = [
+      "result"
+      "result-*"
+    ];
   };
 }

@@ -91,7 +91,7 @@ in
       sound
       graphics
       # wireless
-      ./desktop-niri
+      ./desktop.nix
       gnome-support
       udisks
       zfs
@@ -138,6 +138,11 @@ in
   i18n.defaultLocale = "en_US.UTF-8";
 
   services.tailscale.enable = true;
+
+  programs.appimage.enable = true;
+  programs.appimage.binfmt = true;
+
+  services.flatpak.enable = true;
 
   # services.mullvad-vpn.enable = true;
   # services.mullvad-vpn.enableExcludeWrapper = true;

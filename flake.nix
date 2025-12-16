@@ -2,11 +2,11 @@
   description = "nixos";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     unstable.url = "github:NixOS/nixpkgs";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     agenix = {
@@ -31,7 +31,7 @@
       inputs.nixpkgs.follows = "unstable";
     };
     niri-flake = {
-      url = "github:sodiboo/niri-flake";
+      url = "github:sodiboo/niri-flake"; # https://github.com/sodiboo/niri-flake/issues/1365
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs";
     };
