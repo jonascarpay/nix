@@ -10,7 +10,7 @@ let
   };
 
   wallpaper = {
-    imports = [ ../../desktop/niri/random-wallpaper.nix ];
+    imports = [ ../../desktop/random-wallpaper.nix ];
     services.randomWallpaper = {
       enable = true;
       wallpaperPath = "${inputs.wallpapers}/papes";
@@ -25,7 +25,7 @@ in
     ../../nixos/fonts.nix
     ../../nixos/ndh.nix
     githubHosts
-    ../../desktop/niri
+    ../../desktop
   ];
 
   # hardware.parallels.package = unstable.linuxPackages_latest.prl-tools;
@@ -67,11 +67,23 @@ in
 
     programs.neovide.settings.font.size = 10.0;
     programs.alacritty.settings.font.size = 10;
-    programs.niri.settings.outputs."Virtual-1".scale = 2;
-    programs.niri.settings.layout = {
-      gaps = 16;
-      struts.left = 32;
-      struts.right = 32;
+    programs.niri.settings = {
+      outputs."Virtual-1".scale = 2;
+      layout = {
+        gaps = 16;
+        struts.left = 32;
+        struts.right = 32;
+      };
+      window-rules = [
+        {
+          matches = [{ app-id = "Alacritty"; }];
+          default-column-width.proportion = 0.333;
+        }
+        {
+          matches = [{ app-id = "neovide"; }];
+          default-column-width.proportion = 0.667;
+        }
+      ];
     };
 
     programs.firefox.enable = true;

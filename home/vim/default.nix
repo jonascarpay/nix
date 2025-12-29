@@ -24,15 +24,6 @@ let
       -- Reserve a space in the gutter
       vim.opt.signcolumn = 'yes'
 
-      -- Add cmp_nvim_lsp capabilities settings to lspconfig
-      -- This should be executed before you configure any language server
-      local lspconfig_defaults = require('lspconfig').util.default_config
-      lspconfig_defaults.capabilities = vim.tbl_deep_extend(
-        'force',
-        lspconfig_defaults.capabilities,
-        require('cmp_nvim_lsp').default_capabilities()
-      )
-
       -- This is where you enable features that only work
       -- if there is a language server active in the file
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -57,8 +48,6 @@ let
 
       local cmp = require('cmp')
       local luasnip = require('luasnip')
-      local lsp_zero = require('lsp-zero')
-      local cmp_action = lsp_zero.cmp_action()
 
       cmp.setup({
         preselect = 'item',
@@ -82,10 +71,10 @@ let
         },
         mapping = cmp.mapping.preset.insert({
           ['<C-y>'] = cmp.mapping.confirm({ select = true }),
-          ['<C-space>'] = cmp_action.toggle_completion(),
+          ['<C-space>'] = cmp.mapping.complete(),
           -- Navigate between snippet placeholder
-          ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-          ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+          -- ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+          -- ['<C-b>'] = cmp_action.luasnip_jump_backward(),
           -- Scroll up and down in the completion documentation
           ['<C-u>'] = cmp.mapping.scroll_docs(-4),
           ['<C-d>'] = cmp.mapping.scroll_docs(4),
@@ -97,9 +86,6 @@ let
       from_snipmate.load({paths = "${./snippets}"})
 
       require('trouble').setup {}
-
-      local lspconfig = require('lspconfig')
-      ${config.programs.neovim.extraLspConfig}
     '';
   };
 
@@ -305,15 +291,12 @@ let
       };
       cabal.exe = "${pkgs.haskellPackages.cabal-fmt.bin}/bin/cabal-fmt";
     };
-    extraLspConfig = ''
-      lspconfig.hls.setup({
+    extraLuaConfig = ''
+      vim.lsp.config('hls', {
         filetypes = { 'haskell', 'lhaskell', 'cabal' },
       })
+      vim.lsp.enable('hls')
     '';
-    # extraConfig = ''
-    #   autocmd FileType haskell let g:fzf_tags_command = 'fast-tags -R --exclude=dist-newstye .'
-    #   au BufWritePost *.hs silent! !${pkgs.haskellPackages.fast-tags}/bin/fast-tags -R --exclude=dist-newstyle . &
-    # '';
   };
 
   lang-nix.programs.neovim = {
@@ -321,8 +304,8 @@ let
     plugins = [ np.nvim-treesitter-parsers.nix ];
     # formatters.nix.exe = "${pkgs.nixfmt-rfc-style}/bin/nixfmt";
     formatters.nix.exe = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt";
-    extraLspConfig = ''
-      lspconfig.nil_ls.setup({})
+    extraLuaConfig = ''
+      vim.lsp.enable('nil_ls')
     '';
   };
 
@@ -331,8 +314,8 @@ let
     neovim = {
       plugins = [ np.nvim-treesitter-parsers.cpp ];
       formatters.cpp.exe = "${pkgs.clang-tools}/bin/clang-format";
-      extraLspConfig = ''
-        lspconfig.clangd.setup({})
+      extraLuaConfig = ''
+        vim.lsp.enable('clangd')
       '';
     };
   };
@@ -344,8 +327,8 @@ let
     ];
     plugins = [ np.nvim-treesitter-parsers.bash ];
     formatters.sh.exe = "${pkgs.shfmt}/bin/shfmt";
-    extraLspConfig = ''
-      lspconfig.bashls.setup({})
+    extraLuaConfig = ''
+      vim.lsp.enable('bashls')
     '';
   };
 
@@ -370,9 +353,9 @@ let
         args = [ ];
         stdin = false;
       };
-      extraLspConfig = ''
-        lspconfig.pyright.setup({})
-        lspconfig.ruff.setup({})
+      extraLuaConfig = ''
+        vim.lsp.enable('pyright')
+        vim.lsp.enable('ruff')
       '';
     };
 
@@ -382,11 +365,11 @@ let
     extraConfig = ''
       autocmd BufNewFile,BufRead *.typ setfiletype typst
     '';
-    extraLspConfig = "lspconfig.tinymist.setup({})";
+    extraLuaConfig = "vim.lsp.enable('tinymist')";
   };
 
   # lang-openscad.programs.neovim = {
-  #   extraLspConfig = ''
+  #   extraLuaConfig = ''
   #     vim.lsp.enable('openscad_lsp')
   #   '';
   # };
@@ -396,8 +379,8 @@ let
     formatters.rust = {
       exe = "rustfmt";
     };
-    extraLspConfig = ''
-      lspconfig.rust_analyzer.setup({})
+    extraLuaConfig = ''
+      vim.lsp.enable('rust_analyzer')
     '';
   };
 
@@ -421,15 +404,21 @@ let
       stdin = false;
       args = [ "--in-place" ];
     };
-    extraLspConfig = ''
-      lspconfig.cmake.setup({ cmd = { "${pkgs.cmake-language-server}/bin/cmake-language-server" } })
+    extraLuaConfig = ''
+      vim.lsp.config('cmake', {
+        cmd = { "${pkgs.cmake-language-server}/bin/cmake-language-server" }
+      })
+      vim.lsp.enable('cmake')
     '';
   };
 
   lang-glsl.programs.neovim = {
     plugins = [ np.nvim-treesitter-parsers.glsl ];
-    extraLspConfig = ''
-      lspconfig.glsl_analyzer.setup({ cmd = { "${pkgs.glslls}/bin/glslls" } })
+    extraLuaConfig = ''
+      vim.lsp.config('glsl_analyzer', {
+        cmd = { "${pkgs.glslls}/bin/glslls" }
+      })
+      vim.lsp.enable('glsl_analyzer')
     '';
   };
 

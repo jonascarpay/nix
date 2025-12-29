@@ -26,9 +26,5 @@ in
     formatters = lib.mkOption {
       type = types.attrsOf formatterType;
     };
-    extraLspConfig = lib.mkOption {
-      type = types.lines;
-      default = "";
-    };
   };
 }
