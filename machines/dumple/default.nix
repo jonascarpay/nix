@@ -139,7 +139,7 @@ in
 
   system.stateVersion = "23.05";
 
-  hardware.parallels.package = unstable.linuxPackages.prl-tools;
+  hardware.parallels.package = unstable.prl-tools;
 
   users.users.jmc.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICfujv3vIl7EeRvjUyJyBZpFTSU6DguSYlJpSXzD7H7X Woven_key"
