@@ -22,10 +22,6 @@
       url = "github:jonascarpay/dm-mono-patched";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    adaptive-lighting = {
-      url = "github:basnijholt/adaptive-lighting";
-      flake = false;
-    };
     nix-darwin = {
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "unstable";
