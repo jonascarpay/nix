@@ -291,6 +291,9 @@ in
           # "Mod+Apostrophe".action = actions.screenshot;
           # "Mod+Ctrl+Apostrophe".action = actions.screenshot-screen;
           # "Mod+Shift+Apostrophe".action = actions.screenshot-window;
+          "Mod+Apostrophe".action.screenshot = [ ]; # https://github.com/sodiboo/niri-flake/issues/1380#issuecomment-3420863847
+          "Mod+Ctrl+Apostrophe".action.screenshot-screen = [ ];
+          "Mod+Shift+Apostrophe".action.screenshot-window = [ ];
 
           "Mod+Escape" = { action = actions.toggle-keyboard-shortcuts-inhibit; allow-inhibiting = false; };
           "Mod+Shift+E".action = actions.quit;
