@@ -6,7 +6,10 @@ let
       pkgs.pyright
       (pkgs.python3.withPackages (p: [
         p.polars
+        p.matplotlib
+        p.seaborn
         p.ipython
+        p.jupyterlab
       ]))
     ];
     programs.ruff = {
