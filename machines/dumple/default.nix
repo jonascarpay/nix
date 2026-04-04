@@ -48,13 +48,6 @@ let
     };
   };
 
-  claude = {
-    home.packages = [
-      unstable.claude-code
-    ];
-    programs.git.ignores = [ ".claude" ];
-  };
-
 in
 {
   imports = [

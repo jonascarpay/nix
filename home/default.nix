@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, unstable, inputs, ... }:
 let
 
   python = {
@@ -46,6 +46,14 @@ let
     ];
   };
 
+  claude = {
+    home.packages = [
+      unstable.claude-code
+    ];
+    programs.git.ignores = [ ".claude" ];
+  };
+
+
 in
 {
   imports = [
@@ -59,6 +67,7 @@ in
     inputs.agenix.homeManagerModules.age
     python
     rust
+    claude
   ];
 
   programs.bat.enable = true;
