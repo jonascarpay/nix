@@ -10,6 +10,9 @@ let
         p.seaborn
         p.ipython
         p.jupyterlab
+        p.beautifulsoup4
+        p.altair
+        p.requests
       ]))
     ];
     programs.ruff = {
