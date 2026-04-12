@@ -314,6 +314,13 @@ in
         };
       };
 
+      layer-rules = [{
+        matches = [{ namespace = "^swww-daemon$"; }];
+        place-within-backdrop = true;
+      }];
+      layout.background-color = "transparent";
+      overview.workspace-shadow.enable = false;
+
       window-rules = [{
         clip-to-geometry = true;
         geometry-corner-radius = let radius = 8.0; in {
