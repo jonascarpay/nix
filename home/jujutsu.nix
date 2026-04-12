@@ -15,11 +15,14 @@
     };
   };
   programs.fish.shellAbbrs = {
-    j = "jjui";
-    js = "jj status";
-    je = "jj edit";
+    j = "jj";
+    jb = "jj bookmark";
     jd = "jj describe";
-    jn = "jj new";
+    je = "jj edit";
+    jg = "jj git";
     jl = "jj log";
+    jn = "jj new";
+    js = "jj status";
+    u = "jjui";
   };
 }
