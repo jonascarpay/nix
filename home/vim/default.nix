@@ -238,7 +238,7 @@ let
       np.nvim-treesitter-parsers.c
       np.nvim-treesitter-parsers.sql
       np.nvim-treesitter-parsers.lua
-      np.nvim-treesitter-refactor
+      np.vim-illuminate
       {
         plugin = np.nvim-treesitter;
         type = "lua";
@@ -246,12 +246,6 @@ let
           require('nvim-treesitter.configs').setup {
             highlight = { enable = true },
             indent = { enable = true },
-            refactor = {
-              highlight_definitions = {
-                enable = true,
-                clear_on_cursor_move = true,
-              },
-            },
           }
         '';
       }
