@@ -65,6 +65,7 @@ in
     ./tmux.nix
     ./vim
     ./git.nix
+    ./jujutsu.nix
     ./postgres.nix
     ./daily.nix
     inputs.agenix.homeManagerModules.age
