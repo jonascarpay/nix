@@ -274,7 +274,7 @@ let
   };
 
   lang-haskell.programs.neovim = {
-    # plugins = [ np.nvim-treesitter-parsers.haskell ];
+    # plugins = [ np.nvim-treesitter-parsers.haskell ]; # Haskell treesitter appears to be broken...
     formatters = {
       haskell = {
         exe = "ormolu";
