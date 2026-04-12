@@ -6,6 +6,9 @@
       user.email = "jonascarpay@gmail.com";
       ui.diff-formatter = [ "difft" "--color=always" "$left" "$right" ];
       ui.paginate = "never";
+      # https://docs.jj-vcs.dev/latest/config/#relative-timestamps
+      template-aliases."format_timestamp(timestamp)" = "timestamp.ago()";
+      # TODO: builtin_draft_commit_description_with_diff template, available in 0.39
     };
   };
   programs.jjui = {
