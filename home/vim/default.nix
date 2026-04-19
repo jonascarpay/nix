@@ -378,6 +378,16 @@ let
     '';
   };
 
+  lang-lean.programs.neovim = {
+    # No treesitter as of 2026-04-19
+    plugins = [ np.lean-nvim ];
+    extraLuaConfig = ''
+      require('lean').setup{
+        mappings = true,
+      }
+    '';
+  };
+
   lang-javascript.programs.neovim = {
     plugins = [
       np.nvim-treesitter-parsers.javascript
@@ -444,6 +454,7 @@ in
     lang-glsl
     lang-haskell
     lang-javascript
+    lang-lean
     lang-nix
     # lang-openscad
     lang-python
