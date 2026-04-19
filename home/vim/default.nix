@@ -1,5 +1,4 @@
 { pkgs
-, unstable
 , lib
 , config
 , ...
@@ -274,7 +273,7 @@ let
   };
 
   lang-haskell.programs.neovim = {
-    # plugins = [ np.nvim-treesitter-parsers.haskell ]; # Haskell treesitter appears to be broken...
+    plugins = [ np.nvim-treesitter-parsers.haskell ];
     formatters = {
       haskell = {
         exe = "ormolu";
@@ -472,7 +471,7 @@ in
     "!tags/"
   ];
   programs.neovim = {
-    package = unstable.neovim-unwrapped;
+    # package = unstable.neovim-unwrapped;
     enable = true;
     defaultEditor = true;
     vimAlias = true;
