@@ -47,9 +47,6 @@
   programs.jjui = {
     enable = true;
     package = unstable.jjui;
-    settings = {
-      preview.show_at_start = true;
-    };
   };
   programs.fish.shellAbbrs = {
     j = "jj";
