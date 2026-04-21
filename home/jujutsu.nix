@@ -7,6 +7,11 @@ let
       fsmonitor.backend = "watchman";
       fsmonitor.watchman.register-snapshot-trigger = true;
     };
+    programs.git.ignores = [
+      # I don't know who makes these, but they trigger watchman and generate garbage
+      "~formatter_*"
+      "*.tmp.*"
+    ];
   };
 in
 {
