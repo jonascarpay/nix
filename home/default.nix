@@ -72,6 +72,7 @@ in
     python
     rust
     claude
+    ./starship.nix
   ];
 
   programs.bat.enable = true;
@@ -80,19 +81,19 @@ in
 
   xdg.enable = true;
 
-  programs.powerline-go = {
-    enable = true;
-    modules = [ "venv" "host" "ssh" "cwd" "perms" "git" "exit" "nix-shell" "jobs" ];
-    settings = {
-      hostname-only-if-ssh = true;
-      cwd-max-depth = 4;
-      max-width = 80;
-    };
-    pathAliases = {
-      "\\~/Dev" = "Dev";
-      "/nix/store" = "nst";
-    };
-  };
+  # programs.powerline-go = {
+  #   enable = true;
+  #   modules = [ "venv" "host" "ssh" "cwd" "perms" "git" "exit" "nix-shell" "jobs" ];
+  #   settings = {
+  #     hostname-only-if-ssh = true;
+  #     cwd-max-depth = 4;
+  #     max-width = 80;
+  #   };
+  #   pathAliases = {
+  #     "\\~/Dev" = "Dev";
+  #     "/nix/store" = "nst";
+  #   };
+  # };
 
   home = {
     stateVersion = "23.05";
