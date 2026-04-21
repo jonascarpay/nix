@@ -64,6 +64,7 @@ in
     ignores = [
       "result"
       "result-*"
+      "~formatter_*" # I don't know who makes this but it messes with my jj
     ];
   };
 }
