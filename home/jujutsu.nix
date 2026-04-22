@@ -1,6 +1,8 @@
+{ unstable, ... }:
 {
   programs.jujutsu = {
     enable = true;
+    package = unstable.jujutsu;
     settings = {
       user.name = "Jonas Carpay";
       user.email = "jonascarpay@gmail.com";
@@ -13,6 +15,7 @@
   };
   programs.jjui = {
     enable = true;
+    package = unstable.jjui;
     settings = {
       preview.show_at_start = true;
     };
