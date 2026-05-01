@@ -72,9 +72,20 @@ let
           ['<C-y>'] = cmp.mapping.confirm({ select = true }),
           ['<C-space>'] = cmp.mapping.complete(),
           -- Navigate between snippet placeholder
-          -- ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-          -- ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+          ['<C-f>'] = cmp.mapping(function(fallback)
+            if luasnip.expand_or_jumpable()
+              then luasnip.expand_or_jump()
+              else fallback()
+            end
+          end, { 'i', 's' }),
+          ['<C-b>'] = cmp.mapping(function(fallback)
+            if luasnip.jumpable(-1)
+              then luasnip.jump(-1)
+              else fallback()
+            end
+          end, { 'i', 's' }),
           -- Scroll up and down in the completion documentation
+
           ['<C-u>'] = cmp.mapping.scroll_docs(-4),
           ['<C-d>'] = cmp.mapping.scroll_docs(4),
         })
