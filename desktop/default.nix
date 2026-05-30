@@ -94,6 +94,20 @@ in
   # programs.niri.package = inputs.niri-flake.packages.${pkgs.system}.niri-unstable;
   niri-flake.cache.enable = false;
 
+  # Without this, Firefox (and other apps) can't open file open/save/upload
+  # dialogs under niri: the only installed portal backend is
+  # xdg-desktop-portal-gnome (pulled in by GDM), which declares UseIn=gnome and
+  # is therefore never used under XDG_CURRENT_DESKTOP=niri. Route the FileChooser
+  # interface to the gtk backend, and keep gnome for screencast/screenshot.
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    config.niri = {
+      default = [ "gnome" "gtk" ];
+      "org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
+    };
+  };
+
   services.displayManager.autoLogin = {
     enable = false; # TODO sadly doesn't seem to work with Wayland atm?
     user = "jmc";

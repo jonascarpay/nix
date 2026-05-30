@@ -28,22 +28,6 @@ let
     fi
   '';
 
-  neovide-fuzzel = pkgs.writeShellScript "neovide-fuzzel" ''
-    set -e
-    DIR=$(fuzzel-directory)
-    cd $DIR
-    direnv exec . neovide .
-  '';
-
-  neovide-focused = pkgs.writeShellScript "neovide-focused" ''
-    DIR=$(${focused-dir})
-    if [ -d "$DIR" ]; then
-      cd $DIR
-      direnv exec . neovide .
-    else
-      ${neovide-fuzzel}
-    fi
-  '';
 in
 
 {
@@ -75,10 +59,6 @@ in
         "Mod+Return".action.spawn = "${alacritty-focused}";
         "Mod+Shift+Return".action.spawn = "${alacritty-fuzzel}";
         "Mod+Ctrl+Return".action.spawn = "alacritty";
-
-        "Mod+N".action.spawn = "${neovide-focused}";
-        "Mod+Shift+N".action.spawn = "${neovide-fuzzel}";
-        "Mod+Ctrl+N".action.spawn = "neovide";
 
         "Mod+O".action.spawn = "fuzzel";
 
