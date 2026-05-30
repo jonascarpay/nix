@@ -150,8 +150,10 @@ in
         "Mod+Shift+Equal".action.set-window-height = "+10%";
 
         "Mod+E".action.set-column-width = "33.3%";
+        "Mod+Shift+E".action.set-column-width = "66.7%";
         "Mod+R".action.set-column-width = "50%";
         "Mod+T".action.set-column-width = "66.7%";
+        "Mod+Shift+T".action.set-column-width = "33.3%";
 
         "Mod+V".action = actions.toggle-window-floating;
         "Mod+Shift+V".action = actions.switch-focus-between-floating-and-tiling;
