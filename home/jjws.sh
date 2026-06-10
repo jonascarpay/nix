@@ -11,6 +11,8 @@ ws="${workspaces}/${origin_name}_${timestamp}"
 name=$(basename "$ws")
 
 cleanup() {
+	# `workspace forget` does not snapshot, so we force snapshot before forgetting
+	jj util snapshot --repository "$ws" 2>/dev/null || true
 	jj workspace forget --repository "$origin" "$name" 2>/dev/null || true
 	rm -rf "$ws"
 }
