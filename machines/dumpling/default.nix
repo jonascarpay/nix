@@ -23,7 +23,6 @@ in
     ./hardware-configuration.nix
     ../../nixos/global.nix
     ../../nixos/fonts.nix
-    ../../nixos/ndh.nix
     githubHosts
     ../../desktop
   ];

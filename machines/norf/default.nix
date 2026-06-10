@@ -96,7 +96,6 @@ in
       udisks
       zfs
       ../../nixos/global.nix
-      ../../nixos/ndh.nix
       ../../nixos/gemini.nix
       docker
       brightness-control
