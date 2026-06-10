@@ -20,29 +20,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    services.awww.enable = true;
+
     systemd.user = {
-      # TODO awww is now in home manager
-      services.awww-daemon = {
-        Install = { WantedBy = [ "graphical-session.target" ]; };
-        Unit = {
-          ConditionEnvironment = "WAYLAND_DISPLAY";
-          Description = "awww-daemon";
-          After = [ "graphical-session.target" "niri.service" ];
-          PartOf = [ "graphical-session.target" ];
-        };
-
-        Service = {
-          ExecStart = "${pkgs.awww}/bin/awww-daemon";
-          Restart = "always";
-          RestartSec = 10;
-        };
-      };
-
       services.random-wallpaper = {
         Unit = {
           Description = "Set random wallpaper using awww";
-          After = [ "awww-daemon.service" ];
-          Requires = [ "awww-daemon.service" ];
+          After = [ "awww.service" ];
+          Requires = [ "awww.service" ];
         };
         Service = {
           Type = "oneshot";
@@ -58,7 +43,7 @@ in
             "${script}";
           IOSchedulingClass = "idle";
         };
-        Install.WantedBy = [ "awww-daemon.service" ];
+        Install.WantedBy = [ "awww.service" ];
       };
 
       timers.random-wallpaper = {
