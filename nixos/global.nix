@@ -141,7 +141,7 @@ in
   documentation = {
     nixos.enable = true;
     # nixos.includeAllModules = true;
-    man.generateCaches = true; # Needed for fish man page completions
+    man.cache.enable = true; # Needed for fish man page completions
     dev.enable = true;
   };
 

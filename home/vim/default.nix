@@ -19,7 +19,7 @@ let
       np.trouble-nvim
     ];
     # Adapted from https://github.com/VonHeikemen/lsp-zero.nvim?tab=readme-ov-file#quickstart-for-the-impatient
-    programs.neovim.extraLuaConfig = /* lua */ ''
+    programs.neovim.initLua = /* lua */ ''
       -- Reserve a space in the gutter
       vim.opt.signcolumn = 'yes'
 
@@ -110,7 +110,7 @@ let
       :set splitright
       :set splitbelow
     '';
-    extraLuaConfig = /* lua */ ''
+    initLua = /* lua */ ''
       ---- https://github.com/stevearc/oil.nvim/blob/master/doc/recipes.md#hide-gitignored-files-and-show-git-tracked-hidden-files
       -- helper function to parse output
       local function parse_output(proc)
@@ -236,6 +236,7 @@ let
       {
         plugin = np.fzf-lsp-nvim;
         # NOTE can't use <leader>, not yet bound
+        type = "viml";
         config = ''
           nn <space>fw :WorkspaceSymbols<CR>
         '';
@@ -245,18 +246,23 @@ let
 
   treesitter = {
     programs.neovim.plugins = [
-      np.nvim-treesitter-parsers.c
-      np.nvim-treesitter-parsers.sql
-      np.nvim-treesitter-parsers.lua
       np.vim-illuminate
       {
-        plugin = np.nvim-treesitter;
+        # withAllGrammars bundles every parser (.so) and its queries (.scm) as
+        # dependencies, so no per-language parser/query entries are needed.
+        plugin = np.nvim-treesitter.withAllGrammars;
         type = "lua";
+        # nvim-treesitter `main` branch (26.05) dropped `nvim-treesitter.configs`.
+        # Highlighting is now Neovim-builtin and indentation comes from indentexpr;
+        # enable both per-buffer whenever a parser is available.
         config = ''
-          require('nvim-treesitter.configs').setup {
-            highlight = { enable = true },
-            indent = { enable = true },
-          }
+          vim.api.nvim_create_autocmd('FileType', {
+            callback = function()
+              if pcall(vim.treesitter.start) then
+                vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+              end
+            end,
+          })
         '';
       }
     ];
@@ -284,7 +290,6 @@ let
   };
 
   lang-haskell.programs.neovim = {
-    plugins = [ np.nvim-treesitter-parsers.haskell ];
     formatters = {
       haskell = {
         exe = "ormolu";
@@ -295,7 +300,7 @@ let
       };
       cabal.exe = "${pkgs.haskellPackages.cabal-fmt.bin}/bin/cabal-fmt";
     };
-    extraLuaConfig = ''
+    initLua = ''
       vim.lsp.config('hls', {
         filetypes = { 'haskell', 'lhaskell', 'cabal' },
       })
@@ -305,10 +310,9 @@ let
 
   lang-nix.programs.neovim = {
     extraPackages = [ pkgs.nil ];
-    plugins = [ np.nvim-treesitter-parsers.nix ];
     # formatters.nix.exe = "${pkgs.nixfmt-rfc-style}/bin/nixfmt";
     formatters.nix.exe = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt";
-    extraLuaConfig = ''
+    initLua = ''
       vim.lsp.enable('nil_ls')
     '';
   };
@@ -316,9 +320,8 @@ let
   lang-cpp.programs = {
     git.ignores = [ ".cache/clangd/" ];
     neovim = {
-      plugins = [ np.nvim-treesitter-parsers.cpp ];
       formatters.cpp.exe = "${pkgs.clang-tools}/bin/clang-format";
-      extraLuaConfig = ''
+      initLua = ''
         vim.lsp.enable('clangd')
       '';
     };
@@ -327,11 +330,10 @@ let
   lang-bash.programs.neovim = {
     extraPackages = [
       pkgs.shellcheck
-      pkgs.nodePackages.bash-language-server
+      pkgs.bash-language-server
     ];
-    plugins = [ np.nvim-treesitter-parsers.bash ];
     formatters.sh.exe = "${pkgs.shfmt}/bin/shfmt";
-    extraLuaConfig = ''
+    initLua = ''
       vim.lsp.enable('bashls')
     '';
   };
@@ -351,39 +353,36 @@ let
       '';
     in
     {
-      plugins = [ np.nvim-treesitter-parsers.python ];
       formatters.python = {
         exe = "${unified-formatter}";
         args = [ ];
         stdin = false;
       };
-      extraLuaConfig = ''
+      initLua = ''
         vim.lsp.enable('pyright')
         vim.lsp.enable('ruff')
       '';
     };
 
   lang-typst.programs.neovim = {
-    plugins = [ np.nvim-treesitter-parsers.typst ];
     formatters.typst.exe = "${pkgs.typstyle}/bin/typstyle";
     extraConfig = ''
       autocmd BufNewFile,BufRead *.typ setfiletype typst
     '';
-    extraLuaConfig = "vim.lsp.enable('tinymist')";
+    initLua = "vim.lsp.enable('tinymist')";
   };
 
   # lang-openscad.programs.neovim = {
-  #   extraLuaConfig = ''
+  #   initLua = ''
   #     vim.lsp.enable('openscad_lsp')
   #   '';
   # };
 
   lang-rust.programs.neovim = {
-    plugins = [ np.nvim-treesitter-parsers.rust ];
     formatters.rust = {
       exe = "rustfmt";
     };
-    extraLuaConfig = ''
+    initLua = ''
       vim.lsp.enable('rust_analyzer')
     '';
   };
@@ -391,7 +390,7 @@ let
   lang-lean.programs.neovim = {
     # No treesitter as of 2026-04-19
     plugins = [ np.lean-nvim ];
-    extraLuaConfig = ''
+    initLua = ''
       require('lean').setup{
         mappings = true,
       }
@@ -399,26 +398,20 @@ let
   };
 
   lang-javascript.programs.neovim = {
-    plugins = [
-      np.nvim-treesitter-parsers.javascript
-      np.nvim-treesitter-parsers.svelte
-      np.nvim-treesitter-parsers.html
-    ];
     formatters.javascript = {
-      exe = "${pkgs.nodePackages.prettier}/bin/prettier";
+      exe = "${pkgs.prettier}/bin/prettier";
       stdin = false;
       args = [ "--write" ];
     };
   };
 
   lang-cmake.programs.neovim = {
-    plugins = [ np.nvim-treesitter-parsers.cmake ];
     formatters.cmake = {
       exe = "${pkgs.cmake-format}/bin/cmake-format";
       stdin = false;
       args = [ "--in-place" ];
     };
-    extraLuaConfig = ''
+    initLua = ''
       vim.lsp.config('cmake', {
         cmd = { "${pkgs.cmake-language-server}/bin/cmake-language-server" }
       })
@@ -427,17 +420,12 @@ let
   };
 
   lang-glsl.programs.neovim = {
-    plugins = [ np.nvim-treesitter-parsers.glsl ];
-    extraLuaConfig = ''
+    initLua = ''
       vim.lsp.config('glsl_analyzer', {
         cmd = { "${pkgs.glslls}/bin/glslls" }
       })
       vim.lsp.enable('glsl_analyzer')
     '';
-  };
-
-  lang-vimdoc.programs.neovim = {
-    plugins = [ np.nvim-treesitter-parsers.vimdoc ];
   };
 
   spell.programs.neovim.extraConfig = ''
@@ -471,7 +459,6 @@ in
     lang-rust
     lang-toml
     lang-typst
-    lang-vimdoc
     spell
   ];
   programs.git.ignores = [
@@ -488,7 +475,9 @@ in
     vimAlias = true;
     vimdiffAlias = true;
     viAlias = true;
-    extraLuaConfig = /* lua */ ''
+    withRuby = false; # Default, but raises a warning with stateVersion < 26.05 if not set explicitly
+    withPython3 = false; # Default, but raises a warning with stateVersion < 26.05 if not set explicitly
+    initLua = /* lua */ ''
       vim.keymap.set('n', '<leader>yf', ':let @@ = expand("%:.")<CR>', { desc = 'Yank file path' })
       vim.keymap.set('n', '<leader>yF', ':let @@ = expand("%:.") . ":" . line(".")<CR>', { desc = 'Yank file path with position' })
     '';
@@ -550,6 +539,7 @@ in
       {
         # workaround for https://github.com/nix-community/home-manager/pull/2391
         plugin = pkgs.hello;
+        type = "viml";
         config = ''
           let mapleader = "\<space>"
           let maplocalleader = "\<space>\<space>"
@@ -558,8 +548,8 @@ in
 
       # np.vim-signature
       # np.vim-polyglot # only used for proper indent on cc
-      np.commentary # TODO switch to Comment.nvim
-      np.surround
+      np.vim-commentary # TODO switch to Comment.nvim
+      np.vim-surround
       np.vim-indent-object
       np.vim-repeat
       np.vim-unimpaired
@@ -610,6 +600,7 @@ in
       {
         plugin = np.formatter-nvim;
         # https://github.com/mhartington/formatter.nvim/tree/master/lua/formatter/filetypes
+        type = "viml";
         config =
           let
             quote = str: "\"${str}\"";
@@ -649,23 +640,27 @@ in
 
       {
         plugin = np.vim-localvimrc;
+        type = "viml";
         config = "let g:localvimrc_persistent = 1";
       }
 
       {
         plugin = np.vim-easy-align;
+        type = "viml";
         config = "xmap <Enter> <Plug>(LiveEasyAlign)";
       }
 
       {
         plugin = np.vim-mundo;
+        type = "viml";
         config = ''
           nnoremap <leader>u :MundoToggle<CR>
         '';
       }
 
       {
-        plugin = np.fugitive;
+        plugin = np.vim-fugitive;
+        type = "viml";
         config = ''
           nn <leader>gs :Git<CR>
           nn <leader>gg :Git<CR>
@@ -674,6 +669,7 @@ in
 
       {
         plugin = np.vim-gitgutter;
+        type = "viml";
         config = ''
           nn <leader>ga :GitGutterStageHunk<CR>
           nn <leader>gp :GitGutterPreviewHunk<CR>
@@ -685,6 +681,7 @@ in
 
       {
         plugin = np.fzf-vim;
+        type = "viml";
         config = ''
           nn <leader>ff :Files<CR>
           nn <leader>fg :Ag<CR>
@@ -697,6 +694,7 @@ in
 
       {
         plugin = np.vim-highlightedyank;
+        type = "viml";
         config = ''
           let g:highlightedyank_highlight_duration = 200
         '';
@@ -726,6 +724,7 @@ in
 
       {
         plugin = np.everforest;
+        type = "viml";
         config = "colorscheme everforest";
       }
 

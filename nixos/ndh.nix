@@ -21,6 +21,10 @@
       };
     in
     { lib, ... }: {
+      # FIXME ssh: `programs.ssh.matchBlocks` is deprecated, migrate to `programs.ssh.settings`
+      # (renames keys to OpenSSH directives: user->User, hostname->Hostname,
+      # identityFile->IdentityFile, proxyJump->ProxyJump). Touches ndh work access —
+      # also applies to machines/{dumpling,mochi,dumple,bagel}.
       programs.ssh.matchBlocks = {
         "gitlab.ndh" = config;
         "tx101.ndh" = config;

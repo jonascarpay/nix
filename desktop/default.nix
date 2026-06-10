@@ -34,7 +34,7 @@ let
       };
     };
 
-    programs.neovim.extraLuaConfig = let padding = "10"; in ''
+    programs.neovim.initLua = let padding = "10"; in ''
       vim.g.neovide_padding_top = ${padding}
       vim.g.neovide_padding_bottom = ${padding}
       vim.g.neovide_padding_right = ${padding}
@@ -84,11 +84,24 @@ let
     };
   };
 
+  # GDM 50 (NixOS 26.05) needs `gnome-session` on PATH to launch *any* wayland
+  # session via gdm-wayland-session; without it the niri session never registers
+  # and gdm bounces back to the login screen (nixpkgs #523332; the upstream fix
+  # #523948 only patched the greeter PAM env, not gdm-password). Putting it on
+  # PATH also registers GNOME's own wayland session, so pin niri as the default
+  # (GNOME stays as a selectable fallback).
+  # https://github.com/NixOS/nixpkgs/issues/523332
+  gdm-niri-session = {
+    environment.systemPackages = [ pkgs.gnome-session ];
+    services.displayManager.defaultSession = "niri";
+  };
+
 in
 {
 
   imports = [
     inputs.niri-flake.nixosModules.niri
+    gdm-niri-session
   ];
   programs.niri.enable = true;
   # programs.niri.package = inputs.niri-flake.packages.${pkgs.system}.niri-unstable;
@@ -112,7 +125,7 @@ in
     enable = false; # TODO sadly doesn't seem to work with Wayland atm?
     user = "jmc";
   };
-  services.xserver.displayManager.gdm = {
+  services.displayManager.gdm = {
     enable = true;
     autoLogin.delay = 5;
   };

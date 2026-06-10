@@ -21,18 +21,18 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.user = {
-      # TODO swww is now in home manager
-      services.swww-daemon = {
+      # TODO awww is now in home manager
+      services.awww-daemon = {
         Install = { WantedBy = [ "graphical-session.target" ]; };
         Unit = {
           ConditionEnvironment = "WAYLAND_DISPLAY";
-          Description = "swww-daemon";
+          Description = "awww-daemon";
           After = [ "graphical-session.target" "niri.service" ];
           PartOf = [ "graphical-session.target" ];
         };
 
         Service = {
-          ExecStart = "${pkgs.swww}/bin/swww-daemon";
+          ExecStart = "${pkgs.awww}/bin/awww-daemon";
           Restart = "always";
           RestartSec = 10;
         };
@@ -40,9 +40,9 @@ in
 
       services.random-wallpaper = {
         Unit = {
-          Description = "Set random wallpaper using swww";
-          After = [ "swww-daemon.service" ];
-          Requires = [ "swww-daemon.service" ];
+          Description = "Set random wallpaper using awww";
+          After = [ "awww-daemon.service" ];
+          Requires = [ "awww-daemon.service" ];
         };
         Service = {
           Type = "oneshot";
@@ -52,17 +52,17 @@ in
                 set -eo pipefail
                 PAPE=$(${pkgs.findutils}/bin/find ${cfg.wallpaperPath} -type f | ${pkgs.coreutils}/bin/shuf -n 1);
                 echo "Setting wallpaper to $PAPE"
-                ${pkgs.swww}/bin/swww img "$PAPE"
+                ${pkgs.awww}/bin/awww img "$PAPE"
               '';
             in
             "${script}";
           IOSchedulingClass = "idle";
         };
-        Install.WantedBy = [ "swww-daemon.service" ];
+        Install.WantedBy = [ "awww-daemon.service" ];
       };
 
       timers.random-wallpaper = {
-        Unit.Description = "Set random wallpaper using swww";
+        Unit.Description = "Set random wallpaper using awww";
         Timer.OnUnitActiveSec = cfg.interval;
         Install.WantedBy = [ "timers.target" ];
       };

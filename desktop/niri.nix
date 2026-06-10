@@ -167,7 +167,7 @@ in
     };
 
     layer-rules = [{
-      matches = [{ namespace = "^swww-daemon$"; }];
+      matches = [{ namespace = "^awww-daemon$"; }];
       place-within-backdrop = true;
     }];
     layout.background-color = "transparent";
