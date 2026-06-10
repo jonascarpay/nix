@@ -1,5 +1,9 @@
-{ unstable, ... }:
+{ pkgs, unstable, ... }:
+let
+  jjws = pkgs.writeShellScriptBin "jjws" (builtins.readFile ./jjws.sh);
+in
 {
+  home.packages = [ jjws ];
   programs.jujutsu = {
     enable = true;
     package = unstable.jujutsu;
