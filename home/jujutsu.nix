@@ -1,8 +1,16 @@
 { pkgs, unstable, ... }:
 let
   jjws = pkgs.writeShellScriptBin "jjws" (builtins.readFile ./jjws.sh);
+  watchman = {
+    home.packages = [ pkgs.watchman ];
+    programs.jujutsu.settings = {
+      fsmonitor.backend = "watchman";
+      fsmonitor.watchman.register-snapshot-trigger = true;
+    };
+  };
 in
 {
+  imports = [ watchman ];
   home.packages = [ jjws ];
   programs.jujutsu = {
     enable = true;
