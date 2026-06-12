@@ -61,6 +61,7 @@ in
     jl = "jj log";
     jn = "jj new";
     js = "jj status";
+    jw = "jjws";
     u = "jjui";
   };
 }
