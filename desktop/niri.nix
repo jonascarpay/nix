@@ -8,19 +8,19 @@ let
     CMD=$(${freqle} view "$HISTORY" | fuzzel --dmenu --prompt "run: ")
     [ -n "$CMD" ] || exit 0
     ${freqle} bump "$HISTORY" -- "$CMD"
-    # --hold keeps the window open after the command exits; the final line is
-    # a visible prompt so it never just looks frozen. Single-quoted so nothing
-    # needs escaping; the command arrives as $argv[1].
-    set -- --hold -e fish -c '
+
+    SCRIPT='
       eval $argv[1]
       set _ex $status
       echo
-      set_color -o brblack
       echo "[ exited $_ex ]"
-      set_color normal
-    ' "$CMD"
-    [ -d "$DIR" ] && set -- --working-directory "$DIR" "$@"
-    exec alacritty "$@"
+    '
+    export DIRENV_LOG_FORMAT=""
+    if [ -d "$DIR" ]; then
+      exec alacritty --working-directory "$DIR" --hold -e ${pkgs.direnv}/bin/direnv exec "$DIR" fish -c "$SCRIPT" "$CMD"
+    else
+      exec alacritty --hold -e fish -c "$SCRIPT" "$CMD"
+    fi
   '';
 
   focused-dir = pkgs.lib.getExe (pkgs.writeShellApplication {
