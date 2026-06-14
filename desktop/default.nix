@@ -7,17 +7,17 @@ let
   # TODO this does not properly handle directories with spaces in their names
   fuzzel-directory = { config, ... }:
     let
-      history = "${config.xdg.dataHome}/frecently/directory-history";
-      frecently = "${inputs.frecently.defaultPackage.${pkgs.system}}/bin/frecently";
+      history = "${config.xdg.dataHome}/freqle/directory-history";
+      freqle = "${inputs.freqle.packages.${pkgs.system}.default}/bin/freqle";
       script = pkgs.writeShellScriptBin "fuzzel-directory" ''
-        ${pkgs.python3}/bin/python3 ${./fuzzel-directory.py} ${frecently} ${history} /home/jmc/Dev
+        ${pkgs.python3}/bin/python3 ${./fuzzel-directory.py} ${freqle} ${history} /home/jmc/Dev
       '';
     in
     {
       home.packages = [ script ];
       programs.fish.shellInit = ''
-        function __frecently-directory-hook --on-variable PWD --description 'add current directory to directory history'
-          ${frecently} bump ${history} "$PWD"
+        function __freqle-directory-hook --on-variable PWD --description 'add current directory to directory history'
+          ${freqle} bump ${history} "$PWD"
         end
       '';
     };

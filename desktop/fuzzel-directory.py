@@ -3,21 +3,21 @@ import sys
 from pathlib import Path
 from subprocess import run
 
-[_, frecently, history_file, project_root_str] = sys.argv
+[_, freqle, history_file, project_root_str] = sys.argv
 
-known_dirs = run([frecently, "view", history_file], check=True, capture_output=True).stdout.decode().splitlines()
+known_dirs = run([freqle, "view", history_file], check=True, capture_output=True).stdout.decode().splitlines()
 
 for d in known_dirs:
     if not Path(d).exists():
-        run([frecently, "delete", history_file, d], check=True)
+        run([freqle, "delete", history_file, d], check=True)
 
 git_dirs = run(["fd", "--glob", "--hidden", ".git", project_root_str], capture_output=True, check=True).stdout
 
 project_dirs = re.compile(b"/[^/]+/?\n").sub(b"\n", git_dirs)
 
 
-frecently_out = run(
-    [frecently, "view", history_file, "--augment"],
+freqle_out = run(
+    [freqle, "view", history_file, "--augment"],
     capture_output=True,
     check=True,
     input=project_dirs,
@@ -28,7 +28,7 @@ max_display_dir_len = 0
 project_root: Path = Path(project_root_str)
 home: Path = Path.home()
 
-for path_str in frecently_out.stdout.decode().splitlines():
+for path_str in freqle_out.stdout.decode().splitlines():
     badges = []
     path = Path(path_str)
     if (path / ".git").exists():
@@ -69,6 +69,6 @@ fuzzel_out = run(
 
 out = dir_table[int(fuzzel_out.stdout)][0]
 
-run([frecently, "bump", history_file, out], check=True)
+run([freqle, "bump", history_file, out], check=True)
 
 print(out)

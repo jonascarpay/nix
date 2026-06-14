@@ -1,8 +1,10 @@
 { pkgs, inputs, ... }:
 let
-  frecently-pkg = inputs.frecently.defaultPackage.${pkgs.system};
+  freqle-pkg = inputs.freqle.packages.${pkgs.system}.default;
 in
 {
+  home.packages = [ freqle-pkg ];
+
   programs.fish = {
     enable = true;
     functions = {
@@ -28,7 +30,7 @@ in
       __update_git_root
 
       function fzcd
-          set -l dir (${frecently-pkg}/bin/frecently view ~/.local/share/frecently/directory-history | fzf --no-sort --preview 'tree -C {} --gitignore -L 1')
+          set -l dir (${freqle-pkg}/bin/freqle view ~/.local/share/freqle/directory-history | fzf --no-sort --preview 'tree -C {} --gitignore -L 1')
           if test -n "$dir"
               cd $dir
               and commandline -f repaint
@@ -36,16 +38,16 @@ in
       end
       bind \cs 'fzcd'
 
-      function __frecently_command_hook --on-event fish_postexec --description 'bump command in frecency history'
+      function __freqle_command_hook --on-event fish_postexec --description 'bump command in frecency history'
           set -l cmd (string trim -- $argv[1])
           test -n "$cmd"; or return
           string match -qr '\n' -- $cmd; and return
-          ${frecently-pkg}/bin/frecently bump ~/.local/share/frecently/command-history -- $cmd &
+          ${freqle-pkg}/bin/freqle bump ~/.local/share/freqle/command-history -- $cmd &
           disown
       end
 
       function fzcmd --description 'frecency command picker'
-          set -l cmd (${frecently-pkg}/bin/frecently view ~/.local/share/frecently/command-history | fzf --no-sort --query (commandline))
+          set -l cmd (${freqle-pkg}/bin/freqle view ~/.local/share/freqle/command-history | fzf --no-sort --query (commandline))
           if test -n "$cmd"
               commandline -r -- $cmd
           end

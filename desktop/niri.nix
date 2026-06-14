@@ -1,13 +1,13 @@
 { pkgs, config, inputs, ... }:
 let
-  frecently = "${inputs.frecently.defaultPackage.${pkgs.system}}/bin/frecently";
+  freqle = "${inputs.freqle.packages.${pkgs.system}.default}/bin/freqle";
 
   fzcmd-launch = pkgs.writeShellScript "command-launcher" ''
-    HISTORY="$HOME/.local/share/frecently/command-history"
+    HISTORY="$HOME/.local/share/freqle/command-history"
     DIR=$(${focused-dir})
-    CMD=$(${frecently} view "$HISTORY" | fuzzel --dmenu --prompt "run: ")
+    CMD=$(${freqle} view "$HISTORY" | fuzzel --dmenu --prompt "run: ")
     [ -n "$CMD" ] || exit 0
-    ${frecently} bump "$HISTORY" -- "$CMD"
+    ${freqle} bump "$HISTORY" -- "$CMD"
     # --hold keeps the window open after the command exits; the final line is
     # a visible prompt so it never just looks frozen. Single-quoted so nothing
     # needs escaping; the command arrives as $argv[1].

@@ -13,9 +13,8 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # TODO switch to frecle
-    frecently = {
-      url = "github:jonascarpay/frecently/preserve-index";
+    freqle = {
+      url = "github:jonascarpay/freqle";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     dmmono = {
