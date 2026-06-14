@@ -35,6 +35,23 @@ in
           end
       end
       bind \cs 'fzcd'
+
+      function __frecently_command_hook --on-event fish_postexec --description 'bump command in frecency history'
+          set -l cmd (string trim -- $argv[1])
+          test -n "$cmd"; or return
+          string match -qr '\n' -- $cmd; and return
+          ${frecently-pkg}/bin/frecently bump ~/.local/share/frecently/command-history -- $cmd &
+          disown
+      end
+
+      function fzcmd --description 'frecency command picker'
+          set -l cmd (${frecently-pkg}/bin/frecently view ~/.local/share/frecently/command-history | fzf --no-sort --query (commandline))
+          if test -n "$cmd"
+              commandline -r -- $cmd
+          end
+          commandline -f repaint
+      end
+      bind \co 'fzcmd'
     '';
     shellAbbrs = {
       c = "cd";
