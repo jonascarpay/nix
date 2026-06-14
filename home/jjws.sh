@@ -20,5 +20,14 @@ trap cleanup EXIT
 
 jj workspace add --quiet --name "$name" "$ws"
 jj workspace list
+
+# `.envrc`/`.direnv` are git-ignored, so they don't come along with the
+# workspace. Copy them over and re-allow so direnv works in the workspace too.
+if [ -f "${origin}/.envrc" ] && command -v direnv >/dev/null 2>&1; then
+	cp "${origin}/.envrc" "${ws}/.envrc"
+	[ -d "${origin}/.direnv" ] && cp -r "${origin}/.direnv" "${ws}/.direnv"
+	direnv allow "$ws"
+fi
+
 cd "$ws"
 "${SHELL:-bash}" || true
