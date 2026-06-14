@@ -1,5 +1,28 @@
-{ pkgs, config, ... }:
+{ pkgs, config, inputs, ... }:
 let
+  frecently = "${inputs.frecently.defaultPackage.${pkgs.system}}/bin/frecently";
+
+  fzcmd-launch = pkgs.writeShellScript "command-launcher" ''
+    HISTORY="$HOME/.local/share/frecently/command-history"
+    DIR=$(${focused-dir})
+    CMD=$(${frecently} view "$HISTORY" | fuzzel --dmenu --prompt "run: ")
+    [ -n "$CMD" ] || exit 0
+    ${frecently} bump "$HISTORY" -- "$CMD"
+    # --hold keeps the window open after the command exits; the final line is
+    # a visible prompt so it never just looks frozen. Single-quoted so nothing
+    # needs escaping; the command arrives as $argv[1].
+    set -- --hold -e fish -c '
+      eval $argv[1]
+      set _ex $status
+      echo
+      set_color -o brblack
+      echo "[ exited $_ex ]"
+      set_color normal
+    ' "$CMD"
+    [ -d "$DIR" ] && set -- --working-directory "$DIR" "$@"
+    exec alacritty "$@"
+  '';
+
   focused-dir = pkgs.lib.getExe (pkgs.writeShellApplication {
     name = "getFocusedDir";
     runtimeInputs = [ pkgs.procps pkgs.coreutils pkgs.gawk ];
@@ -100,6 +123,7 @@ in
         "Mod+Ctrl+Return".action.spawn = "alacritty";
 
         "Mod+O".action.spawn = "fuzzel";
+        "Mod+Shift+O".action.spawn = "${fzcmd-launch}";
 
         "Mod+Q".action = actions.close-window;
 
