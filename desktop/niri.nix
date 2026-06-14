@@ -16,7 +16,11 @@ let
   alacritty-fuzzel = pkgs.writeShellScript "alacritty-fuzzel" ''
     set -e
     DIR=$(fuzzel-directory)
-    alacritty --working-directory "$DIR"
+    if jj --repository "$DIR" root >/dev/null 2>&1; then
+      exec ${jjui-split} "$DIR"
+    else
+      exec alacritty --working-directory "$DIR"
+    fi
   '';
 
   alacritty-focused = pkgs.writeShellScript "alacritty-focused" ''
@@ -27,6 +31,41 @@ let
       alacritty
     fi
   '';
+
+  # Given a directory, open a terminal at 2/3 width on the left and a terminal
+  # running jjui at 1/3 width on the right.
+  jjui-split = pkgs.lib.getExe (pkgs.writeShellApplication {
+    name = "jjui-split";
+    runtimeInputs = [ pkgs.jq pkgs.alacritty pkgs.coreutils ];
+    text = ''
+      DIR="''${1:-$PWD}"
+
+      focused_id() { niri msg --json focused-window | jq -r '.id // empty'; }
+
+      # Spawn, then wait until a different window gains focus (the new one).
+      wait_for_new() {
+        local before="$1" cur
+        for _ in $(seq 1 100); do
+          cur=$(focused_id)
+          if [ -n "$cur" ] && [ "$cur" != "$before" ]; then return 0; fi
+          sleep 0.05
+        done
+      }
+
+      before=$(focused_id)
+      alacritty --working-directory "$DIR" &
+      wait_for_new "$before"
+      niri msg action set-column-width "66.7%"
+      left=$(focused_id)
+
+      alacritty --working-directory "$DIR" -e jjui &
+      wait_for_new "$left"
+      niri msg action set-column-width "33.3%"
+
+      # Return focus to the main (left) terminal.
+      niri msg action focus-column-left
+    '';
+  });
 
 in
 
