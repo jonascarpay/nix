@@ -1,17 +1,17 @@
 { pkgs, config, ... }:
 let
-  focused-dir =
-    let
-      pwdx = "${pkgs.procps}/bin/pwdx";
-      ps = "${pkgs.procps}/bin/ps";
-    in
-    pkgs.writeShellScript "getFocusedDir" ''
-      set -e
+  focused-dir = pkgs.lib.getExe (pkgs.writeShellApplication {
+    name = "getFocusedDir";
+    runtimeInputs = [ pkgs.procps pkgs.coreutils pkgs.gawk ];
+    text = ''
       WINDOW_PID=$(niri msg focused-window | awk '/PID:/ {print $2}')
-      SHELL_PID=$(${ps} --ppid $WINDOW_PID -o pid=)
-      DIR=$(${pwdx} $SHELL_PID | cut -d' ' -f 2)
-      echo "$DIR"
+      SHELL_PID=$(ps --ppid "$WINDOW_PID" -o pid= | head -n1 | tr -d ' ')
+      # foreground process group of the controlling terminal (the "active" program)
+      FG_PGID=$(ps -o tpgid= -p "$SHELL_PID" | tr -d ' ')
+      if [ "''${FG_PGID:--1}" -gt 0 ]; then TARGET=$FG_PGID; else TARGET=$SHELL_PID; fi
+      readlink /proc/"$TARGET"/cwd
     '';
+  });
 
   alacritty-fuzzel = pkgs.writeShellScript "alacritty-fuzzel" ''
     set -e
