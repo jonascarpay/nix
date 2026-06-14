@@ -1,4 +1,3 @@
-import re
 import sys
 from pathlib import Path
 from subprocess import run
@@ -11,16 +10,10 @@ for d in known_dirs:
     if not Path(d).exists():
         run([freqle, "delete", history_file, d], check=True)
 
-git_dirs = run(["fd", "--glob", "--hidden", ".git", project_root_str], capture_output=True, check=True).stdout
-
-project_dirs = re.compile(b"/[^/]+/?\n").sub(b"\n", git_dirs)
-
-
 freqle_out = run(
-    [freqle, "view", history_file, "--augment"],
+    [freqle, "view", history_file],
     capture_output=True,
     check=True,
-    input=project_dirs,
 )
 
 dir_table: list[tuple[Path, str]] = []
@@ -58,7 +51,7 @@ fuzzel_out = run(
         "--no-sort",
         "--index",
         "--width",
-        str(max_display_dir_len + 8),
+        str(max_display_dir_len + 10),
         "--prompt",
         " ",
     ],
