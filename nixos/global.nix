@@ -69,7 +69,6 @@ in
       pkgs.htop
       pkgs.ncdu
       pkgs.p7zip
-      pkgs.ranger
       pkgs.sshfs
       scrubnix
       pkgs.tmux

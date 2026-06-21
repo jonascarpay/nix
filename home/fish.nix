@@ -92,8 +92,6 @@ in
       nsp = "nix shell nixpkgs#";
       ns = "nix shell";
       nd = "nix develop";
-      rn = "ranger";
-      nn = "nnn";
       s = "sudo";
       sc = "systemctl --user";
       sca = "systemctl --user start";

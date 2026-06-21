@@ -60,10 +60,6 @@ in
     pass
     home-manager
   ];
-  environment.systemPackages =
-    [
-      pkgs.ranger
-    ];
 
   # Default /etc/hosts content
   environment.etc.hosts = {
