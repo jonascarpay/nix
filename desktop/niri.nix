@@ -198,8 +198,8 @@ in
         "Mod+T".action.set-column-width = "66.7%";
         "Mod+Shift+T".action.set-column-width = "33.3%";
 
-        "Mod+V".action = actions.toggle-window-floating;
-        "Mod+Shift+V".action = actions.switch-focus-between-floating-and-tiling;
+        "Mod+Shift+V".action = actions.toggle-window-floating;
+        "Mod+V".action = actions.switch-focus-between-floating-and-tiling;
         "Mod+W".action = actions.toggle-column-tabbed-display;
 
         # "Mod+Apostrophe".action = actions.screenshot;
