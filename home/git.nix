@@ -1,10 +1,5 @@
 { pkgs, ... }:
-let
-  grove-clone = pkgs.writeShellScriptBin "grove-clone" (builtins.readFile ./grove-clone.sh);
-in
 {
-  home.packages = [ grove-clone ];
-  programs.git-worktree-switcher.enable = true;
   programs.difftastic = {
     enable = true;
     git.enable = true;
