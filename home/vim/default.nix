@@ -659,6 +659,15 @@ in
       }
 
       {
+        # https://github.com/chentoast/marks.nvim
+        plugin = np.marks-nvim;
+        type = "lua";
+        config = /* lua */ ''
+          require('marks').setup({})
+        '';
+      }
+
+      {
         plugin = np.vim-fugitive;
         type = "viml";
         config = ''
