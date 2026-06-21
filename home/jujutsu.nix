@@ -27,7 +27,7 @@ in
       };
       ui = {
         diff-formatter = [ (pkgs.lib.getExe pkgs.difftastic) "--color=always" "$left" "$right" ];
-        paginate = "never";
+        # paginate = "never";
         default-command = "log";
       };
       aliases = {
