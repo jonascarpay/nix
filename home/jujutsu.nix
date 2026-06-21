@@ -26,7 +26,7 @@ in
         email = "jonascarpay@gmail.com";
       };
       ui = {
-        diff-formatter = [ "difft" "--color=always" "$left" "$right" ];
+        diff-formatter = [ (pkgs.lib.getExe pkgs.difftastic) "--color=always" "$left" "$right" ];
         paginate = "never";
         default-command = "log";
       };
