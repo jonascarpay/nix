@@ -56,6 +56,13 @@ let
     programs.git.ignores = [ ".claude" ];
   };
 
+  yazi = {
+    programs.yazi = {
+      enable = true;
+      shellWrapperName = "y";
+    };
+    programs.fish.shellAbbrs.rn = "yazi";
+  };
 
 in
 {
@@ -72,6 +79,7 @@ in
     python
     rust
     claude
+    yazi
     ./starship.nix
   ];
 
