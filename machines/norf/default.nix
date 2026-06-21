@@ -82,6 +82,23 @@ let
     environment.systemPackages = [ pkgs.ddcutil ];
   };
 
+  windows-mount = {
+    boot.supportedFilesystems = [ "ntfs" ];
+    fileSystems."/mnt/windows" = {
+      device = "/dev/disk/by-uuid/867E61177E6100F3";
+      fsType = "ntfs3";
+      options = [
+        # read-only, for security and bc Windows fast startup leaves the disk dirty, refusing to mount
+        "ro"
+        # lazy mount
+        "x-systemd.automount"
+        "noauto"
+        # don't block if absent
+        "nofail"
+      ];
+    };
+  };
+
 in
 
 {
@@ -99,6 +116,7 @@ in
       ../../nixos/gemini.nix
       docker
       brightness-control
+      windows-mount
     ];
 
   # networking.useNetworkd = true;
