@@ -1,6 +1,12 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, config, ... }:
 let
   freqle-pkg = inputs.freqle.packages.${pkgs.system}.default;
+
+  freqle = "${freqle-pkg}/bin/freqle";
+
+  freqle-dir-history = "${config.xdg.dataHome}/freqle/directory-history";
+  freqle-cmd-history = "${config.xdg.dataHome}/freqle/command-history";
+
 in
 {
   home.packages = [ freqle-pkg ];
@@ -29,8 +35,12 @@ in
       end
       __update_git_root
 
+      function __freqle-directory-hook --on-variable PWD --description 'add current directory to directory history'
+        ${freqle} bump ${freqle-dir-history} "$PWD"
+      end
+
       function fzcd
-          set -l dir (${freqle-pkg}/bin/freqle view ~/.local/share/freqle/directory-history | fzf --no-sort --preview 'tree -C {} --gitignore -L 1')
+          set -l dir (${freqle} view ${freqle-dir-history} | fzf --no-sort --preview 'tree -C {} --gitignore -L 1')
           if test -n "$dir"
               cd $dir
               and commandline -f repaint
@@ -42,12 +52,12 @@ in
           set -l cmd (string trim -- $argv[1])
           test -n "$cmd"; or return
           string match -qr '\n' -- $cmd; and return
-          ${freqle-pkg}/bin/freqle bump ~/.local/share/freqle/command-history -- $cmd &
+          ${freqle} bump ${freqle-cmd-history} -- $cmd &
           disown
       end
 
       function fzcmd --description 'frecency command picker'
-          set -l cmd (${freqle-pkg}/bin/freqle view ~/.local/share/freqle/command-history | fzf --no-sort --query (commandline))
+          set -l cmd (${freqle} view ${freqle-cmd-history} | fzf --no-sort --query (commandline))
           if test -n "$cmd"
               commandline -r -- $cmd
           end

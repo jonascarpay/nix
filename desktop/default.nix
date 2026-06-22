@@ -3,7 +3,6 @@ let
 
   colors = (import ../home/everforest.nix).default;
 
-
   # TODO this does not properly handle directories with spaces in their names
   fuzzel-directory = { config, ... }:
     let
@@ -15,14 +14,7 @@ let
     in
     {
       home.packages = [ script ];
-      programs.fish.shellInit = ''
-        function __freqle-directory-hook --on-variable PWD --description 'add current directory to directory history'
-          ${freqle} bump ${history} "$PWD"
-        end
-      '';
     };
-
-
 
   neovide = {
     programs.neovide = {
