@@ -40,7 +40,7 @@ in
       end
 
       function fzcd
-          set -l dir (${freqle} view ${freqle-dir-history} | fzf --no-sort --preview 'tree -C {} --gitignore -L 1')
+          set -l dir (${freqle} view ${freqle-dir-history} | fzf --no-sort --preview '${pkgs.lib.getExe pkgs.tree} -C {} --gitignore -L 1')
           if test -n "$dir"
               cd $dir
               and commandline -f repaint
