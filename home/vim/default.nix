@@ -259,7 +259,17 @@ let
           vim.api.nvim_create_autocmd('FileType', {
             callback = function()
               if pcall(vim.treesitter.start) then
-                vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                -- vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+
+                -- The if-statement here is a workaround for when languages ship without a working `indents` query, i.e. Haskell.
+                -- Otherwise, `indentexpr()` returns 0 which makes every new line start at column 0.
+                -- Otherwise, should fall back to autoindent.
+                -- Periodically check if Haskell has an indents yet, and if so, we can drop this.
+                local lang = vim.treesitter.language.get_lang(vim.bo.filetype) or vim.bo.filetype
+                if vim.treesitter.query.get(lang, 'indents') then
+                  vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                end
+
               end
             end,
           })
