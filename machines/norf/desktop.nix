@@ -37,7 +37,7 @@ in
 
   programs.firefox.enable = true;
 
-  home-manager.users.jmc = {
+  home-manager.users.jmc = { config, ... }: {
 
     imports = [
       wallpaper
@@ -73,6 +73,16 @@ in
         struts.left = 32;
         struts.right = 32;
       };
+    };
+
+    services.swayidle = {
+      enable = true;
+      systemdTargets = [ "niri.service" ];
+      timeouts = [{
+        timeout = 600;
+        command = "${config.programs.niri.package}/bin/niri msg action power-off-monitors";
+        resumeCommand = "${config.programs.niri.package}/bin/niri msg action power-on-monitors";
+      }];
     };
 
     services.wlsunset = {
