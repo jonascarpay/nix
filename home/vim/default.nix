@@ -520,9 +520,10 @@ in
       vn < <gv
       let mapleader = "\<space>"
       let maplocalleader = "\<space>\<space>"
-      " set tabstop=4
-      " set softtabstop=4
-      " set shiftwidth=4
+      set expandtab               " insert spaces instead of tabs
+      set tabstop=2
+      set softtabstop=2
+      set shiftwidth=2
       nn <leader>w :silent w<CR>
       nn <leader>hl :nohl<CR>
       inoremap hj <esc>
