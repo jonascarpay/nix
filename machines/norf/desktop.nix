@@ -85,6 +85,25 @@ in
       }];
     };
 
+    # Spotify (and other media players) don't request idle inhibition
+    # themselves, so watch pipewire for playback instead. niri only honours
+    # wayland idle inhibitors attached to a *visible* surface, hence the d-bus
+    # (org.freedesktop.ScreenSaver) backend.
+    systemd.user.services.pipewire-idle-inhibit = {
+      Unit = {
+        Description = "Inhibit idle while media is playing through pipewire";
+        PartOf = [ "niri.service" ];
+        After = [ "niri.service" "pipewire.service" ];
+        Wants = [ "pipewire.service" ];
+      };
+      Service = {
+        ExecStart = "${pkgs.wayland-pipewire-idle-inhibit}/bin/wayland-pipewire-idle-inhibit --idle-inhibitor d-bus --media-minimum-duration 30";
+        Restart = "always";
+        RestartSec = 10;
+      };
+      Install.WantedBy = [ "niri.service" ];
+    };
+
     services.wlsunset = {
       enable = true;
       latitude = "35.6762";
